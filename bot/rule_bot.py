@@ -59,11 +59,13 @@ class RuleBot(InstrumentedAresBot):
         self.register_behavior(Mining())
         plan = MacroPlan()
         plan.add(AutoSupply(self.start_location))
-        worker_target = min(48, 22 * len(self.ready_townhalls))
+        worker_target, base_target = self.economic_goals()
         plan.add(BuildWorkers(to_count=worker_target))
         plan.add(BuildStructure(self.start_location, UnitTypeId.BARRACKS, to_count=1))
         needs_expansion = (
-            self.time > 120 and self.supply_workers >= 20 and self.townhalls.amount < 2
+            self.time > 120
+            and self.supply_workers >= 20
+            and self.townhalls.amount < base_target
         )
         saving = self.expansion_budget.reserve(
             float(self.time),
@@ -76,7 +78,11 @@ class RuleBot(InstrumentedAresBot):
             )
         self._saving_expansion = saving
         if needs_expansion:
-            plan.add(ExpansionController(to_count=2, max_pending=1, prioritize=saving))
+            plan.add(
+                ExpansionController(
+                    to_count=base_target, max_pending=1, prioritize=saving
+                )
+            )
         if not saving:
             plan.add(SpawnController(self.army_composition))
             plan.add(
@@ -112,20 +118,12 @@ class RuleBot(InstrumentedAresBot):
         )
         if threats:
             state, target = "defend", threats.closest_to(self.start_location).position
+            self.telemetry.counts["emergency_defense_steps"] += 1
+        elif (strategic_order := self.strategic_order(army)) is not None:
+            state, target = strategic_order
         elif len(army) >= 20 or (self.strategy_state == "attack" and len(army) >= 6):
             state = "attack"
-            if self.enemy_structures:
-                target = self.enemy_structures.closest_to(army.center).position
-            else:
-                target = self.enemy_start_locations[0]
-                if army.center.distance_to(target) < 8 or self._sweep_index:
-                    locations = sorted(
-                        self.expansion_locations_list, key=lambda p: (p.x, p.y)
-                    )
-                    if locations:
-                        target = locations[self._sweep_index % len(locations)]
-                        if army.center.distance_to(target) < 8:
-                            self._sweep_index += 1
+            target = self.attack_target(army)
         else:
             state = (
                 "retreat" if self.strategy_state in {"attack", "retreat"} else "rally"
@@ -159,3 +157,21 @@ class RuleBot(InstrumentedAresBot):
                 if not command:
                     self.telemetry.counts["combat_command_rejected"] += 1
         self.telemetry.counts["command_conflicts"] = self.arbiter.conflicts
+
+    def economic_goals(self):
+        return min(48, 22 * len(self.ready_townhalls)), 2
+
+    def strategic_order(self, army):
+        return None
+
+    def attack_target(self, army):
+        if self.enemy_structures:
+            return self.enemy_structures.closest_to(army.center).position
+        target = self.enemy_start_locations[0]
+        if army.center.distance_to(target) < 8 or self._sweep_index:
+            locations = sorted(self.expansion_locations_list, key=lambda p: (p.x, p.y))
+            if locations:
+                target = locations[self._sweep_index % len(locations)]
+                if army.center.distance_to(target) < 8:
+                    self._sweep_index += 1
+        return target

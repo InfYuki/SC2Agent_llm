@@ -24,7 +24,19 @@ run_rule.cmd --no-realtime --max-game-seconds 300 --seed 42
 
 `--no-realtime` 用固定游戏步推进，可比实时更快，是本地回归模式；不改变默认入口。
 
-LLM、BC 和 PPO 尚未启用。本阶段不使用旧项目 API 密钥、不加载嵌入模型。规则版的实际验证范围见阶段报告，不将“规则 Bot 能运行”称为完整混合架构已实现。
+P2 已加入影子和 LLM 战略入口，见 [LLM 阶段报告](docs/PHASE_02_REPORT.md)。BC 和 PPO 尚未启用。所有模式均不加载嵌入模型。默认 `run_rule.cmd` 仍独立运行规则，不读取密钥或调用 API。
+
+首轮工程验证通过：120秒影子测试＋同配置规则/LLM各一局完整实时比赛，后两局均获胜；LLM局31次合法计划，实时比例0.994。本次LLM结束更晚，尚无战略收益结论；研究基线 `baseline-llm-v1`。
+
+```bat
+run_shadow.cmd
+run_llm.cmd
+run_llm.cmd --llm-max-calls 10 --seed 42
+```
+
+两个新入口同样默认完整实时比赛。影子模式只记录计划；LLM 模式允许模型调整工人/基地目标和主力集结、进攻、防守、撤退任务。遭袭时本地立即防守，网络失败保留尚有效计划，45 秒过期后回到规则。单局最多60次请求，可用 `--llm-max-calls` 减少；设0可验证全程规则回退。
+
+本机已将已有 DeepSeek 配置存入被 Git 忽略的 `.env.local`，不会出现在启动参数或实验记录中。迁移到其他机器时复制 `.env.example` 为 `.env.local` 并填写密钥，或设置对应环境变量。模型为 `deepseek-flash`。仅在新入口使用网络，无新增安装依赖。
 
 ## 日志、回放和验证
 
@@ -32,15 +44,18 @@ LLM、BC 和 PPO 尚未启用。本阶段不使用旧项目 API 密钥、不加�
 - 最近一局：`artifacts/latest_run.json` 中的目录。
 - 每局：`manifest.json`、`latest_state.json`、`summary.json`、`events.jsonl`、兼容报告和 `game.SC2Replay`。
 - 稳定性批次：`artifacts/suites/latest.json` 指向批次汇总。
+- LLM 局额外记录：`llm_config.json`、`latest_strategy_snapshot.json`、`strategy_summary.json`，以及 `events.jsonl` 中的请求、延迟、usage、校验结果和实际接管状态。
+- 战略成对实验：`artifacts/latest_strategy_pair.json` 指向汇总。
 
 ```bat
 conda activate sc2-ares-runtime
 python -s -m pip check
 python -s -m unittest discover -s tests -v
 python -s tools/evaluate_rule.py
+python -s tools/evaluate_strategy.py --seed 42
 ```
 
-最后一条将串行执行两地图 × 五种子的 10 局完整比赛，会启动游戏并花费实际时间，不是快速单测。
+`evaluate_rule.py` 串行执行两地图 × 五种子的10局完整固定步比赛；`evaluate_strategy.py` 串行执行同地图/种子的规则版、LLM版各一局完整实时比赛，并调用真实 API。两者会启动游戏并花费实际时间，不是快速单测。后一脚本限制自己启动的每局子进程树最多运行1200秒，触发时会记录实验失败；正常游戏入口无整局时长限制。
 
 ## 已实现的规则功能
 

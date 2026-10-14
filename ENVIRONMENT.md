@@ -66,8 +66,10 @@ probe 是独立测试驱动，输出单独日志，并限制自己启动的子�
 
 锁定的新 SDK 仍在 GameData 中过滤静态 AbilityId，且 UnitOrder 直接查表；4135 回归可复现 KeyError。已迁入项目内 `bot/compat.py`，从引擎读取补充技能及映射，保留未知原编号，不修改 site-packages。每局 `runtime_abilities.json` 保存诊断。回归测试同时检查真实引擎数据形式和仅观测出现的未知技能。
 
-本阶段不配置 LLM、不调用 API、不创建训练环境或下载学习模型。后续必须先通过规则版验收，再进行战略与微操实验。
+P0/P1 不调用 API；其基线保持可独立运行。P2 另增 `run_shadow.cmd` / `run_llm.cmd`，复用锁文件已有 requests 2.32.3，未引入新 SDK、未改动锁文件或 Ares 子模块。私有配置在 `.env.local`，环境变量优先；只连接已有的 DeepSeek 官方 HTTPS 端点。仍未创建训练环境或下载学习模型。
+
+P2 完整实时对照发现 SDK 在游戏结束瞬间查询可用技能可能抛 game-over ProtocolError。项目 `bot/lifecycle.py` 在单次 run_game 作用域内适配：刷新官方 observation，确认本方真实 result 才正常完成，缺失结果和其他协议错误继续上抛。未改 SDK 文件；三项单测覆盖此边界，原失败局保留在 P2 报告。
 
 ## 已确认的建造管理修复
 
-固定的 Ares 3.15.0 建造管理器先判断基地位置被占用，再检查对应任务是否完成。在首次完整对局中，这使完成二矿的 SCV 被继续派向第三矿。RuleBot 通过 Hub 的自定义 manager 接口注册项目内 `bot/building_manager.py`，在原处理前清理已完成的基地任务、计数和工人角色。仅规则模式启用；官方 Ares 子模块保持干净。回归和修复后的完整对局已确认基地峰值为2，后续批次继续检查。
+固定的 Ares 3.15.0 建造管理器先判断基地位置被占用，再检查对应任务是否完成。在首次完整对局中，这使完成二矿的 SCV 被继续派向第三矿。RuleBot 通过 Hub 的自定义 manager 接口注册项目内 `bot/building_manager.py`，在原处理前清理已完成的基地任务、计数和工人角色。规则及其派生的影子/LLM模式启用；官方 Ares 子模块保持干净。回归和修复后的完整对局已确认基地峰值为2，后续批次继续检查。

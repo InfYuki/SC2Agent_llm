@@ -1,0 +1,70 @@
+{
+  "scope": "Small engineering pilot; no strategic strength claim",
+  "runs": [
+    {
+      "run_id": "probe_20261014_161123_162446",
+      "mode": "shadow",
+      "summary": {
+        "status": "truncated",
+        "result": "Result.Defeat",
+        "stop_reason": "game_time_limit",
+        "error": null,
+        "counters": {
+          "completed_COMMANDCENTER": 1,
+          "callbacks": 1071,
+          "completed_SUPPLYDEPOT": 1,
+          "completed_BARRACKS": 2,
+          "marines_created": 1,
+          "combat_commands": 1,
+          "command_conflicts": 0
+        },
+        "game_span_seconds": 120.04464285714286,
+        "wall_span_seconds": 120.67729830002645,
+        "game_to_wall_ratio": 0.9947574609989139,
+        "on_step_p50_seconds": 0.0009710000013001263,
+        "on_step_p95_seconds": 0.0032266000052914023,
+        "on_step_p99_seconds": 0.004944799991790205,
+        "on_step_max_seconds": 0.2718796999542974,
+        "peak_workers": 17,
+        "peak_marines": 1,
+        "peak_bases": 1
+      },
+      "requests": 5,
+      "responses": 5,
+      "valid_plans": 5,
+      "failures": {},
+      "plan_tasks": {
+        "rally": 5
+      },
+      "plan_statuses": {
+        "active": 1,
+        "renewed": 4
+      },
+      "latency_mean_seconds": 1.1747999999905006,
+      "latency_p95_seconds": 1.1869999999762513,
+      "latency_max_seconds": 1.297000000020489,
+      "input_tokens_min": 560,
+      "input_tokens_max": 645,
+      "total_usage": {
+        "prompt_tokens": 3097,
+        "completion_tokens": 609,
+        "total_tokens": 3706
+      },
+      "max_concurrent_requests": 1,
+      "unmatched_requests_at_exit": 0,
+      "freshness_violations": [],
+      "llm_step_fraction": 0.0,
+      "callbacks_while_waiting": 54,
+      "strategy_counters": {
+        "rule_steps": 1070,
+        "requests": 5,
+        "responses": 5,
+        "callbacks_while_waiting": 54,
+        "valid_plans": 5,
+        "plan_active": 1,
+        "plan_renewed": 4
+      },
+      "median_game_advance_during_request": 1.2499999999999982
+    }
+  ]
+}

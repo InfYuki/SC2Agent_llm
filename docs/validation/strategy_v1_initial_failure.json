@@ -1,0 +1,61 @@
+{
+  "pair": {
+    "pair_id": "strategy_20261014_161544",
+    "status": "failed",
+    "scope": "engineering pilot; n=1, no strength inference",
+    "config": {
+      "seed": 42,
+      "map": "Ancient Cistern LE",
+      "wall_timeout": 1200
+    },
+    "source_hashes": {
+      "run_local.py": "898ddab198adefe44d2fd636cdc9b8ea681c16a691456e58b732a5bd62d2814f",
+      "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+      "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+      "bot/arbiter.py": "6b905ac1f0264b1e8880227ed6d0463e82ae0bf34d8b82d15ce8359a9efe494f",
+      "bot/budget.py": "7814baf41b14196c70eeb38659cfd2027f2c1148f492608af1b60c65e0348a10",
+      "bot/building_manager.py": "bf5ea156d1f8528aba2c219ab7913102411d2414c3f8217cdbc631010d73e848",
+      "bot/compat.py": "e90e8b60e1210315b7608498dd6fd964cbbb536c2fad69c3c2274e1f00c1c580",
+      "bot/llm_bot.py": "9aa63927c361ccf086b7211a741e0338060f0475bdcd1774cdafc639059d6b62",
+      "bot/llm_client.py": "7fa87b41fda31388214ec4dbe228667c2b66ba51d95816e0d1d5bb73e2bbf2e5",
+      "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+      "bot/probe.py": "c0ff8a849c282edde043631c4ca53aeea978a5bb2309995fd3927437f942da8d",
+      "bot/rule_bot.py": "193d3f03c20ec9b4d5c7630cf2338419f1bce0a3a6a9af72a4776e754d0ecd82",
+      "bot/strategy.py": "d2818e91b57aaaeac7c7f26ec16017374918d88531b28b3f65cc4c65c10d81bc",
+      "bot/telemetry.py": "aec8d7392c4c0c9a94028a2d907bffe2a813741db903a93936c7e2d7c9251ea6"
+    },
+    "runs": [],
+    "failed_mode": "rule"
+  },
+  "failed_run_id": "probe_20261014_161544_588116",
+  "failed_run": {
+    "status": "crashed",
+    "result": null,
+    "stop_reason": null,
+    "error": {
+      "phase": "run_game",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\CODE\\sc2-ares-llm-rl\\run_local.py\", line 138, in main\n    result = run_game(\n             ^^^^^^^^^\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\site-packages\\sc2\\main.py\", line 529, in run_game\n    result: Result = asyncio.run(_host_game(map_settings, players, **kwargs))\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\asyncio\\runners.py\", line 190, in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\asyncio\\runners.py\", line 118, in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\asyncio\\base_events.py\", line 654, in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\site-packages\\sc2\\main.py\", line 388, in _host_game\n    result = await _play_game(players[0], client, realtime, portconfig, game_time_limit, rgb_render_config)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\site-packages\\sc2\\main.py\", line 233, in _play_game\n    result = await _play_game_ai(client, player_id, player.ai, realtime, game_time_limit)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\site-packages\\sc2\\main.py\", line 198, in _play_game_ai\n    await ai._prepare_step(gs, proto_game_info)\n  File \"D:\\CODE\\sc2-ares-llm-rl\\ares-sc2\\src\\ares\\main.py\", line 191, in _prepare_step\n    return await super()._prepare_step(state, proto_game_info)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\site-packages\\sc2\\bot_ai_internal.py\", line 722, in _prepare_step\n    _unit_only_abilities = await self.client.query_available_abilities_with_tag(\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\site-packages\\sc2\\client.py\", line 391, in query_available_abilities_with_tag\n    result = await self._execute(\n             ^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\site-packages\\sc2\\protocol.py\", line 83, in _execute\n    raise ProtocolError(f\"{response.error}\")\nsc2.protocol.ProtocolError: ['Not supported if game has already ended']\n"
+    },
+    "counters": {
+      "completed_COMMANDCENTER": 3,
+      "callbacks": 3417,
+      "completed_SUPPLYDEPOT": 21,
+      "completed_BARRACKS": 13,
+      "marines_created": 60,
+      "combat_commands": 4694,
+      "command_conflicts": 0,
+      "emergency_defense_steps": 27,
+      "retired_completed_expansion_jobs": 1
+    },
+    "game_span_seconds": 403.70535714285717,
+    "wall_span_seconds": 406.4184104000451,
+    "game_to_wall_ratio": 0.993324482386225,
+    "on_step_p50_seconds": 0.001228799985256046,
+    "on_step_p95_seconds": 0.004964800027664751,
+    "on_step_p99_seconds": 0.006553000013809651,
+    "on_step_max_seconds": 0.05997249996289611,
+    "peak_workers": 45,
+    "peak_marines": 56,
+    "peak_bases": 2
+  }
+}

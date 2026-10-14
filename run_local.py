@@ -21,7 +21,10 @@ def git(*args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=["template", "rule"], default="rule")
+    parser.add_argument(
+        "--mode", choices=["template", "rule", "shadow", "llm"], default="rule"
+    )
+    parser.add_argument("--llm-max-calls", type=int, default=60)
     parser.add_argument(
         "--game-path", default=os.getenv("SC2PATH", r"D:\game\StarCraft II")
     )
@@ -56,7 +59,11 @@ def main():
     parser.add_argument("--run-id", default=None)
     parser.add_argument("--show-config", action="store_true")
     options = parser.parse_args()
-    if options.game_step < 1 or options.max_game_seconds < 0:
+    if (
+        options.game_step < 1
+        or options.max_game_seconds < 0
+        or options.llm_max_calls < 0
+    ):
         parser.error("game-step must be positive; max-game-seconds must be nonnegative")
     config = vars(options).copy()
     print(json.dumps(config, ensure_ascii=True, indent=2), flush=True)
@@ -70,6 +77,7 @@ def main():
     from sc2.player import Bot, Computer
     from bot.probe import InstrumentedAresBot
     from bot.telemetry import Telemetry
+    from bot.lifecycle import recover_completed_game
 
     map_settings = maps.get(options.map)
     run_id = options.run_id or datetime.now(ZoneInfo("Asia/Shanghai")).strftime(
@@ -117,6 +125,10 @@ def main():
     )
     if options.mode == "template":
         ai = InstrumentedAresBot(options, telemetry)
+    elif options.mode in {"shadow", "llm"}:
+        from bot.llm_bot import StrategicBot
+
+        ai = StrategicBot(options, telemetry)
     else:
         from bot.rule_bot import RuleBot
 
@@ -124,20 +136,21 @@ def main():
     print("Run output:", output, flush=True)
     started = time.perf_counter()
     try:
-        result = run_game(
-            map_settings,
-            [
-                Bot(Race.Terran, ai, "LocalMarineRule"),
-                Computer(
-                    Race[options.opponent],
-                    Difficulty[options.difficulty],
-                    AIBuild.Macro,
-                ),
-            ],
-            realtime=options.realtime,
-            random_seed=options.seed,
-            save_replay_as=str(output / "game.SC2Replay"),
-        )
+        with recover_completed_game(telemetry):
+            result = run_game(
+                map_settings,
+                [
+                    Bot(Race.Terran, ai, "LocalMarineRule"),
+                    Computer(
+                        Race[options.opponent],
+                        Difficulty[options.difficulty],
+                        AIBuild.Macro,
+                    ),
+                ],
+                realtime=options.realtime,
+                random_seed=options.seed,
+                save_replay_as=str(output / "game.SC2Replay"),
+            )
         telemetry.finish(result)
     except KeyboardInterrupt:
         telemetry.stop_reason = "user_interrupt"
@@ -149,6 +162,8 @@ def main():
         telemetry.finish()
         raise
     finally:
+        if hasattr(ai, "close_strategy"):
+            ai.close_strategy()
         manifest["process_game_seconds"] = time.perf_counter() - started
         telemetry.write_json("manifest.json", manifest)
     return 1 if telemetry.error else 0

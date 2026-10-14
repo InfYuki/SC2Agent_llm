@@ -1,0 +1,129 @@
+{
+  "scope": "Small engineering pilot; no strategic strength claim",
+  "runs": [
+    {
+      "run_id": "probe_20261014_162939_385465",
+      "mode": "rule",
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "completed_COMMANDCENTER": 3,
+          "callbacks": 5003,
+          "completed_SUPPLYDEPOT": 35,
+          "completed_BARRACKS": 20,
+          "marines_created": 61,
+          "combat_commands": 5146,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 23,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 406.3392857142858,
+        "wall_span_seconds": 410.4813085999922,
+        "game_to_wall_ratio": 0.9899093508061709,
+        "on_step_p50_seconds": 0.0016947999829426408,
+        "on_step_p95_seconds": 0.004034499987028539,
+        "on_step_p99_seconds": 0.005510899994987994,
+        "on_step_max_seconds": 0.07324940001126379,
+        "peak_workers": 45,
+        "peak_marines": 56,
+        "peak_bases": 2
+      },
+      "requests": 0,
+      "responses": 0,
+      "valid_plans": 0,
+      "failures": {},
+      "plan_tasks": {},
+      "plan_statuses": {},
+      "latency_mean_seconds": null,
+      "latency_p95_seconds": null,
+      "latency_max_seconds": null,
+      "input_tokens_min": null,
+      "input_tokens_max": null,
+      "total_usage": {},
+      "max_concurrent_requests": 0,
+      "unmatched_requests_at_exit": 0,
+      "freshness_violations": [],
+      "llm_step_fraction": null,
+      "callbacks_while_waiting": 0,
+      "strategy_counters": {},
+      "median_game_advance_during_request": null
+    },
+    {
+      "run_id": "probe_20261014_163727_220460",
+      "mode": "llm",
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "completed_COMMANDCENTER": 3,
+          "callbacks": 3850,
+          "completed_SUPPLYDEPOT": 25,
+          "completed_BARRACKS": 12,
+          "marines_created": 85,
+          "combat_commands": 9843,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 45,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 467.5892857142858,
+        "wall_span_seconds": 470.41961280000396,
+        "game_to_wall_ratio": 0.9939833990575527,
+        "on_step_p50_seconds": 0.0015475000254809856,
+        "on_step_p95_seconds": 0.0065051999990828335,
+        "on_step_p99_seconds": 0.013070400047581643,
+        "on_step_max_seconds": 1.064963299955707,
+        "peak_workers": 31,
+        "peak_marines": 76,
+        "peak_bases": 2
+      },
+      "requests": 31,
+      "responses": 31,
+      "valid_plans": 31,
+      "failures": {},
+      "plan_tasks": {
+        "rally": 19,
+        "defend": 1,
+        "attack": 11
+      },
+      "plan_statuses": {
+        "active": 5,
+        "renewed": 23,
+        "pending": 3
+      },
+      "latency_mean_seconds": 1.1626451612833226,
+      "latency_p95_seconds": 1.4060000000172295,
+      "latency_max_seconds": 1.5929999999934807,
+      "input_tokens_min": 560,
+      "input_tokens_max": 1755,
+      "total_usage": {
+        "prompt_tokens": 26491,
+        "completion_tokens": 4086,
+        "total_tokens": 30577
+      },
+      "max_concurrent_requests": 1,
+      "unmatched_requests_at_exit": 0,
+      "freshness_violations": [],
+      "llm_step_fraction": 0.9987012987012988,
+      "callbacks_while_waiting": 315,
+      "strategy_counters": {
+        "rule_steps": 5,
+        "requests": 31,
+        "responses": 31,
+        "callbacks_while_waiting": 315,
+        "valid_plans": 31,
+        "plan_active": 5,
+        "llm_steps": 3845,
+        "economy_goal_steps": 3845,
+        "plan_renewed": 23,
+        "combat_goal_steps": 814,
+        "plan_pending": 3
+      },
+      "median_game_advance_during_request": 1.205357142857153
+    }
+  ]
+}
