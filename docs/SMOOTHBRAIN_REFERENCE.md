@@ -38,3 +38,19 @@ Bot ZIP SHA256：`94a94b7c8dcabed70ad99f5e39dedb46f5d4c68b6e16e350fce4e67d21ab35
 当前没有将 SmoothBrain 整套代码作为新 Bot 执行，没有运行用户 ZIP，也没有把其战斗表现当成本项目表现。先完成最小规则底座，后续每次只引入可解释、可验证的一项行为。
 
 补充读取 `army/orders.py`、`army/progress.py` 和 `bot/ares_compat.py`：其战术订单对象、卡住检测可作为后续战术层参考，尚未移植。它的兼容桥主要解决自带 mainline python-sc2 与 Ares 所需 fork 的差异；本项目已经采用模板锁定的 august-k/python-sc2，因此不照搬这套桥接和全局属性修改。当前需要的本机技能表适配是另外经过回归复现的问题。
+
+## 新机 P3 的进一步参考
+
+2026-10-14，按用户新增指示恢复同一固定 commit 的微操源码。只将经 Git blob SHA1 校验的相关文件放入 `.local-setup/references/sc2_bot/` 阅读，未执行参考Bot或安装其依赖。
+
+重点通读 `bot/army/units/bio.py`、`common.py`、`bot/pathing/order_utils.py`；同时保存 local_fight、grid_pathing、repair_retreat、danger_memory 用于后续研究。参考代码的MIT许可已保留在 `docs/licenses/SmoothBrain-LICENSE.txt`。
+
+| 来源与启发 | P3实际处理 | 边界 |
+|---|---|---|
+| BioController 的射程内低有效生命目标、冷却拉扯 | 独立实现5动作专家，射程与目标仍按本项目契约 | 不移植stim、散开、战斗模拟与混合兵种 |
+| common.futile_to_kite：射程更远且不更慢的敌人，单纯后撤难以脱离威胁 | 专家在该条件下保留订单；测试覆盖Stalker示例 | 属于规则启发，尚无效果提升结论 |
+| order_utils.ground_free：Ares干净地面网格采用[x,y]，岩石/矿区/建筑为inf | 通过本项目锁定的mediator读取get_cached_ground_grid，检查边界与非有限值，并补充足迹/已知障碍检查 | 不使用参考仓库的vendored SDK或直接调用其函数 |
+| is_already_attacking/moving：抑制重复订单 | 已有订单同目标时不再下令，数据区分requested动作和executed HOLD | 已用单测和真实引擎反馈核验 |
+| cy_attack_ready：预判下个游戏步及转向/接近 | 暂不移植；本候选冻结为冷却0且射程内可攻击 | 未来单独对照，避免同时改变动作契约和专家 |
+
+用户也允许从 AI Arena Bot 列表寻找来源。本轮优先使用已明确指定、固定提交且MIT源码可核验的SmoothBrain；列表本身不是比赛参赛要求，也不将作者或排名的表现当本项目证据。

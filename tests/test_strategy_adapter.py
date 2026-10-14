@@ -117,6 +117,8 @@ class StrategyAdapterTests(unittest.TestCase):
             ),
             telemetry=SimpleNamespace(counts=Counter(), event=Mock()),
         )
+        bot.issue_combat_orders = lambda *args: RuleBot.issue_combat_orders(bot, *args)
+        bot.issue_rule_order = lambda *args: RuleBot.issue_rule_order(bot, *args)
         RuleBot._combat(bot, 100)
         self.assertEqual(bot.strategy_state, "defend")
         bot.strategic_order.assert_not_called()

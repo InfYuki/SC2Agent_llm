@@ -36,7 +36,34 @@ run_llm.cmd --llm-max-calls 10 --seed 42
 
 两个新入口同样默认完整实时比赛。影子模式只记录计划；LLM 模式允许模型调整工人/基地目标和主力集结、进攻、防守、撤退任务。遭袭时本地立即防守，网络失败保留尚有效计划，45 秒过期后回到规则。单局最多60次请求，可用 `--llm-max-calls` 减少；设0可验证全程规则回退。
 
-本机已将已有 DeepSeek 配置存入被 Git 忽略的 `.env.local`，不会出现在启动参数或实验记录中。迁移到其他机器时复制 `.env.example` 为 `.env.local` 并填写密钥，或设置对应环境变量。模型为 `deepseek-flash`。仅在新入口使用网络，无新增安装依赖。
+P2 原机验证使用被 Git 忽略的 `.env.local`。新机需复制 `.env.example` 为 `.env.local` 并填写自己的密钥，或设置对应环境变量。模型为 `deepseek-flash`。仅在 LLM/影子入口使用网络，规则和 P3 采集不需要密钥。
+
+## 2026-10-14 新机与 P3 入口
+
+本机项目目录：`C:\code\SC2Agent_llm`；运行环境：`sc2-ares-runtime`（Python3.11.17）。游戏默认目录为 `C:\Program Files (x86)\StarCraft II`；`SC2PATH` 和显式 `--game-path` 可覆盖。两张项目地图已安装。
+
+`run_micro.cmd` 是独立的 P3 规则专家采集入口，保持固定规则战略，最多接管4个 Marine，不调用模型或开始训练。特征、动作、支持范围和数据标签见 [MICRO_CONTRACT.md](docs/MICRO_CONTRACT.md)，验证与后续事项见 [P3报告](docs/PHASE_03_REPORT.md)。
+
+```bat
+cd /d C:\code\SC2Agent_llm
+run_rule.cmd
+run_micro.cmd
+run_micro.cmd --micro-max-units 1 --no-realtime --seed 42
+run_micro.cmd --show-config
+```
+
+关闭采集/局部专家时直接用 `run_rule.cmd`。`run_micro.cmd` 默认完整实时比赛；限时测试仍需显式传 `--max-game-seconds`。数据与汇总位于每局 `artifacts/runs/<run_id>/micro_transitions.jsonl`、`micro_summary.json`。使用专用环境运行 `python -s tools/report_micro.py artifacts/runs/<run_id>` 审计时间对齐、标签和 episode 边界。
+
+固定1v1诊断入口（固定8游戏帧、禁用宏观、无LLM）：
+
+```bat
+conda activate sc2-ares-runtime
+python -s tools/run_micro_scenario.py --scenario marine-vs-zergling --seed 42
+python -s tools/run_micro_scenario.py --scenario marine-vs-marine --seed 42
+python -s tools/run_micro_scenario.py --scenario marine-vs-zergling --realtime --seed 42
+```
+
+每次命令独立启动一个有45游戏秒上限的场景。阵容/位置保存在 `scenario.json`，局部结果在 `scenario_result.json`；完整SC2比赛主动截断，不把其 Defeat 当局部失败。该入口没有 Gym reset/step 或 PPO 训练桥接。
 
 ## 日志、回放和验证
 

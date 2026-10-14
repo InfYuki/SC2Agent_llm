@@ -144,19 +144,25 @@ class RuleBot(InstrumentedAresBot):
                 marines=len(army),
             )
         self.strategy_state = state
-        for unit in army:
-            action = "move" if state in {"retreat", "rally"} else "attack"
-            signature = (action, round(target.x, 1), round(target.y, 1))
-            old = self._last_order.get(unit.tag)
-            if old and old[0] == signature and frame - old[1] < 45 and not unit.is_idle:
-                continue
-            if self.arbiter.allow(unit.tag, "rule_combat"):
-                command = unit.move(target) if action == "move" else unit.attack(target)
-                self._last_order[unit.tag] = (signature, frame)
-                self.telemetry.counts["combat_commands"] += 1
-                if not command:
-                    self.telemetry.counts["combat_command_rejected"] += 1
+        self.issue_combat_orders(army, state, target, frame)
         self.telemetry.counts["command_conflicts"] = self.arbiter.conflicts
+
+    def issue_combat_orders(self, army, state, target, frame):
+        for unit in army:
+            self.issue_rule_order(unit, state, target, frame)
+
+    def issue_rule_order(self, unit, state, target, frame):
+        action = "move" if state in {"retreat", "rally"} else "attack"
+        signature = (action, round(target.x, 1), round(target.y, 1))
+        old = self._last_order.get(unit.tag)
+        if old and old[0] == signature and frame - old[1] < 45 and not unit.is_idle:
+            return
+        if self.arbiter.allow(unit.tag, "rule_combat"):
+            command = unit.move(target) if action == "move" else unit.attack(target)
+            self._last_order[unit.tag] = (signature, frame)
+            self.telemetry.counts["combat_commands"] += 1
+            if not command:
+                self.telemetry.counts["combat_command_rejected"] += 1
 
     def economic_goals(self):
         return min(48, 22 * len(self.ready_townhalls)), 2

@@ -1,0 +1,364 @@
+{
+  "status": "engineering_candidate_verified",
+  "date": "2026-10-14",
+  "runtime_core_sha256": {
+    "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+    "bot/micro_bot.py": "b0566639428fb7d5122a84570ec89c29f6d6c50e5216c8d52ddcda6e219bf92a",
+    "bot/micro_data.py": "6a58118cf097d6228eedaa7a471e763cde35c2e232044aaf82988ce6dbd3bdf4",
+    "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+    "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e"
+  },
+  "dependency_lock_sha256": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+  "ares_commit": "70a151a66fdd00d6c1ee44718735d0da396b902e",
+  "tests_passed": 40,
+  "full_match_data_totals": {
+    "transitions": 595,
+    "engine_confirmed": 441,
+    "bc_eligible": 436,
+    "full_matches": 2
+  },
+  "runs": [
+    {
+      "run_id": "p3_final_ancient_42",
+      "accepted": true,
+      "artifact_directory": "artifacts/runs/p3_final_ancient_42",
+      "config": {
+        "mode": "micro_rule",
+        "micro_max_units": 4,
+        "llm_max_calls": 60,
+        "game_path": "C:\\Program Files (x86)\\StarCraft II",
+        "map": "Ancient Cistern LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0,
+        "seed": 42,
+        "run_id": "p3_final_ancient_42",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1079,
+          "completed_SUPPLYDEPOT": 11,
+          "completed_BARRACKS": 7,
+          "marines_created": 68,
+          "combat_commands": 4905,
+          "micro_decision_steps": 805,
+          "micro_owned_decisions": 369,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 37,
+          "micro_action_approach": 197,
+          "micro_action_hold": 87,
+          "micro_action_weakest": 29,
+          "micro_action_retreat": 51,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1,
+          "micro_action_nearest": 5
+        },
+        "game_span_seconds": 385.0,
+        "wall_span_seconds": 24.76122010004474,
+        "game_to_wall_ratio": 15.548506836272756,
+        "on_step_p50_seconds": 0.0010165999992750585,
+        "on_step_p95_seconds": 0.0065481000347062945,
+        "on_step_p99_seconds": 0.009447000047657639,
+        "on_step_max_seconds": 0.031168799963779747,
+        "peak_workers": 45,
+        "peak_marines": 56,
+        "peak_bases": 2
+      },
+      "audit": {
+        "status": "passed",
+        "transitions": 369,
+        "episodes": 84,
+        "bc_eligible": 277,
+        "command_results": {
+          "engine_confirmed": 268,
+          "hold": 87,
+          "engine_unconfirmed": 11,
+          "order_preserved": 3
+        },
+        "requested_actions": {
+          "3": 197,
+          "1": 29,
+          "4": 87,
+          "2": 51,
+          "0": 5
+        },
+        "game_loop_intervals": {
+          "8": 369
+        },
+        "split": [
+          "train"
+        ],
+        "errors": [],
+        "source_sha256": "9370b67ce39c27bb18ae351391dcee3e5392cf48bf4923bf78c461a606c2117d",
+        "match_status": "completed",
+        "match_result": "Result.Victory",
+        "learning_readiness": "not_evaluated",
+        "reward": "not_implemented"
+      },
+      "scenario_result": null,
+      "replay_bytes": 60534,
+      "replay_sha256": "c33c771c7da9ca123957fd9df47452ddae0855e599ae2d98359fa8693452319d"
+    },
+    {
+      "run_id": "p3_final_babylon_11",
+      "accepted": true,
+      "artifact_directory": "artifacts/runs/p3_final_babylon_11",
+      "config": {
+        "mode": "micro_rule",
+        "micro_max_units": 4,
+        "llm_max_calls": 60,
+        "game_path": "C:\\Program Files (x86)\\StarCraft II",
+        "map": "Babylon LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0,
+        "seed": 11,
+        "run_id": "p3_final_babylon_11",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1101,
+          "completed_SUPPLYDEPOT": 10,
+          "completed_BARRACKS": 7,
+          "marines_created": 64,
+          "combat_commands": 4909,
+          "micro_decision_steps": 829,
+          "micro_owned_decisions": 226,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 40,
+          "micro_action_approach": 132,
+          "micro_action_hold": 45,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1,
+          "micro_action_weakest": 10,
+          "micro_action_retreat": 27,
+          "micro_action_nearest": 12
+        },
+        "game_span_seconds": 392.8571428571429,
+        "wall_span_seconds": 26.42047279997496,
+        "game_to_wall_ratio": 14.869421369988324,
+        "on_step_p50_seconds": 0.000956700008828193,
+        "on_step_p95_seconds": 0.0059988999855704606,
+        "on_step_p99_seconds": 0.009658799972385168,
+        "on_step_max_seconds": 0.02341670001624152,
+        "peak_workers": 44,
+        "peak_marines": 54,
+        "peak_bases": 2
+      },
+      "audit": {
+        "status": "passed",
+        "transitions": 226,
+        "episodes": 62,
+        "bc_eligible": 159,
+        "command_results": {
+          "engine_confirmed": 173,
+          "hold": 45,
+          "order_preserved": 4,
+          "engine_unconfirmed": 4
+        },
+        "requested_actions": {
+          "3": 132,
+          "4": 45,
+          "1": 10,
+          "2": 27,
+          "0": 12
+        },
+        "game_loop_intervals": {
+          "8": 226
+        },
+        "split": [
+          "train"
+        ],
+        "errors": [],
+        "source_sha256": "b82e531ea3baffaed427728021de3449816f8c6bb0139bf4f83d5ae7c2726828",
+        "match_status": "completed",
+        "match_result": "Result.Victory",
+        "learning_readiness": "not_evaluated",
+        "reward": "not_implemented"
+      },
+      "scenario_result": null,
+      "replay_bytes": 58963,
+      "replay_sha256": "52b6ac5a23097325c6550618fcb218f9576728da74bf4deab08b4e7264130a08"
+    },
+    {
+      "run_id": "p3_final_zergling_realtime",
+      "accepted": true,
+      "artifact_directory": "artifacts/runs/p3_final_zergling_realtime",
+      "config": {
+        "scenario": "marine-vs-zergling",
+        "game_path": "C:\\Program Files (x86)\\StarCraft II",
+        "map": "Ancient Cistern LE",
+        "seed": 42,
+        "realtime": true,
+        "max_game_seconds": 45,
+        "run_id": "p3_final_zergling_realtime"
+      },
+      "summary": {
+        "status": "truncated",
+        "result": "Result.Defeat",
+        "stop_reason": "game_time_limit",
+        "error": null,
+        "counters": {
+          "completed_COMMANDCENTER": 3,
+          "callbacks": 124,
+          "marines_created": 1,
+          "micro_action_weakest": 5,
+          "micro_decision_steps": 15,
+          "micro_owned_decisions": 15,
+          "command_conflicts": 0,
+          "micro_action_retreat": 7,
+          "micro_action_hold": 3
+        },
+        "game_span_seconds": 5.49107142857143,
+        "wall_span_seconds": 5.367805399990175,
+        "game_to_wall_ratio": 1.022963952564577,
+        "on_step_p50_seconds": 0.0008318000473082066,
+        "on_step_p95_seconds": 0.002352599985897541,
+        "on_step_p99_seconds": 0.0031322999857366085,
+        "on_step_max_seconds": 0.005918800015933812,
+        "peak_workers": 12,
+        "peak_marines": 1,
+        "peak_bases": 1
+      },
+      "audit": {
+        "status": "passed",
+        "transitions": 15,
+        "episodes": 1,
+        "bc_eligible": 13,
+        "command_results": {
+          "order_preserved": 1,
+          "engine_confirmed": 10,
+          "engine_unconfirmed": 1,
+          "hold": 3
+        },
+        "requested_actions": {
+          "1": 5,
+          "2": 7,
+          "4": 3
+        },
+        "game_loop_intervals": {
+          "8": 15
+        },
+        "split": [
+          "validation"
+        ],
+        "errors": [],
+        "source_sha256": "308c0768d7eed123029b289aef7f9ac01a376b5793c431e524a375c8c6ae0c24",
+        "match_status": "truncated",
+        "match_result": "Result.Defeat",
+        "learning_readiness": "not_evaluated",
+        "reward": "not_implemented"
+      },
+      "scenario_result": {
+        "outcome": "enemy_dead",
+        "terminated": true,
+        "truncated": false,
+        "game_loop": 124,
+        "game_seconds": 5.5357142857142865
+      },
+      "replay_bytes": 9845,
+      "replay_sha256": "c8e6f8847f02f8690588f49f5491bb5e00a5403195b5fe2deff82557b099686b"
+    },
+    {
+      "run_id": "p3_final_marine_fixed",
+      "accepted": true,
+      "artifact_directory": "artifacts/runs/p3_final_marine_fixed",
+      "config": {
+        "scenario": "marine-vs-marine",
+        "game_path": "C:\\Program Files (x86)\\StarCraft II",
+        "map": "Ancient Cistern LE",
+        "seed": 42,
+        "realtime": false,
+        "max_game_seconds": 45,
+        "run_id": "p3_final_marine_fixed"
+      },
+      "summary": {
+        "status": "truncated",
+        "result": "Result.Defeat",
+        "stop_reason": "game_time_limit",
+        "error": null,
+        "counters": {
+          "callbacks": 14,
+          "marines_created": 1,
+          "micro_action_retreat": 6,
+          "micro_decision_steps": 12,
+          "micro_owned_decisions": 12,
+          "command_conflicts": 0,
+          "micro_action_approach": 3,
+          "micro_action_weakest": 3
+        },
+        "game_span_seconds": 4.642857142857143,
+        "wall_span_seconds": 0.33680010004900396,
+        "game_to_wall_ratio": 13.785201198519875,
+        "on_step_p50_seconds": 0.00198529998306185,
+        "on_step_p95_seconds": 0.0032248999923467636,
+        "on_step_p99_seconds": 0.0032248999923467636,
+        "on_step_max_seconds": 0.0033153999829664826,
+        "peak_workers": 12,
+        "peak_marines": 1,
+        "peak_bases": 1
+      },
+      "audit": {
+        "status": "passed",
+        "transitions": 12,
+        "episodes": 1,
+        "bc_eligible": 11,
+        "command_results": {
+          "engine_confirmed": 12
+        },
+        "requested_actions": {
+          "2": 6,
+          "3": 3,
+          "1": 3
+        },
+        "game_loop_intervals": {
+          "8": 12
+        },
+        "split": [
+          "train"
+        ],
+        "errors": [],
+        "source_sha256": "020fb99f45062514554819a313fc4b1e9d9ac2e32d32e734ae3d0af28bac01f8",
+        "match_status": "truncated",
+        "match_result": "Result.Defeat",
+        "learning_readiness": "not_evaluated",
+        "reward": "not_implemented"
+      },
+      "scenario_result": {
+        "outcome": "low_health_safety_exit",
+        "terminated": false,
+        "truncated": true,
+        "game_loop": 105,
+        "game_seconds": 4.6875
+      },
+      "replay_bytes": 9680,
+      "replay_sha256": "92ab662074eb867adb3a940ae2b37b6d12ff1c685fad7799b31fe206952b7f9c"
+    }
+  ],
+  "training_readiness": "not_established",
+  "reward": "not_implemented",
+  "models_trained": false,
+  "excluded_early_runs": [
+    "p3_micro_fixed_42",
+    "p3_micro_realtime_42",
+    "p3_scenario_zergling_fixed",
+    "p3_scenario_zergling_fixed_v2",
+    "p3_scenario_zergling_fixed_v3",
+    "p3_scenario_zergling_realtime",
+    "p3_scenario_marine_fixed"
+  ]
+}

@@ -22,11 +22,15 @@ def git(*args):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--mode", choices=["template", "rule", "shadow", "llm"], default="rule"
+        "--mode",
+        choices=["template", "rule", "shadow", "llm", "micro_rule"],
+        default="rule",
     )
+    parser.add_argument("--micro-max-units", type=int, choices=range(1, 5), default=4)
     parser.add_argument("--llm-max-calls", type=int, default=60)
     parser.add_argument(
-        "--game-path", default=os.getenv("SC2PATH", r"D:\game\StarCraft II")
+        "--game-path",
+        default=os.getenv("SC2PATH", r"C:\Program Files (x86)\StarCraft II"),
     )
     parser.add_argument("--map", default="Ancient Cistern LE")
     parser.add_argument(
@@ -125,6 +129,10 @@ def main():
     )
     if options.mode == "template":
         ai = InstrumentedAresBot(options, telemetry)
+    elif options.mode == "micro_rule":
+        from bot.micro_bot import MicroRuleBot
+
+        ai = MicroRuleBot(options, telemetry)
     elif options.mode in {"shadow", "llm"}:
         from bot.llm_bot import StrategicBot
 
@@ -162,6 +170,8 @@ def main():
         telemetry.finish()
         raise
     finally:
+        if hasattr(ai, "close_micro"):
+            ai.close_micro("system_failure" if telemetry.error else None)
         if hasattr(ai, "close_strategy"):
             ai.close_strategy()
         manifest["process_game_seconds"] = time.perf_counter() - started

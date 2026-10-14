@@ -12,7 +12,7 @@
 | P1 规则基线 | 已通过工程验收 | `baseline-rule-v1`，提交 `5b0c039e888e5a474f1ff1433634ce698c746e15`；两地图×五种子10局固定步完整获胜，另1局完整实时获胜 |
 | P2 LLM战略首版 | 已通过工程验收 | `baseline-llm-v1`，提交 `bafd143ed70a8b451a9879e55f02ff9bb36a5c5f`；影子测试及规则/LLM各1局完整实时比赛通过 |
 | P2 正式强度比较 | 未完成 | 本轮仅一个成对工程样本，不能宣称 LLM 提高胜率 |
-| P3 微操接口与规则专家数据 | 未开始 | 下一步开发目标 |
+| P3 微操接口与规则专家数据 | 首轮工程候选已实现并验证 | 新机两地图固定步完整局、1v1场景与真实采集；见 `docs/PHASE_03_REPORT.md`，覆盖/正式验收尚未完成 |
 | BC / PPO / RL模型训练 | 未开始 | 没有已训练模型、训练checkpoint或可恢复训练进程 |
 
 当前默认入口仍是规则版。LLM是单独入口，网络失败不会同步卡住游戏。完整规划已经复制到仓库 [docs/DEVELOPMENT_PLAN.zh-CN.md](docs/DEVELOPMENT_PLAN.zh-CN.md)，无需访问旧电脑 D:\GPT-personal 才能阅读。详细实现及证据见 [P1报告](docs/PHASE_01_REPORT.md)、[P2报告](docs/PHASE_02_REPORT.md)、[本地说明](README_LOCAL.md)。规划中的未实施条目不能当作现成代码。
@@ -77,7 +77,7 @@ Copy-Item -LiteralPath '.\maps\Babylon LE.SC2Map' -Destination (Join-Path $env:S
 Get-FileHash -Algorithm SHA256 '.\maps\Ancient Cistern LE.SC2Map', '.\maps\Babylon LE.SC2Map'
 ```
 
-校验值见 [maps/SOURCES.md](maps/SOURCES.md)。入口默认游戏路径仍为 `D:\game\StarCraft II`；路径不同可设置SC2PATH或每次传 `--game-path`。环境变量设置在当前终端生效；关闭终端后需重设，或自行设置持久用户变量。
+校验值见 [maps/SOURCES.md](maps/SOURCES.md)。新机入口默认游戏路径为 `C:\Program Files (x86)\StarCraft II`；路径不同可设置SC2PATH或每次传 `--game-path`。环境变量设置在当前终端生效；关闭终端后需重设，或自行设置持久用户变量。
 
 ### 4. 配置DeepSeek（仅LLM/影子需要）
 
@@ -149,7 +149,7 @@ API调度：摘要1游戏秒；查询每15游戏秒且至少5实际秒间隔；�
 
 ## 下一阶段具体交接
 
-建议按 [开发规划的P3](docs/DEVELOPMENT_PLAN.zh-CN.md) 开始，先做接口和数据，再训练：
+新机已按 [开发规划的P3](docs/DEVELOPMENT_PLAN.zh-CN.md) 完成首轮接口、规则专家和采集候选，实际使用 `run_micro.cmd` / `tools/run_micro_scenario.py`，证据见 [P3报告](docs/PHASE_03_REPORT.md)。下面是完整阶段要求；已完成子集与剩余事项以P3报告为准，继续先完善场景和数据覆盖，再训练：
 
 1. 固定小范围Marine微操场景，明确受控单位、可见敌方、战斗半径、结束条件和撤退回退。
 2. 冻结 `marine-16-v1` 的16维特征及5类动作的语义、归一化、坐标参照、mask和采样时序；手册是起点，不能直接把示例当可用环境。
@@ -175,4 +175,4 @@ API调度：摘要1游戏秒；查询每15游戏秒且至少5实际秒间隔；�
 
 ## 给新电脑开发助手的接续提示
 
-> 阅读仓库HANDOVER.md、README_LOCAL.md、docs/DEVELOPMENT_PLAN.zh-CN.md及P1/P2报告。项目目标是本地Ares＋LLM战略＋RL微操，不参加AI Arena。P0/P1及P2受限Marine战略首版工程验证已完成，RL尚未开始。先验证新机Conda环境、子模块、SC2路径、地图和25项单测，保留baseline-rule-v1/baseline-llm-v1，再从P3统一微操接口、规则专家与数据采集推进。模型慢/失败时不能阻塞实时游戏，单位必须唯一命令所有者。不要把历史Medium小样本获胜当战略收益，不要读取或输出API密钥。
+> 阅读仓库HANDOVER.md、README_LOCAL.md、docs/DEVELOPMENT_PLAN.zh-CN.md及P1/P2/P3报告。项目目标是本地Ares＋LLM战略＋RL微操，不参加AI Arena。新机项目位于C:\code\SC2Agent_llm，游戏C:\Program Files (x86)\StarCraft II，sc2-ares-runtime / Python3.11.17已恢复，40项单测通过。P1/P2历史基线保留；P3首轮接口/规则专家/真实采集候选已验证，需继续固定场景、数据覆盖和专家对照。BC/PPO尚未开始。新机LLM密钥未配置。保留唯一命令出口、实时非阻塞和原始实验来源，不把Medium小样本获胜当算法收益，不读取或输出API密钥。

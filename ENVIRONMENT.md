@@ -1,5 +1,17 @@
 # 本机 Ares 运行环境
 
+## 新机恢复（2026-10-14）
+
+当前项目为 `C:\code\SC2Agent_llm`，从仓库提交 `3bf78e72d24e1331e79a44dc1b3702872027fd1f` 恢复；P3工作位于 `codex/p3-marine-interface`。下方D盘路径和原安装日志属于原机历史。
+
+新机使用 `C:\Users\27932\anaconda3\envs\sc2-ares-runtime\python.exe`，Python3.11.17；独立Poetry2.2.1工具在 `C:\code\sc2-poetry-tool`。明确设置VIRTUAL_ENV和virtualenvs.create=false后，按原poetry.lock安装；未执行poetry update，未加入Torch/SB3训练依赖，其他已有环境未改动。新机依赖快照位于 `.local-setup/runtime-new-machine.freeze.txt`。
+
+游戏为 `C:\Program Files (x86)\StarCraft II`，实测Base98370。SC2PATH已设置为用户环境变量，入口也将该Windows默认目录作为无环境变量时的后备。项目两张地图复制到游戏Maps，SHA256与 `maps/SOURCES.md` 一致。Ares子模块固定70a151a、源码干净；python-sc2和MapAnalyzer仍是上文档指定Git提交。
+
+GitHub普通完整pack传输在新机多次停滞。通过Git的blob:none获取精确提交/tree、按原提交raw路径下载文件，并逐文件核对Git blob SHA1后补齐工作区；这不是ZIP替代子模块。主仓库历史和baseline-rule-v1/baseline-llm-v1标签已获取，历史未下载的blob仍可由partial clone按需获取。本轮失败克隆与恢复脚本保存在受忽略的 `.local-setup/network-recovery/`，没有覆盖旧项目资产。
+
+新机pip check、原25项测试、30秒实机连接检查和完整实时规则局通过；P3新增检查与证据见 `docs/PHASE_03_REPORT.md`。原私有 `.env.local` 未随Git恢复，LLM实机API未验证；规则/P3不需要密钥。
+
 建立日期：2026-10-14。项目 `D:\CODE\sc2-ares-llm-rl`。
 
 ## 固定来源
