@@ -1,0 +1,14 @@
+{
+  "suite_id": "rule_20261014_152630",
+  "suite_status": "passed",
+  "completed": 10,
+  "planned": 10,
+  "wins": 10,
+  "win_rate": 1.0,
+  "wilson_95": [
+    0.7224672001371218,
+    0.9999999999999999
+  ],
+  "current": null,
+  "failure": null
+}

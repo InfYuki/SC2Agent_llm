@@ -1,0 +1,26 @@
+{
+  "status": "completed",
+  "result": "Result.Victory",
+  "stop_reason": null,
+  "error": null,
+  "counters": {
+    "completed_COMMANDCENTER": 3,
+    "callbacks": 3379,
+    "completed_SUPPLYDEPOT": 18,
+    "completed_BARRACKS": 11,
+    "marines_created": 61,
+    "combat_commands": 4827,
+    "command_conflicts": 0,
+    "retired_completed_expansion_jobs": 1
+  },
+  "game_span_seconds": 405.4464285714286,
+  "wall_span_seconds": 407.5241173999966,
+  "game_to_wall_ratio": 0.9949016788458468,
+  "on_step_p50_seconds": 0.0012978999875485897,
+  "on_step_p95_seconds": 0.006101700011640787,
+  "on_step_p99_seconds": 0.00864509999519214,
+  "on_step_max_seconds": 0.06864250003127381,
+  "peak_workers": 45,
+  "peak_marines": 57,
+  "peak_bases": 2
+}

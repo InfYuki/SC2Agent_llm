@@ -1,0 +1,461 @@
+{
+  "suite_id": "rule_20261014_152630",
+  "status": "passed",
+  "runtime_hashes": {
+    "bot/arbiter.py": "6b905ac1f0264b1e8880227ed6d0463e82ae0bf34d8b82d15ce8359a9efe494f",
+    "bot/budget.py": "7814baf41b14196c70eeb38659cfd2027f2c1148f492608af1b60c65e0348a10",
+    "bot/building_manager.py": "bf5ea156d1f8528aba2c219ab7913102411d2414c3f8217cdbc631010d73e848",
+    "bot/compat.py": "e90e8b60e1210315b7608498dd6fd964cbbb536c2fad69c3c2274e1f00c1c580",
+    "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+    "bot/probe.py": "c0ff8a849c282edde043631c4ca53aeea978a5bb2309995fd3927437f942da8d",
+    "bot/rule_bot.py": "2dd7a7d3c2467ceac96100acf8ee6bccaa48b32d0324d00847637178f07aa865",
+    "bot/telemetry.py": "aec8d7392c4c0c9a94028a2d907bffe2a813741db903a93936c7e2d7c9251ea6",
+    "run_local.py": "9a1ccf9d939d4c52cba9bad033ee6016318c19ca35fb8d8260ffc8a9ce9727c2",
+    "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+    "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32"
+  },
+  "maps": [
+    "Ancient Cistern LE",
+    "Babylon LE"
+  ],
+  "seeds": [
+    42,
+    11,
+    21,
+    31,
+    41
+  ],
+  "matches": [
+    {
+      "run_id": "probe_20261014_152141_221489",
+      "config": {
+        "mode": "rule",
+        "game_path": "D:\\game\\StarCraft II",
+        "map": "Ancient Cistern LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0.0,
+        "seed": 42,
+        "run_id": "probe_20261014_152141_221489",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1104,
+          "completed_SUPPLYDEPOT": 12,
+          "completed_BARRACKS": 7,
+          "marines_created": 56,
+          "combat_commands": 5113,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 393.92857142857144,
+        "wall_span_seconds": 77.94144710002001,
+        "game_to_wall_ratio": 5.054160348383759,
+        "on_step_p50_seconds": 0.0017639999859966338,
+        "on_step_p95_seconds": 0.006317000021226704,
+        "on_step_p99_seconds": 0.00799620000179857,
+        "on_step_max_seconds": 0.009281500009819865,
+        "peak_workers": 45,
+        "peak_marines": 51,
+        "peak_bases": 2
+      }
+    },
+    {
+      "run_id": "rule_20261014_152630_01",
+      "config": {
+        "mode": "rule",
+        "game_path": "D:\\game\\StarCraft II",
+        "map": "Ancient Cistern LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0.0,
+        "seed": 11,
+        "run_id": "rule_20261014_152630_01",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1168,
+          "completed_SUPPLYDEPOT": 13,
+          "completed_BARRACKS": 6,
+          "marines_created": 66,
+          "combat_commands": 5250,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 416.78571428571433,
+        "wall_span_seconds": 80.83948399999645,
+        "game_to_wall_ratio": 5.155719626881001,
+        "on_step_p50_seconds": 0.0014573000371456146,
+        "on_step_p95_seconds": 0.004415000032167882,
+        "on_step_p99_seconds": 0.006400899961590767,
+        "on_step_max_seconds": 0.0477060999837704,
+        "peak_workers": 45,
+        "peak_marines": 60,
+        "peak_bases": 2
+      },
+      "process_seconds": 121.7343155000126
+    },
+    {
+      "run_id": "rule_20261014_152630_02",
+      "config": {
+        "mode": "rule",
+        "game_path": "D:\\game\\StarCraft II",
+        "map": "Ancient Cistern LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0.0,
+        "seed": 21,
+        "run_id": "rule_20261014_152630_02",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1120,
+          "completed_SUPPLYDEPOT": 11,
+          "completed_BARRACKS": 6,
+          "marines_created": 59,
+          "combat_commands": 4947,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 399.64285714285717,
+        "wall_span_seconds": 71.73914160003187,
+        "game_to_wall_ratio": 5.57077835376106,
+        "on_step_p50_seconds": 0.0011514999787323177,
+        "on_step_p95_seconds": 0.004572600009851158,
+        "on_step_p99_seconds": 0.005619000003207475,
+        "on_step_max_seconds": 0.009704299969598651,
+        "peak_workers": 44,
+        "peak_marines": 57,
+        "peak_bases": 2
+      },
+      "process_seconds": 106.8588789999485
+    },
+    {
+      "run_id": "rule_20261014_152630_03",
+      "config": {
+        "mode": "rule",
+        "game_path": "D:\\game\\StarCraft II",
+        "map": "Ancient Cistern LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0.0,
+        "seed": 31,
+        "run_id": "rule_20261014_152630_03",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1144,
+          "completed_SUPPLYDEPOT": 13,
+          "completed_BARRACKS": 6,
+          "marines_created": 62,
+          "combat_commands": 5179,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 408.2142857142857,
+        "wall_span_seconds": 79.45507239998551,
+        "game_to_wall_ratio": 5.137674328195064,
+        "on_step_p50_seconds": 0.0016522000078111887,
+        "on_step_p95_seconds": 0.006518699985463172,
+        "on_step_p99_seconds": 0.008435499970801175,
+        "on_step_max_seconds": 0.05894969997461885,
+        "peak_workers": 44,
+        "peak_marines": 56,
+        "peak_bases": 2
+      },
+      "process_seconds": 114.17328889999771
+    },
+    {
+      "run_id": "rule_20261014_152630_04",
+      "config": {
+        "mode": "rule",
+        "game_path": "D:\\game\\StarCraft II",
+        "map": "Ancient Cistern LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0.0,
+        "seed": 41,
+        "run_id": "rule_20261014_152630_04",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1137,
+          "completed_SUPPLYDEPOT": 13,
+          "completed_BARRACKS": 6,
+          "marines_created": 60,
+          "combat_commands": 5466,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 405.7142857142857,
+        "wall_span_seconds": 79.96293799998239,
+        "game_to_wall_ratio": 5.073779126454497,
+        "on_step_p50_seconds": 0.0014396000187844038,
+        "on_step_p95_seconds": 0.006552300008479506,
+        "on_step_p99_seconds": 0.008037500025238842,
+        "on_step_max_seconds": 0.05121440003858879,
+        "peak_workers": 45,
+        "peak_marines": 57,
+        "peak_bases": 2
+      },
+      "process_seconds": 118.85268429998541
+    },
+    {
+      "run_id": "rule_20261014_152630_05",
+      "config": {
+        "mode": "rule",
+        "game_path": "D:\\game\\StarCraft II",
+        "map": "Babylon LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0.0,
+        "seed": 42,
+        "run_id": "rule_20261014_152630_05",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1192,
+          "completed_SUPPLYDEPOT": 14,
+          "completed_BARRACKS": 7,
+          "marines_created": 69,
+          "combat_commands": 5498,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 425.3571428571429,
+        "wall_span_seconds": 84.7589980000048,
+        "game_to_wall_ratio": 5.018430525300911,
+        "on_step_p50_seconds": 0.001639000023715198,
+        "on_step_p95_seconds": 0.006655899982433766,
+        "on_step_p99_seconds": 0.008502100012265146,
+        "on_step_max_seconds": 0.05784620001213625,
+        "peak_workers": 45,
+        "peak_marines": 62,
+        "peak_bases": 2
+      },
+      "process_seconds": 129.01846749999095
+    },
+    {
+      "run_id": "rule_20261014_152630_06",
+      "config": {
+        "mode": "rule",
+        "game_path": "D:\\game\\StarCraft II",
+        "map": "Babylon LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0.0,
+        "seed": 11,
+        "run_id": "rule_20261014_152630_06",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1140,
+          "completed_SUPPLYDEPOT": 12,
+          "completed_BARRACKS": 6,
+          "marines_created": 58,
+          "combat_commands": 5098,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 406.78571428571433,
+        "wall_span_seconds": 76.41937300004065,
+        "game_to_wall_ratio": 5.323070555492492,
+        "on_step_p50_seconds": 0.0012848000042140484,
+        "on_step_p95_seconds": 0.004482200019992888,
+        "on_step_p99_seconds": 0.006005499977618456,
+        "on_step_max_seconds": 0.04920720000518486,
+        "peak_workers": 45,
+        "peak_marines": 53,
+        "peak_bases": 2
+      },
+      "process_seconds": 113.81663300003856
+    },
+    {
+      "run_id": "rule_20261014_152630_07",
+      "config": {
+        "mode": "rule",
+        "game_path": "D:\\game\\StarCraft II",
+        "map": "Babylon LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0.0,
+        "seed": 21,
+        "run_id": "rule_20261014_152630_07",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1105,
+          "completed_SUPPLYDEPOT": 12,
+          "completed_BARRACKS": 6,
+          "marines_created": 55,
+          "combat_commands": 4888,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 394.28571428571433,
+        "wall_span_seconds": 80.1163680999889,
+        "game_to_wall_ratio": 4.921412735455353,
+        "on_step_p50_seconds": 0.001572699984535575,
+        "on_step_p95_seconds": 0.006571099977008998,
+        "on_step_p99_seconds": 0.008517600013874471,
+        "on_step_max_seconds": 0.011302099970635027,
+        "peak_workers": 44,
+        "peak_marines": 55,
+        "peak_bases": 2
+      },
+      "process_seconds": 125.63767159997951
+    },
+    {
+      "run_id": "rule_20261014_152630_08",
+      "config": {
+        "mode": "rule",
+        "game_path": "D:\\game\\StarCraft II",
+        "map": "Babylon LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0.0,
+        "seed": 31,
+        "run_id": "rule_20261014_152630_08",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1103,
+          "completed_SUPPLYDEPOT": 13,
+          "completed_BARRACKS": 6,
+          "marines_created": 53,
+          "combat_commands": 4894,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 393.5714285714286,
+        "wall_span_seconds": 79.12772760004736,
+        "game_to_wall_ratio": 4.973875031022539,
+        "on_step_p50_seconds": 0.0013642999692820013,
+        "on_step_p95_seconds": 0.006218800030183047,
+        "on_step_p99_seconds": 0.007894499984104186,
+        "on_step_max_seconds": 0.0569338999921456,
+        "peak_workers": 44,
+        "peak_marines": 52,
+        "peak_bases": 2
+      },
+      "process_seconds": 119.17154830001527
+    },
+    {
+      "run_id": "rule_20261014_152630_09",
+      "config": {
+        "mode": "rule",
+        "game_path": "D:\\game\\StarCraft II",
+        "map": "Babylon LE",
+        "opponent": "Zerg",
+        "difficulty": "Medium",
+        "realtime": false,
+        "game_step": 8,
+        "max_game_seconds": 0.0,
+        "seed": 41,
+        "run_id": "rule_20261014_152630_09",
+        "show_config": false
+      },
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1154,
+          "completed_SUPPLYDEPOT": 12,
+          "completed_BARRACKS": 6,
+          "marines_created": 61,
+          "combat_commands": 5339,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 411.78571428571433,
+        "wall_span_seconds": 79.36451889999444,
+        "game_to_wall_ratio": 5.188536640719726,
+        "on_step_p50_seconds": 0.0013488000258803368,
+        "on_step_p95_seconds": 0.004799699992872775,
+        "on_step_p99_seconds": 0.006260800000745803,
+        "on_step_max_seconds": 0.04687489999923855,
+        "peak_workers": 45,
+        "peak_marines": 57,
+        "peak_bases": 2
+      },
+      "process_seconds": 113.42381029995158
+    }
+  ],
+  "current": null,
+  "failure": null
+}

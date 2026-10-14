@@ -129,3 +129,11 @@ dmypy.json
 .pyre/
 
 .idea
+
+# Local research runs, installer tooling, and private settings
+.local-setup/
+artifacts/
+.env.local
+.env.*.local
+*.SC2Replay
+data/
