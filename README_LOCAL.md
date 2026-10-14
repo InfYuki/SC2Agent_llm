@@ -65,6 +65,8 @@ python -s tools/run_micro_scenario.py --scenario marine-vs-zergling --realtime -
 
 每次命令独立启动一个有45游戏秒上限的场景。阵容/位置保存在 `scenario.json`，局部结果在 `scenario_result.json`；完整SC2比赛主动截断，不把其 Defeat 当局部失败。该入口没有 Gym reset/step 或 PPO 训练桥接。
 
+后续场景覆盖与A-move对照可使用 `python -s tools/evaluate_micro.py`；数据冻结使用 `tools/export_micro_dataset.py`。场景可加 `--expert amove`、`--distance 3`、`--health-fraction 0.5` 或 `--enemy-hidden`（潜地Zergling诊断）。最新配置恢复与验证见 [P3后续报告](docs/P3_COVERAGE_REPORT.md)。本机DeepSeek配置已安全保存，迁移到其他机器仍需配置自己的凭据。
+
 ## 日志、回放和验证
 
 - 控制台日志：`artifacts/last-run.log`。

@@ -86,7 +86,7 @@ Copy-Item .env.example .env.local
 notepad .env.local
 ```
 
-填写自己的API密钥；base为 `https://api.deepseek.com`，model为 `deepseek-flash`。环境变量 `DEEPSEEK_API_KEY / DEEPSEEK_BASE_URL / DEEPSEEK_MODEL` 优先于文件。密钥未上传；应在新机重新填写或通过自己的安全渠道转移。不要把密钥放入命令行、日志、交接文本或Git提交中。
+填写自己的API密钥；base为 `https://api.deepseek.com`，model为 `deepseek-flash`。环境变量 `DEEPSEEK_API_KEY / DEEPSEEK_BASE_URL / DEEPSEEK_MODEL` 优先于文件。用户已在本机安全配置 `.env.local`，影子及cap20完整实时LLM局通过，见 `docs/P3_COVERAGE_REPORT.md`；凭据不随Git迁移。不要把密钥放入命令行、日志、交接文本或Git提交中。
 
 纯规则模式不需要密钥。当前LLM适配限官方DeepSeek HTTPS端点和deepseek-flash，显式关闭thinking，使用JSON mode；切换提供方或模型需要新验证。
 
@@ -175,4 +175,4 @@ API调度：摘要1游戏秒；查询每15游戏秒且至少5实际秒间隔；�
 
 ## 给新电脑开发助手的接续提示
 
-> 阅读仓库HANDOVER.md、README_LOCAL.md、docs/DEVELOPMENT_PLAN.zh-CN.md及P1/P2/P3报告。项目目标是本地Ares＋LLM战略＋RL微操，不参加AI Arena。新机项目位于C:\code\SC2Agent_llm，游戏C:\Program Files (x86)\StarCraft II，sc2-ares-runtime / Python3.11.17已恢复，40项单测通过。P1/P2历史基线保留；P3首轮接口/规则专家/真实采集候选已验证，需继续固定场景、数据覆盖和专家对照。BC/PPO尚未开始。新机LLM密钥未配置。保留唯一命令出口、实时非阻塞和原始实验来源，不把Medium小样本获胜当算法收益，不读取或输出API密钥。
+> 阅读仓库HANDOVER.md、README_LOCAL.md、开发规划及P1/P2/P3和P3_COVERAGE_REPORT。项目目标是本地Ares＋LLM战略＋RL微操，不参加AI Arena。新机项目C:\code\SC2Agent_llm，游戏C:\Program Files (x86)\StarCraft II，sc2-ares-runtime / Python3.11.17，44项测试通过。P1/P2历史基线保留；P3有统一接口、专家采集、8场景×2专家通过、54条冻结BC技术合格样本，但动作0缺失，仍需2目标和更广数据覆盖后再训练。BC/PPO尚未开始。新机LLM已安全配置，影子2/2及cap20完整实时20/20合法计划、Victory和预算回退通过。保留唯一命令出口、实时非阻塞、数据分组与原始来源，不把小样本获胜当算法收益，不输出密钥。

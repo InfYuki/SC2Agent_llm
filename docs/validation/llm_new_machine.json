@@ -1,0 +1,138 @@
+{
+  "scope": "Small engineering pilot; no strategic strength claim",
+  "runs": [
+    {
+      "run_id": "llm_restore_shadow_2",
+      "mode": "shadow",
+      "summary": {
+        "status": "truncated",
+        "result": "Result.Defeat",
+        "stop_reason": "game_time_limit",
+        "error": null,
+        "counters": {
+          "completed_COMMANDCENTER": 3,
+          "callbacks": 1008,
+          "completed_SUPPLYDEPOT": 4
+        },
+        "game_span_seconds": 44.955357142857146,
+        "wall_span_seconds": 45.819314300024416,
+        "game_to_wall_ratio": 0.9811442582595172,
+        "on_step_p50_seconds": 0.00042320002103224397,
+        "on_step_p95_seconds": 0.0009633000008761883,
+        "on_step_p99_seconds": 0.0016705000307410955,
+        "on_step_max_seconds": 0.0033156999852508307,
+        "peak_workers": 15,
+        "peak_marines": 0,
+        "peak_bases": 1
+      },
+      "requests": 2,
+      "responses": 2,
+      "valid_plans": 2,
+      "failures": {},
+      "plan_tasks": {
+        "rally": 2
+      },
+      "plan_statuses": {
+        "active": 1,
+        "renewed": 1
+      },
+      "latency_mean_seconds": 1.0624999999708962,
+      "latency_p95_seconds": 0.8899999999557622,
+      "latency_max_seconds": 1.2349999999860302,
+      "input_tokens_min": 560,
+      "input_tokens_max": 632,
+      "total_usage": {
+        "prompt_tokens": 1192,
+        "completion_tokens": 217,
+        "total_tokens": 1409
+      },
+      "max_concurrent_requests": 1,
+      "unmatched_requests_at_exit": 0,
+      "freshness_violations": [],
+      "llm_step_fraction": 0.0,
+      "callbacks_while_waiting": 48,
+      "strategy_counters": {
+        "rule_steps": 1007,
+        "requests": 2,
+        "responses": 2,
+        "callbacks_while_waiting": 48,
+        "valid_plans": 2,
+        "plan_active": 1,
+        "plan_renewed": 1
+      },
+      "median_game_advance_during_request": 1.0714285714285712
+    },
+    {
+      "run_id": "llm_restore_full_cap20",
+      "mode": "llm",
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "completed_COMMANDCENTER": 7,
+          "callbacks": 9469,
+          "completed_SUPPLYDEPOT": 48,
+          "completed_BARRACKS": 28,
+          "marines_created": 76,
+          "combat_commands": 8698,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 19,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 422.6785714285715,
+        "wall_span_seconds": 430.7472296000342,
+        "game_to_wall_ratio": 0.981268229678564,
+        "on_step_p50_seconds": 0.0005059000104665756,
+        "on_step_p95_seconds": 0.0016799999866634607,
+        "on_step_p99_seconds": 0.002575599995907396,
+        "on_step_max_seconds": 0.0065527999540790915,
+        "peak_workers": 43,
+        "peak_marines": 63,
+        "peak_bases": 2
+      },
+      "requests": 20,
+      "responses": 20,
+      "valid_plans": 20,
+      "failures": {},
+      "plan_tasks": {
+        "rally": 17,
+        "attack": 3
+      },
+      "plan_statuses": {
+        "active": 5,
+        "renewed": 15
+      },
+      "latency_mean_seconds": 1.220349999994505,
+      "latency_p95_seconds": 1.452999999979511,
+      "latency_max_seconds": 1.6559999999590218,
+      "input_tokens_min": 560,
+      "input_tokens_max": 692,
+      "total_usage": {
+        "prompt_tokens": 13149,
+        "completion_tokens": 2491,
+        "total_tokens": 15640
+      },
+      "max_concurrent_requests": 1,
+      "unmatched_requests_at_exit": 0,
+      "freshness_violations": [],
+      "llm_step_fraction": 0.7963882141725631,
+      "callbacks_while_waiting": 545,
+      "strategy_counters": {
+        "rule_steps": 1928,
+        "requests": 20,
+        "responses": 20,
+        "callbacks_while_waiting": 545,
+        "valid_plans": 20,
+        "plan_active": 5,
+        "llm_steps": 7541,
+        "economy_goal_steps": 7541,
+        "plan_renewed": 15,
+        "combat_goal_steps": 647,
+        "expired_active_plans": 1
+      },
+      "median_game_advance_during_request": 1.2053571428571406
+    }
+  ]
+}

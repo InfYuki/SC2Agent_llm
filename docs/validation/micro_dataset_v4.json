@@ -1,0 +1,66 @@
+{
+  "samples": 54,
+  "feature_version": "marine-16-v1",
+  "action_version": "marine-5-v1",
+  "decision_game_loops": 8,
+  "input_files": [
+    {
+      "run_id": "p3_coverage_v4_zerg_close_kite",
+      "sha256": "23da7f62571b879e00716b067eead0aa0ba68fa63f46b89fcf2ba8258fc463db"
+    },
+    {
+      "run_id": "p3_coverage_v4_zerg_medium_kite",
+      "sha256": "760f1e031688a099adb4dd52f1d1471bf1718ddb68efc26f217520bbc59649c5"
+    },
+    {
+      "run_id": "p3_coverage_v4_marine_close_kite",
+      "sha256": "1f4e85f0c454e3bf41f346f830182a15c8eaff92ce83a7083b0f01210df9a3b7"
+    },
+    {
+      "run_id": "p3_coverage_v4_marine_hurt_kite",
+      "sha256": "ada712995f1745a9c2b5f748b610fe32deb8080ec1defe65d628321adb0d554f"
+    },
+    {
+      "run_id": "p3_coverage_v4_zerg_hurt_kite",
+      "sha256": "28fff038ce3a07bcbc4017da0c0f8cb5b28925677ef9ef653bdc2a88fe61ec8b"
+    },
+    {
+      "run_id": "p3_coverage_v4_marine_medium_kite",
+      "sha256": "1199bfd229c4dd17131f3b92ba1113a2a8795d260a34019bba93bdc3a535cb0c"
+    },
+    {
+      "run_id": "p3_coverage_v4_unseen_kite",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "run_id": "p3_coverage_v4_time_limit_kite",
+      "sha256": "4bb7d812692ff3148d7f301723b7c994cd838d46fa72c2bacad0d6eeff45ab7a"
+    }
+  ],
+  "group_splits": {
+    "zerg_close": "train",
+    "zerg_medium": "validation",
+    "marine_close": "train",
+    "marine_hurt": "test",
+    "zerg_hurt": "validation",
+    "marine_medium": "test"
+  },
+  "split_counts": {
+    "train": 20,
+    "validation": 19,
+    "test": 15
+  },
+  "action_counts": {
+    "1": 11,
+    "2": 16,
+    "4": 22,
+    "3": 5
+  },
+  "missing_actions": [
+    0
+  ],
+  "dataset_sha256": "21227bd6a01306c4795a277ac4b5c0405630cd01e7ab2d60b75a6f93b849f444",
+  "suite_sha256": "86f88d71eff1aff9a889b465b02cfd948c940f6f50a8b0d46183d6743d4dd4c2",
+  "training_readiness": "not_established",
+  "models_trained": false
+}

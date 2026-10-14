@@ -49,12 +49,22 @@ class ScenarioBot(MicroRuleBot):
 
     async def _setup_scene(self):
         await super().on_start()
-        self.recorder.scenario = self.options.scenario + "-v1"
+        self.recorder.scenario = self.options.scenario + "-v4"
+        if self.options.data_split:
+            self.recorder.split = self.options.data_split
+        self._health_ready = (
+            self.options.health_fraction == 1
+            and self.options.enemy_health_fraction == 1
+        )
         self._scene_tag = self._enemy_tag = None
         self._scene_stop = False
         self._scene_outcome = None
         self.enemy_kind = (
-            UnitTypeId.ZERGLING
+            (
+                UnitTypeId.ZERGLINGBURROWED
+                if self.options.enemy_hidden
+                else UnitTypeId.ZERGLING
+            )
             if self.options.scenario == "marine-vs-zergling"
             else UnitTypeId.MARINE
         )
@@ -70,7 +80,13 @@ class ScenarioBot(MicroRuleBot):
         ]
         positions.sort(key=lambda point: (point.distance_to(center), point.x, point.y))
         for left in positions:
-            right = Point2((left.x + 6, left.y))
+            right = Point2((left.x + self.options.distance, left.y))
+            starts = [self.start_location, *self.enemy_start_locations]
+            if any(
+                min(left.distance_to(start), right.distance_to(start)) < 25
+                for start in starts
+            ):
+                continue
             probe = SimpleNamespace(position=left, radius=0.375)
             if (
                 self._open_patch(left)
@@ -98,6 +114,12 @@ class ScenarioBot(MicroRuleBot):
                         time_limit_seconds=self.options.max_game_seconds,
                         opponent_script="visible-nearest-attack-v1",
                         macro="disabled",
+                        expert=self.options.expert,
+                        requested_distance=self.options.distance,
+                        health_fraction=self.options.health_fraction,
+                        enemy_health_fraction=self.options.enemy_health_fraction,
+                        enemy_hidden=self.options.enemy_hidden,
+                        split=self.recorder.split,
                     ),
                 )
                 return
@@ -113,8 +135,8 @@ class ScenarioBot(MicroRuleBot):
             *self.structures,
         ]
         obstacles = [u for u in obstacles if left.distance_to(u.position) < 24]
-        for dx in range(-6, 13, 2):
-            for dy in range(-6, 7, 2):
+        for dx in range(-3, int(self.options.distance) + 4, 2):
+            for dy in range(-3, 4, 2):
                 point = Point2((left.x + dx, left.y + dy))
                 if (
                     not self.in_pathing_grid(point)
@@ -166,6 +188,18 @@ class ScenarioBot(MicroRuleBot):
         enemies = [
             e for e in self.enemy_units if e.type_id == self.enemy_kind and e.is_visible
         ]
+        if army and not getattr(self, "_initial_scene_recorded", False):
+            self._initial_scene_recorded = True
+            self.telemetry.write_json(
+                "initial_scene_observation.json",
+                dict(
+                    game_loop=int(self.state.game_loop),
+                    friendly_position=list(army.first.position),
+                    health=float(army.first.health),
+                    visible_enemy_count=len(enemies),
+                    enemy_positions=[list(e.position) for e in enemies],
+                ),
+            )
         if army and self._scene_tag is None:
             self._scene_tag = army.first.tag
         if enemies and self._enemy_tag is None:
@@ -186,10 +220,36 @@ class ScenarioBot(MicroRuleBot):
         if army and enemies and frame - self._last_combat_frame >= DECISION_LOOPS:
             self._last_combat_frame = frame
             self.strategy_state = "attack"
-            self.issue_combat_orders(army, "attack", self.scene_goal, frame)
+            if self.options.expert == "kite":
+                self.issue_combat_orders(army, "attack", self.scene_goal, frame)
+            else:
+                # Native attack-move is a separate baseline, not a fabricated
+                # five-action BC label. It uses the same ownership gate.
+                self.arbiter.begin_step({u.tag: "rule_combat" for u in army})
+                for unit in army:
+                    self.issue_rule_order(unit, "attack", self.scene_goal, frame)
             self.telemetry.counts["command_conflicts"] = self.arbiter.conflicts
 
     async def on_step(self, iteration):
+        if not self._health_ready:
+            if self.time >= self.options.max_game_seconds:
+                await super().on_step(iteration)
+                return
+            army = self.units(UnitTypeId.MARINE)
+            enemies = self.enemy_units.filter(
+                lambda e: e.type_id == self.enemy_kind and e.is_visible
+            )
+            if army and enemies:
+                await self.client.debug_set_unit_value(
+                    army, 2, army.first.health_max * self.options.health_fraction
+                )
+                await self.client.debug_set_unit_value(
+                    enemies,
+                    2,
+                    enemies.first.health_max * self.options.enemy_health_fraction,
+                )
+                self._health_ready = True
+            return
         await super().on_step(iteration)
         if self._scene_stop:
             # Full SC2 match is deliberately truncated after the local scenario.
@@ -225,11 +285,21 @@ def main():
     parser.add_argument("--map", default="Ancient Cistern LE")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--realtime", action="store_true")
+    parser.add_argument("--expert", choices=["kite", "amove"], default="kite")
+    parser.add_argument("--distance", type=float, choices=[3.0, 6.0, 10.0], default=6.0)
+    parser.add_argument("--enemy-hidden", action="store_true")
+    parser.add_argument("--health-fraction", type=float, default=1.0)
+    parser.add_argument("--enemy-health-fraction", type=float, default=1.0)
+    parser.add_argument(
+        "--data-split", choices=["train", "validation", "test"], default=None
+    )
     parser.add_argument("--max-game-seconds", type=float, default=45)
     parser.add_argument("--run-id", default=None)
     args = parser.parse_args()
     if args.max_game_seconds <= 0:
         parser.error("A finite positive scenario time limit is required")
+    if not (0.2 < args.health_fraction <= 1 and 0 < args.enemy_health_fraction <= 1):
+        parser.error("Own health fraction must be (0.2,1]; enemy health must be (0,1]")
     os.environ["SC2PATH"] = str(Path(args.game_path).resolve())
     os.chdir(ROOT)
     run_id = args.run_id or "scenario_" + datetime.now(timezone.utc).strftime(

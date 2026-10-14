@@ -10,7 +10,7 @@
 
 GitHub普通完整pack传输在新机多次停滞。通过Git的blob:none获取精确提交/tree、按原提交raw路径下载文件，并逐文件核对Git blob SHA1后补齐工作区；这不是ZIP替代子模块。主仓库历史和baseline-rule-v1/baseline-llm-v1标签已获取，历史未下载的blob仍可由partial clone按需获取。本轮失败克隆与恢复脚本保存在受忽略的 `.local-setup/network-recovery/`，没有覆盖旧项目资产。
 
-新机pip check、原25项测试、30秒实机连接检查和完整实时规则局通过；P3新增检查与证据见 `docs/PHASE_03_REPORT.md`。原私有 `.env.local` 未随Git恢复，LLM实机API未验证；规则/P3不需要密钥。
+新机pip check、原25项测试、30秒实机连接检查和完整实时规则局通过；P3初轮证据见 `docs/PHASE_03_REPORT.md`。原私有 `.env.local` 未随Git恢复；用户随后提供配置，已在本机安全保存并通过真实影子及cap20完整实时LLM验证，后续44项测试/场景覆盖见 `docs/P3_COVERAGE_REPORT.md`。规则/P3不需要密钥。
 
 建立日期：2026-10-14。项目 `D:\CODE\sc2-ares-llm-rl`。
 
