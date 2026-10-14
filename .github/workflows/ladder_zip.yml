@@ -1,6 +1,7 @@
+name: Manual upstream ladder package (not used for local development)
+
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:

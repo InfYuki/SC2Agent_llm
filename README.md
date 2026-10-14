@@ -1,6 +1,6 @@
 # 本地 Ares + LLM + RL 项目
 
-本机实际启动请先阅读 [README_LOCAL.md](README_LOCAL.md)：双击 `run_rule.cmd` 运行实时完整对局；环境与安装记录见 [ENVIRONMENT.md](ENVIRONMENT.md)，阶段证据见 [docs/PHASE_01_REPORT.md](docs/PHASE_01_REPORT.md)。当前先开发并验证 Ares 规则底座，LLM 与 RL 尚未启用。
+项目交接与换机恢复请先阅读 **[HANDOVER.md](HANDOVER.md)**。当前 P0/P1 规则基线及 P2 LLM 战略首版已通过工程验证，RL 尚未开始。启动、日志与入口说明见 [README_LOCAL.md](README_LOCAL.md)，证据见 [P1报告](docs/PHASE_01_REPORT.md) 和 [P2报告](docs/PHASE_02_REPORT.md)。
 
 以下保留官方模板原始使用资料，模板的默认入口、地图路径及参赛流程不代表本项目的本机配置或开发目标。
 
