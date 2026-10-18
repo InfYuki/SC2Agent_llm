@@ -24,7 +24,7 @@ run_rule.cmd --no-realtime --max-game-seconds 300 --seed 42
 
 `--no-realtime` 用固定游戏步推进，可比实时更快，是本地回归模式；不改变默认入口。
 
-P2 已加入影子和 LLM 战略入口，见 [LLM 阶段报告](docs/PHASE_02_REPORT.md)。BC 和 PPO 尚未启用。所有模式均不加载嵌入模型。默认 `run_rule.cmd` 仍独立运行规则，不读取密钥或调用 API。
+P2 已加入影子和 LLM 战略入口，见 [LLM 阶段报告](docs/PHASE_02_REPORT.md)。P4 已提供显式启用的 NumPy BC 原型，PPO 尚未启用；操作见下方 P4 入口。所有模式均不加载嵌入模型。默认 `run_rule.cmd` 仍独立运行规则，不读取密钥或调用 API。
 
 首轮工程验证通过：120秒影子测试＋同配置规则/LLM各一局完整实时比赛，后两局均获胜；LLM局31次合法计划，实时比例0.994。本次LLM结束更晚，尚无战略收益结论；研究基线 `baseline-llm-v1`。
 
@@ -42,7 +42,7 @@ P2 原机验证使用被 Git 忽略的 `.env.local`。新机需复制 `.env.exam
 
 本机项目目录：`C:\code\SC2Agent_llm`；运行环境：`sc2-ares-runtime`（Python3.11.17）。游戏默认目录为 `C:\Program Files (x86)\StarCraft II`；`SC2PATH` 和显式 `--game-path` 可覆盖。两张项目地图已安装。
 
-`run_micro.cmd` 是独立的 P3 规则专家采集入口，保持固定规则战略，最多接管4个 Marine，不调用模型或开始训练。特征、动作、支持范围和数据标签见 [MICRO_CONTRACT.md](docs/MICRO_CONTRACT.md)，验证与后续事项见 [P3报告](docs/PHASE_03_REPORT.md)。
+`run_micro.cmd` 是独立的 P3 规则专家采集入口，保持固定规则战略，最多接管4个 Marine；该入口仍使用规则专家。BC 使用下方独立入口。特征、动作、支持范围和数据标签见 [MICRO_CONTRACT.md](docs/MICRO_CONTRACT.md)，验证与后续事项见 [P3报告](docs/PHASE_03_REPORT.md)。
 
 ```bat
 cd /d C:\code\SC2Agent_llm
@@ -116,6 +116,33 @@ run_rule.cmd --mode template --max-game-seconds 12 --seed 42
 官方模板与 Ares 子模块保留其 MIT 许可。用户指定的 SmoothBrain 源码分析、版本比较和后续参考点见 [docs/SMOOTHBRAIN_REFERENCE.md](docs/SMOOTHBRAIN_REFERENCE.md)。未执行用户提供的 ZIP；借鉴的资源优先级思想在独立实现处标明了来源。
 ## 2026-10-18 P3双目标与导出状态
 
-suite marine-coverage-v7（场景*-v6）已完成12case×2专家24/24工程检查，导出82条技术合格样本，train32/validation24/test26且每split五动作均出现。58项单测通过。双目标按tag确认血量；双AI场景增加双方官方Result结束屏障。失败v5/v6和pilot均未混入冻结数据。训练就绪仍未建立，BC/PPO未开始；继续扩大独立场景与样本量。最新证据、数据哈希及局部停止遥测限制见 [P3覆盖报告](docs/P3_COVERAGE_REPORT.md)。
+suite marine-coverage-v7（场景*-v6）已完成12case×2专家24/24工程检查，导出82条技术合格样本，train32/validation24/test26且每split五动作均出现。58项单测通过。双目标按tag确认血量；双AI场景增加双方官方Result结束屏障。失败v5/v6和pilot均未混入冻结数据。训练就绪仍未建立；P4 已基于此冻结数据完成 BC 工程原型，PPO未开始。最新证据、数据哈希及局部停止遥测限制见 [P3覆盖报告](docs/P3_COVERAGE_REPORT.md)。
 
 单独诊断双目标可在 `tools/run_micro_scenario.py` 使用 `--enemy-count 2 --second-distance 8 --second-enemy-health-fraction 0.5`；实际参数以入口 `--help` 为准。正式冻结和分组审计继续使用 `tools/evaluate_micro.py` / `tools/export_micro_dataset.py`。
+
+## 2026-10-18 P4 BC 快速原型
+
+已训练 NumPy 16→64→64→5（Tanh）模型，显式启用后接管 Marine 局部动作；固定规则战略继续运行。冻结82条样本仅用于工程原型，训练/验证/测试准确率100%/100%/88.46%，不代表战斗收益或泛化。详见 [P4报告](docs/PHASE_04_MVP_REPORT.md)。没有安装Torch或PPO训练栈。
+
+在本机 PowerShell 使用已有模型：
+
+```powershell
+Set-Location C:\code\SC2Agent_llm
+conda activate sc2-ares-runtime
+$env:PYTHONNOUSERSITE = '1'
+$bcModel = '.\artifacts\models\marine_bc_mvp_20261018_seed42'
+.\run_bc.cmd --show-config
+.\run_bc.cmd
+# 独立场景诊断（会启动游戏）
+python -s tools/run_micro_scenario.py --scenario marine-vs-marine --policy bc --bc-model $bcModel --seed 42
+```
+
+双击 `run_bc.cmd` 或运行 `.\run_bc.cmd` 即加载本次模型，路径以脚本所在目录定位；可用 `--bc-model <其他目录>` 覆盖，默认模型缺失仍回退规则。`run_bc.cmd` 等价于 `run_local.py --mode rule_bc --bc-model <默认模型目录>` 的日志包装入口。默认规则入口仍为 `run_rule.cmd`。模型目录需同时包含 `weights.npz`、`metadata.json` 和 `training_report.json`；运行加载校验契约、权重形状与哈希，加载或推理失败转规则，事件中记录原因。动作使用当帧mask，保留唯一命令出口及低血量保护。BC和其规则回退日志均为 `policy=marine-bc-numpy-v1`、`expert=null`、`bc_eligible=false`，不能混入规则专家训练数据。
+
+模型与冻结原始数据在被Git忽略的 `artifacts/` 中，迁移机器需另行携带；只克隆代码不会取得模型。若已有冻结数据，可在当前NumPy环境重新训练一次（输出目录必须尚不存在）：
+
+```powershell
+python -s tools/train_micro_bc.py .\artifacts\micro_datasets\p3_v7_formal_20261018_115352_dataset .\artifacts\models\marine_bc_rebuilt_seed42 --seed 42 --epochs 1000 --learning-rate 0.003
+```
+
+训练仅优化train，以validation最小masked loss选权重，最后一次评估test；不要用test调参。82真实行推理一致、两局场景smoke通过；规划1000条真实及边界一致性未做，属于可用MVP而非P4正式验收。下轮先P5单Marine最小真实reset/step与奖励桥接，无需重跑历史24局suite或全部58项旧测试。

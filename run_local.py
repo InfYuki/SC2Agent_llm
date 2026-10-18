@@ -23,10 +23,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--mode",
-        choices=["template", "rule", "shadow", "llm", "micro_rule"],
+        choices=["template", "rule", "shadow", "llm", "micro_rule", "rule_bc"],
         default="rule",
     )
     parser.add_argument("--micro-max-units", type=int, choices=range(1, 5), default=4)
+    parser.add_argument("--bc-model", default=None, help="Prototype BC model directory; missing/invalid models use rule micro.")
     parser.add_argument("--llm-max-calls", type=int, default=60)
     parser.add_argument(
         "--game-path",
@@ -129,7 +130,7 @@ def main():
     )
     if options.mode == "template":
         ai = InstrumentedAresBot(options, telemetry)
-    elif options.mode == "micro_rule":
+    elif options.mode in {"micro_rule", "rule_bc"}:
         from bot.micro_bot import MicroRuleBot
 
         ai = MicroRuleBot(options, telemetry)

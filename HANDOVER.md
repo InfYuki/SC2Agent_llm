@@ -13,7 +13,8 @@
 | P2 LLM战略首版 | 已通过工程验收 | `baseline-llm-v1`，提交 `bafd143ed70a8b451a9879e55f02ff9bb36a5c5f`；影子测试及规则/LLM各1局完整实时比赛通过 |
 | P2 正式强度比较 | 未完成 | 本轮仅一个成对工程样本，不能宣称 LLM 提高胜率 |
 | P3 微操接口与规则专家数据 | 接口、双目标及v7覆盖批次工程验证通过；训练就绪未建立 | 12case×2专家24/24通过，82条冻结技术合格样本，每split五动作均出现；见 `docs/P3_COVERAGE_REPORT.md` |
-| BC / PPO / RL模型训练 | 未开始 | 没有已训练模型、训练checkpoint或可恢复训练进程 |
+| P4 BC工程原型 | 已训练并提供显式运行入口 | NumPy 16→64→64→5，冻结82条；见 `docs/PHASE_04_MVP_REPORT.md`，不代表训练就绪或战斗收益 |
+| PPO / RL训练桥接 | 未开始 | 无Gym reset/step或PPO训练进程 |
 
 当前默认入口仍是规则版。LLM是单独入口，网络失败不会同步卡住游戏。完整规划已经复制到仓库 [docs/DEVELOPMENT_PLAN.zh-CN.md](docs/DEVELOPMENT_PLAN.zh-CN.md)，无需访问旧电脑 D:\GPT-personal 才能阅读。详细实现及证据见 [P1报告](docs/PHASE_01_REPORT.md)、[P2报告](docs/PHASE_02_REPORT.md)、[本地说明](README_LOCAL.md)。规划中的未实施条目不能当作现成代码。
 
@@ -149,7 +150,7 @@ API调度：摘要1游戏秒；查询每15游戏秒且至少5实际秒间隔；�
 
 ## 下一阶段具体交接
 
-新机已按 [开发规划的P3](docs/DEVELOPMENT_PLAN.zh-CN.md) 完成首轮接口、规则专家和采集候选，实际使用 `run_micro.cmd` / `tools/run_micro_scenario.py`，证据见 [P3报告](docs/PHASE_03_REPORT.md)。下面是完整阶段要求；已完成子集与剩余事项以P3报告为准，继续先完善场景和数据覆盖，再训练：
+新机已按 [开发规划的P3](docs/DEVELOPMENT_PLAN.zh-CN.md) 完成首轮接口、规则专家和采集候选，实际使用 `run_micro.cmd` / `tools/run_micro_scenario.py`，证据见 [P3报告](docs/PHASE_03_REPORT.md)。下面保留P3阶段要求；P4已在冻结小样本上实现快速BC工程原型，当前操作以P4报告与README为准，后续仍需扩大独立覆盖：
 
 1. 固定小范围Marine微操场景，明确受控单位、可见敌方、战斗半径、结束条件和撤退回退。
 2. 冻结 `marine-16-v1` 的16维特征及5类动作的语义、归一化、坐标参照、mask和采样时序；手册是起点，不能直接把示例当可用环境。
@@ -157,7 +158,7 @@ API调度：摘要1游戏秒；查询每15游戏秒且至少5实际秒间隔；�
 4. 先采规则专家数据，严格对齐 observation/action/mask/next observation 与游戏帧，记录episode边界、版本和随机种子，避免同一对局跨训练/测试泄漏。
 5. 有真实数据与环境验收后，再开展BC；PPO需真实reset/step桥接与训练部署一致的动作掩码。固定规则战略评估微操，再组合LLM；局部训练不调用远端LLM。
 
-不要先安装一整套旧项目依赖或直接开始PPO。当前生产环境没有stable-baselines3/sb3-contrib训练栈；后续应另建训练环境，保持Ares运行基线可用。当前环境、代码与模型没有需要“继续训练”的进度。
+不要先安装一整套旧项目依赖或直接开始PPO。当前生产环境没有stable-baselines3/sb3-contrib训练栈；后续应另建训练环境，保持Ares运行基线可用。已有BC权重和训练元数据位于本机artifacts/models；无运行中的训练进程，PPO尚未开始。
 
 用户参考Bot为 [Myrmecoman/sc2_bot](https://github.com/Myrmecoman/sc2_bot)，固定参考commit `895d8b036af0554e8d49cc6be5925abe54da6ba2`；分析见 [SMOOTHBRAIN_REFERENCE.md](docs/SMOOTHBRAIN_REFERENCE.md)。其宏观自管工人，不可把它的宏观控制与本项目Ares Mining直接叠加；不要混用其自带旧Ares和当前子模块。用户SmoothBrain_data.zip是22字节有效空ZIP，没有训练数据。
 
@@ -175,9 +176,16 @@ API调度：摘要1游戏秒；查询每15游戏秒且至少5实际秒间隔；�
 
 ## 给新电脑开发助手的接续提示
 
-> 阅读仓库HANDOVER.md、README_LOCAL.md、开发规划及P1/P2/P3和P3_COVERAGE_REPORT。项目目标是本地Ares＋LLM战略＋RL微操，不参加AI Arena。新机项目C:\code\SC2Agent_llm，游戏C:\Program Files (x86)\StarCraft II，sc2-ares-runtime / Python3.11.17，58项测试通过。P1/P2历史基线保留；P3统一接口、双目标与v7覆盖批次12场景×2专家24/24通过，冻结82条技术合格样本（train32/validation24/test26），每split五动作均出现，但训练就绪仍未建立，须扩大独立几何/敌种/seed/障碍/死亡边界与样本量。BC/PPO尚未开始。新机LLM已安全配置，影子2/2及cap20完整实时20/20合法计划、Victory和预算回退通过。保留唯一命令出口、实时非阻塞、数据分组与原始来源，不把小样本获胜当算法收益，不输出密钥。
+> 先读HANDOVER.md、README_LOCAL.md、docs/PHASE_04_MVP_REPORT.md和P3_COVERAGE_REPORT。项目在C:\code\SC2Agent_llm，目标是本地Ares＋LLM战略＋Marine微操，不参加AI Arena。用户偏好快速可用MVP、少重复测试；每小步交子代理，主代理协调核对。P1/P2与P3历史证据保留。P4以冻结82条（32/24/26）训练NumPy BC，val选epoch1000，test准确率88.46%；这是标签拟合工程原型，不证明收益或泛化。显式run_bc.cmd --bc-model启用，默认仍规则；失败规则回退，BC日志不充当专家标签。模型和数据不在Git，迁移需另带。未开始PPO，训练就绪仍未建立。遵守唯一命令出口、非阻塞LLM及凭据保密。
+
 ## 2026-10-18 P3接续状态
 
 suite marine-coverage-v7 / 场景*-v6正式批次 `p3_v7_formal_20261018_115352` 24/24通过；冻结82条技术合格样本，train32/validation24/test26，每split五动作均出现。共享摘要在docs/validation/micro_coverage_v7.json和micro_dataset_v7.json。58/58单测、pip check、diff检查、独立源码审查与最终数据/日志验收通过；suite记录17源哈希，当前无变化。双AI结束屏障要求双方原SDK返回有效官方Result后清理；24局日志均有双方官方Result、无连接已关闭错误，0命令冲突。失败v5（0.6秒初始化窗口不足）和v6（双AI退出竞态）保留且不导出；详情见 [P3覆盖报告](docs/P3_COVERAGE_REPORT.md)。
 
-两种专家各9次低血量安全退出、1次敌人死亡、2次时间上限，未发现优势证据。相同双目标几何不同seed不能作为泛化证明。训练就绪仍未建立，BC/PPO未开始；下一步先扩大独立场景和样本量。场景局部结果优先读scenario_result.outcome和尾transition.end_reason，summary.stop_reason仍有统一写game_time_limit的分类限制，后续连同Telemetry映射修复。
+两种专家各9次低血量安全退出、1次敌人死亡、2次时间上限，未发现优势证据。相同双目标几何不同seed不能作为泛化证明。本段为P3历史状态；P4已完成小样本BC原型，训练就绪仍未建立、PPO未开始。场景局部结果优先读scenario_result.outcome和尾transition.end_reason，summary.stop_reason仍有统一写game_time_limit的分类限制，后续连同Telemetry映射修复。
+
+## 2026-10-18 P4接续状态
+
+快速BC原型已训练并接入 `run_bc.cmd`，双击即按脚本目录定位本次模型；`--bc-model <目录>` 可覆盖，默认模型缺失仍规则回退。NumPy MLP、masked交叉熵和Adam；train优化、validation选权重、test最后评估一次。训练/验证/测试准确率100%/100%/88.46%。新增6项必要定向测试（训练2、运行4）与CLI检查通过，本轮不重复全58项或24局suite。最终推理一致性与两局smoke证据见 [P4报告](docs/PHASE_04_MVP_REPORT.md)。
+
+模型本体不提交；换机单独复制模型目录和冻结数据，或按README重训。82真实行推理一致、两局场景smoke通过；1000条真实及边界一致性未做，P4未正式验收。下轮先P5单Marine Discrete(5)最小reset/step/action_masks/close与奖励桥接；stub仅契约，真实SC2接线后才称可训练。PPO未开始，小样本准确率不证明BC优于规则。

@@ -14,7 +14,8 @@ from bot.micro import (
 
 
 class Recorder:
-    def __init__(self, output, seed, scenario=SCENARIO_VERSION):
+    def __init__(self, output, seed, scenario=SCENARIO_VERSION, *,
+                 policy_version=EXPERT_VERSION, bc_labels=True):
         self.output = output
         self.match_id = output.name
         # All units and engagements in a match always share the split.
@@ -22,6 +23,8 @@ class Recorder:
         self.split = "train" if bucket < 8 else "validation" if bucket == 8 else "test"
         self.seed = seed
         self.scenario = scenario
+        self.policy_version = policy_version
+        self.bc_labels = bc_labels
         self.pending = {}
         self.episodes = {}
         self.sequence = Counter()
@@ -61,7 +64,8 @@ class Recorder:
             versions=dict(
                 feature=FEATURE_VERSION,
                 action=ACTION_VERSION,
-                expert=EXPERT_VERSION,
+                expert=EXPERT_VERSION if self.bc_labels else None,
+                policy=self.policy_version,
                 scenario=self.scenario,
                 decision_game_loops=DECISION_LOOPS,
             ),
@@ -127,7 +131,8 @@ class Recorder:
                 reward_version="not_implemented",
             )
             row["bc_eligible"] = (
-                row["command_result"] in {"engine_confirmed", "hold"}
+                self.bc_labels
+                and row["command_result"] in {"engine_confirmed", "hold"}
                 and frame - row["game_loop"] == DECISION_LOOPS
                 and not truncated
             )
@@ -157,6 +162,8 @@ class Recorder:
                     counters=dict(self.counts),
                     reward="not_implemented",
                     scenario=self.scenario,
+                    policy_version=self.policy_version,
+                    expert_labels=self.bc_labels,
                 ),
                 indent=2,
             ),

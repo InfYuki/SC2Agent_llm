@@ -16,6 +16,49 @@ class MicroRuleBot(RuleBot):
         self._authorized_tag = None
         self._micro_disabled = False
         self._released_at = {}
+        self._bc_requested = (
+            getattr(options, "mode", None) == "rule_bc"
+            or getattr(options, "policy", "rule") == "bc"
+        )
+        self._bc_policy = None
+        if self._bc_requested:
+            from bot.micro_bc import NumpyBCPolicy, POLICY_VERSION
+
+            # BC decisions, including their rule fallback, are never expert labels.
+            self.recorder.policy_version = POLICY_VERSION
+            self.recorder.bc_labels = False
+            try:
+                self._bc_policy = NumpyBCPolicy.load(options.bc_model)
+                self.telemetry.event(
+                    "bc_model_loaded", prototype=True,
+                    weights_sha256=self._bc_policy.metadata["weights_sha256"],
+                    dataset_sha256=self._bc_policy.metadata.get("dataset_sha256"),
+                )
+            except Exception as exc:
+                self._bc_fallback("load", exc)
+
+    def _bc_fallback(self, phase, exc):
+        self._bc_policy = None
+        self.telemetry.counts["bc_" + phase + "_fallback"] += 1
+        self.telemetry.event(
+            "bc_fallback", phase=phase, reason=type(exc).__name__,
+            detail=str(exc), fallback="marine-kite-v1",
+        )
+
+    def choose_micro_action(self, unit, ctx):
+        if self._bc_policy is not None:
+            try:
+                action = Action(self._bc_policy.action(ctx.obs, ctx.mask))
+                if not ctx.mask[action]:
+                    raise ValueError("BC selected masked action")
+                self.telemetry.counts["bc_inference_decisions"] += 1
+                return action
+            except Exception as exc:
+                # Disable the model once; subsequent decisions use the expert.
+                self._bc_fallback("inference", exc)
+        if self._bc_requested:
+            self.telemetry.counts["bc_rule_fallback_decisions"] += 1
+        return expert(unit, ctx)
 
     def play_step(self, iteration):
         self.recorder.feedback(self.state)
@@ -135,7 +178,7 @@ class MicroRuleBot(RuleBot):
                 continue
             ctx = contexts[unit.tag]
             try:
-                requested = expert(unit, ctx)
+                requested = self.choose_micro_action(unit, ctx)
                 self._execute_micro(unit, ctx, requested, army, target, frame)
             except Exception as exc:
                 self._micro_disabled = True

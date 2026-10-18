@@ -1,0 +1,278 @@
+{
+  "selected_epoch": 1000,
+  "metrics": {
+    "train": {
+      "samples": 32,
+      "masked_loss": 0.00013840693281963468,
+      "masked_accuracy": 1.0,
+      "train_majority_with_hold_fallback_accuracy": 0.4375,
+      "action_recall": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      }
+    },
+    "validation": {
+      "samples": 24,
+      "masked_loss": 0.00036365733831189573,
+      "masked_accuracy": 1.0,
+      "train_majority_with_hold_fallback_accuracy": 0.4583333333333333,
+      "action_recall": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0
+      }
+    },
+    "test": {
+      "samples": 26,
+      "masked_loss": 0.4317181706428528,
+      "masked_accuracy": 0.8846153846153846,
+      "train_majority_with_hold_fallback_accuracy": 0.07692307692307693,
+      "action_recall": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 0.5,
+        "4": 1.0
+      }
+    }
+  },
+  "weights_sha256": "e36cba313c1d8e1731573595b1b975316e1522db3af8d1a4abf4f21e405c2dcf",
+  "dataset_sha256": "6558232fea2386e1bef792b50e728b7f5e13ff6a47498837538dd4b0f91aee9e",
+  "prototype": true,
+  "training_readiness": "not_established",
+  "format": "micro-bc-mvp-summary-v1",
+  "date": "2026-10-18",
+  "model_directory": "artifacts/models/marine_bc_mvp_20261018_seed42",
+  "architecture": [
+    16,
+    64,
+    64,
+    5
+  ],
+  "seed": 42,
+  "validation": {
+    "targeted_tests_passed": 6,
+    "cli_checks_passed": true,
+    "frozen_row_parity": {
+      "samples": 82,
+      "logits_max_abs_diff": 5.7220458984375e-06,
+      "logits_allclose": true,
+      "actions_equal": true,
+      "illegal_actions": 0,
+      "weights_sha256": "e36cba313c1d8e1731573595b1b975316e1522db3af8d1a4abf4f21e405c2dcf"
+    },
+    "game_smokes": [
+      {
+        "run_id": "p4_bc_mvp_smoke_20261018",
+        "process": {
+          "run_id": "p4_bc_mvp_smoke_20261018",
+          "exit_code": 0,
+          "process_seconds": 25.011338799988152,
+          "command": [
+            "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe",
+            "-s",
+            "-u",
+            "tools/run_micro_scenario.py",
+            "--policy",
+            "bc",
+            "--bc-model",
+            "C:\\code\\SC2Agent_llm\\artifacts\\models\\marine_bc_mvp_20261018_seed42",
+            "--scenario",
+            "marine-vs-zergling",
+            "--distance",
+            "3",
+            "--max-game-seconds",
+            "20",
+            "--run-id",
+            "p4_bc_mvp_smoke_20261018"
+          ],
+          "owned_pid": 49664,
+          "wall_timeout_seconds": 120
+        },
+        "summary": {
+          "status": "truncated",
+          "result": "Result.Defeat",
+          "stop_reason": "game_time_limit",
+          "error": null,
+          "counters": {
+            "marines_created": 1,
+            "bc_inference_decisions": 14,
+            "micro_action_retreat": 2,
+            "micro_decision_steps": 14,
+            "micro_owned_decisions": 14,
+            "command_conflicts": 0,
+            "callbacks": 15,
+            "micro_action_weakest": 2,
+            "micro_action_hold": 10
+          },
+          "game_span_seconds": 5.0,
+          "wall_span_seconds": 0.513655100017786,
+          "game_to_wall_ratio": 9.734158192582665,
+          "on_step_p50_seconds": 0.0024391000042669475,
+          "on_step_p95_seconds": 0.0033426999871153384,
+          "on_step_p99_seconds": 0.0033426999871153384,
+          "on_step_max_seconds": 0.0060464999987743795,
+          "peak_workers": 12,
+          "peak_marines": 1,
+          "peak_bases": 1
+        },
+        "scenario": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 130,
+          "game_seconds": 5.803571428571429
+        },
+        "micro_summary": {
+          "match_id": "p4_bc_mvp_smoke_20261018",
+          "seed": 42,
+          "split": "train",
+          "counters": {
+            "transitions": 14,
+            "engine_confirmed": 4,
+            "bc_eligible": 0,
+            "terminated": 1,
+            "truncated": 0,
+            "hold": 10
+          },
+          "reward": "not_implemented",
+          "scenario": "marine-vs-zergling-v6",
+          "policy_version": "marine-bc-numpy-v1",
+          "expert_labels": false
+        },
+        "recorded_rows": 14,
+        "illegal_requested_actions": 0,
+        "engine_error_rows": 0,
+        "command_result_counts": {
+          "engine_confirmed": 4,
+          "hold": 10
+        },
+        "all_expert_null": true,
+        "all_bc_policy": true,
+        "bc_eligible": 0,
+        "fallback_events": []
+      },
+      {
+        "run_id": "p4_bc_missing_smoke_20261018",
+        "process": {
+          "run_id": "p4_bc_missing_smoke_20261018",
+          "exit_code": 0,
+          "process_seconds": 22.975913500005845,
+          "command": [
+            "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe",
+            "-s",
+            "-u",
+            "tools/run_micro_scenario.py",
+            "--policy",
+            "bc",
+            "--bc-model",
+            "C:\\code\\SC2Agent_llm\\artifacts\\models\\missing_bc_mvp",
+            "--scenario",
+            "marine-vs-zergling",
+            "--distance",
+            "3",
+            "--max-game-seconds",
+            "20",
+            "--run-id",
+            "p4_bc_missing_smoke_20261018"
+          ],
+          "owned_pid": 33424,
+          "wall_timeout_seconds": 120
+        },
+        "summary": {
+          "status": "truncated",
+          "result": "Result.Defeat",
+          "stop_reason": "game_time_limit",
+          "error": null,
+          "counters": {
+            "bc_load_fallback": 1,
+            "marines_created": 1,
+            "bc_rule_fallback_decisions": 14,
+            "micro_action_retreat": 2,
+            "micro_decision_steps": 14,
+            "micro_owned_decisions": 14,
+            "command_conflicts": 0,
+            "callbacks": 15,
+            "micro_action_weakest": 2,
+            "micro_action_hold": 10
+          },
+          "game_span_seconds": 5.000000000000001,
+          "wall_span_seconds": 0.5224733000213746,
+          "game_to_wall_ratio": 9.569867014822478,
+          "on_step_p50_seconds": 0.0028323000005912036,
+          "on_step_p95_seconds": 0.004059400002006441,
+          "on_step_p99_seconds": 0.004059400002006441,
+          "on_step_max_seconds": 0.006874600017908961,
+          "peak_workers": 12,
+          "peak_marines": 1,
+          "peak_bases": 1
+        },
+        "scenario": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 131,
+          "game_seconds": 5.8482142857142865
+        },
+        "micro_summary": {
+          "match_id": "p4_bc_missing_smoke_20261018",
+          "seed": 42,
+          "split": "train",
+          "counters": {
+            "transitions": 14,
+            "engine_confirmed": 4,
+            "bc_eligible": 0,
+            "terminated": 1,
+            "truncated": 0,
+            "hold": 10
+          },
+          "reward": "not_implemented",
+          "scenario": "marine-vs-zergling-v6",
+          "policy_version": "marine-bc-numpy-v1",
+          "expert_labels": false
+        },
+        "recorded_rows": 14,
+        "illegal_requested_actions": 0,
+        "engine_error_rows": 0,
+        "command_result_counts": {
+          "engine_confirmed": 4,
+          "hold": 10
+        },
+        "all_expert_null": true,
+        "all_bc_policy": true,
+        "bc_eligible": 0,
+        "fallback_events": [
+          {
+            "event": "bc_fallback",
+            "wall_time": 1792297957.9945188,
+            "phase": "load",
+            "reason": "FileNotFoundError",
+            "detail": "[Errno 2] No such file or directory: 'C:\\\\code\\\\SC2Agent_llm\\\\artifacts\\\\models\\\\missing_bc_mvp\\\\metadata.json'",
+            "fallback": "marine-kite-v1"
+          }
+        ]
+      }
+    ]
+  },
+  "interpretation": "Offline imitation prototype only; accuracy is label agreement, not combat strength or generalization.",
+  "source": {
+    "training_report": "artifacts/models/marine_bc_mvp_20261018_seed42/training_report.json",
+    "verification_report": "artifacts/bc_validation/p4_mvp_20261018_1232/verification_report.json"
+  },
+  "context": {
+    "p4_formal_acceptance": false,
+    "planned_1000_real_and_boundary_parity_samples_completed": false,
+    "complete_match_comparison": false,
+    "smoke_max_game_seconds": 20,
+    "interpretation": "Two local engineering smokes only; outer match Defeat/truncated is not the local scenario outcome or a win-rate experiment.",
+    "default_launcher_model": "artifacts/models/marine_bc_mvp_20261018_seed42",
+    "launcher_model_path_relative_to": "script_directory",
+    "explicit_bc_model_overrides_default": true,
+    "launcher_default_path_validation": "CLI only; no additional game smoke"
+  }
+}
