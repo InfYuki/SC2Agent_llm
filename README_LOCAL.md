@@ -114,3 +114,8 @@ run_rule.cmd --mode template --max-game-seconds 12 --seed 42
 ## 参考来源
 
 官方模板与 Ares 子模块保留其 MIT 许可。用户指定的 SmoothBrain 源码分析、版本比较和后续参考点见 [docs/SMOOTHBRAIN_REFERENCE.md](docs/SMOOTHBRAIN_REFERENCE.md)。未执行用户提供的 ZIP；借鉴的资源优先级思想在独立实现处标明了来源。
+## 2026-10-18 P3双目标与导出状态
+
+suite marine-coverage-v7（场景*-v6）已完成12case×2专家24/24工程检查，导出82条技术合格样本，train32/validation24/test26且每split五动作均出现。58项单测通过。双目标按tag确认血量；双AI场景增加双方官方Result结束屏障。失败v5/v6和pilot均未混入冻结数据。训练就绪仍未建立，BC/PPO未开始；继续扩大独立场景与样本量。最新证据、数据哈希及局部停止遥测限制见 [P3覆盖报告](docs/P3_COVERAGE_REPORT.md)。
+
+单独诊断双目标可在 `tools/run_micro_scenario.py` 使用 `--enemy-count 2 --second-distance 8 --second-enemy-health-fraction 0.5`；实际参数以入口 `--help` 为准。正式冻结和分组审计继续使用 `tools/evaluate_micro.py` / `tools/export_micro_dataset.py`。

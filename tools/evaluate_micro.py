@@ -84,9 +84,127 @@ CASES = [
         health=1,
         seed=51,
         split="train",
-        limit=0.6,
+        # The first engine callback can be at loop 17 (~0.76 seconds).
+        # Include per-tag initialization and complete 8-loop observations.
+        limit=3,
+        expected_outcome="game_time_limit",
     ),
 ]
+CASES += [
+    dict(
+        id=f"dual_nearest_{split}",
+        scenario="marine-vs-marine",
+        distance=3,
+        health=1,
+        seed=seed,
+        split=split,
+        limit=45,
+        enemy_count=2,
+        second_distance=8,
+        second_health=0.5,
+        expected_priority=0,
+    )
+    for split, seed in (("train", 61), ("validation", 71), ("test", 81))
+]
+CASES += [
+    dict(
+        id="dual_weakest_in_range",
+        scenario="marine-vs-marine",
+        distance=3,
+        health=1,
+        seed=91,
+        split="test",
+        limit=45,
+        enemy_count=2,
+        second_distance=5,
+        second_health=0.5,
+        expected_priority=1,
+    )
+]
+
+
+def observed_case_check(directory, case, expert):
+    """Check the engine observation, never infer validity from spawn requests."""
+    if case.get("expected_outcome") == "game_time_limit":
+        initial_path = directory / "initial_scene_observation.json"
+        initialized = initial_path.exists() and json.loads(
+            initial_path.read_text(encoding="utf-8")
+        ).get("initialization_confirmed", False)
+        result = json.loads(
+            (directory / "scenario_result.json").read_text(encoding="utf-8")
+        )
+        actual_timeout = (
+            result["outcome"] == "game_time_limit"
+            and result["truncated"]
+            and not result["terminated"]
+            and result["game_loop"] / 22.4 >= case["limit"]
+        )
+        rows = [
+            json.loads(line)
+            for line in (directory / "micro_transitions.jsonl")
+            .read_text(encoding="utf-8")
+            .splitlines()
+        ]
+        complete = sum(
+            row["actual_game_loops"] == 8 and not row["truncated"] for row in rows
+        )
+        return dict(
+            passed=bool(
+                initialized and actual_timeout and (expert == "amove" or complete > 0)
+            ),
+            required=True,
+            initialization_confirmed=bool(initialized),
+            actual_game_time_limit=actual_timeout,
+            complete_eight_loop_samples=complete,
+        )
+    if case.get("enemy_count", 1) != 2:
+        return dict(passed=True, required=False)
+    path = directory / "initial_scene_observation.json"
+    if not path.exists():
+        return dict(
+            passed=False, required=True, reason="no_confirmed_initial_observation"
+        )
+    initial = json.loads(path.read_text(encoding="utf-8"))
+    enemies = {e["tag"]: e for e in initial["enemies"]}
+    near = enemies.get(initial["nearest_tag"])
+    weak = enemies.get(initial["weakest_tag"])
+    priority = case["expected_priority"]
+    geometry = bool(
+        initial["initialization_confirmed"]
+        and len(enemies) == 2
+        and near
+        and weak
+        and near["tag"] != weak["tag"]
+        and near["health"] > weak["health"]
+        and near["in_range"]
+        and weak["in_range"] == (priority == 1)
+    )
+    ready_priority = initial["weapon_cooldown"] > 0 or (
+        initial["mask"][priority] and initial["expert_action"] == priority
+    )
+    rows = [
+        json.loads(line)
+        for line in (directory / "micro_transitions.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    confirmed = sum(
+        r["requested_action"] == priority
+        and r["executed_action"] == priority
+        and r["command_result"] == "engine_confirmed"
+        and r["actual_game_loops"] == 8
+        and r["bc_eligible"]
+        for r in rows
+    )
+    return dict(
+        passed=geometry and ready_priority and (expert == "amove" or confirmed > 0),
+        required=True,
+        geometry_valid=geometry,
+        ready_priority_valid=ready_priority,
+        expected_priority=priority,
+        initial_cooldown=initial["weapon_cooldown"],
+        bc_eligible_confirmed_priority=confirmed,
+    )
 
 
 def main():
@@ -102,10 +220,14 @@ def main():
     output.mkdir(parents=True, exist_ok=False)
     sources = {
         str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-        for p in [*(ROOT / "bot").glob("*.py"), ROOT / "tools/run_micro_scenario.py"]
+        for p in [
+            *(ROOT / "bot").glob("*.py"),
+            ROOT / "tools/run_micro_scenario.py",
+            Path(__file__),
+        ]
     }
     suite = dict(
-        version="marine-coverage-v4",
+        version="marine-coverage-v7",
         cases=CASES,
         source_hashes=sources,
         runs=[],
@@ -149,6 +271,15 @@ def main():
             ]
             if case.get("hidden"):
                 command.append("--enemy-hidden")
+            if case.get("enemy_count") == 2:
+                command += [
+                    "--enemy-count",
+                    "2",
+                    "--second-distance",
+                    str(case["second_distance"]),
+                    "--second-enemy-health-fraction",
+                    str(case["second_health"]),
+                ]
             print(f"Running {case['id']} / {expert}", flush=True)
             with (output / (run_id + ".log")).open("w", encoding="utf-8") as log:
                 process = subprocess.Popen(
@@ -168,6 +299,7 @@ def main():
             summary = json.loads((directory / "summary.json").read_text())
             result = json.loads((directory / "scenario_result.json").read_text())
             checked = audit(directory)
+            observed = observed_case_check(directory, case, expert)
             expected_empty = expert == "amove" or case["id"] == "unseen"
             passed = (
                 code == 0
@@ -175,6 +307,7 @@ def main():
                 and summary["counters"].get("command_conflicts", 0) == 0
                 and checked["status"] == ("no_data" if expected_empty else "passed")
                 and (directory / "game.SC2Replay").stat().st_size > 0
+                and observed["passed"]
             )
             suite["runs"].append(
                 dict(
@@ -185,6 +318,7 @@ def main():
                     passed=passed,
                     result=result,
                     audit=checked,
+                    observed_case_check=observed,
                 )
             )
             save()

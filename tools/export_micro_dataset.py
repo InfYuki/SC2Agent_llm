@@ -15,9 +15,16 @@ def export(summary_path, output):
         raise ValueError("Only a fully passed frozen suite can be exported")
     output.mkdir(parents=True, exist_ok=False)
     rows, inputs, group_splits = [], [], {}
+    expert_versions, scenario_versions = set(), set()
     for run in suite["runs"]:
         if run["expert"] != "kite":
             continue
+        group, split = run["case"], run["split"]
+        if split not in {"train", "validation", "test"}:
+            raise ValueError("Unsupported data split")
+        if group in group_splits and group_splits[group] != split:
+            raise ValueError("Same scenario group leaked across splits")
+        group_splits[group] = split
         path = ROOT / "artifacts/runs" / run["run_id"] / "micro_transitions.jsonl"
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         if digest != run["audit"]["source_sha256"]:
@@ -32,6 +39,19 @@ def export(summary_path, output):
                 versions["decision_game_loops"],
             ) != ("marine-16-v1", "marine-5-v1", 8):
                 raise ValueError("Incompatible demonstration contract")
+            expert_version, scenario_version = versions.get("expert"), versions.get(
+                "scenario"
+            )
+            if (
+                expert_version != "marine-kite-v1"
+                or not isinstance(scenario_version, str)
+                or not scenario_version
+            ):
+                raise ValueError("Missing or unsupported demonstration provenance")
+            expert_versions.add(expert_version)
+            scenario_versions.add(scenario_version)
+            if row["split"] != split:
+                raise ValueError("Illegal label or inconsistent split")
             if not row["bc_eligible"]:
                 continue
             if (
@@ -40,12 +60,10 @@ def export(summary_path, output):
                 or row["actual_game_loops"] != 8
             ):
                 raise ValueError("Incorrect BC eligibility")
-            group = run["case"]
-            split = run["split"]
-            if group in group_splits and group_splits[group] != split:
-                raise ValueError("Same scenario group leaked across splits")
-            group_splits[group] = split
-            if row["split"] != split or not row["mask"][row["executed_action"]]:
+            if (
+                not 0 <= row["executed_action"] < 5
+                or not row["mask"][row["executed_action"]]
+            ):
                 raise ValueError("Illegal label or inconsistent split")
             rows.append((row, group, split))
     if not rows:
@@ -61,14 +79,25 @@ def export(summary_path, output):
         split=np.array([r[2] for r in rows]),
     )
     counts = Counter(r[0]["executed_action"] for r in rows)
+    split_coverage = {}
+    for split in ("train", "validation", "test"):
+        actions = Counter(r[0]["executed_action"] for r in rows if r[2] == split)
+        split_coverage[split] = dict(
+            samples=sum(actions.values()),
+            action_counts={str(i): actions[i] for i in range(5)},
+            missing_actions=[i for i in range(5) if not actions[i]],
+        )
     metadata = dict(
         samples=len(rows),
         feature_version="marine-16-v1",
         action_version="marine-5-v1",
         decision_game_loops=8,
+        expert_versions=sorted(expert_versions),
+        scenario_versions=sorted(scenario_versions),
         input_files=inputs,
         group_splits=group_splits,
         split_counts=dict(Counter(r[2] for r in rows)),
+        split_coverage=split_coverage,
         action_counts=dict(counts),
         missing_actions=[i for i in range(5) if not counts[i]],
         dataset_sha256=hashlib.sha256(dataset.read_bytes()).hexdigest(),

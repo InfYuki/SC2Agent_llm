@@ -1,6 +1,6 @@
 # SC2Agent_llm 工作交接与换机恢复
 
-交接日期：2026-10-14。仓库：<https://github.com/InfYuki/SC2Agent_llm>。
+交接日期：2026-10-18。仓库：<https://github.com/InfYuki/SC2Agent_llm>。
 
 ## 先了解当前做到哪里
 
@@ -12,7 +12,7 @@
 | P1 规则基线 | 已通过工程验收 | `baseline-rule-v1`，提交 `5b0c039e888e5a474f1ff1433634ce698c746e15`；两地图×五种子10局固定步完整获胜，另1局完整实时获胜 |
 | P2 LLM战略首版 | 已通过工程验收 | `baseline-llm-v1`，提交 `bafd143ed70a8b451a9879e55f02ff9bb36a5c5f`；影子测试及规则/LLM各1局完整实时比赛通过 |
 | P2 正式强度比较 | 未完成 | 本轮仅一个成对工程样本，不能宣称 LLM 提高胜率 |
-| P3 微操接口与规则专家数据 | 首轮工程候选已实现并验证 | 新机两地图固定步完整局、1v1场景与真实采集；见 `docs/PHASE_03_REPORT.md`，覆盖/正式验收尚未完成 |
+| P3 微操接口与规则专家数据 | 接口、双目标及v7覆盖批次工程验证通过；训练就绪未建立 | 12case×2专家24/24通过，82条冻结技术合格样本，每split五动作均出现；见 `docs/P3_COVERAGE_REPORT.md` |
 | BC / PPO / RL模型训练 | 未开始 | 没有已训练模型、训练checkpoint或可恢复训练进程 |
 
 当前默认入口仍是规则版。LLM是单独入口，网络失败不会同步卡住游戏。完整规划已经复制到仓库 [docs/DEVELOPMENT_PLAN.zh-CN.md](docs/DEVELOPMENT_PLAN.zh-CN.md)，无需访问旧电脑 D:\GPT-personal 才能阅读。详细实现及证据见 [P1报告](docs/PHASE_01_REPORT.md)、[P2报告](docs/PHASE_02_REPORT.md)、[本地说明](README_LOCAL.md)。规划中的未实施条目不能当作现成代码。
@@ -175,4 +175,9 @@ API调度：摘要1游戏秒；查询每15游戏秒且至少5实际秒间隔；�
 
 ## 给新电脑开发助手的接续提示
 
-> 阅读仓库HANDOVER.md、README_LOCAL.md、开发规划及P1/P2/P3和P3_COVERAGE_REPORT。项目目标是本地Ares＋LLM战略＋RL微操，不参加AI Arena。新机项目C:\code\SC2Agent_llm，游戏C:\Program Files (x86)\StarCraft II，sc2-ares-runtime / Python3.11.17，44项测试通过。P1/P2历史基线保留；P3有统一接口、专家采集、8场景×2专家通过、54条冻结BC技术合格样本，但动作0缺失，仍需2目标和更广数据覆盖后再训练。BC/PPO尚未开始。新机LLM已安全配置，影子2/2及cap20完整实时20/20合法计划、Victory和预算回退通过。保留唯一命令出口、实时非阻塞、数据分组与原始来源，不把小样本获胜当算法收益，不输出密钥。
+> 阅读仓库HANDOVER.md、README_LOCAL.md、开发规划及P1/P2/P3和P3_COVERAGE_REPORT。项目目标是本地Ares＋LLM战略＋RL微操，不参加AI Arena。新机项目C:\code\SC2Agent_llm，游戏C:\Program Files (x86)\StarCraft II，sc2-ares-runtime / Python3.11.17，58项测试通过。P1/P2历史基线保留；P3统一接口、双目标与v7覆盖批次12场景×2专家24/24通过，冻结82条技术合格样本（train32/validation24/test26），每split五动作均出现，但训练就绪仍未建立，须扩大独立几何/敌种/seed/障碍/死亡边界与样本量。BC/PPO尚未开始。新机LLM已安全配置，影子2/2及cap20完整实时20/20合法计划、Victory和预算回退通过。保留唯一命令出口、实时非阻塞、数据分组与原始来源，不把小样本获胜当算法收益，不输出密钥。
+## 2026-10-18 P3接续状态
+
+suite marine-coverage-v7 / 场景*-v6正式批次 `p3_v7_formal_20261018_115352` 24/24通过；冻结82条技术合格样本，train32/validation24/test26，每split五动作均出现。共享摘要在docs/validation/micro_coverage_v7.json和micro_dataset_v7.json。58/58单测、pip check、diff检查、独立源码审查与最终数据/日志验收通过；suite记录17源哈希，当前无变化。双AI结束屏障要求双方原SDK返回有效官方Result后清理；24局日志均有双方官方Result、无连接已关闭错误，0命令冲突。失败v5（0.6秒初始化窗口不足）和v6（双AI退出竞态）保留且不导出；详情见 [P3覆盖报告](docs/P3_COVERAGE_REPORT.md)。
+
+两种专家各9次低血量安全退出、1次敌人死亡、2次时间上限，未发现优势证据。相同双目标几何不同seed不能作为泛化证明。训练就绪仍未建立，BC/PPO未开始；下一步先扩大独立场景和样本量。场景局部结果优先读scenario_result.outcome和尾transition.end_reason，summary.stop_reason仍有统一写game_time_limit的分类限制，后续连同Telemetry映射修复。

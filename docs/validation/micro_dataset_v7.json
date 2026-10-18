@@ -1,0 +1,129 @@
+{
+  "samples": 82,
+  "feature_version": "marine-16-v1",
+  "action_version": "marine-5-v1",
+  "decision_game_loops": 8,
+  "expert_versions": [
+    "marine-kite-v1"
+  ],
+  "scenario_versions": [
+    "marine-vs-marine-v6",
+    "marine-vs-zergling-v6"
+  ],
+  "input_files": [
+    {
+      "run_id": "p3_v7_formal_20261018_115352_zerg_close_kite",
+      "sha256": "7fe82c154fa1b6240c28ccfad7d47e2314b5de8ca67c351b53412799088be2e9"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_zerg_medium_kite",
+      "sha256": "075eae6d13c46edc80720a4bf22920a5c90a1e4236646b0f783f01bc4a60ba83"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_marine_close_kite",
+      "sha256": "b767f2df7efd90a37bb6474b23d07e9a0dd4937449683adb1a64bed0a3375610"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_marine_hurt_kite",
+      "sha256": "da34d6be37a8ce920c6f31fc76cc903fea8ee59d1d664f9b6ecb9a99a8508865"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_zerg_hurt_kite",
+      "sha256": "ab30acf1ea236c08ae3cd79021bbf9034eb4981580afe1fe525d8a2b9f8f0d9a"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_marine_medium_kite",
+      "sha256": "9c3e323042d0f5e2308190d1a73f5884a0408ac416266fdda0b56672db39299d"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_unseen_kite",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_time_limit_kite",
+      "sha256": "0b1a6afa3b9341eeb5afc4f39269f4ba536539aa85b07582e72d3435029b80fa"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_dual_nearest_train_kite",
+      "sha256": "2f569234383cf81daaa96164b14613ac280b5d3f7c55cc9bf41dd248d11f3b81"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_dual_nearest_validation_kite",
+      "sha256": "8260efff57a58ba79e38c76f28a68a0567ba3d02c70fc86faf5b51059a40495e"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_dual_nearest_test_kite",
+      "sha256": "6b9fc4ce09a28890a3f56b899d2b10596c8d8a850b912b7879ccbeefe822a24c"
+    },
+    {
+      "run_id": "p3_v7_formal_20261018_115352_dual_weakest_in_range_kite",
+      "sha256": "f5afc33ae48beb6b5fcecea3fe9004bc08f44d1c056dbcfadcd1938a226ccbb4"
+    }
+  ],
+  "group_splits": {
+    "zerg_close": "train",
+    "zerg_medium": "validation",
+    "marine_close": "train",
+    "marine_hurt": "test",
+    "zerg_hurt": "validation",
+    "marine_medium": "test",
+    "unseen": "test",
+    "time_limit": "train",
+    "dual_nearest_train": "train",
+    "dual_nearest_validation": "validation",
+    "dual_nearest_test": "test",
+    "dual_weakest_in_range": "test"
+  },
+  "split_counts": {
+    "train": 32,
+    "validation": 24,
+    "test": 26
+  },
+  "split_coverage": {
+    "train": {
+      "samples": 32,
+      "action_counts": {
+        "0": 1,
+        "1": 7,
+        "2": 8,
+        "3": 2,
+        "4": 14
+      },
+      "missing_actions": []
+    },
+    "validation": {
+      "samples": 24,
+      "action_counts": {
+        "0": 1,
+        "1": 5,
+        "2": 6,
+        "3": 1,
+        "4": 11
+      },
+      "missing_actions": []
+    },
+    "test": {
+      "samples": 26,
+      "action_counts": {
+        "0": 2,
+        "1": 5,
+        "2": 11,
+        "3": 6,
+        "4": 2
+      },
+      "missing_actions": []
+    }
+  },
+  "action_counts": {
+    "2": 25,
+    "1": 17,
+    "4": 27,
+    "3": 9,
+    "0": 4
+  },
+  "missing_actions": [],
+  "dataset_sha256": "6558232fea2386e1bef792b50e728b7f5e13ff6a47498837538dd4b0f91aee9e",
+  "suite_sha256": "7359e6d41d50b83728e037b869198b09451d6184678f610adcaf70398245ffb0",
+  "training_readiness": "not_established",
+  "models_trained": false
+}

@@ -1,4 +1,4 @@
-"""Single local 1v1 debug scenario, fixed 8-loop sampling; no reset/step claim."""
+"""Local one/two-target debug scene, fixed 8-loop sampling; no reset/step claim."""
 import argparse
 from collections import Counter
 from datetime import datetime, timezone
@@ -21,7 +21,7 @@ from sc2.main import run_game
 from sc2.player import Bot
 from sc2.position import Point2
 from bot.lifecycle import recover_completed_game
-from bot.micro import DECISION_LOOPS, clear_segment, context
+from bot.micro import DECISION_LOOPS, clear_segment, context, expert
 from bot.micro_bot import MicroRuleBot
 from bot.telemetry import Telemetry
 
@@ -49,13 +49,14 @@ class ScenarioBot(MicroRuleBot):
 
     async def _setup_scene(self):
         await super().on_start()
-        self.recorder.scenario = self.options.scenario + "-v4"
+        self.recorder.scenario = self.options.scenario + "-v6"
         if self.options.data_split:
             self.recorder.split = self.options.data_split
-        self._health_ready = (
-            self.options.health_fraction == 1
-            and self.options.enemy_health_fraction == 1
-        )
+        self._health_ready = False
+        self._health_written = False
+        self._enemy_tags = set()
+        self._dead_enemy_tags = set()
+        self._enemy_roles = {}
         self._scene_tag = self._enemy_tag = None
         self._scene_stop = False
         self._scene_outcome = None
@@ -81,24 +82,33 @@ class ScenarioBot(MicroRuleBot):
         positions.sort(key=lambda point: (point.distance_to(center), point.x, point.y))
         for left in positions:
             right = Point2((left.x + self.options.distance, left.y))
+            enemy_positions = [right]
+            if self.options.enemy_count == 2:
+                enemy_positions.append(
+                    Point2((left.x + self.options.second_distance, left.y))
+                )
             starts = [self.start_location, *self.enemy_start_locations]
             if any(
-                min(left.distance_to(start), right.distance_to(start)) < 25
+                min(p.distance_to(start) for p in [left, *enemy_positions]) < 25
                 for start in starts
             ):
                 continue
             probe = SimpleNamespace(position=left, radius=0.375)
             if (
                 self._open_patch(left)
-                and clear_segment(self, probe, right)
-                and self.get_terrain_height(left) == self.get_terrain_height(right)
+                and all(clear_segment(self, probe, p) for p in enemy_positions)
+                and all(
+                    self.get_terrain_height(left) == self.get_terrain_height(p)
+                    for p in enemy_positions
+                )
             ):
                 self.scene_goal = right
                 self.scene_origin = left
+                self.enemy_spawn_positions = enemy_positions
                 await self.client.debug_create_unit(
                     [
                         [UnitTypeId.MARINE, 1, left, 1],
-                        [self.enemy_kind, 1, right, 2],
+                        *[[self.enemy_kind, 1, p, 2] for p in enemy_positions],
                     ]
                 )
                 self.telemetry.write_json(
@@ -109,6 +119,10 @@ class ScenarioBot(MicroRuleBot):
                         enemy=self.enemy_kind.name,
                         friendly_position=list(left),
                         enemy_position=list(right),
+                        enemy_positions=[list(p) for p in enemy_positions],
+                        enemy_count=self.options.enemy_count,
+                        second_distance=self.options.second_distance,
+                        second_enemy_health_fraction=self.options.second_enemy_health_fraction,
                         seed=self.options.seed,
                         decision_game_loops=DECISION_LOOPS,
                         time_limit_seconds=self.options.max_game_seconds,
@@ -124,7 +138,7 @@ class ScenarioBot(MicroRuleBot):
                 )
                 return
         self.telemetry.write_json("spawn_rejections.json", dict(self.spawn_rejects))
-        raise RuntimeError("No supported 1v1 spawn segment on this map")
+        raise RuntimeError("No supported local spawn segment on this map")
 
     def _open_patch(self, left):
         height = self.get_terrain_height(left)
@@ -135,7 +149,11 @@ class ScenarioBot(MicroRuleBot):
             *self.structures,
         ]
         obstacles = [u for u in obstacles if left.distance_to(u.position) < 24]
-        for dx in range(-3, int(self.options.distance) + 4, 2):
+        extent = max(
+            self.options.distance,
+            self.options.second_distance if self.options.enemy_count == 2 else 0,
+        )
+        for dx in range(-3, int(extent) + 4, 2):
             for dy in range(-3, 4, 2):
                 point = Point2((left.x + dx, left.y + dy))
                 if (
@@ -188,29 +206,17 @@ class ScenarioBot(MicroRuleBot):
         enemies = [
             e for e in self.enemy_units if e.type_id == self.enemy_kind and e.is_visible
         ]
-        if army and not getattr(self, "_initial_scene_recorded", False):
-            self._initial_scene_recorded = True
-            self.telemetry.write_json(
-                "initial_scene_observation.json",
-                dict(
-                    game_loop=int(self.state.game_loop),
-                    friendly_position=list(army.first.position),
-                    health=float(army.first.health),
-                    visible_enemy_count=len(enemies),
-                    enemy_positions=[list(e.position) for e in enemies],
-                ),
-            )
         if army and self._scene_tag is None:
             self._scene_tag = army.first.tag
-        if enemies and self._enemy_tag is None:
-            self._enemy_tag = enemies[0].tag
         if self._scene_tag in self.state.dead_units:
             self._finish_scene("marine_dead", True)
             return
-        if self._enemy_tag in self.state.dead_units:
+        self._dead_enemy_tags.update(self._enemy_tags & self.state.dead_units)
+        if self._enemy_tags and self._enemy_tags <= self._dead_enemy_tags:
             self._finish_scene("enemy_dead", True)
             return
-        if self._enemy_tag is not None and not enemies:
+        live_tags = self._enemy_tags - self._dead_enemy_tags
+        if live_tags - {e.tag for e in enemies}:
             self._finish_scene("enemy_not_visible", False)
             return
         if army and army.first.health_percentage <= 0.2:
@@ -236,26 +242,99 @@ class ScenarioBot(MicroRuleBot):
                 await super().on_step(iteration)
                 return
             army = self.units(UnitTypeId.MARINE)
-            enemies = self.enemy_units.filter(
-                lambda e: e.type_id == self.enemy_kind and e.is_visible
-            )
-            if army and enemies:
-                await self.client.debug_set_unit_value(
-                    army, 2, army.first.health_max * self.options.health_fraction
-                )
-                await self.client.debug_set_unit_value(
-                    enemies,
-                    2,
-                    enemies.first.health_max * self.options.enemy_health_fraction,
-                )
+            enemies = [
+                e
+                for e in self.enemy_units
+                if e.type_id == self.enemy_kind and e.is_visible
+            ]
+            # Hidden diagnostics cannot identify a tag through an ordinary observation.
+            # Only their all-full-health single-target setup is supported.
+            if army and self.options.enemy_hidden:
                 self._health_ready = True
-            return
+                self._record_initial(army, enemies)
+            elif army and len(enemies) == self.options.enemy_count:
+                if not self._enemy_tags:
+                    remaining = list(enemies)
+                    for role, position in enumerate(self.enemy_spawn_positions):
+                        enemy = min(
+                            remaining,
+                            key=lambda e: (e.position.distance_to(position), e.tag),
+                        )
+                        self._enemy_roles[enemy.tag] = role
+                        remaining.remove(enemy)
+                    self._enemy_tags = set(self._enemy_roles)
+                targets = [(army.first, self.options.health_fraction)] + [
+                    (
+                        e,
+                        self.options.enemy_health_fraction
+                        if self._enemy_roles[e.tag] == 0
+                        else self.options.second_enemy_health_fraction,
+                    )
+                    for e in enemies
+                    if e.tag in self._enemy_tags
+                ]
+                confirmed = (
+                    self._health_written
+                    and len(targets) == self.options.enemy_count + 1
+                    and all(
+                        abs(u.health - u.health_max * fraction) <= 0.6
+                        for u, fraction in targets
+                    )
+                )
+                if confirmed:
+                    self._health_ready = True
+                    self._scene_tag = army.first.tag
+                    self._record_initial(army, enemies)
+                else:
+                    # Set each tag independently; heterogeneous health must never
+                    # use the SDK's bulk value computed from the first enemy.
+                    for unit, fraction in targets:
+                        await self.client.debug_set_unit_value(
+                            unit, 2, unit.health_max * fraction
+                        )
+                    self._health_written = True
+            if not self._health_ready:
+                return
         await super().on_step(iteration)
         if self._scene_stop:
             # Full SC2 match is deliberately truncated after the local scenario.
             # Only scenario_result describes its win/death; never count a match win.
             self.telemetry.stop_reason = "game_time_limit"
             await self.client.leave()
+
+    def _record_initial(self, army, enemies):
+        unit = army.first
+        ctx = context(self, unit, army, self.scene_goal)
+        self.telemetry.write_json(
+            "initial_scene_observation.json",
+            dict(
+                game_loop=int(self.state.game_loop),
+                initialization_confirmed=self._health_ready,
+                friendly_tag=unit.tag,
+                friendly_position=list(unit.position),
+                health=float(unit.health),
+                visible_enemy_count=len(enemies),
+                enemy_positions=[list(e.position) for e in enemies],
+                enemies=[
+                    dict(
+                        tag=e.tag,
+                        role=self._enemy_roles.get(e.tag),
+                        position=list(e.position),
+                        health=float(e.health),
+                        health_max=float(e.health_max),
+                        distance=float(unit.distance_to(e)),
+                        in_range=bool(unit.target_in_range(e)),
+                    )
+                    for e in enemies
+                ],
+                nearest_tag=ctx.nearest.tag if ctx.nearest else None,
+                weakest_tag=ctx.weakest.tag if ctx.weakest else None,
+                weapon_cooldown=float(unit.weapon_cooldown),
+                obs=list(ctx.obs),
+                mask=list(ctx.mask),
+                expert_action=int(expert(unit, ctx)),
+            ),
+        )
 
     def close_micro(self, reason=None):
         if getattr(self, "_scene_outcome", None) is None:
@@ -288,6 +367,9 @@ def main():
     parser.add_argument("--expert", choices=["kite", "amove"], default="kite")
     parser.add_argument("--distance", type=float, choices=[3.0, 6.0, 10.0], default=6.0)
     parser.add_argument("--enemy-hidden", action="store_true")
+    parser.add_argument("--enemy-count", type=int, choices=[1, 2], default=1)
+    parser.add_argument("--second-distance", type=float, default=8.0)
+    parser.add_argument("--second-enemy-health-fraction", type=float, default=0.5)
     parser.add_argument("--health-fraction", type=float, default=1.0)
     parser.add_argument("--enemy-health-fraction", type=float, default=1.0)
     parser.add_argument(
@@ -300,6 +382,20 @@ def main():
         parser.error("A finite positive scenario time limit is required")
     if not (0.2 < args.health_fraction <= 1 and 0 < args.enemy_health_fraction <= 1):
         parser.error("Own health fraction must be (0.2,1]; enemy health must be (0,1]")
+    if not (
+        args.distance + 1 <= args.second_distance <= 10
+        and 0 < args.second_enemy_health_fraction <= 1
+    ):
+        if args.enemy_count == 2:
+            parser.error(
+                "Second target distance must be at least near distance + 1 and <=10; health in (0,1]"
+            )
+    if args.enemy_hidden and (
+        args.enemy_count != 1
+        or args.health_fraction != 1
+        or args.enemy_health_fraction != 1
+    ):
+        parser.error("Hidden diagnostic requires one enemy and full initial health")
     os.environ["SC2PATH"] = str(Path(args.game_path).resolve())
     os.chdir(ROOT)
     run_id = args.run_id or "scenario_" + datetime.now(timezone.utc).strftime(
@@ -333,7 +429,7 @@ def main():
     telemetry.write_json("manifest.json", manifest)
     print("Run output:", output, flush=True)
     try:
-        with recover_completed_game(telemetry):
+        with recover_completed_game(telemetry, expected_players=2):
             result = run_game(
                 settings,
                 [
