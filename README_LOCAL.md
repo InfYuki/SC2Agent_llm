@@ -24,7 +24,7 @@ run_rule.cmd --no-realtime --max-game-seconds 300 --seed 42
 
 `--no-realtime` 用固定游戏步推进，可比实时更快，是本地回归模式；不改变默认入口。
 
-P2 已加入影子和 LLM 战略入口，见 [LLM 阶段报告](docs/PHASE_02_REPORT.md)。P4 已提供显式启用的 NumPy BC 原型，PPO 尚未启用；操作见下方 P4 入口。所有模式均不加载嵌入模型。默认 `run_rule.cmd` 仍独立运行规则，不读取密钥或调用 API。
+P2 已加入影子和 LLM 战略入口，见 [LLM 阶段报告](docs/PHASE_02_REPORT.md)。P4 已提供显式启用的 NumPy BC 原型，PPO已有独立最小训练入口；操作见下方P4/P5入口。所有模式均不加载嵌入模型。默认 `run_rule.cmd` 仍独立运行规则，不读取密钥或调用 API。
 
 首轮工程验证通过：120秒影子测试＋同配置规则/LLM各一局完整实时比赛，后两局均获胜；LLM局31次合法计划，实时比例0.994。本次LLM结束更晚，尚无战略收益结论；研究基线 `baseline-llm-v1`。
 
@@ -116,13 +116,13 @@ run_rule.cmd --mode template --max-game-seconds 12 --seed 42
 官方模板与 Ares 子模块保留其 MIT 许可。用户指定的 SmoothBrain 源码分析、版本比较和后续参考点见 [docs/SMOOTHBRAIN_REFERENCE.md](docs/SMOOTHBRAIN_REFERENCE.md)。未执行用户提供的 ZIP；借鉴的资源优先级思想在独立实现处标明了来源。
 ## 2026-10-18 P3双目标与导出状态
 
-suite marine-coverage-v7（场景*-v6）已完成12case×2专家24/24工程检查，导出82条技术合格样本，train32/validation24/test26且每split五动作均出现。58项单测通过。双目标按tag确认血量；双AI场景增加双方官方Result结束屏障。失败v5/v6和pilot均未混入冻结数据。训练就绪仍未建立；P4 已基于此冻结数据完成 BC 工程原型，PPO未开始。最新证据、数据哈希及局部停止遥测限制见 [P3覆盖报告](docs/P3_COVERAGE_REPORT.md)。
+suite marine-coverage-v7（场景*-v6）已完成12case×2专家24/24工程检查，导出82条技术合格样本，train32/validation24/test26且每split五动作均出现。58项单测通过。双目标按tag确认血量；双AI场景增加双方官方Result结束屏障。失败v5/v6和pilot均未混入冻结数据。训练就绪仍未建立；P4 已基于此冻结数据完成 BC 工程原型，PPO后续已完成32步工程MVP。最新证据、数据哈希及局部停止遥测限制见 [P3覆盖报告](docs/P3_COVERAGE_REPORT.md)。
 
 单独诊断双目标可在 `tools/run_micro_scenario.py` 使用 `--enemy-count 2 --second-distance 8 --second-enemy-health-fraction 0.5`；实际参数以入口 `--help` 为准。正式冻结和分组审计继续使用 `tools/evaluate_micro.py` / `tools/export_micro_dataset.py`。
 
 ## 2026-10-18 P4 BC 快速原型
 
-已训练 NumPy 16→64→64→5（Tanh）模型，显式启用后接管 Marine 局部动作；固定规则战略继续运行。冻结82条样本仅用于工程原型，训练/验证/测试准确率100%/100%/88.46%，不代表战斗收益或泛化。详见 [P4报告](docs/PHASE_04_MVP_REPORT.md)。没有安装Torch或PPO训练栈。
+已训练 NumPy 16→64→64→5（Tanh）模型，显式启用后接管 Marine 局部动作；固定规则战略继续运行。冻结82条样本仅用于工程原型，训练/验证/测试准确率100%/100%/88.46%，不代表战斗收益或泛化。详见 [P4报告](docs/PHASE_04_MVP_REPORT.md)。该BC入口本身不需要Torch/PPO；后续PPO使用独立训练环境。
 
 在本机 PowerShell 使用已有模型：
 
@@ -157,4 +157,16 @@ python -s tools/smoke_micro_env.py --seed 42 --max-game-seconds 8 --game-path 'C
 
 命令会新启动一局真实SC2；不读LLM凭据。每次reset冷启动worker，MVP不支持动态scenario/options。报告位于`artifacts/micro_env/<episode_id>/`，游戏证据及`rl_rollout.jsonl`位于其`game/`子目录；训练日志为external action、非专家、BC不合格，不混入P3数据。
 
-仅1局真实验证：14步全部8loops，非法动作拒绝不推进，HP奖励逐条一致，marine_dead正常terminated，双方官方Result及worker/SC2进程清理通过。未实测时间截断/敌方死亡/重复reset/中途close/故障，训练吞吐未验收，未安装或运行PPO。详情与首次pre-game失败修复见 [P5报告](docs/PHASE_05_ENV_MVP_REPORT.md)、[共享证据](docs/validation/micro_env_mvp.json)。
+仅1局真实验证：14步全部8loops，非法动作拒绝不推进，HP奖励逐条一致，marine_dead正常terminated，双方官方Result及worker/SC2进程清理通过。以上为首轮桥接历史范围；后续Gymnasium与32步PPO结果见下节。详情与首次pre-game失败修复见 [P5报告](docs/PHASE_05_ENV_MVP_REPORT.md)、[共享证据](docs/validation/micro_env_mvp.json)。
+
+## 2026-10-19 P5 Gymnasium 与 PPO 最小训练
+
+标准适配 `envs.gym_sc2_micro_env.GymSC2MicroEnv` 已接通：16维float32观测、Discrete5、bool mask；真死亡为空时给零吸收终态，时间截断保留真实obs；系统失败raise并丢弃，不能混入训练。训练Python位于 `C:\code\sc2-ares-training\Scripts\python.exe`，worker仍用锁定Ares runtime；固定依赖见 [requirements-ppo.txt](requirements-ppo.txt)。
+
+一次真实32步MaskablePPO已完成finite actor更新、checkpoint保存与重载概率/动作完全一致；2局完整marine_dead（14/13步），第三局5步因训练预算结束close；49.562秒，零系统失败/命令冲突/SC2残留。seed42起始，随机初始化独立PPO，未用BC权重。模型 `artifacts/micro_ppo/p5_ppo_mvp_20261018/model.zip` 被Git忽略、需另带；尚无PPO整局部署入口，不代表强度提升或P5全面验收。
+
+```powershell
+& C:\code\sc2-ares-training\Scripts\python.exe -s tools/train_micro_ppo.py artifacts/micro_ppo/new_run --worker-python C:/Users/27932/anaconda3/envs/sc2-ares-runtime/python.exe --seed 42 --total-timesteps 32 --n-steps 32 --batch-size 16 --n-epochs 2
+```
+
+命令启动真实游戏，输出目录必须不存在。证据及边界见 [P5 PPO报告](docs/PHASE_05_PPO_MVP_REPORT.md)、[共享摘要](docs/validation/micro_ppo_mvp.json)。默认规则与BC入口保持原用途，局部训练不读凭据、不调用LLM。

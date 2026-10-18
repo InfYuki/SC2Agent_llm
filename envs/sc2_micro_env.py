@@ -21,8 +21,9 @@ ROOT = Path(__file__).resolve().parents[1]
 class SC2MicroEnv:
     def __init__(self, *, game_path=r"C:\Program Files (x86)\StarCraft II",
                  map_name="Ancient Cistern LE", max_game_seconds=20,
-                 startup_timeout=90, step_timeout=30, output_root=None):
+                 startup_timeout=90, step_timeout=30, output_root=None, worker_python=None):
         self.game_path = str(game_path)
+        self.worker_python = str(worker_python or sys.executable)
         self.map_name = map_name
         self.max_game_seconds = float(max_game_seconds)
         self.startup_timeout = float(startup_timeout)
@@ -47,7 +48,7 @@ class SC2MicroEnv:
         self._listener._listener._socket.settimeout(self.startup_timeout)
         env = dict(os.environ, SC2_MICRO_HOST=host, SC2_MICRO_PORT=str(port),
                    SC2_MICRO_AUTHKEY=key.hex(), PYTHONNOUSERSITE="1", PYTHONUNBUFFERED="1")
-        command = [sys.executable, "-s", "-u", str(ROOT / "tools" / "sc2_micro_worker.py"),
+        command = [self.worker_python, "-s", "-u", str(ROOT / "tools" / "sc2_micro_worker.py"),
                    "--episode-id", self.episode_id, "--seed", str(int(seed)),
                    "--output-dir", str(self.output_dir), "--game-path", self.game_path,
                    "--max-game-seconds", str(self.max_game_seconds), "--map", self.map_name]

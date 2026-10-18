@@ -1,0 +1,192 @@
+{
+  "date": "2026-10-19",
+  "status": "engineering_mvp_passed",
+  "run": "artifacts\\micro_ppo\\p5_ppo_mvp_20261018",
+  "training": {
+    "format": "marine-maskable-ppo-sb3-v1",
+    "feature_version": "marine-16-v1",
+    "action_version": "marine-5-v1",
+    "decision_game_loops": 8,
+    "reward_version": "effective-hp-delta-45-terminal-1-v1",
+    "normalization": "marine-16-v1",
+    "actor_layers": [
+      16,
+      64,
+      64,
+      5
+    ],
+    "critic_hidden_layers": [
+      64,
+      64
+    ],
+    "activation": "tanh",
+    "seed": 42,
+    "initialization": "random",
+    "bc_weights_used": false,
+    "dataset": null,
+    "checkpoint_sha256": "80139d368fbb24a0eb1d6262c3e0dc53b3688ed1c94f1b469d107f118608a793",
+    "versions": {
+      "numpy": "2.4.6",
+      "torch": "2.10.0+cpu",
+      "gymnasium": "1.2.3",
+      "stable-baselines3": "2.7.1",
+      "sb3-contrib": "2.7.1"
+    },
+    "training_python": "C:\\code\\sc2-ares-training\\Scripts\\python.exe",
+    "worker_python": "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe",
+    "training": {
+      "total_timesteps": 32,
+      "n_steps": 32,
+      "batch_size": 16,
+      "n_epochs": 2,
+      "learning_rate": 0.0003,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "clip_range": 0.2,
+      "device": "cpu"
+    },
+    "engineering_prototype": true,
+    "combat_strength_evaluated": false,
+    "deployment_exported": false
+  },
+  "actual_steps": 32,
+  "completed_episodes": 2,
+  "partial_episodes": 1,
+  "empty_resets": 0,
+  "episodes": [
+    {
+      "episode_id": "378f61807ef84532b96dbad79309d4bd",
+      "seed": 191664964,
+      "steps": 13,
+      "terminated": true,
+      "truncated": false,
+      "end_reason": "marine_dead",
+      "raw_reward_sum": -1.4666666666666668,
+      "own_final_hp": 0.0,
+      "enemy_final_hp": 21.0,
+      "collection_end": "official_episode_end"
+    },
+    {
+      "episode_id": "69dcdb250b3b42b3bdb31c000668b1d9",
+      "seed": 42,
+      "steps": 14,
+      "terminated": true,
+      "truncated": false,
+      "end_reason": "marine_dead",
+      "raw_reward_sum": -1.6,
+      "own_final_hp": 0.0,
+      "enemy_final_hp": 27.0,
+      "collection_end": "official_episode_end"
+    },
+    {
+      "episode_id": "985b10dbad044696897efa1de85e3586",
+      "seed": 1662057958,
+      "steps": 5,
+      "terminated": false,
+      "truncated": false,
+      "end_reason": null,
+      "raw_reward_sum": 0.0,
+      "own_final_hp": 33.0,
+      "enemy_final_hp": 33.0,
+      "collection_end": "training_budget_close"
+    }
+  ],
+  "action_counts": [
+    1,
+    5,
+    8,
+    10,
+    8
+  ],
+  "command_results": {
+    "engine_confirmed": 21,
+    "hold": 8,
+    "queued": 2,
+    "order_preserved": 1
+  },
+  "order_preserved": [
+    {
+      "episode_id": "69dcdb250b3b42b3bdb31c000668b1d9",
+      "decision_id": 5,
+      "requested_action": 1,
+      "executed_action": 4
+    }
+  ],
+  "checks": {
+    "all_masks_legal": true,
+    "reward_recomputed_rows": 32,
+    "reward_float32_max_abs_error": 5.563100180516756e-08,
+    "all_actual_loops_8": true,
+    "system_failures": 0,
+    "discarded_rows": 0,
+    "command_conflicts": 0,
+    "expert_labels": 0,
+    "completed_official_close_confirmed": true,
+    "sc2_processes_remaining": 0
+  },
+  "update": {
+    "sb3_n_updates": 2,
+    "parameters_finite": true,
+    "actor_parameters_changed": true,
+    "max_abs_parameter_change": 0.0012000910937786102,
+    "metrics": {
+      "train/learning_rate": 0.0003,
+      "train/entropy_loss": -1.2807766497135162,
+      "train/policy_gradient_loss": -0.002219333196990192,
+      "train/value_loss": 0.3652058094739914,
+      "train/approx_kl": 5.041062831878662e-05,
+      "train/clip_fraction": 0.0,
+      "train/loss": 0.1799774318933487,
+      "train/explained_variance": -0.5022475719451904,
+      "train/n_updates": 2.0,
+      "train/clip_range": 0.2
+    }
+  },
+  "reload": {
+    "probability_max_abs_error": 0.0,
+    "masked_action_equal": true,
+    "action": 4,
+    "observation": [
+      1.0,
+      0.0,
+      0.350830078125,
+      0.46484375,
+      0.0,
+      0.46484375,
+      1.0,
+      0.0,
+      0.0,
+      0.46484375,
+      0.0,
+      1.0,
+      0.0,
+      0.0625,
+      0.08935546875,
+      0.0
+    ],
+    "mask": [
+      false,
+      false,
+      true,
+      true,
+      true
+    ],
+    "probabilities": [
+      0.0,
+      0.0,
+      0.3327973783016205,
+      0.32746726274490356,
+      0.3397354185581207
+    ]
+  },
+  "checkpoint_sha256": "80139d368fbb24a0eb1d6262c3e0dc53b3688ed1c94f1b469d107f118608a793",
+  "wall_seconds": 49.562000000005355,
+  "steps_per_wall_second": 0.6456559460876587,
+  "verification_scope": "One real 32-step collection; two complete deaths and one budget-close partial episode; no evaluation games.",
+  "limitations": [
+    "No combat-strength claim",
+    "No PPO deployment entry",
+    "No real time-limit/enemy-death/system-crash validation",
+    "Training readiness beyond this MVP not established"
+  ]
+}

@@ -1,0 +1,6 @@
+# Install only in the separate sc2-ares-training venv; keep runtime/poetry.lock intact.
+# Install CPU Torch first: python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+torch==2.10.0
+gymnasium==1.2.3
+stable-baselines3==2.7.1
+sb3-contrib==2.7.1

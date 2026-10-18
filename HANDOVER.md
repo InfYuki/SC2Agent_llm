@@ -1,6 +1,6 @@
 # SC2Agent_llm 工作交接与换机恢复
 
-交接日期：2026-10-18。仓库：<https://github.com/InfYuki/SC2Agent_llm>。
+交接日期：2026-10-19。仓库：<https://github.com/InfYuki/SC2Agent_llm>。
 
 ## 先了解当前做到哪里
 
@@ -14,7 +14,7 @@
 | P2 正式强度比较 | 未完成 | 本轮仅一个成对工程样本，不能宣称 LLM 提高胜率 |
 | P3 微操接口与规则专家数据 | 接口、双目标及v7覆盖批次工程验证通过；训练就绪未建立 | 12case×2专家24/24通过，82条冻结技术合格样本，每split五动作均出现；见 `docs/P3_COVERAGE_REPORT.md` |
 | P4 BC工程原型 | 已训练并提供显式运行入口 | NumPy 16→64→64→5，冻结82条；见 `docs/PHASE_04_MVP_REPORT.md`，不代表训练就绪或战斗收益 |
-| P5真实训练桥接MVP | 单Marine真实reset/step通过，未正式验收 | 自定义Gym风格API、14步真实8loop证据；非Gymnasium Env，PPO未开始，见 `docs/PHASE_05_ENV_MVP_REPORT.md` |
+| P5真实训练桥接与PPO MVP | Gymnasium适配、32步真实PPO更新及保存重载通过；整阶段未正式验收 | 独立训练环境，2完整+1部分episode；见 `docs/PHASE_05_PPO_MVP_REPORT.md` |
 
 当前默认入口仍是规则版。LLM是单独入口，网络失败不会同步卡住游戏。完整规划已经复制到仓库 [docs/DEVELOPMENT_PLAN.zh-CN.md](docs/DEVELOPMENT_PLAN.zh-CN.md)，无需访问旧电脑 D:\GPT-personal 才能阅读。详细实现及证据见 [P1报告](docs/PHASE_01_REPORT.md)、[P2报告](docs/PHASE_02_REPORT.md)、[本地说明](README_LOCAL.md)。规划中的未实施条目不能当作现成代码。
 
@@ -158,7 +158,7 @@ API调度：摘要1游戏秒；查询每15游戏秒且至少5实际秒间隔；�
 4. 先采规则专家数据，严格对齐 observation/action/mask/next observation 与游戏帧，记录episode边界、版本和随机种子，避免同一对局跨训练/测试泄漏。
 5. 有真实数据与环境验收后，再开展BC；PPO需真实reset/step桥接与训练部署一致的动作掩码。固定规则战略评估微操，再组合LLM；局部训练不调用远端LLM。
 
-不要先安装一整套旧项目依赖或直接开始PPO。当前生产环境没有stable-baselines3/sb3-contrib训练栈；后续应另建训练环境，保持Ares运行基线可用。已有BC权重和训练元数据位于本机artifacts/models；无运行中的训练进程，PPO尚未开始。
+PPO已在独立venv `C:\code\sc2-ares-training` 进行最小训练，worker保持锁定Ares runtime；不要把训练栈装进运行环境。已有BC权重在artifacts/models；PPO模型为artifacts/micro_ppo/p5_ppo_mvp_20261018/model.zip，无运行中的训练进程。
 
 用户参考Bot为 [Myrmecoman/sc2_bot](https://github.com/Myrmecoman/sc2_bot)，固定参考commit `895d8b036af0554e8d49cc6be5925abe54da6ba2`；分析见 [SMOOTHBRAIN_REFERENCE.md](docs/SMOOTHBRAIN_REFERENCE.md)。其宏观自管工人，不可把它的宏观控制与本项目Ares Mining直接叠加；不要混用其自带旧Ares和当前子模块。用户SmoothBrain_data.zip是22字节有效空ZIP，没有训练数据。
 
@@ -176,7 +176,7 @@ API调度：摘要1游戏秒；查询每15游戏秒且至少5实际秒间隔；�
 
 ## 给新电脑开发助手的接续提示
 
-> 先读HANDOVER.md、README_LOCAL.md、docs/PHASE_04_MVP_REPORT.md和P3_COVERAGE_REPORT。项目在C:\code\SC2Agent_llm，目标是本地Ares＋LLM战略＋Marine微操，不参加AI Arena。用户偏好快速可用MVP、少重复测试；每小步交子代理，主代理协调核对。P1/P2与P3历史证据保留。P4以冻结82条（32/24/26）训练NumPy BC，val选epoch1000，test准确率88.46%；这是标签拟合工程原型，不证明收益或泛化。显式run_bc.cmd --bc-model启用，默认仍规则；失败规则回退，BC日志不充当专家标签。模型和数据不在Git，迁移需另带。未开始PPO，训练就绪仍未建立。遵守唯一命令出口、非阻塞LLM及凭据保密。
+> 先读HANDOVER.md、README_LOCAL.md、docs/PHASE_04_MVP_REPORT.md和P3_COVERAGE_REPORT。项目在C:\code\SC2Agent_llm，目标是本地Ares＋LLM战略＋Marine微操，不参加AI Arena。用户偏好快速可用MVP、少重复测试；每小步交子代理，主代理协调核对。P1/P2与P3历史证据保留。P4以冻结82条（32/24/26）训练NumPy BC，val选epoch1000，test准确率88.46%；这是标签拟合工程原型，不证明收益或泛化。显式run_bc.cmd --bc-model启用，默认仍规则；失败规则回退，BC日志不充当专家标签。模型和数据不在Git，迁移需另带。PPO已完成真实32步工程MVP（非强度验收），训练就绪仍未建立。先读docs/PHASE_05_PPO_MVP_REPORT.md，独立training Python+runtime worker，尚无PPO部署入口。遵守唯一命令出口、非阻塞LLM及凭据保密。
 
 ## 2026-10-18 P3接续状态
 
@@ -188,11 +188,17 @@ suite marine-coverage-v7 / 场景*-v6正式批次 `p3_v7_formal_20261018_115352`
 
 快速BC原型已训练并接入 `run_bc.cmd`，双击即按脚本目录定位本次模型；`--bc-model <目录>` 可覆盖，默认模型缺失仍规则回退。NumPy MLP、masked交叉熵和Adam；train优化、validation选权重、test最后评估一次。训练/验证/测试准确率100%/100%/88.46%。新增6项必要定向测试（训练2、运行4）与CLI检查通过，本轮不重复全58项或24局suite。最终推理一致性与两局smoke证据见 [P4报告](docs/PHASE_04_MVP_REPORT.md)。
 
-模型本体不提交；换机单独复制模型目录和冻结数据，或按README重训。82真实行推理一致、两局场景smoke通过；1000条真实及边界一致性未做，P4未正式验收。下轮先P5单Marine Discrete(5)最小reset/step/action_masks/close与奖励桥接；stub仅契约，真实SC2接线后才称可训练。PPO未开始，小样本准确率不证明BC优于规则。
+模型本体不提交；换机单独复制模型目录和冻结数据，或按README重训。82真实行推理一致、两局场景smoke通过；1000条真实及边界一致性未做，P4未正式验收。本段保留P4历史接续要求；其后的P5桥接及PPO最小训练见文末最新接续，小样本准确率不证明BC优于规则。
 
 
 ## 2026-10-18 P5真实桥接MVP接续
 
 SC2MicroEnv自定义Gym风格reset/step/action_masks/close已接真实worker；不是Gymnasium Env，死亡可obs=None。唯一真实episode c06761effef34708901c214e7d7c3bd7，seed42/8秒上限，14步全部8loops，frame17→129；action5及masked0拒绝不推进。HP己45→0/敌45→9，逐条复算奖励一致，总-1.2含死亡终局-1；marine_dead/terminated=true/truncated=false。双方官方Defeat/Victory、worker exit0、close无自有SC2残留；0命令冲突，RL日志非专家/BC合格0，不读LLM凭据。
 
-首次pre-game目录冲突失败已保留，worker Telemetry改game子目录后只运行上述1局。2项必要父端契约测试与worker编译/CLI通过；不重跑全suite。真实time truncation、敌死、重复reset、mid-close、故障与训练吞吐未验证。完整报告docs/PHASE_05_ENV_MVP_REPORT.md，共享docs/validation/micro_env_mvp.json；真实奖励消费RL rollout，旧micro_summary.reward字段与通用summary截断分类不作为环境终止依据。PPO未开始、训练就绪未建立。下一步补训练适配/必要边界与吞吐，再独立训练环境接PPO。
+首次pre-game目录冲突失败已保留，worker Telemetry改game子目录后只运行上述1局。2项必要父端契约测试与worker编译/CLI通过；不重跑全suite。以上为首轮桥接历史范围；后续重复reset、预算close及一次吞吐测量已随32步PPO训练覆盖，见文末最新接续。完整报告docs/PHASE_05_ENV_MVP_REPORT.md，共享docs/validation/micro_env_mvp.json；真实奖励消费RL rollout，旧micro_summary.reward字段与通用summary截断分类不作为环境终止依据。训练就绪仍未全面建立。
+
+## 2026-10-19 P5最新接续
+
+Gymnasium适配与MaskablePPO最小训练已过：32真实步、2完整死亡episode（14/13步）及1预算close部分episode（5步），SB3 n_updates2、参数finite且actor变化，保存重载同obs+mask概率误差0。模型SHA256 `80139d368fbb24a0eb1d6262c3e0dc53b3688ed1c94f1b469d107f118608a793`。原始目录artifacts/micro_ppo/p5_ppo_mvp_20261018，模型不入Git；两完整局官方Result确认，全部32条mask/真实HP奖励复核，无systemfailure/conflict/进程残留。训练49.562秒；无额外评估局，不能推出收益/胜率。
+
+训练环境C:\code\sc2-ares-training（Torch2.10.0+cpu/Gymnasium1.2.3/SB3与contrib2.7.1）；worker仍C:\Users\27932\anaconda3\envs\sc2-ares-runtime\python.exe -s；依赖requirements-ppo.txt，锁文件及子模块未改。2项adapter+1项trainer定向测试/pipcheck通过，不重跑旧suite。系统失败在buffer前raise；真实故障/时间截断/敌死仍未实测。仅工程MVP、P5全面验收/长训/部署未做。后续优先按用户需要接PPO局部部署与短时行为验证，默认规则/BC/LLM入口保持原用途。
