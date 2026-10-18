@@ -32,6 +32,41 @@ def write_json(path, value):
     path.write_text(json.dumps(value, indent=2, allow_nan=False), encoding="utf-8")
 
 
+def policy_sha256(model):
+    digest = hashlib.sha256()
+    for key, value in sorted(model.policy.state_dict().items()):
+        digest.update(key.encode())
+        digest.update(value.detach().cpu().numpy().tobytes())
+    return digest.hexdigest()
+
+
+def resume_checkpoint(source):
+    """Accept only our versioned checkpoint and its adjacent provenance."""
+    source = Path(source).resolve()
+    checkpoint = source / "model.zip" if source.is_dir() else source
+    if checkpoint.suffix != ".zip" or not checkpoint.is_file():
+        raise ValueError("--resume requires a model directory or existing .zip")
+    metadata = json.loads((checkpoint.parent / "metadata.json").read_text(encoding="utf-8"))
+    expected = dict(format="marine-maskable-ppo-sb3-v1", feature_version="marine-16-v1",
+                    action_version="marine-5-v1", decision_game_loops=8,
+                    reward_version="effective-hp-delta-45-terminal-1-v1",
+                    normalization="marine-16-v1", actor_layers=[16, 64, 64, 5],
+                    critic_hidden_layers=[64, 64], activation="tanh", bc_weights_used=False)
+    for key, value in expected.items():
+        if metadata.get(key) != value:
+            raise ValueError(f"Incompatible resume metadata: {key}")
+    digest = hashlib.sha256(checkpoint.read_bytes()).hexdigest()
+    if metadata.get("checkpoint_sha256") != digest:
+        raise ValueError("Resume checkpoint hash does not match metadata")
+    for package in ("stable-baselines3", "sb3-contrib"):
+        if metadata.get("versions", {}).get(package) != version(package):
+            raise ValueError(f"Resume requires the recorded {package} version")
+    for key, value in dict(gamma=0.99, gae_lambda=0.95, clip_range=0.2, device="cpu").items():
+        if metadata.get("training", {}).get(key) != value:
+            raise ValueError(f"Incompatible resume training metadata: {key}")
+    return checkpoint, metadata, digest
+
+
 def probe(model, obs, mask):
     with torch.no_grad():
         tensor, _ = model.policy.obs_to_tensor(obs)
@@ -96,9 +131,22 @@ class TraceCallback(BaseCallback):
 
 
 def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft II",
-          map_name="Ancient Cistern LE", max_game_seconds=8, seed=42,
-          total_timesteps=32, n_steps=32, batch_size=16, n_epochs=2,
-          learning_rate=3e-4, environment=None):
+          map_name="Ancient Cistern LE", max_game_seconds=8, seed=None,
+          total_timesteps=32, n_steps=None, batch_size=None, n_epochs=None,
+          learning_rate=None, resume=None, environment=None):
+    parent = resume_checkpoint(resume) if resume is not None else None
+    requested = dict(n_steps=n_steps, batch_size=batch_size, n_epochs=n_epochs,
+                     learning_rate=learning_rate)
+    defaults = dict(n_steps=32, batch_size=16, n_epochs=2, learning_rate=3e-4)
+    effective = parent[1]["training"] if parent else defaults
+    for key, value in requested.items():
+        if parent and value is not None and value != effective[key]:
+            raise ValueError(f"Resume inherits {key}={effective[key]}; conflicting override")
+        requested[key] = effective[key] if value is None else value
+    n_steps, batch_size, n_epochs, learning_rate = (requested[key] for key in defaults)
+    if parent and seed is not None and seed != parent[1]["seed"]:
+        raise ValueError("Resume inherits the parent seed; conflicting override")
+    seed = parent[1]["seed"] if parent else (42 if seed is None else seed)
     if n_steps < 2 or batch_size < 2 or n_steps % batch_size:
         raise ValueError("n_steps must be divisible by batch_size, both >= 2")
     if total_timesteps < n_steps or total_timesteps % n_steps or n_epochs < 1:
@@ -112,26 +160,47 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
         worker_python=worker_python, game_path=game_path, map_name=map_name,
         max_game_seconds=max_game_seconds, output_root=output / "episodes")
     trace = TraceCallback(env, output / "training_transitions.jsonl")
+    environment_closed = False
     try:
         torch.set_num_threads(1)
-        model = MaskablePPO(
+        model = MaskablePPO.load(parent[0], env=env, device="cpu") if parent else MaskablePPO(
             "MlpPolicy", env, n_steps=n_steps, batch_size=batch_size,
             n_epochs=n_epochs, learning_rate=learning_rate, gamma=0.99,
             gae_lambda=0.95, clip_range=0.2, seed=seed, device="cpu", verbose=1,
             policy_kwargs=dict(net_arch=dict(pi=[64, 64], vf=[64, 64]),
                                activation_fn=torch.nn.Tanh))
+        if parent:
+            for key, value in requested.items():
+                if getattr(model, key) != value:
+                    raise ValueError(f"Resume model and metadata disagree: {key}")
+            if model.n_envs != 1 or model.policy.net_arch != dict(pi=[64, 64], vf=[64, 64]):
+                raise ValueError("Resume requires the single-environment fixed MLP")
+            if model.policy.activation_fn is not torch.nn.Tanh:
+                raise ValueError("Resume requires tanh activation")
+            if (model.gamma != 0.99 or model.gae_lambda != 0.95
+                    or float(model.clip_range(1.0)) != 0.2 or model.seed != seed):
+                raise ValueError("Resume model and fixed training metadata disagree")
+        initial_steps, initial_updates = model.num_timesteps, model._n_updates
+        initial_policy_hash = policy_sha256(model)
+        optimizer_steps_before = [int(state["step"]) for state in
+                                  model.policy.optimizer.state.values() if "step" in state]
         initial = {key: value.detach().cpu().clone()
                    for key, value in model.policy.state_dict().items()}
-        model.learn(total_timesteps=total_timesteps, callback=trace, use_masking=True)
+        model.learn(total_timesteps=total_timesteps, callback=trace, use_masking=True,
+                    reset_num_timesteps=not bool(parent))
         final = model.policy.state_dict()
         changes = {key: float(torch.max(torch.abs(value.cpu() - initial[key])))
                    for key, value in final.items()}
         finite = all(bool(torch.isfinite(value).all()) for value in final.values())
         actor_changed = any(value > 0 for key, value in changes.items()
                             if key.startswith(("mlp_extractor.policy_net", "action_net")))
-        if not finite or not actor_changed or model._n_updates < 1:
+        if not finite or not actor_changed or model._n_updates <= initial_updates:
             raise ValueError("No finite actor PPO update was demonstrated")
         probabilities, action = probe(model, trace.probe_obs, trace.probe_mask)
+        # Close the worker before naming any successful checkpoint; close failure
+        # is a system failure, not a completed training run.
+        env.close()
+        environment_closed = True
         # Write to an explicitly provisional name until reload verification passes.
         provisional = output / "model.pending.zip"
         model.save(provisional)
@@ -149,7 +218,13 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
             reward_version="effective-hp-delta-45-terminal-1-v1",
             normalization="marine-16-v1", actor_layers=[16, 64, 64, 5],
             critic_hidden_layers=[64, 64], activation="tanh", seed=seed,
-            initialization="random", bc_weights_used=False, dataset=None,
+            initialization="resume" if parent else "random", bc_weights_used=False, dataset=None,
+            parent_checkpoint=(dict(path=str(parent[0]), sha256=parent[2]) if parent else None),
+            initial_policy_sha256=initial_policy_hash,
+            initial_timesteps=initial_steps, additional_timesteps=model.num_timesteps - initial_steps,
+            cumulative_timesteps=model.num_timesteps,
+            hyperparameter_source="parent_checkpoint" if parent else "CLI/defaults",
+            resume_semantics="Fresh environment reset; RNG/game trajectory is not replayed.",
             checkpoint_sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest(),
             versions={name: version(name) for name in
                       ("numpy", "torch", "gymnasium", "stable-baselines3", "sb3-contrib")},
@@ -162,6 +237,14 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
             deployment_exported=False)
         report = dict(
             status="success", actual_steps=model.num_timesteps,
+            initial_timesteps=initial_steps, additional_steps=model.num_timesteps - initial_steps,
+            cumulative_timesteps=model.num_timesteps, initial_updates=initial_updates,
+            initial_policy_sha256=initial_policy_hash,
+            parent_checkpoint=metadata["parent_checkpoint"],
+            hyperparameter_source=metadata["hyperparameter_source"],
+            optimizer_steps_before=optimizer_steps_before,
+            optimizer_steps_after=[int(state["step"]) for state in
+                                   model.policy.optimizer.state.values() if "step" in state],
             completed_episodes=trace.episodes, observed_episode_count=len(trace.episode_rewards),
             reward_sum=sum(row["reward"] for row in trace.rows),
             updates=model._n_updates, parameters_finite=finite,
@@ -192,7 +275,8 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
         # Do not swallow reset failures or train a system-failure truncation.
         raise
     finally:
-        env.close()
+        if not environment_closed:
+            env.close()
 
 
 def main():
@@ -202,19 +286,21 @@ def main():
     parser.add_argument("--game-path", default=r"C:\Program Files (x86)\StarCraft II")
     parser.add_argument("--map", default="Ancient Cistern LE")
     parser.add_argument("--max-game-seconds", type=float, default=8)
-    parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--total-timesteps", type=int, default=32)
-    parser.add_argument("--n-steps", type=int, default=32)
-    parser.add_argument("--batch-size", type=int, default=16)
-    parser.add_argument("--n-epochs", type=int, default=2)
-    parser.add_argument("--learning-rate", type=float, default=3e-4)
+    parser.add_argument("--resume", type=Path, help="Parent model directory or .zip with adjacent metadata.json; inherits hyperparameters")
+    parser.add_argument("--seed", type=int)
+    parser.add_argument("--total-timesteps", type=int, default=32,
+                        help="Additional steps for this run, including when resuming")
+    parser.add_argument("--n-steps", type=int)
+    parser.add_argument("--batch-size", type=int)
+    parser.add_argument("--n-epochs", type=int)
+    parser.add_argument("--learning-rate", type=float)
     args = parser.parse_args()
     print(json.dumps(train(
         args.output, worker_python=args.worker_python, game_path=args.game_path,
         map_name=args.map, max_game_seconds=args.max_game_seconds, seed=args.seed,
         total_timesteps=args.total_timesteps, n_steps=args.n_steps,
         batch_size=args.batch_size, n_epochs=args.n_epochs,
-        learning_rate=args.learning_rate), indent=2, allow_nan=False))
+        learning_rate=args.learning_rate, resume=args.resume), indent=2, allow_nan=False))
 
 
 if __name__ == "__main__":

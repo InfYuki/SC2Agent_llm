@@ -13,30 +13,33 @@ SHAPES = {
 
 
 class NumpyBCPolicy:
+    policy_version = POLICY_VERSION
+    label = "BC"
+
     @classmethod
     def load(cls, directory):
         directory = Path(directory)
         metadata = json.loads((directory / "metadata.json").read_text(encoding="utf-8"))
         contract = dict(
-            format=POLICY_VERSION, feature_version="marine-16-v1",
+            format=cls.policy_version, feature_version="marine-16-v1",
             action_version="marine-5-v1", decision_game_loops=8,
             architecture=[16, 64, 64, 5], activation="tanh",
             normalization="marine-16-v1",
         )
         for key, value in contract.items():
             if metadata.get(key) != value:
-                raise ValueError("BC contract mismatch: " + key)
+                raise ValueError(cls.label + " contract mismatch: " + key)
         path = directory / "weights.npz"
         if hashlib.sha256(path.read_bytes()).hexdigest() != metadata.get("weights_sha256"):
-            raise ValueError("BC weights hash mismatch")
+            raise ValueError(cls.label + " weights hash mismatch")
         with np.load(path, allow_pickle=False) as archive:
             if set(archive.files) != set(SHAPES):
-                raise ValueError("BC weight keys mismatch")
+                raise ValueError(cls.label + " weight keys mismatch")
             weights = {}
             for key, shape in SHAPES.items():
                 value = archive[key]
                 if value.shape != shape or value.dtype != np.float32 or not np.isfinite(value).all():
-                    raise ValueError("Invalid BC weights: " + key)
+                    raise ValueError("Invalid " + cls.label + " weights: " + key)
                 weights[key] = value.copy()
         policy = cls()
         policy.weights, policy.metadata = weights, metadata
@@ -52,7 +55,7 @@ class NumpyBCPolicy:
             h = np.tanh(h @ w["w2"] + w["b2"])
             result = h @ w["w3"] + w["b3"]
         if result.shape != (5,) or not np.isfinite(result).all():
-            raise ValueError("Invalid BC logits")
+            raise ValueError("Invalid " + self.label + " logits")
         return result
 
     def action(self, obs, mask):

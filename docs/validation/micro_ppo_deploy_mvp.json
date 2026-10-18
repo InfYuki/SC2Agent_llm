@@ -1,0 +1,276 @@
+{
+  "date": "2026-10-19",
+  "status": "resume_and_deployment_engineering_mvp_passed",
+  "parent_run": "artifacts\\micro_ppo\\p5_ppo_mvp_20261018",
+  "resume_run": "artifacts\\micro_ppo\\p5_ppo_resume_mvp_20261019",
+  "actor_directory": "artifacts/models/marine_ppo_mvp_20261019",
+  "training": {
+    "status": "success",
+    "actual_steps": 64,
+    "initial_timesteps": 32,
+    "additional_steps": 32,
+    "cumulative_timesteps": 64,
+    "initial_updates": 2,
+    "initial_policy_sha256": "e3318defa3165815b5d5b906fdaecedf2d90cf460580ac6eb34f6c300765a4a0",
+    "parent_checkpoint": {
+      "path": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_ppo_mvp_20261018\\model.zip",
+      "sha256": "80139d368fbb24a0eb1d6262c3e0dc53b3688ed1c94f1b469d107f118608a793"
+    },
+    "hyperparameter_source": "parent_checkpoint",
+    "optimizer_steps_before": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "optimizer_steps_after": [
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8
+    ],
+    "completed_episodes": [
+      {
+        "episode_id": "3f0c0890a4aa4cfa88f4b115c196d8b0",
+        "steps": 14,
+        "reward": -1.7333334237337112,
+        "reason": "marine_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_ppo_resume_mvp_20261019\\episodes\\3f0c0890a4aa4cfa88f4b115c196d8b0"
+      },
+      {
+        "episode_id": "6af2c5f45ef7409eacabeef27a0447e6",
+        "steps": 14,
+        "reward": -1.4666667431592941,
+        "reason": "marine_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_ppo_resume_mvp_20261019\\episodes\\6af2c5f45ef7409eacabeef27a0447e6"
+      }
+    ],
+    "observed_episode_count": 3,
+    "reward_sum": -3.2000001668930054,
+    "updates": 4,
+    "parameters_finite": true,
+    "actor_parameters_changed": true,
+    "parameter_max_abs_changes": {
+      "mlp_extractor.policy_net.0.weight": 0.0011416375637054443,
+      "mlp_extractor.policy_net.0.bias": 0.0011023594997823238,
+      "mlp_extractor.policy_net.2.weight": 0.0010744747705757618,
+      "mlp_extractor.policy_net.2.bias": 0.0010864718351513147,
+      "mlp_extractor.value_net.0.weight": 0.00121239572763443,
+      "mlp_extractor.value_net.0.bias": 0.001214162795804441,
+      "mlp_extractor.value_net.2.weight": 0.0012029707431793213,
+      "mlp_extractor.value_net.2.bias": 0.0012008174089714885,
+      "action_net.weight": 0.0011670293752104044,
+      "action_net.bias": 0.0011094579240307212,
+      "value_net.weight": 0.00120505690574646,
+      "value_net.bias": 0.0011989232152700424
+    },
+    "reload": {
+      "probability_max_abs_error": 0.0,
+      "masked_action_equal": true,
+      "action": 4,
+      "observation": [
+        1.0,
+        0.0,
+        0.3444661498069763,
+        0.46484375,
+        0.0,
+        0.46484375,
+        1.0,
+        0.0,
+        0.0,
+        0.46484375,
+        0.0,
+        1.0,
+        0.0,
+        0.0625,
+        0.08935546875,
+        0.0
+      ],
+      "mask": [
+        false,
+        false,
+        true,
+        true,
+        true
+      ],
+      "probabilities": [
+        0.0,
+        0.0,
+        0.3335552513599396,
+        0.31880486011505127,
+        0.34763991832733154
+      ]
+    },
+    "training_metrics": {
+      "train/learning_rate": 0.0003,
+      "train/entropy_loss": -1.2736647427082062,
+      "train/policy_gradient_loss": -0.0018169123213738203,
+      "train/value_loss": 0.2873179353773594,
+      "train/approx_kl": 4.546716809272766e-05,
+      "train/clip_fraction": 0.0,
+      "train/loss": 0.11928742378950119,
+      "train/explained_variance": -1.0055272579193115,
+      "train/n_updates": 4.0,
+      "train/clip_range": 0.2
+    },
+    "wall_seconds": 49.35899999999674,
+    "rollout_trace": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_ppo_resume_mvp_20261019\\training_transitions.jsonl",
+    "checkpoint_sha256": "eaf6f375b1f37b42c88555916f4e9afcf953c1b3f08a0ac410f6f686177b8fd9",
+    "interpretation": "Engineering update and reload only; no combat-strength evaluation."
+  },
+  "training_verification": {
+    "steps": 32,
+    "first_step": 33,
+    "last_step": 64,
+    "raw_reward_max_abs_error": 0.0,
+    "all_masks_legal": true,
+    "all_actual_loops_8": true,
+    "expert_labels": 0,
+    "system_failures": 0,
+    "discarded_rows": 0,
+    "initial_policy_matches_parent": true,
+    "command_results": {
+      "engine_confirmed": 21,
+      "hold": 8,
+      "order_preserved": 3
+    },
+    "episode_steps": {
+      "3f0c0890a4aa4cfa88f4b115c196d8b0": 14,
+      "6af2c5f45ef7409eacabeef27a0447e6": 14,
+      "ee311337d9f74a27bd9c12eb860312a5": 4
+    }
+  },
+  "export": {
+    "format": "marine-ppo-numpy-v1",
+    "feature_version": "marine-16-v1",
+    "action_version": "marine-5-v1",
+    "decision_game_loops": 8,
+    "architecture": [
+      16,
+      64,
+      64,
+      5
+    ],
+    "activation": "tanh",
+    "normalization": "marine-16-v1",
+    "prototype": true,
+    "weights_sha256": "dc4964b5d0d0f813d791c126675ef6ed7fe87af1268e4ce216159a6412efde03",
+    "producer": {
+      "algorithm": "MaskablePPO",
+      "source_checkpoint": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_ppo_resume_mvp_20261019\\model.zip",
+      "source_checkpoint_sha256": "eaf6f375b1f37b42c88555916f4e9afcf953c1b3f08a0ac410f6f686177b8fd9",
+      "versions": {
+        "torch": "2.10.0+cpu",
+        "stable-baselines3": "2.7.1",
+        "sb3-contrib": "2.7.1",
+        "numpy": "2.4.6"
+      }
+    }
+  },
+  "parity": {
+    "rows": 32,
+    "source": "existing_parent_real_source_obs_and_source_mask",
+    "probability_max_abs_error": 5.960464477539063e-08,
+    "actions_equal": 32,
+    "illegal_masks": 0,
+    "masked_probabilities_zero": true,
+    "parent_hashes_unchanged": {
+      "model.zip": "80139d368fbb24a0eb1d6262c3e0dc53b3688ed1c94f1b469d107f118608a793",
+      "metadata.json": "f2c9ea277eaf0373142dc41a240688ec821374c569a4f8b09fd44ed24041fffd"
+    }
+  },
+  "deployment": {
+    "run": "artifacts\\runs\\p5_ppo_deploy_mvp_20261019",
+    "exit_code": 0,
+    "scenario_result": {
+      "outcome": "low_health_safety_exit",
+      "terminated": false,
+      "truncated": true,
+      "game_loop": 98,
+      "game_seconds": 4.375
+    },
+    "summary": {
+      "status": "truncated",
+      "result": "Result.Defeat",
+      "stop_reason": "game_time_limit",
+      "error": null,
+      "counters": {
+        "marines_created": 1,
+        "ppo_inference_decisions": 10,
+        "micro_action_hold": 10,
+        "micro_decision_steps": 10,
+        "micro_owned_decisions": 10,
+        "command_conflicts": 0,
+        "callbacks": 11
+      },
+      "game_span_seconds": 3.571428571428571,
+      "wall_span_seconds": 0.1859900999988895,
+      "game_to_wall_ratio": 19.20225093405453,
+      "on_step_p50_seconds": 0.0023975000076461583,
+      "on_step_p95_seconds": 0.003022700024303049,
+      "on_step_p99_seconds": 0.003022700024303049,
+      "on_step_max_seconds": 0.0032201999856624752,
+      "peak_workers": 12,
+      "peak_marines": 1,
+      "peak_bases": 1
+    },
+    "rows": 10,
+    "action_counts": {
+      "4": 10
+    },
+    "command_results": {
+      "hold": 10
+    },
+    "all_masks_legal": true,
+    "fallback_events": 0,
+    "expert_labels": 0,
+    "bc_eligible_rows": 0,
+    "final_hp": {
+      "own": 9.0,
+      "enemy": 9.0
+    },
+    "all_predictions_owned": true
+  },
+  "sc2_processes_remaining": 0,
+  "scope": "Exactly one real additional 32-step PPO collection and one short local PPO deployment game; no full-match or win-rate evaluation.",
+  "limitations": [
+    "Only 64 cumulative training steps; all 10 deployment actions were HOLD.",
+    "Safety exit at 4.375 game seconds is not a combat-strength claim.",
+    "No real deployment fallback game; fallback is covered by targeted tests.",
+    "P5 full acceptance and scaled training readiness not established.",
+    "Resume preserves model and optimizer but starts a fresh SC2 episode; it is not bitwise deterministic continuation."
+  ],
+  "runtime_validation": {
+    "actor_load_in_locked_runtime": "success",
+    "torch_sb3_imported": false,
+    "run_ppo_show_config_exit_code": 0,
+    "mode": "rule_ppo",
+    "default_model": "artifacts/models/marine_ppo_mvp_20261019"
+  }
+}

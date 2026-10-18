@@ -176,7 +176,7 @@ PPO已在独立venv `C:\code\sc2-ares-training` 进行最小训练，worker保�
 
 ## 给新电脑开发助手的接续提示
 
-> 先读HANDOVER.md、README_LOCAL.md、docs/PHASE_04_MVP_REPORT.md和P3_COVERAGE_REPORT。项目在C:\code\SC2Agent_llm，目标是本地Ares＋LLM战略＋Marine微操，不参加AI Arena。用户偏好快速可用MVP、少重复测试；每小步交子代理，主代理协调核对。P1/P2与P3历史证据保留。P4以冻结82条（32/24/26）训练NumPy BC，val选epoch1000，test准确率88.46%；这是标签拟合工程原型，不证明收益或泛化。显式run_bc.cmd --bc-model启用，默认仍规则；失败规则回退，BC日志不充当专家标签。模型和数据不在Git，迁移需另带。PPO已完成真实32步工程MVP（非强度验收），训练就绪仍未建立。先读docs/PHASE_05_PPO_MVP_REPORT.md，独立training Python+runtime worker，尚无PPO部署入口。遵守唯一命令出口、非阻塞LLM及凭据保密。
+> 先读HANDOVER.md、README_LOCAL.md、docs/PHASE_04_MVP_REPORT.md和P3_COVERAGE_REPORT。项目在C:\code\SC2Agent_llm，目标是本地Ares＋LLM战略＋Marine微操，不参加AI Arena。用户偏好快速可用MVP、少重复测试；每小步交子代理，主代理协调核对。P1/P2与P3历史证据保留。P4以冻结82条（32/24/26）训练NumPy BC，val选epoch1000，test准确率88.46%；这是标签拟合工程原型，不证明收益或泛化。显式run_bc.cmd --bc-model启用，默认仍规则；失败规则回退，BC日志不充当专家标签。模型和数据不在Git，迁移需另带。PPO已完成真实32步工程MVP（非强度验收），训练就绪仍未建立。先读docs/PHASE_05_PPO_MVP_REPORT.md，独立training Python+runtime worker，最新PPO显式入口见文末续训部署接续。遵守唯一命令出口、非阻塞LLM及凭据保密。
 
 ## 2026-10-18 P3接续状态
 
@@ -201,4 +201,19 @@ SC2MicroEnv自定义Gym风格reset/step/action_masks/close已接真实worker；�
 
 Gymnasium适配与MaskablePPO最小训练已过：32真实步、2完整死亡episode（14/13步）及1预算close部分episode（5步），SB3 n_updates2、参数finite且actor变化，保存重载同obs+mask概率误差0。模型SHA256 `80139d368fbb24a0eb1d6262c3e0dc53b3688ed1c94f1b469d107f118608a793`。原始目录artifacts/micro_ppo/p5_ppo_mvp_20261018，模型不入Git；两完整局官方Result确认，全部32条mask/真实HP奖励复核，无systemfailure/conflict/进程残留。训练49.562秒；无额外评估局，不能推出收益/胜率。
 
-训练环境C:\code\sc2-ares-training（Torch2.10.0+cpu/Gymnasium1.2.3/SB3与contrib2.7.1）；worker仍C:\Users\27932\anaconda3\envs\sc2-ares-runtime\python.exe -s；依赖requirements-ppo.txt，锁文件及子模块未改。2项adapter+1项trainer定向测试/pipcheck通过，不重跑旧suite。系统失败在buffer前raise；真实故障/时间截断/敌死仍未实测。仅工程MVP、P5全面验收/长训/部署未做。后续优先按用户需要接PPO局部部署与短时行为验证，默认规则/BC/LLM入口保持原用途。
+训练环境C:\code\sc2-ares-training（Torch2.10.0+cpu/Gymnasium1.2.3/SB3与contrib2.7.1）；worker仍C:\Users\27932\anaconda3\envs\sc2-ares-runtime\python.exe -s；依赖requirements-ppo.txt，锁文件及子模块未改。2项adapter+1项trainer定向测试/pipcheck通过，不重跑旧suite。系统失败在buffer前raise；真实故障/时间截断/敌死仍未实测。本段为首轮历史工程MVP；P5全面验收/长训未做，最新局部部署见下节。后续优先按用户需要接PPO局部部署与短时行为验证，默认规则/BC/LLM入口保持原用途。
+
+
+## 2026-10-19 PPO续训与部署最新接续
+
+已从原32步checkpoint续训新增32步→累计64步，policy与Adam状态保留（optimizer step4→8、updates2→4）；父模型/metadata不变。新checkpoint在`artifacts/micro_ppo/p5_ppo_resume_mvp_20261019/model.zip`，NumPy actor在`artifacts/models/marine_ppo_mvp_20261019`；运行环境无需Torch，独立训练环境负责训练与导出。模型与原始证据不入Git，迁移另带。
+
+双击`run_ppo.cmd`或运行`.\run_ppo.cmd`启动规则宏观+PPO局部Marine；`.\run_ppo.cmd --ppo-model <目录>`覆盖模型。显式mode=rule_ppo；失败记录并转规则，全部PPO/fallback非专家，默认规则/BC用途保留。CLI默认路径已验证，唯一实机部署为单Marine短场景：10次推理/10owned、全部HOLD、4.375秒low_health_safety_exit（己/敌HP均9），无fallback/非法mask/冲突/error/SC2残留。这仅证明链路接管，不证明战斗收益。已有32真实观测SB3/NumPy概率误差5.9604645e-8、动作全同。
+
+继续现64步模型，例新增320步（未运行；继承父n_steps32/batch16/epochs2，输出目录须新建）：
+
+```powershell
+& C:\code\sc2-ares-training\Scripts\python.exe -s tools/train_micro_ppo.py artifacts/micro_ppo/p5_ppo_next --worker-python C:/Users/27932/anaconda3/envs/sc2-ares-runtime/python.exe --resume artifacts/micro_ppo/p5_ppo_resume_mvp_20261019 --total-timesteps 320
+```
+
+`--total-timesteps`是本次增量、需为32倍数；示例成功后累计384步，恢复optimizer但不承诺完整RNG复演。新训练后按[续训部署报告](docs/PHASE_05_PPO_DEPLOY_MVP_REPORT.md)导出actor，再用`--ppo-model`选新目录。完整事实及边界见该报告和[共享摘要](docs/validation/micro_ppo_deploy_mvp.json)。下一步增加有限训练预算、诊断奖励/动作分布，再少量与规则/BC对比；P5全面验收、规模训练就绪和强度改进均未建立，勿重复旧suite拖延推进。

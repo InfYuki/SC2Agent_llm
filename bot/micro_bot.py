@@ -21,6 +21,26 @@ class MicroRuleBot(RuleBot):
             or getattr(options, "policy", "rule") == "bc"
         )
         self._bc_policy = None
+        self._ppo_requested = (
+            getattr(options, "mode", None) == "rule_ppo"
+            or getattr(options, "policy", "rule") == "ppo"
+        )
+        self._ppo_policy = None
+        if self._ppo_requested:
+            from bot.micro_ppo import NumpyPPOPolicy, POLICY_VERSION
+
+            # PPO and its rule fallback must never become expert/BC labels.
+            self.recorder.policy_version = POLICY_VERSION
+            self.recorder.bc_labels = False
+            try:
+                self._ppo_policy = NumpyPPOPolicy.load(options.ppo_model)
+                self.telemetry.event(
+                    "ppo_model_loaded", prototype=True,
+                    weights_sha256=self._ppo_policy.metadata["weights_sha256"],
+                    producer=self._ppo_policy.metadata["producer"],
+                )
+            except Exception as exc:
+                self._ppo_fallback("load", exc)
         if self._bc_requested:
             from bot.micro_bc import NumpyBCPolicy, POLICY_VERSION
 
@@ -45,7 +65,27 @@ class MicroRuleBot(RuleBot):
             detail=str(exc), fallback="marine-kite-v1",
         )
 
+    def _ppo_fallback(self, phase, exc):
+        self._ppo_policy = None
+        self.telemetry.counts["ppo_" + phase + "_fallback"] += 1
+        self.telemetry.event(
+            "ppo_fallback", phase=phase, reason=type(exc).__name__,
+            detail=str(exc), fallback="marine-kite-v1",
+        )
+
     def choose_micro_action(self, unit, ctx):
+        if self._ppo_policy is not None:
+            try:
+                action = Action(self._ppo_policy.action(ctx.obs, ctx.mask))
+                if not ctx.mask[action]:
+                    raise ValueError("PPO selected masked action")
+                self.telemetry.counts["ppo_inference_decisions"] += 1
+                return action
+            except Exception as exc:
+                self._ppo_fallback("inference", exc)
+        if self._ppo_requested:
+            self.telemetry.counts["ppo_rule_fallback_decisions"] += 1
+            return expert(unit, ctx)
         if self._bc_policy is not None:
             try:
                 action = Action(self._bc_policy.action(ctx.obs, ctx.mask))

@@ -365,8 +365,9 @@ def main():
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--realtime", action="store_true")
     parser.add_argument("--expert", choices=["kite", "amove"], default="kite")
-    parser.add_argument("--policy", choices=["rule", "bc"], default="rule")
+    parser.add_argument("--policy", choices=["rule", "bc", "ppo"], default="rule")
     parser.add_argument("--bc-model", default=None, help="Prototype model directory; invalid models fall back to kite rules.")
+    parser.add_argument("--ppo-model", default=None, help="Exported NumPy PPO actor; invalid models fall back to kite rules.")
     parser.add_argument("--distance", type=float, choices=[3.0, 6.0, 10.0], default=6.0)
     parser.add_argument("--enemy-hidden", action="store_true")
     parser.add_argument("--enemy-count", type=int, choices=[1, 2], default=1)
@@ -380,8 +381,8 @@ def main():
     parser.add_argument("--max-game-seconds", type=float, default=45)
     parser.add_argument("--run-id", default=None)
     args = parser.parse_args()
-    if args.policy == "bc" and args.expert != "kite":
-        parser.error("BC policy requires the five-action kite adapter (--expert kite)")
+    if args.policy in {"bc", "ppo"} and args.expert != "kite":
+        parser.error("BC/PPO policy requires the five-action kite adapter (--expert kite)")
     if args.max_game_seconds <= 0:
         parser.error("A finite positive scenario time limit is required")
     if not (0.2 < args.health_fraction <= 1 and 0 < args.enemy_health_fraction <= 1):
@@ -411,7 +412,7 @@ def main():
         parser.error("run-id must stay in artifacts/runs")
     telemetry = Telemetry(output)
     options = SimpleNamespace(
-        **vars(args), mode="rule_bc" if args.policy == "bc" else "micro_rule",
+        **vars(args), mode={"bc": "rule_bc", "ppo": "rule_ppo", "rule": "micro_rule"}[args.policy],
         game_step=DECISION_LOOPS, micro_max_units=1
     )
     bot = ScenarioBot(options, telemetry)
