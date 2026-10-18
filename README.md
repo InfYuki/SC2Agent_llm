@@ -1,6 +1,6 @@
 # 本地 Ares + LLM + RL 项目
 
-项目交接与换机恢复请先阅读 **[HANDOVER.md](HANDOVER.md)**。当前 P0/P1 规则基线及 P2 LLM 战略首版已通过工程验证，RL 尚未开始。启动、日志与入口说明见 [README_LOCAL.md](README_LOCAL.md)，证据见 [P1报告](docs/PHASE_01_REPORT.md) 和 [P2报告](docs/PHASE_02_REPORT.md)。
+项目交接与换机恢复请先阅读 **[HANDOVER.md](HANDOVER.md)**。当前 P0/P1 规则基线及 P2 LLM 战略首版已通过工程验证，P4已提供BC原型，P5单Marine真实reset/step桥接MVP已验1局；PPO尚未开始。启动、日志与入口说明见 [README_LOCAL.md](README_LOCAL.md)，最新边界见 [P5报告](docs/PHASE_05_ENV_MVP_REPORT.md)，历史证据见 [P1报告](docs/PHASE_01_REPORT.md) 和 [P2报告](docs/PHASE_02_REPORT.md)。
 
 以下保留官方模板原始使用资料，模板的默认入口、地图路径及参赛流程不代表本项目的本机配置或开发目标。
 

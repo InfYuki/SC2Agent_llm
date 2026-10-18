@@ -1,0 +1,82 @@
+"""One isolated SC2 episode, owned and bounded by SC2MicroEnv."""
+import argparse
+import hashlib
+from multiprocessing.connection import Client
+import os
+from pathlib import Path
+import sys
+from types import SimpleNamespace
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+import run_local
+from sc2 import maps
+from sc2.data import Race
+from sc2.main import run_game
+from sc2.player import Bot
+from bot.lifecycle import recover_completed_game
+from bot.micro import DECISION_LOOPS
+from bot.micro_env_bot import MicroEnvBot, PROTOCOL
+from bot.telemetry import Telemetry
+from tools.run_micro_scenario import Opponent
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--episode-id", required=True)
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--output-dir", required=True)
+    parser.add_argument("--game-path", required=True)
+    parser.add_argument("--max-game-seconds", type=float, default=20)
+    parser.add_argument("--map", default="Ancient Cistern LE")
+    args = parser.parse_args()
+    if not 0 < args.max_game_seconds <= 120:
+        parser.error("max-game-seconds must be in (0,120]")
+    os.environ["SC2PATH"] = str(Path(args.game_path).resolve())
+    os.chdir(ROOT)
+    connection = Client((os.environ["SC2_MICRO_HOST"], int(os.environ["SC2_MICRO_PORT"])),
+                        family="AF_INET", authkey=bytes.fromhex(os.environ["SC2_MICRO_AUTHKEY"]))
+    # Parent owns the episode root and worker.log; Telemetry owns a new child.
+    telemetry = Telemetry(Path(args.output_dir) / "game")
+    options = SimpleNamespace(**vars(args), scenario="marine-vs-marine", distance=6.0,
+                              enemy_count=1, second_distance=8.0, second_enemy_health_fraction=0.5,
+                              health_fraction=1.0, enemy_health_fraction=1.0, enemy_hidden=False,
+                              data_split=None, expert="kite", policy="external", mode="micro_env",
+                              game_step=DECISION_LOOPS, micro_max_units=1, realtime=False)
+    bot = None
+    try:
+        bot = MicroEnvBot(options, telemetry, connection, args.episode_id)
+        settings = maps.get(args.map)
+        telemetry.write_json("manifest.json", dict(config=vars(args), protocol=PROTOCOL,
+            provenance="real-sc2-external-action", expert_labels=False,
+            project_commit=run_local.git("rev-parse", "HEAD"), python=sys.executable,
+            map_sha256=hashlib.sha256(Path(settings.path).read_bytes()).hexdigest(),
+            decision_game_loops=DECISION_LOOPS))
+        with recover_completed_game(telemetry, expected_players=2):
+            result = run_game(settings, [Bot(Race.Terran, bot), Bot(Race.Terran, Opponent())],
+                              realtime=False, random_seed=args.seed,
+                              save_replay_as=str(telemetry.output / "game.SC2Replay"))
+        telemetry.finish(result)
+        connection.send(dict(protocol=PROTOCOL, type="closed", episode_id=args.episode_id,
+                             decision_id=bot._decision_id, unit_slot=0,
+                             frame=int(bot.state.game_loop), info=dict(official_results=str(result))))
+        return 0
+    except Exception as exc:
+        telemetry.fail("micro_env_worker")
+        telemetry.finish()
+        try:
+            connection.send(dict(protocol=PROTOCOL, type="error", episode_id=args.episode_id,
+                                 decision_id=getattr(bot, "_decision_id", 0), unit_slot=0,
+                                 frame=int(bot.state.game_loop) if bot and hasattr(bot, "state") else 0,
+                                 info=dict(reason=type(exc).__name__ + ":" + str(exc), rollout_discard=True)))
+        except (EOFError, OSError):
+            pass
+        raise
+    finally:
+        if bot is not None:
+            bot.close_micro("system_failure" if telemetry.error else None)
+        connection.close()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

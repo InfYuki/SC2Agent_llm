@@ -14,7 +14,7 @@
 | P2 正式强度比较 | 未完成 | 本轮仅一个成对工程样本，不能宣称 LLM 提高胜率 |
 | P3 微操接口与规则专家数据 | 接口、双目标及v7覆盖批次工程验证通过；训练就绪未建立 | 12case×2专家24/24通过，82条冻结技术合格样本，每split五动作均出现；见 `docs/P3_COVERAGE_REPORT.md` |
 | P4 BC工程原型 | 已训练并提供显式运行入口 | NumPy 16→64→64→5，冻结82条；见 `docs/PHASE_04_MVP_REPORT.md`，不代表训练就绪或战斗收益 |
-| PPO / RL训练桥接 | 未开始 | 无Gym reset/step或PPO训练进程 |
+| P5真实训练桥接MVP | 单Marine真实reset/step通过，未正式验收 | 自定义Gym风格API、14步真实8loop证据；非Gymnasium Env，PPO未开始，见 `docs/PHASE_05_ENV_MVP_REPORT.md` |
 
 当前默认入口仍是规则版。LLM是单独入口，网络失败不会同步卡住游戏。完整规划已经复制到仓库 [docs/DEVELOPMENT_PLAN.zh-CN.md](docs/DEVELOPMENT_PLAN.zh-CN.md)，无需访问旧电脑 D:\GPT-personal 才能阅读。详细实现及证据见 [P1报告](docs/PHASE_01_REPORT.md)、[P2报告](docs/PHASE_02_REPORT.md)、[本地说明](README_LOCAL.md)。规划中的未实施条目不能当作现成代码。
 
@@ -189,3 +189,10 @@ suite marine-coverage-v7 / 场景*-v6正式批次 `p3_v7_formal_20261018_115352`
 快速BC原型已训练并接入 `run_bc.cmd`，双击即按脚本目录定位本次模型；`--bc-model <目录>` 可覆盖，默认模型缺失仍规则回退。NumPy MLP、masked交叉熵和Adam；train优化、validation选权重、test最后评估一次。训练/验证/测试准确率100%/100%/88.46%。新增6项必要定向测试（训练2、运行4）与CLI检查通过，本轮不重复全58项或24局suite。最终推理一致性与两局smoke证据见 [P4报告](docs/PHASE_04_MVP_REPORT.md)。
 
 模型本体不提交；换机单独复制模型目录和冻结数据，或按README重训。82真实行推理一致、两局场景smoke通过；1000条真实及边界一致性未做，P4未正式验收。下轮先P5单Marine Discrete(5)最小reset/step/action_masks/close与奖励桥接；stub仅契约，真实SC2接线后才称可训练。PPO未开始，小样本准确率不证明BC优于规则。
+
+
+## 2026-10-18 P5真实桥接MVP接续
+
+SC2MicroEnv自定义Gym风格reset/step/action_masks/close已接真实worker；不是Gymnasium Env，死亡可obs=None。唯一真实episode c06761effef34708901c214e7d7c3bd7，seed42/8秒上限，14步全部8loops，frame17→129；action5及masked0拒绝不推进。HP己45→0/敌45→9，逐条复算奖励一致，总-1.2含死亡终局-1；marine_dead/terminated=true/truncated=false。双方官方Defeat/Victory、worker exit0、close无自有SC2残留；0命令冲突，RL日志非专家/BC合格0，不读LLM凭据。
+
+首次pre-game目录冲突失败已保留，worker Telemetry改game子目录后只运行上述1局。2项必要父端契约测试与worker编译/CLI通过；不重跑全suite。真实time truncation、敌死、重复reset、mid-close、故障与训练吞吐未验证。完整报告docs/PHASE_05_ENV_MVP_REPORT.md，共享docs/validation/micro_env_mvp.json；真实奖励消费RL rollout，旧micro_summary.reward字段与通用summary截断分类不作为环境终止依据。PPO未开始、训练就绪未建立。下一步补训练适配/必要边界与吞吐，再独立训练环境接PPO。

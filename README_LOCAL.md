@@ -145,4 +145,16 @@ python -s tools/run_micro_scenario.py --scenario marine-vs-marine --policy bc --
 python -s tools/train_micro_bc.py .\artifacts\micro_datasets\p3_v7_formal_20261018_115352_dataset .\artifacts\models\marine_bc_rebuilt_seed42 --seed 42 --epochs 1000 --learning-rate 0.003
 ```
 
-训练仅优化train，以validation最小masked loss选权重，最后一次评估test；不要用test调参。82真实行推理一致、两局场景smoke通过；规划1000条真实及边界一致性未做，属于可用MVP而非P4正式验收。下轮先P5单Marine最小真实reset/step与奖励桥接，无需重跑历史24局suite或全部58项旧测试。
+训练仅优化train，以validation最小masked loss选权重，最后一次评估test；不要用test调参。82真实行推理一致、两局场景smoke通过；规划1000条真实及边界一致性未做，属于可用MVP而非P4正式验收。
+
+## 2026-10-18 P5 真实环境 MVP
+
+`envs.sc2_micro_env.SC2MicroEnv` 已支持单Marine固定场景的真实 `reset(seed=42)`、`step(action)`、`action_masks()`、`close()`。每步8loops、16维观测、5动作mask；越界/被mask动作在推进前拒绝。奖励为 `(敌方有效HP损失-己方有效HP损失)/45 + 敌死-己死`。这是自定义Gym风格API，非Gymnasium Env；己方死亡可返回`obs=None`及HOLD-only mask，不能直接接标准PPO采样器。系统失败标记`rollout_discard`，不作战术胜负训练。
+
+```powershell
+python -s tools/smoke_micro_env.py --seed 42 --max-game-seconds 8 --game-path 'C:\Program Files (x86)\StarCraft II'
+```
+
+命令会新启动一局真实SC2；不读LLM凭据。每次reset冷启动worker，MVP不支持动态scenario/options。报告位于`artifacts/micro_env/<episode_id>/`，游戏证据及`rl_rollout.jsonl`位于其`game/`子目录；训练日志为external action、非专家、BC不合格，不混入P3数据。
+
+仅1局真实验证：14步全部8loops，非法动作拒绝不推进，HP奖励逐条一致，marine_dead正常terminated，双方官方Result及worker/SC2进程清理通过。未实测时间截断/敌方死亡/重复reset/中途close/故障，训练吞吐未验收，未安装或运行PPO。详情与首次pre-game失败修复见 [P5报告](docs/PHASE_05_ENV_MVP_REPORT.md)、[共享证据](docs/validation/micro_env_mvp.json)。
