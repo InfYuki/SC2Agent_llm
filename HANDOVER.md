@@ -280,3 +280,14 @@ actor`artifacts/models/marine_ppo_bc_warmstart_20261019`（weights SHA bccce3aa1
 生产低HP/unsupported/静态防御/控数等保护继续规则combat，不等于模型加载/推理失败fallback；没有逐原因遥测，不能推算次数。支持6敌种而课程仅1Marine对1Zergling，未记录实际敌type分布，不能排除课程外支持敌种推理；多Marine共享actor并非训练过群体策略。仅1局Easy工程Victory，无对照/统计，不推PPO收益、强度、胜率或正式P6验收。
 
 run `artifacts/runs/e3_fullmatch_ppo_20261019`，冻结/console/执行证据 `artifacts/p6_e3_fullmatch_20261019`；报告 `docs/PHASE_06_E3_FULLMATCH_MVP_REPORT.md`，共享 `docs/validation/e3_fullmatch_mvp.json`。raw233条虽旧split=train，全部expert=null/bc_eligible=false，另learning_exclusion按SHA永久排除训练；reward仍null，未训练/未调外部模型/未改API配置/未装包/未重跑。模型及原始工件Git忽略，迁移另带；训练budgetclose EOFError历史问题仍未解决。正式P6及收益评估待新授权预算。
+
+
+## 2026-10-19 E4 LLM战略 + PPO微操完整局接续
+
+`llm_ppo`已组合既有后台LLM目标与curriculum256 PPO微操，共用单RuleBot/arbiter；新双击入口`run_llm_ppo.cmd`（默认realtime/Medium/调用上限60），本次实验显式非实时Easy且收紧预算，不改变`run_ppo.cmd`默认。运行示例：`.\run_llm_ppo.cmd --difficulty Easy --no-realtime --llm-max-calls 16`；实际已完成命令/冻结SHA以报告为准，不应直接重跑覆盖既有run-id。
+
+首次唯一局273.214游戏秒因可选latest_state.json原子替换WinError5崩溃、exit1、无官方结果/回放；4真实HTTP200/4active、231LLM经济步、166军队目标步、110PPO。证据代理局中Get-Content读快照可能触发Windows删除共享锁，但未证实因果，失败日志完整保留。只修可选快照winerror5/32有限重试/skip，其它必需写和异常不吞；必要同配置/seed重验一次，无第三局、无挑策略结果。初cap20已用4，重验cap16实际6，累计10≤20；未改API配置/提示词/模型/时效门或训练。
+
+重验run `e4_fullmatch_llm_ppo_20261019_snapshotfix`自然官方Victory、exit0，370游戏秒/39.858实际秒；6HTTP200/6valid active、428LLM及经济目标步、361军队目标步、251等待callbacks。240PPOinfer=owned=240真8loops，25Marine tags、mask合法；其中102PPO命令/34owned微步/17tags发生于LLM实际激活区间。159engine_confirmed+71hold+3preserved+7unconfirmed，后者不冒充确认。43工人/56Marine峰、生产60、2基地/8兵营快照、采矿8020；零冲突/模型fallback/重验error/残留，replay保存。snapshot锁retry/skip均0，不声称实机复现了锁修复。
+
+两run共350行均expert=null/bc_eligible=false，旧split=train文字由按rawSHA永久learning_exclusion排除训练，reward仍null。保护继续规则、最多4Marine共享单体actor、敌type与逐保护原因未记录；一个Easy成功样本加一个中止局不推强度/胜率/训练收益。训练budgetclose EOFError历史缺口仍在，正式P6未完成。模型/raw Git忽略需另带。完整双attempt、异常/观察干扰边界、plan/source/model/mapSHA与cleanup见 `docs/PHASE_06_E4_FULLMATCH_MVP_REPORT.md`、`docs/validation/e4_fullmatch_mvp.json`。

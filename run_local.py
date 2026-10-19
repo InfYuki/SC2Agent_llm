@@ -19,11 +19,34 @@ def git(*args):
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
 
 
+def create_bot(options, telemetry):
+    """Select the explicit composition without changing the default rule bot."""
+    if options.mode == "llm_ppo":
+        from bot.llm_ppo_bot import LLMPPOBot
+
+        return LLMPPOBot(options, telemetry)
+    if options.mode == "template":
+        from bot.probe import InstrumentedAresBot
+
+        return InstrumentedAresBot(options, telemetry)
+    if options.mode in {"micro_rule", "rule_bc", "rule_ppo"}:
+        from bot.micro_bot import MicroRuleBot
+
+        return MicroRuleBot(options, telemetry)
+    if options.mode in {"shadow", "llm"}:
+        from bot.llm_bot import StrategicBot
+
+        return StrategicBot(options, telemetry)
+    from bot.rule_bot import RuleBot
+
+    return RuleBot(options, telemetry)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--mode",
-        choices=["template", "rule", "shadow", "llm", "micro_rule", "rule_bc", "rule_ppo"],
+        choices=["template", "rule", "shadow", "llm", "micro_rule", "rule_bc", "rule_ppo", "llm_ppo"],
         default="rule",
     )
     parser.add_argument("--micro-max-units", type=int, choices=range(1, 5), default=4)
@@ -81,7 +104,6 @@ def main():
     from sc2.data import AIBuild, Difficulty, Race
     from sc2.main import run_game
     from sc2.player import Bot, Computer
-    from bot.probe import InstrumentedAresBot
     from bot.telemetry import Telemetry
     from bot.lifecycle import recover_completed_game
 
@@ -129,20 +151,7 @@ def main():
     (ROOT / "artifacts" / "latest_run.json").write_text(
         json.dumps(dict(output_dir=str(output)), indent=2), encoding="utf-8"
     )
-    if options.mode == "template":
-        ai = InstrumentedAresBot(options, telemetry)
-    elif options.mode in {"micro_rule", "rule_bc", "rule_ppo"}:
-        from bot.micro_bot import MicroRuleBot
-
-        ai = MicroRuleBot(options, telemetry)
-    elif options.mode in {"shadow", "llm"}:
-        from bot.llm_bot import StrategicBot
-
-        ai = StrategicBot(options, telemetry)
-    else:
-        from bot.rule_bot import RuleBot
-
-        ai = RuleBot(options, telemetry)
+    ai = create_bot(options, telemetry)
     print("Run output:", output, flush=True)
     started = time.perf_counter()
     try:

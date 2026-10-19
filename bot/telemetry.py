@@ -27,7 +27,43 @@ class Telemetry:
         temporary.write_text(
             json.dumps(value, indent=2, ensure_ascii=False), encoding="utf-8"
         )
-        temporary.replace(target)
+        if name == "latest_state.json":
+            self._replace_latest_snapshot(temporary, target)
+        else:
+            temporary.replace(target)
+
+    def _replace_latest_snapshot(self, temporary, target):
+        # Windows readers can briefly deny delete/replace access to this optional
+        # snapshot. Keep the previous complete file; never relax mandatory writes.
+        try:
+            for attempt in range(3):
+                try:
+                    temporary.replace(target)
+                    return
+                except OSError as error:
+                    if getattr(error, "winerror", None) not in {5, 32}:
+                        raise
+                    if attempt < 2:
+                        self.counts["latest_state_lock_retries"] += 1
+                        time.sleep(0.01 * (attempt + 1))
+                    else:
+                        self.counts["latest_state_lock_skips"] += 1
+                        self.event(
+                            "snapshot_skipped", file=target.name,
+                            reason="windows_replace_lock", winerror=error.winerror,
+                            attempts=3,
+                        )
+        finally:
+            try:
+                temporary.unlink(missing_ok=True)
+            except OSError as error:
+                if getattr(error, "winerror", None) not in {5, 32}:
+                    raise
+                self.counts["latest_state_cleanup_locks"] += 1
+                self.event(
+                    "snapshot_cleanup_locked", file=temporary.name,
+                    winerror=error.winerror,
+                )
 
     def event(self, kind, **fields):
         if not self.events.closed:

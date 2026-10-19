@@ -188,7 +188,7 @@ class StrategicBot(RuleBot):
             if self._candidate_id and candidate is None:
                 self.stats["expired_active_plans"] += 1
             self._candidate_id = identity
-        self._plan = candidate if self.options.mode == "llm" else None
+        self._plan = candidate if self.options.mode in {"llm", "llm_ppo"} else None
         source = "llm" if self._plan else "rule"
         if source != self._source:
             self.telemetry.event(

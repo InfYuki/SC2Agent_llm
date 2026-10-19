@@ -26,7 +26,7 @@ class MicroRuleBot(RuleBot):
         )
         self._bc_policy = None
         self._ppo_requested = (
-            getattr(options, "mode", None) == "rule_ppo"
+            getattr(options, "mode", None) in {"rule_ppo", "llm_ppo"}
             or getattr(options, "policy", "rule") == "ppo"
         )
         self._ppo_policy = None

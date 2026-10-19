@@ -1,0 +1,1191 @@
+{
+  "date": "2026-10-19",
+  "scope": "E4 fullmatch integration engineering MVP after one required telemetry-lock repair; two attempts retained, no training or strength inference",
+  "run_id": "e4_fullmatch_llm_ppo_20261019_snapshotfix",
+  "acceptance": "engineering_mvp_completed_after_telemetry_fix; not formal P6 or strength acceptance",
+  "plan_path": "artifacts\\p6_e4_fullmatch_20261019_snapshotfix\\plan.json",
+  "plan_sha256": "889b7c7cab9e7a7d61c04d58dbdd66eb7a822d89bcd6e7129e6701d23bce32ea",
+  "command": [
+    "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe",
+    "-s",
+    "-u",
+    "tools/run_logged.py",
+    "--mode",
+    "llm_ppo",
+    "--ppo-model",
+    "artifacts/models/marine_ppo_curriculum256_20261019",
+    "--map",
+    "Ancient Cistern LE",
+    "--opponent",
+    "Zerg",
+    "--difficulty",
+    "Easy",
+    "--no-realtime",
+    "--game-step",
+    "8",
+    "--max-game-seconds",
+    "1200",
+    "--llm-max-calls",
+    "16",
+    "--seed",
+    "20261019",
+    "--run-id",
+    "e4_fullmatch_llm_ppo_20261019_snapshotfix"
+  ],
+  "source_commit": "1e40ddf74bdb256ec8fa150d3210483050f8f9ae",
+  "source_hashes_frozen_count": 134,
+  "source_hashes_unchanged": true,
+  "model_hashes": {
+    "metadata.json": "7f8c0754a6dc65f5d13bbfac18608e26b48b72ebc5f2215fa2bf0674cc932e07",
+    "weights.npz": "8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1"
+  },
+  "model_hashes_unchanged": true,
+  "map_hashes": {
+    "C:\\code\\SC2Agent_llm\\maps\\Ancient Cistern LE.SC2Map": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+    "C:\\Program Files (x86)\\StarCraft II\\Maps\\Ancient Cistern LE.SC2Map": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59"
+  },
+  "map_hashes_unchanged": true,
+  "summary": {
+    "status": "completed",
+    "result": "Result.Victory",
+    "stop_reason": null,
+    "error": null,
+    "counters": {
+      "callbacks": 1037,
+      "completed_SUPPLYDEPOT": 10,
+      "completed_BARRACKS": 6,
+      "marines_created": 60,
+      "combat_commands": 5089,
+      "micro_decision_steps": 762,
+      "micro_owned_decisions": 240,
+      "command_conflicts": 0,
+      "emergency_defense_steps": 16,
+      "ppo_inference_decisions": 240,
+      "micro_action_hold": 71,
+      "micro_action_retreat": 150,
+      "micro_action_weakest": 13,
+      "completed_COMMANDCENTER": 1,
+      "retired_completed_expansion_jobs": 1,
+      "micro_action_approach": 6
+    },
+    "game_span_seconds": 370.0,
+    "wall_span_seconds": 26.84670829999959,
+    "game_to_wall_ratio": 13.781950318281874,
+    "on_step_p50_seconds": 0.0017726999940350652,
+    "on_step_p95_seconds": 0.007902500045020133,
+    "on_step_p99_seconds": 0.01137570000719279,
+    "on_step_max_seconds": 0.027367700007744133,
+    "peak_workers": 43,
+    "peak_marines": 56,
+    "peak_bases": 2
+  },
+  "strategy_summary": {
+    "mode": "llm_ppo",
+    "counters": {
+      "rule_steps": 609,
+      "requests": 6,
+      "responses": 6,
+      "callbacks_while_waiting": 251,
+      "valid_plans": 6,
+      "plan_active": 6,
+      "llm_steps": 428,
+      "economy_goal_steps": 428,
+      "expired_active_plans": 5,
+      "combat_goal_steps": 361
+    },
+    "latency_seconds": [
+      1.2349999999860302,
+      0.875,
+      1.1869999999762513,
+      1.202999999979511,
+      1.125,
+      0.9679999999934807
+    ],
+    "request_inflight_at_exit": false,
+    "end_result": "Result.Victory",
+    "active_plan": {
+      "request_id": "strategy-332",
+      "snapshot_seq": 332,
+      "stance": "pressure",
+      "worker_target": 44,
+      "base_target": 2,
+      "task": "attack",
+      "target_id": "enemy_main",
+      "min_army_supply": 24,
+      "reason_summary": "56 army supply with 50 marines vs lair/spawning pool; push enemy main to exploit tech-heavy zerg while capping economy at 44 workers."
+    },
+    "pending_plan": null
+  },
+  "micro_summary": {
+    "match_id": "e4_fullmatch_llm_ppo_20261019_snapshotfix",
+    "seed": 20261019,
+    "split": "train",
+    "counters": {
+      "transitions": 240,
+      "hold": 71,
+      "bc_eligible": 0,
+      "terminated": 0,
+      "truncated": 71,
+      "engine_confirmed": 159,
+      "order_preserved": 3,
+      "engine_unconfirmed": 7
+    },
+    "reward": "not_implemented",
+    "scenario": "visible-ground-skirmish-v1",
+    "policy_version": "marine-ppo-numpy-v1",
+    "expert_labels": false
+  },
+  "exit_code": 0,
+  "wall_seconds": 39.857558299961966,
+  "watchdog_triggered": false,
+  "processes_before": {
+    "ProcessId": 61756,
+    "ParentProcessId": 55580,
+    "Name": "python.exe",
+    "ExecutablePath": "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe"
+  },
+  "processes_after": {
+    "ProcessId": 61756,
+    "ParentProcessId": 55580,
+    "Name": "python.exe",
+    "ExecutablePath": "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe"
+  },
+  "natural_official_result": true,
+  "replay_exists": true,
+  "failure": null,
+  "llm": {
+    "logical_call_cap": 16,
+    "requests": 6,
+    "http_200_responses": 6,
+    "valid_plans": 6,
+    "active_plans": 6,
+    "actual_llm_steps": 428,
+    "economy_goal_steps": 428,
+    "combat_goal_steps": 361,
+    "callbacks_while_waiting": 251,
+    "plans": [
+      {
+        "event": "llm_plan",
+        "wall_time": 1792402497.8231711,
+        "status": "active",
+        "plan": {
+          "request_id": "strategy-1",
+          "snapshot_seq": 1,
+          "stance": "develop",
+          "worker_target": 20,
+          "base_target": 2,
+          "task": "rally",
+          "target_id": "own_main",
+          "min_army_supply": 20,
+          "reason_summary": "Open with worker saturation and expand at 20 workers; rally until a marine squad exists."
+        },
+        "captured_game_seconds": 0.0,
+        "game_seconds": 25.0
+      },
+      {
+        "event": "llm_plan",
+        "wall_time": 1792402502.480268,
+        "status": "active",
+        "plan": {
+          "request_id": "strategy-101",
+          "snapshot_seq": 101,
+          "stance": "defend_then_expand",
+          "worker_target": 30,
+          "base_target": 2,
+          "task": "rally",
+          "target_id": "own_main",
+          "min_army_supply": 20,
+          "reason_summary": "No enemy seen; raise economy and marine count near home, expand when safe."
+        },
+        "captured_game_seconds": 107.14285714285715,
+        "game_seconds": 123.21428571428572
+      },
+      {
+        "event": "llm_plan",
+        "wall_time": 1792402507.7796342,
+        "status": "active",
+        "plan": {
+          "request_id": "strategy-175",
+          "snapshot_seq": 175,
+          "stance": "develop",
+          "worker_target": 40,
+          "base_target": 2,
+          "task": "rally",
+          "target_id": "own_natural",
+          "min_army_supply": 22,
+          "reason_summary": "Four barracks online, economy strong at 22 workers; keep rallying while pending marines finish, then push at 22 army supply."
+        },
+        "captured_game_seconds": 186.42857142857144,
+        "game_seconds": 202.85714285714286
+      },
+      {
+        "event": "llm_plan",
+        "wall_time": 1792402512.8116865,
+        "status": "active",
+        "plan": {
+          "request_id": "strategy-240",
+          "snapshot_seq": 240,
+          "stance": "pressure",
+          "worker_target": 40,
+          "base_target": 2,
+          "task": "attack",
+          "target_id": "enemy_main",
+          "min_army_supply": 26,
+          "reason_summary": "32 army supply and 5 barracks; push enemy main while growing workers to 40 on two bases."
+        },
+        "captured_game_seconds": 256.0714285714286,
+        "game_seconds": 267.8571428571429
+      },
+      {
+        "event": "llm_plan",
+        "wall_time": 1792402517.7449398,
+        "status": "active",
+        "plan": {
+          "request_id": "strategy-288",
+          "snapshot_seq": 288,
+          "stance": "pressure",
+          "worker_target": 40,
+          "base_target": 2,
+          "task": "attack",
+          "target_id": "enemy_main",
+          "min_army_supply": 24,
+          "reason_summary": "Army 41 supply with 36 marines; enemy exposed near main. Push with current force while capping workers at 40."
+        },
+        "captured_game_seconds": 307.5,
+        "game_seconds": 318.92857142857144
+      },
+      {
+        "event": "llm_plan",
+        "wall_time": 1792402522.6823115,
+        "status": "active",
+        "plan": {
+          "request_id": "strategy-332",
+          "snapshot_seq": 332,
+          "stance": "pressure",
+          "worker_target": 44,
+          "base_target": 2,
+          "task": "attack",
+          "target_id": "enemy_main",
+          "min_army_supply": 24,
+          "reason_summary": "56 army supply with 50 marines vs lair/spawning pool; push enemy main to exploit tech-heavy zerg while capping economy at 44 workers."
+        },
+        "captured_game_seconds": 354.64285714285717,
+        "game_seconds": 363.5714285714286
+      }
+    ],
+    "responses": [
+      {
+        "event": "llm_response",
+        "wall_time": 1792402497.8231711,
+        "request_id": "strategy-1",
+        "snapshot_seq": 1,
+        "captured_game_seconds": 0.0,
+        "game_seconds": 25.0,
+        "deadline_exceeded": false,
+        "ok": true,
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 560,
+          "completion_tokens": 115,
+          "total_tokens": 675
+        },
+        "latency_seconds": 1.2349999999860302
+      },
+      {
+        "event": "llm_response",
+        "wall_time": 1792402502.480268,
+        "request_id": "strategy-101",
+        "snapshot_seq": 101,
+        "captured_game_seconds": 107.14285714285715,
+        "game_seconds": 123.21428571428572,
+        "deadline_exceeded": false,
+        "ok": true,
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 581,
+          "completion_tokens": 118,
+          "total_tokens": 699
+        },
+        "latency_seconds": 0.875
+      },
+      {
+        "event": "llm_response",
+        "wall_time": 1792402507.7796342,
+        "request_id": "strategy-175",
+        "snapshot_seq": 175,
+        "captured_game_seconds": 186.42857142857144,
+        "game_seconds": 202.85714285714286,
+        "deadline_exceeded": false,
+        "ok": true,
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 581,
+          "completion_tokens": 126,
+          "total_tokens": 707
+        },
+        "latency_seconds": 1.1869999999762513
+      },
+      {
+        "event": "llm_response",
+        "wall_time": 1792402512.8116865,
+        "request_id": "strategy-240",
+        "snapshot_seq": 240,
+        "captured_game_seconds": 256.0714285714286,
+        "game_seconds": 267.8571428571429,
+        "deadline_exceeded": false,
+        "ok": true,
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 608,
+          "completion_tokens": 119,
+          "total_tokens": 727
+        },
+        "latency_seconds": 1.202999999979511
+      },
+      {
+        "event": "llm_response",
+        "wall_time": 1792402517.7449398,
+        "request_id": "strategy-288",
+        "snapshot_seq": 288,
+        "captured_game_seconds": 307.5,
+        "game_seconds": 318.92857142857144,
+        "deadline_exceeded": false,
+        "ok": true,
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 1628,
+          "completion_tokens": 126,
+          "total_tokens": 1754
+        },
+        "latency_seconds": 1.125
+      },
+      {
+        "event": "llm_response",
+        "wall_time": 1792402522.6823115,
+        "request_id": "strategy-332",
+        "snapshot_seq": 332,
+        "captured_game_seconds": 354.64285714285717,
+        "game_seconds": 363.5714285714286,
+        "deadline_exceeded": false,
+        "ok": true,
+        "http_status": 200,
+        "usage": {
+          "prompt_tokens": 1663,
+          "completion_tokens": 131,
+          "total_tokens": 1794
+        },
+        "latency_seconds": 0.9679999999934807
+      }
+    ],
+    "fallback_rule_steps": 609,
+    "expired_active_plans": 5,
+    "failure_events": [],
+    "transport": "single background thread, no adapter retry; existing private loader; no credentials in CLI/log summary"
+  },
+  "overlap": {
+    "llm_active_micro_command_rows": 102,
+    "llm_active_owned_micro_steps": 34,
+    "llm_active_micro_unique_tags": 17,
+    "llm_active_micro_frame_range": [
+      6000,
+      7816
+    ],
+    "note": "Event ordering: latest strategy_source=llm before micro command; verifies active strategic goals and PPO ownership concurrently, not causal quality."
+  },
+  "transitions": {
+    "rows": 240,
+    "unique_marine_tags": 25,
+    "unique_target_tags": 6,
+    "requested_actions": {
+      "4": 71,
+      "2": 150,
+      "1": 13,
+      "3": 6
+    },
+    "command_results": {
+      "hold": 71,
+      "engine_confirmed": 159,
+      "order_preserved": 3,
+      "engine_unconfirmed": 7
+    },
+    "actual_game_loops": {
+      "8": 240
+    },
+    "end_reasons": {
+      "None": 169,
+      "strategy_retreat": 4,
+      "control_released": 67
+    },
+    "invalid_source_masks": 0,
+    "invalid_executed_masks": 0,
+    "bc_eligible": 0,
+    "expert_nonnull": 0,
+    "policy_versions": {
+      "marine-ppo-numpy-v1": 240
+    },
+    "split": {
+      "train": 240
+    },
+    "reward_versions": {
+      "not_implemented": 240
+    }
+  },
+  "combat_steps": {
+    "count": 762,
+    "max_controlled": 4,
+    "with_owned": 69,
+    "frame_deltas": {
+      "8": 761
+    }
+  },
+  "macro": {
+    "initial_state": {
+      "event": "state",
+      "wall_time": 1792402496.5747087,
+      "game_seconds": 0.0,
+      "game_loop": 0,
+      "minerals": 50,
+      "vespene": 0,
+      "workers": 12,
+      "marines": 0,
+      "bases": 1,
+      "supply_used": 12,
+      "supply_cap": 15,
+      "structures": {
+        "COMMANDCENTER": 1
+      },
+      "strategy": "develop",
+      "enemy_visible": 0,
+      "counters": {
+        "callbacks": 1
+      }
+    },
+    "last_logged_state": {
+      "event": "state",
+      "wall_time": 1792402523.3771856,
+      "game_seconds": 369.64285714285717,
+      "game_loop": 8280,
+      "minerals": 215,
+      "vespene": 0,
+      "workers": 43,
+      "marines": 56,
+      "bases": 2,
+      "supply_used": 107,
+      "supply_cap": 110,
+      "structures": {
+        "BARRACKS": 8,
+        "SUPPLYDEPOT": 13,
+        "COMMANDCENTER": 2
+      },
+      "strategy": "attack",
+      "enemy_visible": 13,
+      "counters": {
+        "callbacks": 1036,
+        "completed_SUPPLYDEPOT": 10,
+        "completed_BARRACKS": 6,
+        "marines_created": 60,
+        "combat_commands": 5036,
+        "micro_decision_steps": 761,
+        "micro_owned_decisions": 240,
+        "command_conflicts": 0,
+        "emergency_defense_steps": 16,
+        "ppo_inference_decisions": 240,
+        "micro_action_hold": 71,
+        "micro_action_retreat": 150,
+        "micro_action_weakest": 13,
+        "completed_COMMANDCENTER": 1,
+        "retired_completed_expansion_jobs": 1,
+        "micro_action_approach": 6
+      }
+    },
+    "peak_barracks": 8,
+    "note": "Natural official Victory; last logged state can precede final callback. Snapshot peak barracks counts include unfinished structures.",
+    "collected_minerals_ares_log": 8020,
+    "collected_vespene_ares_log": 0
+  },
+  "fallback": {
+    "model_load": 0,
+    "model_inference": 0,
+    "model_rule_decisions": 0,
+    "safety_reason_counts": null,
+    "safety_reason_note": "Production lowHP/unsupported/static-defense/control-limit gates retained; not individually instrumented."
+  },
+  "event_counts": {
+    "ppo_model_loaded": 1,
+    "started": 1,
+    "strategy_source": 12,
+    "llm_request": 6,
+    "state": 346,
+    "llm_response": 6,
+    "llm_plan": 6,
+    "plan_transition": 11,
+    "goal_progress": 7,
+    "strategy_changed": 6,
+    "micro_timing": 762,
+    "expansion_reservation": 2,
+    "micro_ownership": 142,
+    "micro_command": 240
+  },
+  "error_event_count": 0,
+  "learning_exclusion": {
+    "run_id": "e4_fullmatch_llm_ppo_20261019_snapshotfix",
+    "excluded_from_future_training": true,
+    "reason": "single E4 fullmatch engineering revalidation; never expert or training evidence",
+    "plan_sha256": "889b7c7cab9e7a7d61c04d58dbdd66eb7a822d89bcd6e7129e6701d23bce32ea",
+    "raw_sha256": {
+      "micro_transitions.jsonl": "2a02f6910cece90ce35cf6347ced765415b3fe24843284085ebdba2ebe105980"
+    }
+  },
+  "limitations": [
+    "First attempt crashed on telemetry atomic replace; its error, absence of natural result/replay and possible observer interference are retained. One necessary fix revalidation only, not result selection.",
+    "One successful Easy opponent sample with an earlier aborted attempt; no controlled comparison, training, strength, win-rate, gain or generalization claim.",
+    "Non-realtime asynchronous API scheduling depends on wall latency; plans expire in game time. No extra throttling, first-plan gate or relaxed stale threshold was added.",
+    "Up to four Marines independently share a single-unit actor; not learned group control. Actual target-type distribution and individual safety-gate counts unavailable.",
+    "Engine-unconfirmed/hold/order-preserved are not newly confirmed commands. Per-step rewards remain null/not_implemented.",
+    "Both raw runs use legacy split=train text, but all350 transitions are expert=null and BC-ineligible. SHA-based permanent exclusion sidecars forbid future training.",
+    "Historical training budgetclose EOFError remains unresolved; this fullmatch does not validate that training shutdown path."
+  ],
+  "raw_files": {
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\compatibility-report.json": {
+      "bytes": 133,
+      "sha256": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\events.jsonl": {
+      "bytes": 414393,
+      "sha256": "85294cbe219cb607f4fc6c8ca952a59d9ee9502788943f4490bd5f9396b3aba4"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\game.SC2Replay": {
+      "bytes": 57238,
+      "sha256": "693e35eb8710da19f3bcc34b8e31c4cfda511075e59142d66229ac4840374bb3"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\latest_state.json": {
+      "bytes": 887,
+      "sha256": "be406e63d949068c232ebf9b828ffe28cb91196295b9ad06e5271e976a1c587b"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\latest_strategy_snapshot.json": {
+      "bytes": 5246,
+      "sha256": "928aab9a23ed1d6ce9fc908aa0f6f35fb276ebc566e0c6f6f2e347843b02c8fb"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\learning_exclusion.json": {
+      "bytes": 409,
+      "sha256": "2007b08513eef88624fea809d4a3e4280ccbcbb7a2bc4f685bce1c75514daddb"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\llm_config.json": {
+      "bytes": 459,
+      "sha256": "121751107125198699f0767587d980ef0d8e9601efa88d3cb2a57727b3640161"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\manifest.json": {
+      "bytes": 14986,
+      "sha256": "d6278d46e21bddb54321000b6a11943c18ed6e88b677386ffbb7205e16e24397"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\micro_summary.json": {
+      "bytes": 471,
+      "sha256": "4e94042e25f6a9502e3c7100873e8e77679971ff185651f0789a9f9e6b596b3f"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\micro_transitions.jsonl": {
+      "bytes": 319224,
+      "sha256": "2a02f6910cece90ce35cf6347ced765415b3fe24843284085ebdba2ebe105980"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\runtime_abilities.json": {
+      "bytes": 445163,
+      "sha256": "44834a304ca6650651f43b032ecbb5f18ef2087a3ccbdc36691d4c186998fb72"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\strategy_summary.json": {
+      "bytes": 968,
+      "sha256": "9d3ed74a811d0bd24741dc131c69c5c7e4d86fcc2f848a2c3d319583bd489d22"
+    },
+    "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019_snapshotfix\\summary.json": {
+      "bytes": 1027,
+      "sha256": "49015735e12832efa62971cb878b78ff01d62086f329881817af5f786446bb6b"
+    },
+    "artifacts\\p6_e4_fullmatch_20261019_snapshotfix\\console.log": {
+      "bytes": 6467,
+      "sha256": "c724123096c899d075dc7b79b375700060dba50f98dd015d9a6214fd401c1c20"
+    },
+    "artifacts\\p6_e4_fullmatch_20261019_snapshotfix\\execution.json": {
+      "bytes": 14607,
+      "sha256": "b2f1604192dbe5e1139745c6c4c7a79bfa5f3f639d25e3840000ea998392223d"
+    }
+  },
+  "request_budget": {
+    "total_authorized_logical_calls": 20,
+    "first_attempt_cap": 20,
+    "first_attempt_actual": 4,
+    "revalidation_cap": 16,
+    "revalidation_actual": 6,
+    "total_actual": 10,
+    "no_third_attempt": true
+  },
+  "attempts": [
+    {
+      "date": "2026-10-19",
+      "scope": "one fullmatch E4 engineering attempt; crashed before natural result; partial integration only",
+      "run_id": "e4_fullmatch_llm_ppo_20261019",
+      "acceptance": "partial_crashed_no_fullmatch_acceptance",
+      "plan_path": "artifacts\\p6_e4_fullmatch_20261019\\plan.json",
+      "plan_sha256": "4c1e71c4a309fef3422d6009b23e2d1cea832cc437852b8756bb02105152c27d",
+      "command": [
+        "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe",
+        "-s",
+        "-u",
+        "tools/run_logged.py",
+        "--mode",
+        "llm_ppo",
+        "--ppo-model",
+        "artifacts/models/marine_ppo_curriculum256_20261019",
+        "--map",
+        "Ancient Cistern LE",
+        "--opponent",
+        "Zerg",
+        "--difficulty",
+        "Easy",
+        "--no-realtime",
+        "--game-step",
+        "8",
+        "--max-game-seconds",
+        "1200",
+        "--llm-max-calls",
+        "20",
+        "--seed",
+        "20261019",
+        "--run-id",
+        "e4_fullmatch_llm_ppo_20261019"
+      ],
+      "source_commit": "1e40ddf74bdb256ec8fa150d3210483050f8f9ae",
+      "source_hashes_frozen_count": 132,
+      "source_hashes_unchanged": true,
+      "model_hashes": {
+        "metadata.json": "7f8c0754a6dc65f5d13bbfac18608e26b48b72ebc5f2215fa2bf0674cc932e07",
+        "weights.npz": "8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1"
+      },
+      "model_hashes_unchanged": true,
+      "map_hashes": {
+        "C:\\code\\SC2Agent_llm\\maps\\Ancient Cistern LE.SC2Map": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+        "C:\\Program Files (x86)\\StarCraft II\\Maps\\Ancient Cistern LE.SC2Map": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59"
+      },
+      "map_hashes_unchanged": true,
+      "summary": {
+        "status": "crashed",
+        "result": null,
+        "stop_reason": null,
+        "error": {
+          "phase": "on_step",
+          "traceback": "Traceback (most recent call last):\n  File \"C:\\code\\SC2Agent_llm\\bot\\probe.py\", line 70, in on_step\n    self.telemetry.observe(self, time.perf_counter() - start)\n  File \"C:\\code\\SC2Agent_llm\\bot\\telemetry.py\", line 75, in observe\n    self.write_json(\"latest_state.json\", snapshot)\n  File \"C:\\code\\SC2Agent_llm\\bot\\telemetry.py\", line 30, in write_json\n    temporary.replace(target)\n  File \"C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\Lib\\pathlib.py\", line 1188, in replace\n    os.replace(self, target)\nPermissionError: [WinError 5] 拒绝访问。: 'C:\\\\code\\\\SC2Agent_llm\\\\artifacts\\\\runs\\\\e4_fullmatch_llm_ppo_20261019\\\\latest_state.json.tmp' -> 'C:\\\\code\\\\SC2Agent_llm\\\\artifacts\\\\runs\\\\e4_fullmatch_llm_ppo_20261019\\\\latest_state.json'\n"
+        },
+        "counters": {
+          "callbacks": 766,
+          "completed_SUPPLYDEPOT": 6,
+          "completed_BARRACKS": 5,
+          "marines_created": 31,
+          "combat_commands": 2959,
+          "micro_decision_steps": 491,
+          "micro_owned_decisions": 110,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 6,
+          "ppo_inference_decisions": 110,
+          "micro_action_hold": 23,
+          "micro_action_retreat": 79,
+          "micro_action_weakest": 8,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 273.2142857142857,
+        "wall_span_seconds": 16.570818400010467,
+        "game_to_wall_ratio": 16.487676053109915,
+        "on_step_p50_seconds": 0.0013021000195294619,
+        "on_step_p95_seconds": 0.003855900024063885,
+        "on_step_p99_seconds": 0.010456199990585446,
+        "on_step_max_seconds": 0.01352409995160997,
+        "peak_workers": 32,
+        "peak_marines": 29,
+        "peak_bases": 2
+      },
+      "strategy_summary": {
+        "mode": "llm_ppo",
+        "counters": {
+          "rule_steps": 535,
+          "requests": 4,
+          "responses": 4,
+          "callbacks_while_waiting": 190,
+          "valid_plans": 4,
+          "plan_active": 4,
+          "llm_steps": 231,
+          "economy_goal_steps": 231,
+          "expired_active_plans": 3,
+          "combat_goal_steps": 166
+        },
+        "latency_seconds": [
+          1.1100000000442378,
+          1.077999999979511,
+          1.202999999979511,
+          0.9219999999622814
+        ],
+        "request_inflight_at_exit": false,
+        "end_result": null,
+        "active_plan": {
+          "request_id": "strategy-243",
+          "snapshot_seq": 243,
+          "stance": "pressure",
+          "worker_target": 36,
+          "base_target": 2,
+          "task": "attack",
+          "target_id": "enemy_main",
+          "min_army_supply": 24,
+          "reason_summary": "Two bases and 5 barracks online; 28 marines with 5 pending. Push enemy main while growing workers to 36."
+        },
+        "pending_plan": null
+      },
+      "micro_summary": {
+        "match_id": "e4_fullmatch_llm_ppo_20261019",
+        "seed": 20261019,
+        "split": "train",
+        "counters": {
+          "transitions": 110,
+          "hold": 23,
+          "bc_eligible": 0,
+          "terminated": 0,
+          "truncated": 22,
+          "engine_confirmed": 81,
+          "order_preserved": 2,
+          "engine_unconfirmed": 4
+        },
+        "reward": "not_implemented",
+        "scenario": "visible-ground-skirmish-v1",
+        "policy_version": "marine-ppo-numpy-v1",
+        "expert_labels": false
+      },
+      "exit_code": 1,
+      "wall_seconds": 28.61741509998683,
+      "watchdog_triggered": false,
+      "processes_before": {
+        "ProcessId": 58352,
+        "ParentProcessId": 66764,
+        "Name": "python.exe",
+        "ExecutablePath": "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe"
+      },
+      "processes_after": {
+        "ProcessId": 58352,
+        "ParentProcessId": 66764,
+        "Name": "python.exe",
+        "ExecutablePath": "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe"
+      },
+      "natural_official_result": false,
+      "replay_exists": false,
+      "failure": {
+        "category": "telemetry_atomic_replace_permission_error",
+        "game_seconds": 273.2142857142857,
+        "exception": "PermissionError [WinError 5] latest_state.json.tmp -> latest_state.json",
+        "observer_interference_possible": true,
+        "observer_action": "Evidence agent used PowerShell Get-Content to read live latest_state.json shortly before failure; Windows reader delete-sharing lock is plausible, not proven. Do not attribute this crash to strategic or PPO decision quality.",
+        "retry_performed": false
+      },
+      "llm": {
+        "logical_call_cap": 20,
+        "requests": 4,
+        "http_200_responses": 4,
+        "valid_plans": 4,
+        "active_plans": 4,
+        "actual_llm_steps": 231,
+        "economy_goal_steps": 231,
+        "combat_goal_steps": 166,
+        "callbacks_while_waiting": 190,
+        "plans": [
+          {
+            "event": "llm_plan",
+            "wall_time": 1792402286.2598624,
+            "status": "active",
+            "plan": {
+              "request_id": "strategy-1",
+              "snapshot_seq": 1,
+              "stance": "develop",
+              "worker_target": 44,
+              "base_target": 2,
+              "task": "rally",
+              "target_id": "own_main",
+              "min_army_supply": 20,
+              "reason_summary": "Opening: saturate economy, expand at 20 workers, then build a 20-supply marine force."
+            },
+            "captured_game_seconds": 0.0,
+            "game_seconds": 22.142857142857146
+          },
+          {
+            "event": "llm_plan",
+            "wall_time": 1792402291.287384,
+            "status": "active",
+            "plan": {
+              "request_id": "strategy-104",
+              "snapshot_seq": 104,
+              "stance": "develop",
+              "worker_target": 40,
+              "base_target": 2,
+              "task": "rally",
+              "target_id": "own_main",
+              "min_army_supply": 20,
+              "reason_summary": "No enemy info; mass workers off 4 barracks, grow economy toward second base, hold marines until 20 supply."
+            },
+            "captured_game_seconds": 110.35714285714286,
+            "game_seconds": 130.0
+          },
+          {
+            "event": "llm_plan",
+            "wall_time": 1792402296.4216402,
+            "status": "active",
+            "plan": {
+              "request_id": "strategy-177",
+              "snapshot_seq": 177,
+              "stance": "develop",
+              "worker_target": 40,
+              "base_target": 2,
+              "task": "rally",
+              "target_id": "own_natural",
+              "min_army_supply": 22,
+              "reason_summary": "No enemy seen; economy at 2 bases, 4 barracks. Mass marines and rally at natural before pushing."
+            },
+            "captured_game_seconds": 188.57142857142858,
+            "game_seconds": 205.71428571428572
+          },
+          {
+            "event": "llm_plan",
+            "wall_time": 1792402301.189307,
+            "status": "active",
+            "plan": {
+              "request_id": "strategy-243",
+              "snapshot_seq": 243,
+              "stance": "pressure",
+              "worker_target": 36,
+              "base_target": 2,
+              "task": "attack",
+              "target_id": "enemy_main",
+              "min_army_supply": 24,
+              "reason_summary": "Two bases and 5 barracks online; 28 marines with 5 pending. Push enemy main while growing workers to 36."
+            },
+            "captured_game_seconds": 259.2857142857143,
+            "game_seconds": 268.2142857142857
+          }
+        ],
+        "responses": [
+          {
+            "event": "llm_response",
+            "wall_time": 1792402286.2598624,
+            "request_id": "strategy-1",
+            "snapshot_seq": 1,
+            "captured_game_seconds": 0.0,
+            "game_seconds": 22.142857142857146,
+            "deadline_exceeded": false,
+            "ok": true,
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 560,
+              "completion_tokens": 119,
+              "total_tokens": 679
+            },
+            "latency_seconds": 1.1100000000442378
+          },
+          {
+            "event": "llm_response",
+            "wall_time": 1792402291.287384,
+            "request_id": "strategy-104",
+            "snapshot_seq": 104,
+            "captured_game_seconds": 110.35714285714286,
+            "game_seconds": 130.0,
+            "deadline_exceeded": false,
+            "ok": true,
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 581,
+              "completion_tokens": 122,
+              "total_tokens": 703
+            },
+            "latency_seconds": 1.077999999979511
+          },
+          {
+            "event": "llm_response",
+            "wall_time": 1792402296.4216402,
+            "request_id": "strategy-177",
+            "snapshot_seq": 177,
+            "captured_game_seconds": 188.57142857142858,
+            "game_seconds": 205.71428571428572,
+            "deadline_exceeded": false,
+            "ok": true,
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 581,
+              "completion_tokens": 122,
+              "total_tokens": 703
+            },
+            "latency_seconds": 1.202999999979511
+          },
+          {
+            "event": "llm_response",
+            "wall_time": 1792402301.189307,
+            "request_id": "strategy-243",
+            "snapshot_seq": 243,
+            "captured_game_seconds": 259.2857142857143,
+            "game_seconds": 268.2142857142857,
+            "deadline_exceeded": false,
+            "ok": true,
+            "http_status": 200,
+            "usage": {
+              "prompt_tokens": 608,
+              "completion_tokens": 125,
+              "total_tokens": 733
+            },
+            "latency_seconds": 0.9219999999622814
+          }
+        ],
+        "fallback_rule_steps": 535,
+        "expired_active_plans": 3,
+        "failure_events": [],
+        "transport": "single background thread, no adapter retry; existing private loader; no credentials in CLI/log summary"
+      },
+      "overlap": {
+        "llm_active_micro_command_rows": 28,
+        "llm_active_owned_micro_steps": 7,
+        "llm_active_micro_unique_tags": 7,
+        "llm_active_micro_frame_range": [
+          6008,
+          6056
+        ],
+        "note": "Event ordering: latest strategy_source=llm before micro command; verifies active strategic goals and PPO ownership concurrently, not causal quality."
+      },
+      "transitions": {
+        "rows": 110,
+        "unique_marine_tags": 10,
+        "unique_target_tags": 6,
+        "requested_actions": {
+          "4": 23,
+          "2": 79,
+          "1": 8
+        },
+        "command_results": {
+          "hold": 23,
+          "engine_confirmed": 81,
+          "order_preserved": 2,
+          "engine_unconfirmed": 4
+        },
+        "actual_game_loops": {
+          "8": 110
+        },
+        "end_reasons": {
+          "None": 88,
+          "strategy_retreat": 4,
+          "control_released": 18
+        },
+        "invalid_source_masks": 0,
+        "invalid_executed_masks": 0,
+        "bc_eligible": 0,
+        "expert_nonnull": 0,
+        "policy_versions": {
+          "marine-ppo-numpy-v1": 110
+        },
+        "split": {
+          "train": 110
+        },
+        "reward_versions": {
+          "not_implemented": 110
+        }
+      },
+      "combat_steps": {
+        "count": 491,
+        "max_controlled": 4,
+        "with_owned": 28,
+        "frame_deltas": {
+          "8": 490
+        }
+      },
+      "macro": {
+        "initial_state": {
+          "event": "state",
+          "wall_time": 1792402285.154222,
+          "game_seconds": 0.0,
+          "game_loop": 0,
+          "minerals": 50,
+          "vespene": 0,
+          "workers": 12,
+          "marines": 0,
+          "bases": 1,
+          "supply_used": 12,
+          "supply_cap": 15,
+          "structures": {
+            "COMMANDCENTER": 1
+          },
+          "strategy": "develop",
+          "enemy_visible": 0,
+          "counters": {
+            "callbacks": 1
+          }
+        },
+        "last_logged_state": {
+          "event": "state",
+          "wall_time": 1792402301.6300583,
+          "game_seconds": 272.14285714285717,
+          "game_loop": 6096,
+          "minerals": 390,
+          "vespene": 0,
+          "workers": 30,
+          "marines": 26,
+          "bases": 2,
+          "supply_used": 63,
+          "supply_cap": 78,
+          "structures": {
+            "SUPPLYDEPOT": 6,
+            "BARRACKS": 5,
+            "COMMANDCENTER": 2
+          },
+          "strategy": "attack",
+          "enemy_visible": 0,
+          "counters": {
+            "callbacks": 763,
+            "completed_SUPPLYDEPOT": 6,
+            "completed_BARRACKS": 5,
+            "marines_created": 30,
+            "combat_commands": 2940,
+            "micro_decision_steps": 488,
+            "micro_owned_decisions": 110,
+            "command_conflicts": 0,
+            "emergency_defense_steps": 6,
+            "ppo_inference_decisions": 110,
+            "micro_action_hold": 23,
+            "micro_action_retreat": 79,
+            "micro_action_weakest": 8,
+            "completed_COMMANDCENTER": 1,
+            "retired_completed_expansion_jobs": 1
+          }
+        },
+        "peak_barracks": 5,
+        "note": "summary includes final failed snapshot callback; last logged state precedes failed atomic replace"
+      },
+      "fallback": {
+        "model_load": 0,
+        "model_inference": 0,
+        "model_rule_decisions": 0,
+        "safety_reason_counts": null,
+        "safety_reason_note": "Production lowHP/unsupported/static-defense/control-limit gates retained; not individually instrumented."
+      },
+      "event_counts": {
+        "ppo_model_loaded": 1,
+        "started": 1,
+        "strategy_source": 8,
+        "llm_request": 4,
+        "state": 255,
+        "llm_response": 4,
+        "llm_plan": 4,
+        "plan_transition": 7,
+        "goal_progress": 3,
+        "strategy_changed": 4,
+        "micro_timing": 491,
+        "expansion_reservation": 2,
+        "micro_ownership": 44,
+        "micro_command": 110,
+        "exception": 1
+      },
+      "error_event_count": 1,
+      "learning_exclusion": {
+        "run_id": "e4_fullmatch_llm_ppo_20261019",
+        "excluded_from_future_training": true,
+        "reason": "single E4 engineering experiment crashed; not expert or training evidence",
+        "plan_sha256": "4c1e71c4a309fef3422d6009b23e2d1cea832cc437852b8756bb02105152c27d",
+        "raw_sha256": {
+          "micro_transitions.jsonl": "f57c2b27124d1cb3612802ea407fb99cfc3ef59ddc731503a08985890d6b9ceb"
+        }
+      },
+      "limitations": [
+        "Only one Easy opponent attempt; no training, retry, strength, win-rate or PPO gain conclusion.",
+        "Natural official result and replay missing because telemetry exception aborted game; E4 fullmatch acceptance not reached.",
+        "Live state reading may have interfered with Windows atomic replacement; no controlled causality experiment was run.",
+        "Up to four Marines share single-unit actor independently; this is not a learned group policy.",
+        "Actual target types and individual safety-gate reason counts not recorded.",
+        "Engine-unconfirmed/hold/order-preserved are not new engine-confirmed commands.",
+        "Raw split=train legacy string, but all rows are nonexpert and BC-ineligible; immutable SHA exclusion sidecar prevents future training; rewards remain null/not_implemented."
+      ],
+      "raw_files": {
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\compatibility-report.json": {
+          "bytes": 133,
+          "sha256": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\events.jsonl": {
+          "bytes": 255042,
+          "sha256": "ba5d0d4c6d849935de9df29a069a111657a33b79d5e79c478a27f76adb62f20e"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\latest_state.json": {
+          "bytes": 845,
+          "sha256": "1b328e3ac57540e22e458f5144674d201026d1593e178a67b19b0ea4b7598fc1"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\latest_state.json.tmp": {
+          "bytes": 844,
+          "sha256": "0fdd6b02a37cf531be86d4692283b2cc8b7492fedb78365d5512fb9f0967a0af"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\latest_strategy_snapshot.json": {
+          "bytes": 1713,
+          "sha256": "ef603f98f9429c3283c5211f6c17d0c377358313dfd2af2470fc0596b6ac4847"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\learning_exclusion.json": {
+          "bytes": 391,
+          "sha256": "cd970425065f610059c2bc70a252fd51146f743fc47f3e2aef87488f7654b9f0"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\llm_config.json": {
+          "bytes": 459,
+          "sha256": "c284fd113f7960b38eeb6584cfe737a65929d9e5fb6df5968f8d165f7f938d2b"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\manifest.json": {
+          "bytes": 14752,
+          "sha256": "024051c9c1dfd984e78cc48a7ba02bed8ee4746cd616f68e77d34ea2bf3ea93e"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\micro_summary.json": {
+          "bytes": 458,
+          "sha256": "de742cf29a0453e57fd35edf1ebaf0c2e06149f36038a0e911444a5a6dddfc70"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\micro_transitions.jsonl": {
+          "bytes": 144983,
+          "sha256": "f57c2b27124d1cb3612802ea407fb99cfc3ef59ddc731503a08985890d6b9ceb"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\runtime_abilities.json": {
+          "bytes": 445163,
+          "sha256": "44834a304ca6650651f43b032ecbb5f18ef2087a3ccbdc36691d4c186998fb72"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\strategy_summary.json": {
+          "bytes": 902,
+          "sha256": "43d15ef3596c2bc667e598468159743d53f7c8413b941f6a26ef8b0fbafae0ab"
+        },
+        "artifacts\\runs\\e4_fullmatch_llm_ppo_20261019\\summary.json": {
+          "bytes": 1841,
+          "sha256": "dac60dcade0aca19e6db7bb5ddf0ef5e7200e83fbc223300aa13a2ff13844e6a"
+        },
+        "artifacts\\p6_e4_fullmatch_20261019\\console.log": {
+          "bytes": 18144,
+          "sha256": "eeb25836dff7f8c096331254b39acebe70fb1b507d48103738ca201b048b7c09"
+        },
+        "artifacts\\p6_e4_fullmatch_20261019\\execution.json": {
+          "bytes": 14371,
+          "sha256": "3c84aa7078281a62cc9318bb38e4ead09400b846fefbfc7d0c0199ff75040636"
+        }
+      }
+    },
+    {
+      "run_id": "e4_fullmatch_llm_ppo_20261019_snapshotfix",
+      "status": "completed",
+      "result": "Result.Victory",
+      "exit_code": 0,
+      "plan_sha256": "889b7c7cab9e7a7d61c04d58dbdd66eb7a822d89bcd6e7129e6701d23bce32ea",
+      "reason": "one necessary telemetry fix revalidation, not strategy result selection",
+      "llm_max_calls": 16
+    }
+  ],
+  "telemetry_fix": {
+    "scope": "Only optional latest_state.json atomic replace handles Windows winerror5/32: up to3 attempts with 10/20ms waits; exhaustion emits snapshot_skipped and keeps old complete snapshot. Other JSON mandatory writes still raise, unrelated errors still raise.",
+    "actual_retry_count": 0,
+    "actual_skip_count": 0,
+    "actual_cleanup_lock_count": 0,
+    "first_failure_causality": "Live Get-Content read may have held Windows delete sharing; not proven. Final verification avoided reading live latest_state. Successful revalidation does not prove this exact lock recurred in engine run.",
+    "validation": "One merged focused mocked-lock/composition check, compile/diff per implementation and audit release; no additional engine lock reproduction."
+  },
+  "console_error_lines": [],
+  "model_producer": {
+    "algorithm": "MaskablePPO",
+    "initialization": "resume",
+    "source_checkpoint_sha256": "9c94690a2cb8eaabfb5fd24c6c0984896825d6f27f87700335f9e41df3aaafd1",
+    "bc_weights_used": true,
+    "expert_labels": false,
+    "note": "Prior BC initialization is model lineage; this PPO producer is not expert and run rows remain BC-ineligible."
+  }
+}
