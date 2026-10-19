@@ -228,3 +228,13 @@ Gymnasium适配与MaskablePPO最小训练已过：32真实步、2完整死亡epi
 训练释放后仅同新seed20261019串行2探索短场、非严格因果对照：PPO10HOLD、4.375游戏秒己/敌HP9/9；规则kite12决策（10engine_confirmed+2hold）、5.089286秒HP9/27，均low_health_safety_exit/truncated，exit0、无fallback/冲突/error/残留。源哈希/初始frame18/几何/HP/mask一致，仅武器cooldown不同；pair_initial_state_fully_matched=false、controlled_comparison=false。HP差不能归因于策略更强，不推胜率、泛化或完整比赛结论；未重跑选seed、未额外运行旧策略/BC。
 
 默认run_ppo.cmd仍指原64步actor；384步只是最新非最佳，用`.\run_ppo.cmd --ppo-model artifacts/models/marine_ppo_train384_20261019`显式选择。模型与原始证据不入Git，迁移另带。详见docs/PPO_TRAINING_384_REPORT.md与docs/validation/ppo_training_384.json。下一步诊断预算close异常、训练任务/奖励和BC初始化，标准化含cooldown初态后再小对照；P5全面验收、规模训练就绪和战斗收益均未建立。
+
+## 2026-10-19 BC warm-start → PPO 最小MVP
+
+`train_micro_ppo.py --init-bc`严格验证BC与冻结数据，仅转置复制actor，critic保留新初始化、optimizer空，与resume互斥；导出producer透传准确BC来源。本轮独立BC warm-start新分支0→32步，不是384→416；默认64与旧384不变。来源BC及metadata hash不变。训练前82真实冻结观测原始logits误差2.861e-6、masked概率误差3.8743e-7、动作82/82一致，initialization_report在learn前保存。该82条仅迁移诊断，未完成正式1000观测验收。
+
+唯一32步训练`artifacts/micro_ppo/p5_bc_warmstart_20261019`，52.828秒、updates0→2，optimizer空→12个step4，actor finite且更新（最大参数变化.001202449），reload误差0。2完整死亡局各16步，敌最终HP15/9、官方结果/close确认；32条mask/8loops/HP奖励通过、buffer无failure/discard/专家/冲突。第32步done后SB3自动reset第三空局f9c100aede024777b7321232b3a1c3b8，预算close仍EOFError/Traceback，无官方结果/summary；0采样未入buffer、无SC2残留，关闭缺口仍未修。
+
+actor`artifacts/models/marine_ppo_bc_warmstart_20261019`（weights SHA bccce3aa15dfda49518f8dd0bbd5a2b9949a3ed38d814291a3ad38ba9b876ec1），checkpoint SHA d81fe552b3b2a126283d3fb38b31aa8e86e69d506bd842611213ef0f9af47c9e；同82观测导出概率误差5.9605e-8、动作全同。BC/初始PPO/更新PPO argmax均[4,17,28,6,27]、0变化，概率最大更新.100795686。可用--resume该32步checkpoint继承BC来源，不重复--init-bc。
+
+唯一部署`artifacts/runs/p5_bc_warmstart_ppo_20261019`，单Marine镜像distance6/seed20261019/max20、exit0；12推理/owned，actions[0,3,4,3,2]、10engine_confirmed+2hold，5.044643秒low_health_safety_exit、己/敌9/21；mask/8loops合法、无fallback/冲突/error、全非专家。初frame17、己cooldown5.69018555未标准化；本轮没有BC游戏或严格对照。知识迁移与多动作部署成立，不能从历史randomPPO全HOLD差异推出强度或32步训练收益。显式`.\run_ppo.cmd --ppo-model artifacts/models/marine_ppo_bc_warmstart_20261019`选用；模型/原始工件迁移另带。报告docs/PHASE_05_BC_WARMSTART_MVP_REPORT.md与docs/validation/ppo_bc_warmstart_mvp.json。下一步优先近战/射程差可学习任务和小对照，不盲目堆镜像Marine训练；预算close/cooldown标准化待办。P5全面验收、规模训练就绪与战斗收益未建立。

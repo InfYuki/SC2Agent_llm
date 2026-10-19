@@ -1,8 +1,8 @@
 """Tiny real-SC2 MaskablePPO update and checkpoint round trip (CPU).
 
 Run with the separate training interpreter; --worker-python selects the locked
-Ares runtime. This is a randomly initialized engineering baseline, not BC or a
-combat-strength evaluation. No dependency installation happens here.
+Ares runtime. Initialization is random unless --init-bc is explicit. This is an
+engineering prototype, not a combat-strength evaluation.
 """
 import argparse
 import hashlib
@@ -40,6 +40,87 @@ def policy_sha256(model):
     return digest.hexdigest()
 
 
+def actor_sha256(model):
+    digest = hashlib.sha256()
+    for key, value in sorted(model.policy.state_dict().items()):
+        if key.startswith(("mlp_extractor.policy_net", "action_net")):
+            digest.update(key.encode())
+            digest.update(value.detach().cpu().numpy().tobytes())
+    return digest.hexdigest()
+
+
+def initialize_bc_actor(model, directory, dataset):
+    """Copy only the validated BC actor, then verify every frozen observation."""
+    from bot.micro_bc import NumpyBCPolicy
+    from tools.train_micro_bc import load_dataset
+
+    directory, dataset = Path(directory).resolve(), Path(dataset).resolve()
+    bc = NumpyBCPolicy.load(directory)
+    data, dataset_meta = load_dataset(dataset)
+    metadata_hash = hashlib.sha256((directory / "metadata.json").read_bytes()).hexdigest()
+    dataset_meta_hash = hashlib.sha256((dataset / "metadata.json").read_bytes()).hexdigest()
+    if (bc.metadata.get("dataset_sha256") != dataset_meta["dataset_sha256"]
+            or bc.metadata.get("dataset_metadata_sha256") != dataset_meta_hash
+            or bc.metadata.get("sample_counts") != dataset_meta["split_counts"]):
+        raise ValueError("BC source dataset provenance mismatch")
+    policy = model.policy
+    layers = list(policy.mlp_extractor.policy_net)
+    if (len(layers) != 4 or not isinstance(layers[0], torch.nn.Linear)
+            or not isinstance(layers[1], torch.nn.Tanh)
+            or not isinstance(layers[2], torch.nn.Linear)
+            or not isinstance(layers[3], torch.nn.Tanh)
+            or not isinstance(policy.action_net, torch.nn.Linear)
+            or policy.features_extractor.__class__.__name__ != "FlattenExtractor"
+            or model.observation_space.shape != (16,) or model.action_space.n != 5
+            or not np.all(model.observation_space.low == -1)
+            or not np.all(model.observation_space.high == 1)):
+        raise ValueError("BC transfer requires the fixed actor and marine normalization")
+    if model.num_timesteps or model._n_updates or policy.optimizer.state:
+        raise ValueError("BC initialization requires a new PPO and fresh optimizer")
+    critic = {key: value.clone() for key, value in policy.state_dict().items()
+              if key.startswith(("mlp_extractor.value_net", "value_net"))}
+    with torch.no_grad():
+        for index, layer in enumerate((layers[0], layers[2], policy.action_net), 1):
+            weight, bias = bc.weights[f"w{index}"].T, bc.weights[f"b{index}"]
+            if tuple(layer.weight.shape) != weight.shape or tuple(layer.bias.shape) != bias.shape:
+                raise ValueError("BC transfer layer shape mismatch")
+            layer.weight.copy_(torch.from_numpy(weight.copy()))
+            layer.bias.copy_(torch.from_numpy(bias.copy()))
+    if not critic or any(not torch.equal(value, policy.state_dict()[key])
+                         for key, value in critic.items()):
+        raise ValueError("BC transfer changed the independently initialized critic")
+    logits_error = probability_error = 0.0
+    initial_actions, initial_probabilities = [], []
+    for obs, mask in zip(data["obs"], data["mask"]):
+        expected_logits = bc.logits(obs)
+        legal = np.where(mask, expected_logits, -np.inf)
+        expected_probability = np.exp(legal - legal.max())
+        expected_probability /= expected_probability.sum()
+        with torch.no_grad():
+            tensor, _ = policy.obs_to_tensor(obs)
+            actual_logits = policy.action_net(policy.mlp_extractor.forward_actor(
+                policy.extract_features(tensor))).cpu().numpy()[0]
+        actual_probability, action = probe(model, obs, mask)
+        initial_actions.append(action)
+        initial_probabilities.append(actual_probability.tolist())
+        logits_error = max(logits_error, float(np.max(np.abs(actual_logits - expected_logits))))
+        probability_error = max(probability_error, float(np.max(np.abs(
+            actual_probability - expected_probability))))
+        if (not np.isfinite(actual_logits).all() or logits_error > 1e-5
+                or probability_error > 1e-6 or action != bc.action(obs, mask)):
+            raise ValueError("BC to PPO initialization parity failed")
+    return dict(path=str(directory), metadata_sha256=metadata_hash,
+                weights_sha256=bc.metadata["weights_sha256"],
+                dataset=str(dataset), dataset_sha256=dataset_meta["dataset_sha256"],
+                dataset_metadata_sha256=dataset_meta_hash,
+                parity_samples=len(data["obs"]), logits_max_abs_error=logits_error,
+                masked_probability_max_abs_error=probability_error,
+                masked_actions_equal=True, critic_unchanged=True,
+                masked_actions=initial_actions, masked_probabilities=initial_probabilities,
+                optimizer_state_empty=True, initial_actor_sha256=actor_sha256(model),
+                interpretation="Frozen observations check transfer only; not expert PPO rollouts or formal 1000-observation acceptance.")
+
+
 def resume_checkpoint(source):
     """Accept only our versioned checkpoint and its adjacent provenance."""
     source = Path(source).resolve()
@@ -51,10 +132,18 @@ def resume_checkpoint(source):
                     action_version="marine-5-v1", decision_game_loops=8,
                     reward_version="effective-hp-delta-45-terminal-1-v1",
                     normalization="marine-16-v1", actor_layers=[16, 64, 64, 5],
-                    critic_hidden_layers=[64, 64], activation="tanh", bc_weights_used=False)
+                    critic_hidden_layers=[64, 64], activation="tanh")
     for key, value in expected.items():
         if metadata.get(key) != value:
             raise ValueError(f"Incompatible resume metadata: {key}")
+    if metadata.get("bc_weights_used") not in (True, False):
+        raise ValueError("Resume requires explicit BC provenance")
+    if metadata["bc_weights_used"]:
+        provenance = metadata.get("bc_initialization")
+        if not isinstance(provenance, dict) or any(
+                not isinstance(provenance.get(key), str) or len(provenance[key]) != 64
+                for key in ("metadata_sha256", "weights_sha256", "dataset_sha256")):
+            raise ValueError("Resume requires BC source hashes")
     digest = hashlib.sha256(checkpoint.read_bytes()).hexdigest()
     if metadata.get("checkpoint_sha256") != digest:
         raise ValueError("Resume checkpoint hash does not match metadata")
@@ -133,7 +222,11 @@ class TraceCallback(BaseCallback):
 def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft II",
           map_name="Ancient Cistern LE", max_game_seconds=8, seed=None,
           total_timesteps=32, n_steps=None, batch_size=None, n_epochs=None,
-          learning_rate=None, resume=None, environment=None):
+          learning_rate=None, resume=None, init_bc=None, init_bc_dataset=None, environment=None):
+    if resume is not None and init_bc is not None:
+        raise ValueError("--init-bc and --resume are mutually exclusive")
+    if init_bc_dataset is not None and init_bc is None:
+        raise ValueError("--init-bc-dataset requires --init-bc")
     parent = resume_checkpoint(resume) if resume is not None else None
     requested = dict(n_steps=n_steps, batch_size=batch_size, n_epochs=n_epochs,
                      learning_rate=learning_rate)
@@ -180,10 +273,19 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
             if (model.gamma != 0.99 or model.gae_lambda != 0.95
                     or float(model.clip_range(1.0)) != 0.2 or model.seed != seed):
                 raise ValueError("Resume model and fixed training metadata disagree")
+        bc_initialization = initialize_bc_actor(
+            model, init_bc, init_bc_dataset or ROOT / "artifacts/micro_datasets/p3_v7_formal_20261018_115352_dataset"
+        ) if init_bc is not None else (parent[1].get("bc_initialization") if parent else None)
         initial_steps, initial_updates = model.num_timesteps, model._n_updates
         initial_policy_hash = policy_sha256(model)
+        initial_actor_hash = actor_sha256(model)
         optimizer_steps_before = [int(state["step"]) for state in
                                   model.policy.optimizer.state.values() if "step" in state]
+        if init_bc is not None:
+            write_json(output / "initialization_report.json", dict(
+                initialization="bc_actor", initial_timesteps=initial_steps,
+                initial_policy_sha256=initial_policy_hash, initial_actor_sha256=initial_actor_hash,
+                optimizer_steps_before=optimizer_steps_before, bc_initialization=bc_initialization))
         initial = {key: value.detach().cpu().clone()
                    for key, value in model.policy.state_dict().items()}
         model.learn(total_timesteps=total_timesteps, callback=trace, use_masking=True,
@@ -212,15 +314,25 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
             raise ValueError("Saved policy failed probability/action round trip")
         checkpoint = output / "model.zip"
         provisional.rename(checkpoint)
+        if init_bc is not None:
+            source = Path(bc_initialization["path"])
+            if (hashlib.sha256((source / "metadata.json").read_bytes()).hexdigest()
+                    != bc_initialization["metadata_sha256"]
+                    or hashlib.sha256((source / "weights.npz").read_bytes()).hexdigest()
+                    != bc_initialization["weights_sha256"]):
+                raise ValueError("Original BC files changed during training")
         metadata = dict(
             format="marine-maskable-ppo-sb3-v1", feature_version="marine-16-v1",
             action_version="marine-5-v1", decision_game_loops=8,
             reward_version="effective-hp-delta-45-terminal-1-v1",
             normalization="marine-16-v1", actor_layers=[16, 64, 64, 5],
             critic_hidden_layers=[64, 64], activation="tanh", seed=seed,
-            initialization="resume" if parent else "random", bc_weights_used=False, dataset=None,
+            initialization="resume" if parent else ("bc_actor" if init_bc is not None else "random"),
+            bc_weights_used=bool(bc_initialization), bc_initialization=bc_initialization,
+            dataset=(bc_initialization["dataset_sha256"] if bc_initialization else None),
             parent_checkpoint=(dict(path=str(parent[0]), sha256=parent[2]) if parent else None),
             initial_policy_sha256=initial_policy_hash,
+            initial_actor_sha256=initial_actor_hash,
             initial_timesteps=initial_steps, additional_timesteps=model.num_timesteps - initial_steps,
             cumulative_timesteps=model.num_timesteps,
             hyperparameter_source="parent_checkpoint" if parent else "CLI/defaults",
@@ -240,6 +352,9 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
             initial_timesteps=initial_steps, additional_steps=model.num_timesteps - initial_steps,
             cumulative_timesteps=model.num_timesteps, initial_updates=initial_updates,
             initial_policy_sha256=initial_policy_hash,
+            initial_actor_sha256=initial_actor_hash,
+            initialization=metadata["initialization"], bc_initialization=bc_initialization,
+            original_bc_unchanged=True if init_bc is not None else None,
             parent_checkpoint=metadata["parent_checkpoint"],
             hyperparameter_source=metadata["hyperparameter_source"],
             optimizer_steps_before=optimizer_steps_before,
@@ -286,7 +401,10 @@ def main():
     parser.add_argument("--game-path", default=r"C:\Program Files (x86)\StarCraft II")
     parser.add_argument("--map", default="Ancient Cistern LE")
     parser.add_argument("--max-game-seconds", type=float, default=8)
-    parser.add_argument("--resume", type=Path, help="Parent model directory or .zip with adjacent metadata.json; inherits hyperparameters")
+    initialization = parser.add_mutually_exclusive_group()
+    initialization.add_argument("--resume", type=Path, help="Parent model directory or .zip with adjacent metadata.json; inherits hyperparameters")
+    initialization.add_argument("--init-bc", type=Path, help="Initialize a new PPO actor from a validated BC directory")
+    parser.add_argument("--init-bc-dataset", type=Path, help="Frozen BC source dataset for transfer parity; defaults to the v7 dataset")
     parser.add_argument("--seed", type=int)
     parser.add_argument("--total-timesteps", type=int, default=32,
                         help="Additional steps for this run, including when resuming")
@@ -300,7 +418,8 @@ def main():
         map_name=args.map, max_game_seconds=args.max_game_seconds, seed=args.seed,
         total_timesteps=args.total_timesteps, n_steps=args.n_steps,
         batch_size=args.batch_size, n_epochs=args.n_epochs,
-        learning_rate=args.learning_rate, resume=args.resume), indent=2, allow_nan=False))
+        learning_rate=args.learning_rate, resume=args.resume, init_bc=args.init_bc,
+        init_bc_dataset=args.init_bc_dataset), indent=2, allow_nan=False))
 
 
 if __name__ == "__main__":

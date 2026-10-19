@@ -1,0 +1,378 @@
+{
+  "date": "2026-10-19",
+  "status": "bounded_bc_warmstart_mvp_complete",
+  "budget": {
+    "training_runs": 1,
+    "real_training_steps": 32,
+    "deployment_games": 1,
+    "bc_comparison_games": 0
+  },
+  "initialization": {
+    "initialization": "bc_actor",
+    "initial_timesteps": 0,
+    "initial_policy_sha256": "63433a6089338758c2263e43d354088d718357314401f71b9c130f27fda18e51",
+    "initial_actor_sha256": "f41c062cfc284803dd3f6518b6babdb6f991d2cfe03219b8e7ac11cb44ece043",
+    "optimizer_steps_before": []
+  },
+  "bc_initialization": {
+    "path": "C:\\code\\SC2Agent_llm\\artifacts\\models\\marine_bc_mvp_20261018_seed42",
+    "metadata_sha256": "1223a8341b2f5e5b1b98cb54fd6062d5cdfa31d6907c9e9086479d97e0d253fc",
+    "weights_sha256": "e36cba313c1d8e1731573595b1b975316e1522db3af8d1a4abf4f21e405c2dcf",
+    "dataset": "C:\\code\\SC2Agent_llm\\artifacts\\micro_datasets\\p3_v7_formal_20261018_115352_dataset",
+    "dataset_sha256": "6558232fea2386e1bef792b50e728b7f5e13ff6a47498837538dd4b0f91aee9e",
+    "dataset_metadata_sha256": "48df293d34accad041560193bf05c552b81c9c81a1515b7d975ce4c08a2611a5",
+    "parity_samples": 82,
+    "logits_max_abs_error": 2.86102294921875e-06,
+    "masked_probability_max_abs_error": 3.8743019104003906e-07,
+    "masked_actions_equal": true,
+    "critic_unchanged": true,
+    "optimizer_state_empty": true,
+    "initial_actor_sha256": "f41c062cfc284803dd3f6518b6babdb6f991d2cfe03219b8e7ac11cb44ece043",
+    "interpretation": "Frozen observations check transfer only; not expert PPO rollouts or formal 1000-observation acceptance."
+  },
+  "training": {
+    "status": "success",
+    "actual_steps": 32,
+    "initial_timesteps": 0,
+    "additional_steps": 32,
+    "cumulative_timesteps": 32,
+    "initial_updates": 0,
+    "initial_policy_sha256": "63433a6089338758c2263e43d354088d718357314401f71b9c130f27fda18e51",
+    "initial_actor_sha256": "f41c062cfc284803dd3f6518b6babdb6f991d2cfe03219b8e7ac11cb44ece043",
+    "initialization": "bc_actor",
+    "original_bc_unchanged": true,
+    "parent_checkpoint": null,
+    "hyperparameter_source": "CLI/defaults",
+    "optimizer_steps_before": [],
+    "optimizer_steps_after": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "completed_episodes": [
+      {
+        "episode_id": "85561c41fc5641cd8c3d47ff27af87dc",
+        "steps": 16,
+        "reward": -1.3333334028720856,
+        "reason": "marine_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_bc_warmstart_20261019\\episodes\\85561c41fc5641cd8c3d47ff27af87dc"
+      },
+      {
+        "episode_id": "e1f8f96c9c314f5188330433b99910e8",
+        "steps": 16,
+        "reward": -1.200000062584877,
+        "reason": "marine_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_bc_warmstart_20261019\\episodes\\e1f8f96c9c314f5188330433b99910e8"
+      }
+    ],
+    "observed_episode_count": 2,
+    "reward_sum": -2.5333334654569626,
+    "updates": 2,
+    "parameters_finite": true,
+    "actor_parameters_changed": true,
+    "wall_seconds": 52.82799999997951,
+    "rollout_trace": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_bc_warmstart_20261019\\training_transitions.jsonl",
+    "checkpoint_sha256": "d81fe552b3b2a126283d3fb38b31aa8e86e69d506bd842611213ef0f9af47c9e",
+    "interpretation": "Engineering update and reload only; no combat-strength evaluation.",
+    "reload": {
+      "probability_max_abs_error": 0.0,
+      "masked_action_equal": true,
+      "action": 2,
+      "observation": [
+        1.0,
+        0.0,
+        0.3924804627895355,
+        0.46484375,
+        0.0,
+        0.46484375,
+        1.0,
+        0.0,
+        0.0,
+        0.46484375,
+        0.0,
+        1.0,
+        0.0,
+        0.0625,
+        0.08935546875,
+        0.0
+      ],
+      "mask": [
+        false,
+        false,
+        true,
+        true,
+        true
+      ],
+      "probabilities": [
+        0.0,
+        0.0,
+        0.9998840093612671,
+        3.308043006189365e-10,
+        0.00011593061208259314
+      ]
+    },
+    "parameter_max_abs_change": 0.0012024492025375366,
+    "output_dir": "artifacts\\micro_ppo\\p5_bc_warmstart_20261019",
+    "rollout_validation": {
+      "steps": 32,
+      "all_masks_legal": true,
+      "all_actual_loops_8": true,
+      "raw_reward_max_abs_error": 0.0,
+      "trace_float32_reward_max_abs_error": 5.563100180516756e-08,
+      "system_failures": 0,
+      "discarded_rows": 0,
+      "expert_labels": 0,
+      "command_conflicts": 0,
+      "sampled_actions": [
+        0,
+        7,
+        7,
+        5,
+        13
+      ],
+      "command_results": {
+        "engine_confirmed": 18,
+        "hold": 13,
+        "order_preserved": 1
+      },
+      "episode_boundaries": [
+        {
+          "episode_id": "85561c41fc5641cd8c3d47ff27af87dc",
+          "steps": 16,
+          "terminated": true,
+          "truncated": false,
+          "reason": "marine_dead",
+          "own_final_hp": 0.0,
+          "enemy_final_hp": 15.0,
+          "worker_log_anomalies": []
+        },
+        {
+          "episode_id": "e1f8f96c9c314f5188330433b99910e8",
+          "steps": 16,
+          "terminated": true,
+          "truncated": false,
+          "reason": "marine_dead",
+          "own_final_hp": 0.0,
+          "enemy_final_hp": 9.0,
+          "worker_log_anomalies": []
+        },
+        {
+          "episode_id": "f9c100aede024777b7321232b3a1c3b8",
+          "steps": 0,
+          "boundary": "SB3 auto-reset after terminal step32; no transitions; budget close",
+          "official_result_available": false,
+          "worker_log_anomalies": [
+            "EOFError",
+            "Traceback"
+          ]
+        }
+      ],
+      "worker_log_errors": [
+        {
+          "episode_id": "f9c100aede024777b7321232b3a1c3b8",
+          "marker": "EOFError"
+        },
+        {
+          "episode_id": "f9c100aede024777b7321232b3a1c3b8",
+          "marker": "Traceback"
+        }
+      ],
+      "original_bc_unchanged": true
+    },
+    "seed": 42,
+    "hyperparameters": {
+      "total_timesteps": 32,
+      "n_steps": 32,
+      "batch_size": 16,
+      "n_epochs": 2,
+      "learning_rate": 0.0003,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "clip_range": 0.2,
+      "device": "cpu"
+    },
+    "sc2_processes_remaining_after_run": 0
+  },
+  "export": {
+    "actor_dir": "artifacts\\models\\marine_ppo_bc_warmstart_20261019",
+    "weights_sha256": "bccce3aa15dfda49518f8dd0bbd5a2b9949a3ed38d814291a3ad38ba9b876ec1",
+    "source_checkpoint_sha256": "d81fe552b3b2a126283d3fb38b31aa8e86e69d506bd842611213ef0f9af47c9e",
+    "bc_provenance_preserved": true
+  },
+  "offline_policy_comparison": {
+    "rows": 82,
+    "source": "frozen_82_existing_observations_no_new_games",
+    "bc_actions": [
+      4,
+      17,
+      28,
+      6,
+      27
+    ],
+    "initial_ppo_actions": [
+      4,
+      17,
+      28,
+      6,
+      27
+    ],
+    "trained_ppo_actions": [
+      4,
+      17,
+      28,
+      6,
+      27
+    ],
+    "changed_deterministic_actions": 0,
+    "mean_bc_probabilities": [
+      0.048550281673669815,
+      0.20721067488193512,
+      0.33561956882476807,
+      0.07922031730413437,
+      0.32939913868904114
+    ],
+    "mean_initial_ppo_probabilities": [
+      0.048550280755091255,
+      0.20721068542178084,
+      0.33561955999976906,
+      0.07922030731009788,
+      0.3293991618504433
+    ],
+    "mean_trained_ppo_probabilities": [
+      0.04847666248679161,
+      0.20720712840557098,
+      0.3380179703235626,
+      0.0767936035990715,
+      0.3295046389102936
+    ],
+    "trained_vs_initial_probability_max_abs_change": 0.1007956862449646,
+    "export_probability_max_abs_error": 5.960464477539063e-08,
+    "export_actions_equal": 82,
+    "interpretation": "Same frozen observations diagnose transfer/update only; no combat strength or independent evaluation."
+  },
+  "deployment": {
+    "run_dir": "artifacts\\runs\\p5_bc_warmstart_ppo_20261019",
+    "exit_code": 0,
+    "scenario": {
+      "version": "marine-vs-marine-v6",
+      "friendly": "MARINE",
+      "enemy": "MARINE",
+      "friendly_position": [
+        82,
+        80
+      ],
+      "enemy_position": [
+        88.0,
+        80
+      ],
+      "enemy_positions": [
+        [
+          88.0,
+          80
+        ]
+      ],
+      "enemy_count": 1,
+      "second_distance": 8.0,
+      "second_enemy_health_fraction": 0.5,
+      "seed": 20261019,
+      "decision_game_loops": 8,
+      "time_limit_seconds": 20.0,
+      "opponent_script": "visible-nearest-attack-v1",
+      "macro": "disabled",
+      "expert": "kite",
+      "requested_distance": 6.0,
+      "health_fraction": 1.0,
+      "enemy_health_fraction": 1.0,
+      "enemy_hidden": false,
+      "split": "train"
+    },
+    "local_result": {
+      "outcome": "low_health_safety_exit",
+      "terminated": false,
+      "truncated": true,
+      "game_loop": 113,
+      "game_seconds": 5.044642857142858
+    },
+    "initial_game_loop": 17,
+    "initial_obs": [
+      1.0,
+      0.0,
+      0.379345703125,
+      0.46484375,
+      0.0,
+      0.46484375,
+      1.0,
+      0.0,
+      0.0,
+      0.46484375,
+      0.0,
+      1.0,
+      0.0,
+      0.0625,
+      0.08935546875,
+      0.0
+    ],
+    "initial_weapon_cooldown": 5.690185546875,
+    "final_own_hp": 9.0,
+    "final_enemy_hp": 21.0,
+    "action_counts": [
+      0,
+      3,
+      4,
+      3,
+      2
+    ],
+    "command_results": {
+      "engine_confirmed": 10,
+      "hold": 2
+    },
+    "all_masks_legal": true,
+    "all_actual_loops_8": true,
+    "all_nonexpert": true,
+    "counters": {
+      "marines_created": 1,
+      "ppo_inference_decisions": 12,
+      "micro_action_retreat": 4,
+      "micro_decision_steps": 12,
+      "micro_owned_decisions": 12,
+      "command_conflicts": 0,
+      "callbacks": 13,
+      "micro_action_approach": 3,
+      "micro_action_weakest": 3,
+      "micro_action_hold": 2
+    },
+    "summary_error": null,
+    "official_match_result": "Result.Defeat",
+    "interpretation": "One deployment smoke only; no BC game or controlled strength comparison. Initial engine cooldown recorded, not standardized. Outer match result does not replace local scenario result.",
+    "sc2_processes_remaining_after_run": 0,
+    "fallback_count": 0,
+    "telemetry_errors": []
+  },
+  "default_actor_unchanged": "artifacts/models/marine_ppo_mvp_20261019",
+  "limitations": [
+    "32 new PPO steps from BC actor, not a continuation of random PPO384",
+    "Frozen82 transfer diagnostic is not formal1000-observation acceptance",
+    "No new BC game or controlled strength comparison",
+    "P5 full acceptance, scale readiness and combat gains not established",
+    "Budget-close EOFError/Traceback persists in third auto-reset episode with zero sampled transitions; not counted as buffer failure"
+  ]
+}

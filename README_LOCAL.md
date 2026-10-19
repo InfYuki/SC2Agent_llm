@@ -200,3 +200,9 @@ python -s tools/smoke_micro_env.py --seed 42 --max-game-seconds 8 --game-path 'C
 ```
 
 模型与原始工件不入Git，迁移另带。完整事实、关闭异常与限制见[PPO384报告](docs/PPO_TRAINING_384_REPORT.md)和[共享摘要](docs/validation/ppo_training_384.json)。下一步诊断预算close、训练任务/奖励及BC初始化，标准化含cooldown的初态后再小对照；本轮不追加游戏或改奖励。P5全面验收、规模训练就绪和强度收益未建立。
+
+### BC actor 初始化PPO最小接续（2026-10-19）
+
+`tools/train_micro_ppo.py --init-bc artifacts/models/marine_bc_mvp_20261018_seed42`可将BC三层actor迁移到新PPO；critic/optimizer新建，与`--resume`互斥。唯一真实新训练32步（累计0→32，非384→416），输出`artifacts/micro_ppo/p5_bc_warmstart_20261019`；训练前82条logits/概率/动作parity成功、BC原hash不变，更新后同82条argmax未变但概率有变化。后续可`--resume`该目录，保留BC来源。
+
+独立actor`artifacts/models/marine_ppo_bc_warmstart_20261019`已导出并保留BC来源。显式运行`.\run_ppo.cmd --ppo-model artifacts/models/marine_ppo_bc_warmstart_20261019`；默认仍原64步模型，旧384步模型保留。唯一部署12决策actions0..4=`[0,3,4,3,2]`，5.044643秒lowHP退出、己/敌9/21；呈现BC式多动作，未做严格对照、不推强度或32步训练收益。budget-close的第三自动reset空局仍EOFError，未入buffer且无SC2残留。详见[BC warm-start报告](docs/PHASE_05_BC_WARMSTART_MVP_REPORT.md)与[共享摘要](docs/validation/ppo_bc_warmstart_mvp.json)。下一步优先近战/射程差可学习任务与小对照，不盲目增加镜像Marine步数；关闭协议与cooldown标准化待办。

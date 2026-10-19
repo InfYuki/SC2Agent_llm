@@ -43,6 +43,15 @@ def export_actor(model, checkpoint, output):
                 or not np.isfinite(weights[key]).all()):
             raise ValueError("Unsupported PPO weights: " + key)
     checkpoint_hash = hashlib.sha256(checkpoint.read_bytes()).hexdigest()
+    provenance = {}
+    source_metadata = checkpoint.parent / "metadata.json"
+    if source_metadata.is_file():
+        source = json.loads(source_metadata.read_text(encoding="utf-8"))
+        if source.get("checkpoint_sha256") != checkpoint_hash:
+            raise ValueError("Source metadata checkpoint hash mismatch")
+        provenance = {key: source[key] for key in
+                      ("initialization", "bc_weights_used", "bc_initialization", "dataset")
+                      if key in source}
     # Refuse provenance that attributes a different in-memory actor to the zip.
     saved = MaskablePPO.load(checkpoint, device="cpu")
     for key, tensor in policy.state_dict().items():
@@ -58,6 +67,7 @@ def export_actor(model, checkpoint, output):
         weights_sha256=hashlib.sha256((output / "weights.npz").read_bytes()).hexdigest(),
         producer=dict(algorithm="MaskablePPO", source_checkpoint=str(checkpoint.resolve()),
                       source_checkpoint_sha256=checkpoint_hash,
+                      **provenance,
                       versions={name: version(name) for name in
                                 ("torch", "stable-baselines3", "sb3-contrib", "numpy")}),
     )

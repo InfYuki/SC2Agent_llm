@@ -8,9 +8,11 @@ from sb3_contrib import MaskablePPO
 
 import gymnasium as gym
 import numpy as np
+import torch
 
 from envs.gym_sc2_micro_env import RolloutDiscardError
-from tools.train_micro_ppo import policy_sha256, train
+from tools.train_micro_ppo import initialize_bc_actor, policy_sha256, resume_checkpoint, train
+from tools.train_micro_bc import initialize
 
 
 class TinyMaskedEnv(gym.Env):
@@ -44,6 +46,74 @@ class TinyMaskedEnv(gym.Env):
 
 
 class PPOCheckpointTest(unittest.TestCase):
+    def test_bc_actor_transfer_and_exclusive_initialization(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            bc, dataset = root / "bc", root / "dataset"
+            bc.mkdir()
+            dataset.mkdir()
+            weights = initialize(5)
+            np.savez(bc / "weights.npz", **weights)
+            count = 6
+            obs = np.random.default_rng(3).uniform(-1, 1, (count, 16)).astype(np.float32)
+            masks = np.array([[True, False, True, False, True]] * count)
+            np.savez(dataset / "demonstrations.npz", obs=obs, mask=masks,
+                     action=np.zeros(count, dtype=np.int64),
+                     group=np.array(["a", "a", "b", "b", "c", "c"]),
+                     split=np.array(["train", "train", "validation", "validation", "test", "test"]))
+            sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
+            contract = dict(feature_version="marine-16-v1", action_version="marine-5-v1",
+                            decision_game_loops=8)
+            splits = dict(train=2, validation=2, test=2)
+            (dataset / "metadata.json").write_text(json.dumps(dict(
+                **contract, dataset_sha256=sha(dataset / "demonstrations.npz"),
+                samples=count, split_counts=splits,
+                group_splits=dict(a="train", b="validation", c="test"))))
+            metadata = dict(**contract, format="marine-bc-numpy-v1", architecture=[16, 64, 64, 5],
+                            activation="tanh", normalization="marine-16-v1",
+                            weights_sha256=sha(bc / "weights.npz"),
+                            dataset_sha256=sha(dataset / "demonstrations.npz"),
+                            dataset_metadata_sha256=sha(dataset / "metadata.json"), sample_counts=splits)
+            (bc / "metadata.json").write_text(json.dumps(metadata))
+            model = MaskablePPO("MlpPolicy", TinyMaskedEnv(), n_steps=32, batch_size=16,
+                seed=42, policy_kwargs=dict(net_arch=dict(pi=[64, 64], vf=[64, 64]),
+                                           activation_fn=torch.nn.Tanh))
+            critic = {key: value.clone() for key, value in model.policy.state_dict().items()
+                      if key.startswith(("mlp_extractor.value_net", "value_net"))}
+            transfer = initialize_bc_actor(model, bc, dataset)
+            self.assertEqual(transfer["parity_samples"], count)
+            self.assertLess(transfer["logits_max_abs_error"], 1e-5)
+            self.assertLess(transfer["masked_probability_max_abs_error"], 1e-6)
+            self.assertTrue(transfer["masked_actions_equal"])
+            for index, layer in enumerate((model.policy.mlp_extractor.policy_net[0],
+                    model.policy.mlp_extractor.policy_net[2], model.policy.action_net), 1):
+                np.testing.assert_array_equal(layer.weight.detach().numpy(), weights[f"w{index}"].T)
+                np.testing.assert_array_equal(layer.bias.detach().numpy(), weights[f"b{index}"])
+            self.assertTrue(all(torch.equal(value, model.policy.state_dict()[key])
+                                for key, value in critic.items()))
+            self.assertFalse(model.policy.optimizer.state)
+            original = (bc / "weights.npz").read_bytes()
+            report = train(root / "warmstart", init_bc=bc, init_bc_dataset=dataset,
+                           worker_python="unused-fixture", environment=TinyMaskedEnv())
+            self.assertEqual(report["initialization"], "bc_actor")
+            self.assertEqual(report["initial_timesteps"], 0)
+            self.assertFalse(report["optimizer_steps_before"])
+            self.assertTrue(report["parameters_finite"] and report["actor_parameters_changed"])
+            checkpoint, saved_metadata, _ = resume_checkpoint(root / "warmstart")
+            self.assertEqual(checkpoint.name, "model.zip")
+            self.assertTrue(saved_metadata["bc_weights_used"])
+            self.assertEqual(saved_metadata["bc_initialization"]["weights_sha256"],
+                             metadata["weights_sha256"])
+            self.assertTrue((root / "warmstart" / "initialization_report.json").exists())
+            self.assertEqual((bc / "weights.npz").read_bytes(), original)
+            with self.assertRaisesRegex(ValueError, "mutually exclusive"):
+                train(root / "invalid", resume="unused", init_bc=bc, worker_python="unused")
+            metadata["normalization"] = "unsupported"
+            (bc / "metadata.json").write_text(json.dumps(metadata))
+            with self.assertRaisesRegex(ValueError, "normalization"):
+                initialize_bc_actor(model, bc, dataset)
+
     def test_resume_preserves_parent_optimizer_and_cumulative_steps(self):
         with tempfile.TemporaryDirectory() as directory:
             parent = Path(directory) / "parent"
