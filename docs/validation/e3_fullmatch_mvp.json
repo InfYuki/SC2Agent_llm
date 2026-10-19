@@ -1,0 +1,310 @@
+{
+  "date": "2026-10-19",
+  "scope": "one fullmatch engineering MVP; no strength/win-rate conclusion",
+  "run_id": "e3_fullmatch_ppo_20261019",
+  "plan_path": "artifacts\\p6_e3_fullmatch_20261019\\plan.json",
+  "plan_sha256": "ee1c3250186ac1421659f7309053f28a056444eb7ddb57be50dc34f177d84788",
+  "command": [
+    "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe",
+    "-s",
+    "-u",
+    "tools/run_logged.py",
+    "--mode",
+    "rule_ppo",
+    "--ppo-model",
+    "artifacts\\models\\marine_ppo_curriculum256_20261019",
+    "--map",
+    "Ancient Cistern LE",
+    "--opponent",
+    "Zerg",
+    "--difficulty",
+    "Easy",
+    "--no-realtime",
+    "--game-step",
+    "8",
+    "--max-game-seconds",
+    "1200",
+    "--llm-max-calls",
+    "0",
+    "--seed",
+    "20261019",
+    "--run-id",
+    "e3_fullmatch_ppo_20261019"
+  ],
+  "source_commit": "0f31a6223b8ca3ede86f6385d3319af608d3569a",
+  "source_hashes_frozen_count": 127,
+  "source_hashes_unchanged": true,
+  "model_hashes": {
+    "metadata.json": "7f8c0754a6dc65f5d13bbfac18608e26b48b72ebc5f2215fa2bf0674cc932e07",
+    "weights.npz": "8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1"
+  },
+  "model_hashes_unchanged": true,
+  "map_hashes": {
+    "C:\\code\\SC2Agent_llm\\maps\\Ancient Cistern LE.SC2Map": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+    "C:\\Program Files (x86)\\StarCraft II\\Maps\\Ancient Cistern LE.SC2Map": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59"
+  },
+  "summary": {
+    "status": "completed",
+    "result": "Result.Victory",
+    "stop_reason": null,
+    "error": null,
+    "counters": {
+      "callbacks": 1042,
+      "completed_SUPPLYDEPOT": 10,
+      "completed_BARRACKS": 6,
+      "marines_created": 58,
+      "combat_commands": 4918,
+      "micro_decision_steps": 767,
+      "micro_owned_decisions": 233,
+      "command_conflicts": 0,
+      "emergency_defense_steps": 18,
+      "ppo_inference_decisions": 233,
+      "micro_action_hold": 64,
+      "micro_action_retreat": 144,
+      "micro_action_weakest": 17,
+      "completed_COMMANDCENTER": 1,
+      "retired_completed_expansion_jobs": 1,
+      "micro_action_approach": 8
+    },
+    "game_span_seconds": 371.78571428571433,
+    "wall_span_seconds": 24.843499200011138,
+    "game_to_wall_ratio": 14.96511064293019,
+    "on_step_p50_seconds": 0.0009684999822638929,
+    "on_step_p95_seconds": 0.005555800045840442,
+    "on_step_p99_seconds": 0.00857120001455769,
+    "on_step_max_seconds": 0.022102000017184764,
+    "peak_workers": 45,
+    "peak_marines": 53,
+    "peak_bases": 2
+  },
+  "micro_summary": {
+    "match_id": "e3_fullmatch_ppo_20261019",
+    "seed": 20261019,
+    "split": "train",
+    "counters": {
+      "transitions": 233,
+      "hold": 64,
+      "bc_eligible": 0,
+      "terminated": 0,
+      "truncated": 54,
+      "engine_confirmed": 159,
+      "order_preserved": 4,
+      "engine_unconfirmed": 6
+    },
+    "reward": "not_implemented",
+    "scenario": "visible-ground-skirmish-v1",
+    "policy_version": "marine-ppo-numpy-v1",
+    "expert_labels": false
+  },
+  "exit_code": 0,
+  "wall_seconds": 39.716232699982356,
+  "watchdog_triggered": false,
+  "processes_before": {
+    "ProcessId": 60944,
+    "ParentProcessId": 61632,
+    "Name": "python.exe",
+    "ExecutablePath": "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe"
+  },
+  "processes_after": {
+    "ProcessId": 60944,
+    "ParentProcessId": 61632,
+    "Name": "python.exe",
+    "ExecutablePath": "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe"
+  },
+  "transitions": {
+    "rows": 233,
+    "unique_marine_tags": 27,
+    "unique_target_tags": 7,
+    "requested_actions": {
+      "4": 64,
+      "2": 144,
+      "1": 17,
+      "3": 8
+    },
+    "command_results": {
+      "hold": 64,
+      "engine_confirmed": 159,
+      "order_preserved": 4,
+      "engine_unconfirmed": 6
+    },
+    "actual_game_loops": {
+      "8": 233
+    },
+    "end_reasons": {
+      "None": 179,
+      "strategy_retreat": 4,
+      "control_released": 50
+    },
+    "invalid_source_masks": 0,
+    "invalid_executed_masks": 0,
+    "bc_eligible": 0,
+    "expert_nonnull": 0,
+    "policy_versions": {
+      "marine-ppo-numpy-v1": 233
+    },
+    "split": {
+      "train": 233
+    },
+    "reward_versions": {
+      "not_implemented": 233
+    }
+  },
+  "combat_steps": {
+    "count": 767,
+    "max_controlled": 4,
+    "with_owned": 70,
+    "frame_deltas": {
+      "8": 766
+    }
+  },
+  "macro": {
+    "initial_state": {
+      "event": "state",
+      "wall_time": 1792393369.788771,
+      "game_seconds": 0.0,
+      "game_loop": 0,
+      "minerals": 50,
+      "vespene": 0,
+      "workers": 12,
+      "marines": 0,
+      "bases": 1,
+      "supply_used": 12,
+      "supply_cap": 15,
+      "structures": {
+        "COMMANDCENTER": 1
+      },
+      "strategy": "develop",
+      "enemy_visible": 0,
+      "counters": {
+        "callbacks": 1
+      }
+    },
+    "last_state": {
+      "event": "state",
+      "wall_time": 1792393394.6326952,
+      "game_seconds": 371.78571428571433,
+      "game_loop": 8328,
+      "minerals": 410,
+      "vespene": 0,
+      "workers": 45,
+      "marines": 53,
+      "bases": 2,
+      "supply_used": 104,
+      "supply_cap": 110,
+      "structures": {
+        "SUPPLYDEPOT": 13,
+        "COMMANDCENTER": 2,
+        "BARRACKS": 8
+      },
+      "strategy": "attack",
+      "enemy_visible": 9,
+      "counters": {
+        "callbacks": 1042,
+        "completed_SUPPLYDEPOT": 10,
+        "completed_BARRACKS": 6,
+        "marines_created": 58,
+        "combat_commands": 4918,
+        "micro_decision_steps": 767,
+        "micro_owned_decisions": 233,
+        "command_conflicts": 0,
+        "emergency_defense_steps": 18,
+        "ppo_inference_decisions": 233,
+        "micro_action_hold": 64,
+        "micro_action_retreat": 144,
+        "micro_action_weakest": 17,
+        "completed_COMMANDCENTER": 1,
+        "retired_completed_expansion_jobs": 1,
+        "micro_action_approach": 8
+      }
+    },
+    "peak_barracks": 8,
+    "collected_minerals_ares_log": 8110,
+    "collected_vespene_ares_log": 0
+  },
+  "fallback": {
+    "model_load": 0,
+    "model_inference": 0,
+    "model_rule_decisions": 0,
+    "safety_reason_counts": null,
+    "safety_reason_note": "Production low-health/unsupported/static defense/control-limit gates retained; not individually instrumented, cannot infer counts from non-owned steps."
+  },
+  "enemy_type_distribution": null,
+  "enemy_type_note": "Zerg Easy Macro confirmed in config/engine log; actual target types not recorded, possible inference on supported species outside Zergling curriculum.",
+  "raw_files": {
+    "manifest.json": {
+      "bytes": 14224,
+      "sha256": "2642c6ff602493d6d24751ab7b17dbfaba80402c23c091cfd130ad9c31d251dc"
+    },
+    "summary.json": {
+      "bytes": 1040,
+      "sha256": "54b00a78dd4cf302c2fae7815221b99232d2f1901b7ce64ecb6eb33e74f78c2f"
+    },
+    "micro_summary.json": {
+      "bytes": 455,
+      "sha256": "66e66d428643c6d9543ecf3972915fa642dbef9c59f9ea5772366379d19365b8"
+    },
+    "events.jsonl": {
+      "bytes": 392326,
+      "sha256": "18fe5176440d3387adebe414bd696a57b4b2a54952b8aef77a349903c0375b94"
+    },
+    "micro_transitions.jsonl": {
+      "bytes": 305806,
+      "sha256": "2fa80043f81845a40c6a4e36b3e9cd75cd681749bd038afece694a69c226668d"
+    },
+    "game.SC2Replay": {
+      "bytes": 57112,
+      "sha256": "d9f0acdbf6150676a4af56442707f27c6dbbad94250f55732c1d340472e243c3"
+    },
+    "console.log": {
+      "bytes": 6295,
+      "sha256": "d2663e3035f1661408cfde7bba37fedd6b1ad2146f8214173ac742d84e6244a1"
+    },
+    "execution.json": {
+      "bytes": 13589,
+      "sha256": "d85edada00d8c1a8a31aded5225b957c0c47c50b2c4c913b609b077d8e35f93d"
+    }
+  },
+  "learning_exclusion": {
+    "run_id": "e3_fullmatch_ppo_20261019",
+    "excluded_from_future_training": true,
+    "reason": "single fullmatch engineering evaluation; never expert/training evidence",
+    "plan_sha256": "ee1c3250186ac1421659f7309053f28a056444eb7ddb57be50dc34f177d84788",
+    "raw_sha256": {
+      "micro_transitions.jsonl": "2fa80043f81845a40c6a4e36b3e9cd75cd681749bd038afece694a69c226668d"
+    }
+  },
+  "limitations": [
+    "Single Easy opponent sample; no PPO vs rule comparison, no training or win-rate claim.",
+    "At most four Marines independently share single-unit actor; not a learned group policy.",
+    "Six engine_unconfirmed rows are not engine confirmation or errors; retain raw records.",
+    "Actual enemy types and individual safety gate reason counts unavailable.",
+    "Per-step rewards are null/not_implemented; no training reward invented."
+  ],
+  "event_counts": {
+    "ppo_model_loaded": 1,
+    "started": 1,
+    "state": 348,
+    "strategy_changed": 6,
+    "micro_timing": 767,
+    "expansion_reservation": 2,
+    "micro_ownership": 108,
+    "micro_command": 233
+  },
+  "error_event_count": 0,
+  "console_error_lines": [],
+  "post_run_update": {
+    "default_launcher": "run_ppo.cmd",
+    "default_actor": "artifacts/models/marine_ppo_curriculum256_20261019",
+    "scope": "E3 engineering experiment model, not proven stronger/best",
+    "timing": "after natural game completion; static show-config only",
+    "original64_retained": true,
+    "source_hash_equality_scope": "frozen plan vs immediate execution snapshot before post-run launcher/docs changes"
+  },
+  "post_run_launcher_change": {
+    "file": "run_ppo.cmd",
+    "sha256": "563d697577439e5d0c1c70aa96f71fd8e60d9ca89aed7eab253980427de0e5ab",
+    "static_default_config_verified": true,
+    "static_original64_override_verified": true,
+    "game_restarted": false
+  }
+}
