@@ -217,3 +217,14 @@ Gymnasium适配与MaskablePPO最小训练已过：32真实步、2完整死亡epi
 ```
 
 `--total-timesteps`是本次增量、需为32倍数；示例成功后累计384步，恢复optimizer但不承诺完整RNG复演。新训练后按[续训部署报告](docs/PHASE_05_PPO_DEPLOY_MVP_REPORT.md)导出actor，再用`--ppo-model`选新目录。完整事实及边界见该报告和[共享摘要](docs/validation/micro_ppo_deploy_mvp.json)。下一步增加有限训练预算、诊断奖励/动作分布，再少量与规则/BC对比；P5全面验收、规模训练就绪和强度改进均未建立，勿重复旧suite拖延推进。
+
+
+## 2026-10-19 PPO384步有限训练最新接续
+
+唯一从64步checkpoint新增320步→累计384，n_updates4→24、Adam step8→48，360.344秒。新checkpoint `artifacts/micro_ppo/p5_ppo_train384_20261019/model.zip`（SHA256 `543c059aec4cd790322d5e7b9d14c03744c34163e78d6c0d64dfebcc91c6a3c2`）；新NumPy actor `artifacts/models/marine_ppo_train384_20261019`；父模型/metadata不变。320真实8loops合法mask、HP奖励复核通过，参数finite/actor改变/reload概率误差0；320真实观测SB3→NumPy概率误差8.9406967e-8、动作全同。未改reward/实现/依赖，不重跑旧suite。
+
+21完整训练局均marine_dead/官方结果及close确认，己HP0、敌HP15..33均22.429，完整回报均值-1.498413；另1局预算close前5步。buffer内system_failure/discard/conflict均0；最后部分局worker.log在close有EOFError/Unknown exception，无summary/官方Result，异常未入buffer，trainer exit0、已清理无SC2残留；不能写所有日志零错误，关闭异常待修复。五个64步奖励块无清晰改善。采样动作0..4=[23,34,71,89,103]；同320观测父/新确定性均HOLD，平均HOLD概率0.309289→0.342991；HOLD可保留自动攻击，不能单凭动作占比判无效。
+
+训练释放后仅同新seed20261019串行2探索短场、非严格因果对照：PPO10HOLD、4.375游戏秒己/敌HP9/9；规则kite12决策（10engine_confirmed+2hold）、5.089286秒HP9/27，均low_health_safety_exit/truncated，exit0、无fallback/冲突/error/残留。源哈希/初始frame18/几何/HP/mask一致，仅武器cooldown不同；pair_initial_state_fully_matched=false、controlled_comparison=false。HP差不能归因于策略更强，不推胜率、泛化或完整比赛结论；未重跑选seed、未额外运行旧策略/BC。
+
+默认run_ppo.cmd仍指原64步actor；384步只是最新非最佳，用`.\run_ppo.cmd --ppo-model artifacts/models/marine_ppo_train384_20261019`显式选择。模型与原始证据不入Git，迁移另带。详见docs/PPO_TRAINING_384_REPORT.md与docs/validation/ppo_training_384.json。下一步诊断预算close异常、训练任务/奖励和BC初始化，标准化含cooldown初态后再小对照；P5全面验收、规模训练就绪和战斗收益均未建立。

@@ -172,7 +172,7 @@ python -s tools/smoke_micro_env.py --seed 42 --max-game-seconds 8 --game-path 'C
 命令启动真实游戏，输出目录必须不存在。证据及边界见 [P5 PPO报告](docs/PHASE_05_PPO_MVP_REPORT.md)、[共享摘要](docs/validation/micro_ppo_mvp.json)。默认规则与BC入口保持原用途，局部训练不读凭据、不调用LLM。
 
 
-## 2026-10-19 PPO续训与部署最新接续
+## 2026-10-19 PPO64步续训与部署（历史接续）
 
 已从原32步checkpoint续训新增32步→累计64步，policy与Adam状态保留（optimizer step4→8、updates2→4）；父模型/metadata不变。新checkpoint在`artifacts/micro_ppo/p5_ppo_resume_mvp_20261019/model.zip`，NumPy actor在`artifacts/models/marine_ppo_mvp_20261019`；运行环境无需Torch，独立训练环境负责训练与导出。模型与原始证据不入Git，迁移另带。
 
@@ -185,3 +185,18 @@ python -s tools/smoke_micro_env.py --seed 42 --max-game-seconds 8 --game-path 'C
 ```
 
 `--total-timesteps`是本次增量、需为32倍数；示例成功后累计384步，恢复optimizer但不承诺完整RNG复演。新训练后按[续训部署报告](docs/PHASE_05_PPO_DEPLOY_MVP_REPORT.md)导出actor，再用`--ppo-model`选新目录。完整事实及边界见该报告和[共享摘要](docs/validation/micro_ppo_deploy_mvp.json)。下一步增加有限训练预算、诊断奖励/动作分布，再少量与规则/BC对比；P5全面验收、规模训练就绪和强度改进均未建立，勿重复旧suite拖延推进。
+
+
+## 2026-10-19 PPO384步最新接续
+
+已唯一新增320真实步，累计64→384（360.344秒），actor更新、保存重载及320真实观测SB3/NumPy导出一致性通过。新checkpoint：`artifacts/micro_ppo/p5_ppo_train384_20261019/model.zip`；新actor：`artifacts/models/marine_ppo_train384_20261019`。采样21完整marine_dead、另1预算close前5步；完整回报均值-1.498413，未见清晰改善。buffer内系统失败0，但最后budgetclose的worker.log有EOFError且无该局summary/官方Result；训练exit0、异常未入buffer、无SC2残留，关闭边界仍未解决。
+
+训练后仅同新seed20261019串行2探索短场：PPO10HOLD、4.375秒己/敌HP9/9；规则kite5.089286秒HP9/27，均low_health_safety_exit/truncated。初始坐标/HP/frame/mask一致，但武器cooldown不同，不是严格因果对照，不能把HP差归因于策略更强或推出胜率。HOLD保留order可自动攻击；同一320观测父/新actor确定性均HOLD，平均HOLD概率0.309289→0.342991。
+
+`run_ppo.cmd`默认仍是原64步actor，新384步模型是最新而非已证明最佳；显式选择：
+
+```powershell
+.\run_ppo.cmd --ppo-model artifacts/models/marine_ppo_train384_20261019
+```
+
+模型与原始工件不入Git，迁移另带。完整事实、关闭异常与限制见[PPO384报告](docs/PPO_TRAINING_384_REPORT.md)和[共享摘要](docs/validation/ppo_training_384.json)。下一步诊断预算close、训练任务/奖励及BC初始化，标准化含cooldown的初态后再小对照；本轮不追加游戏或改奖励。P5全面验收、规模训练就绪和强度收益未建立。
