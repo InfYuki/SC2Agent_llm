@@ -73,6 +73,13 @@ class MicroEnvBot(ScenarioBot):
         own_hp = 0.0 if dead else effective_health(marine) if marine else None
         enemy_hp = sum(effective_health(enemies[tag]) for tag in self._enemy_tags - self._dead_enemy_tags) if not unseen else None
         info = dict(reason=reason, next_observation_valid=ctx is not None,
+                    task=getattr(self.options, "training_task", None), reward_scale=45.0,
+                    observed_enemies=[dict(type_id=enemies[tag].type_id.value,
+                                           type_name=enemies[tag].type_id.name,
+                                           health=float(enemies[tag].health),
+                                           health_max=float(enemies[tag].health_max),
+                                           ground_range=float(enemies[tag].ground_range))
+                                      for tag in sorted(self._enemy_tags & enemies.keys())],
                     reward_version=REWARD_VERSION, own_effective_hp=own_hp,
                     enemy_effective_hp=enemy_hp, rollout_discard=bool(unseen or (marine is None and not dead)),
                     provenance="real-sc2-external-action", expert_labels=False,

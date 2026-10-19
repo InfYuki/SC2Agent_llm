@@ -206,3 +206,11 @@ python -s tools/smoke_micro_env.py --seed 42 --max-game-seconds 8 --game-path 'C
 `tools/train_micro_ppo.py --init-bc artifacts/models/marine_bc_mvp_20261018_seed42`可将BC三层actor迁移到新PPO；critic/optimizer新建，与`--resume`互斥。唯一真实新训练32步（累计0→32，非384→416），输出`artifacts/micro_ppo/p5_bc_warmstart_20261019`；训练前82条logits/概率/动作parity成功、BC原hash不变，更新后同82条argmax未变但概率有变化。后续可`--resume`该目录，保留BC来源。
 
 独立actor`artifacts/models/marine_ppo_bc_warmstart_20261019`已导出并保留BC来源。显式运行`.\run_ppo.cmd --ppo-model artifacts/models/marine_ppo_bc_warmstart_20261019`；默认仍原64步模型，旧384步模型保留。唯一部署12决策actions0..4=`[0,3,4,3,2]`，5.044643秒lowHP退出、己/敌9/21；呈现BC式多动作，未做严格对照、不推强度或32步训练收益。budget-close的第三自动reset空局仍EOFError，未入buffer且无SC2残留。详见[BC warm-start报告](docs/PHASE_05_BC_WARMSTART_MVP_REPORT.md)与[共享摘要](docs/validation/ppo_bc_warmstart_mvp.json)。下一步优先近战/射程差可学习任务与小对照，不盲目增加镜像Marine步数；关闭协议与cooldown标准化待办。
+
+## 2026-10-19 近战任务BC初始化PPO128步
+
+已把scenario/distance/时间上限贯穿训练链路，唯一新BC初始化训练0→128（非Marine checkpoint换任务resume）：marine-vs-zergling、名义距6/满HP1v1/12秒/8loops/scale45；真实敌type105/35HP/range0.10009765625，奖励按真实HP差含自然回血。169.688秒、9完整enemy_dead（己10或15HP）+末局3步budgetclose；finite actor更新、reload误差0、128真实obs SB3/NumPy parity动作全同。关闭末局仍EOFError/Traceback，无summary/官方结局、未形成buffer故障，结束无SC2/worker残留。
+
+checkpoint `artifacts/micro_ppo/p5_melee_bc128_20261019/model.zip`；NumPy actor `artifacts/models/marine_ppo_melee_bc128_20261019`，producer保留BC和近战task。显式`.\run_ppo.cmd --ppo-model artifacts/models/marine_ppo_melee_bc128_20261019`选用；默认仍原64步actor，工件Git忽略需另带。继续本近战checkpoint用`--resume`继承task，冲突覆盖拒绝。
+
+仅2局同seed20261019探索：PPO/规则均14决策、6.116071秒enemy_dead、己10HP，动作分别[0,2,2,0,10]/[0,3,2,0,9]。初ready距3.134765625（出生名义距6），cooldown .52783203125/.417236328125不同，无严格对照；同128训练obs原BC/新actor argmax零变化，不推训练收益或胜率。详见[近战报告](docs/PHASE_05_MELEE_PPO_MVP_REPORT.md)与[共享摘要](docs/validation/ppo_melee_mvp.json)。下一步budgetclose、初态标准化及有限独立比较；P5全面验收/规模就绪未建立。

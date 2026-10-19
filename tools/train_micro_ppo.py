@@ -14,6 +14,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from envs.sc2_micro_env import SCENARIOS, training_task
 
 try:
     import numpy as np
@@ -156,6 +157,22 @@ def resume_checkpoint(source):
     return checkpoint, metadata, digest
 
 
+def resolve_training_task(metadata=None, **requested):
+    """Inherit the recorded task; legacy checkpoints mean the old Marine task."""
+    inherited = metadata.get("task") if metadata is not None else None
+    baseline = training_task() if inherited is None else training_task(**{
+        key: inherited[key] for key in ("scenario", "distance", "max_game_seconds", "map_name")})
+    if inherited is not None and inherited != baseline:
+        raise ValueError("Incompatible resume task metadata")
+    values = {}
+    for key in ("scenario", "distance", "max_game_seconds", "map_name"):
+        value = requested.get(key)
+        if metadata is not None and value is not None and value != baseline[key]:
+            raise ValueError(f"Resume inherits task {key}={baseline[key]}; conflicting override")
+        values[key] = baseline[key] if value is None else value
+    return training_task(**values)
+
+
 def probe(model, obs, mask):
     with torch.no_grad():
         tensor, _ = model.policy.obs_to_tensor(obs)
@@ -196,6 +213,10 @@ class TraceCallback(BaseCallback):
         if not mask[action]:
             raise ValueError("Training selected a masked action")
         row = dict(step=self.num_timesteps, episode_id=episode_id,
+                   task=info.get("task"), own_effective_hp=info.get("own_effective_hp"),
+                   enemy_effective_hp=info.get("enemy_effective_hp"),
+                   own_hp_loss=info.get("own_hp_loss"), enemy_hp_loss=info.get("enemy_hp_loss"),
+                   reward_scale=info.get("reward_scale"), terminal_reward=info.get("terminal_reward"),
                    decision_id=info["decision_id"], frame=info["frame"],
                    previous_frame=info.get("previous_frame"),
                    actual_game_loops=info.get("actual_game_loops"),
@@ -220,7 +241,7 @@ class TraceCallback(BaseCallback):
 
 
 def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft II",
-          map_name="Ancient Cistern LE", max_game_seconds=8, seed=None,
+          map_name=None, max_game_seconds=None, scenario=None, distance=None, seed=None,
           total_timesteps=32, n_steps=None, batch_size=None, n_epochs=None,
           learning_rate=None, resume=None, init_bc=None, init_bc_dataset=None, environment=None):
     if resume is not None and init_bc is not None:
@@ -228,6 +249,8 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
     if init_bc_dataset is not None and init_bc is None:
         raise ValueError("--init-bc-dataset requires --init-bc")
     parent = resume_checkpoint(resume) if resume is not None else None
+    task = resolve_training_task(parent[1] if parent else None, map_name=map_name,
+                                 max_game_seconds=max_game_seconds, scenario=scenario, distance=distance)
     requested = dict(n_steps=n_steps, batch_size=batch_size, n_epochs=n_epochs,
                      learning_rate=learning_rate)
     defaults = dict(n_steps=32, batch_size=16, n_epochs=2, learning_rate=3e-4)
@@ -250,8 +273,9 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
     output.mkdir(parents=True, exist_ok=False)
     started = time.monotonic()
     env = environment if environment is not None else GymSC2MicroEnv(
-        worker_python=worker_python, game_path=game_path, map_name=map_name,
-        max_game_seconds=max_game_seconds, output_root=output / "episodes")
+        worker_python=worker_python, game_path=game_path, map_name=task["map_name"],
+        max_game_seconds=task["max_game_seconds"], scenario=task["scenario"],
+        distance=task["distance"], output_root=output / "episodes")
     trace = TraceCallback(env, output / "training_transitions.jsonl")
     environment_closed = False
     try:
@@ -283,6 +307,7 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
                                   model.policy.optimizer.state.values() if "step" in state]
         if init_bc is not None:
             write_json(output / "initialization_report.json", dict(
+                task=task,
                 initialization="bc_actor", initial_timesteps=initial_steps,
                 initial_policy_sha256=initial_policy_hash, initial_actor_sha256=initial_actor_hash,
                 optimizer_steps_before=optimizer_steps_before, bc_initialization=bc_initialization))
@@ -322,6 +347,7 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
                     != bc_initialization["weights_sha256"]):
                 raise ValueError("Original BC files changed during training")
         metadata = dict(
+            task=task,
             format="marine-maskable-ppo-sb3-v1", feature_version="marine-16-v1",
             action_version="marine-5-v1", decision_game_loops=8,
             reward_version="effective-hp-delta-45-terminal-1-v1",
@@ -348,6 +374,7 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
             engineering_prototype=True, combat_strength_evaluated=False,
             deployment_exported=False)
         report = dict(
+            task=task,
             status="success", actual_steps=model.num_timesteps,
             initial_timesteps=initial_steps, additional_steps=model.num_timesteps - initial_steps,
             cumulative_timesteps=model.num_timesteps, initial_updates=initial_updates,
@@ -399,8 +426,10 @@ def main():
     parser.add_argument("output", type=Path)
     parser.add_argument("--worker-python", type=Path, required=True)
     parser.add_argument("--game-path", default=r"C:\Program Files (x86)\StarCraft II")
-    parser.add_argument("--map", default="Ancient Cistern LE")
-    parser.add_argument("--max-game-seconds", type=float, default=8)
+    parser.add_argument("--map", help="New run default: Ancient Cistern LE; resume inherits task")
+    parser.add_argument("--max-game-seconds", type=float, help="New run default: 8; resume inherits task")
+    parser.add_argument("--scenario", choices=SCENARIOS, help="New run default: marine-vs-marine; resume inherits task")
+    parser.add_argument("--distance", type=float, help="New run default: 6; resume inherits task")
     initialization = parser.add_mutually_exclusive_group()
     initialization.add_argument("--resume", type=Path, help="Parent model directory or .zip with adjacent metadata.json; inherits hyperparameters")
     initialization.add_argument("--init-bc", type=Path, help="Initialize a new PPO actor from a validated BC directory")
@@ -416,6 +445,7 @@ def main():
     print(json.dumps(train(
         args.output, worker_python=args.worker_python, game_path=args.game_path,
         map_name=args.map, max_game_seconds=args.max_game_seconds, seed=args.seed,
+        scenario=args.scenario, distance=args.distance,
         total_timesteps=args.total_timesteps, n_steps=args.n_steps,
         batch_size=args.batch_size, n_epochs=args.n_epochs,
         learning_rate=args.learning_rate, resume=args.resume, init_bc=args.init_bc,

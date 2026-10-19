@@ -20,6 +20,7 @@ class GymSC2MicroEnv(gym.Env):
     def __init__(self, *, bridge=None, **bridge_kwargs):
         super().__init__()
         self.bridge = bridge if bridge is not None else SC2MicroEnv(**bridge_kwargs)
+        self.task = getattr(self.bridge, "task", None)
         self.observation_space = gym.spaces.Box(-1.0, 1.0, (16,), dtype=np.float32)
         self.action_space = gym.spaces.Discrete(5)
         self._absorbing = False

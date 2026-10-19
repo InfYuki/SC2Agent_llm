@@ -238,3 +238,13 @@ Gymnasium适配与MaskablePPO最小训练已过：32真实步、2完整死亡epi
 actor`artifacts/models/marine_ppo_bc_warmstart_20261019`（weights SHA bccce3aa15dfda49518f8dd0bbd5a2b9949a3ed38d814291a3ad38ba9b876ec1），checkpoint SHA d81fe552b3b2a126283d3fb38b31aa8e86e69d506bd842611213ef0f9af47c9e；同82观测导出概率误差5.9605e-8、动作全同。BC/初始PPO/更新PPO argmax均[4,17,28,6,27]、0变化，概率最大更新.100795686。可用--resume该32步checkpoint继承BC来源，不重复--init-bc。
 
 唯一部署`artifacts/runs/p5_bc_warmstart_ppo_20261019`，单Marine镜像distance6/seed20261019/max20、exit0；12推理/owned，actions[0,3,4,3,2]、10engine_confirmed+2hold，5.044643秒low_health_safety_exit、己/敌9/21；mask/8loops合法、无fallback/冲突/error、全非专家。初frame17、己cooldown5.69018555未标准化；本轮没有BC游戏或严格对照。知识迁移与多动作部署成立，不能从历史randomPPO全HOLD差异推出强度或32步训练收益。显式`.\run_ppo.cmd --ppo-model artifacts/models/marine_ppo_bc_warmstart_20261019`选用；模型/原始工件迁移另带。报告docs/PHASE_05_BC_WARMSTART_MVP_REPORT.md与docs/validation/ppo_bc_warmstart_mvp.json。下一步优先近战/射程差可学习任务和小对照，不盲目堆镜像Marine训练；预算close/cooldown标准化待办。P5全面验收、规模训练就绪与战斗收益未建立。
+
+## 2026-10-19 近战训练接续
+
+最新完成独立BC初始化近战PPO0→128，原BC/随机PPO384/BCwarmstart32及默认64actor保留。任务marine-vs-zergling-v6/名义距6/满HP1v1/12秒/8loops/rewardscale45，task贯穿env/Gym/worker/trainer并保存metadata；resume继承且拒绝任务冲突，旧无task元数据按Marine/6/8解释。真实enemy type105、35HPmax、近战range0.10009765625；自然回血signedloss原样按真实HP计算。
+
+新run `artifacts/micro_ppo/p5_melee_bc128_20261019`，128步169.688秒、updates0→8、Adam空→step16、finite actor更新/reload概率误差0。9完整enemy_dead各13/14步、己10或15HP；另3步部分局budgetclose仍EOFError/Traceback且无summary/官方结局，buffer failure/discard0、无SC2/worker残留。128行mask/8loops/相邻真实HP损失与奖励复核过；128已有真obs导出parity最大1.0477379e-9、动作全同。checkpoint SHA177d1b91f420acfbdfa39e0ffc3d18b53975b23a75f394f9fe5122177b9158ea；actor `artifacts/models/marine_ppo_melee_bc128_20261019`，weights SHA4f22c0f05e428600183983244b0be2e48a024326fa1a8b404341f95d3681f0d2，producer保留BC与task。
+
+唯一2短探索PPO/规则同seed20261019，均14决策/6.116071秒enemy_dead/己10HP；PPO actions[0,2,2,0,10]、规则[0,3,2,0,9]，无fallback/冲突/error。名义距6而ready距3.134765625，cooldown .52783203125/.417236328125不同，不能严格对照/推胜率；同128训练obs原BC与新actor argmax零变化，不能推128步收益。默认run_ppo仍64步，新actor显式--ppo-model选择，模型/证据Git忽略需另带；继续新近战checkpoint用--resume，不再initBC或换任务。
+
+共享docs/PHASE_05_MELEE_PPO_MVP_REPORT.md与docs/validation/ppo_melee_mvp.json。仅1项实现任务契约检查+compile/CLI、唯一128步训练+2探索，无外部模型/安装/凭据/旧suite。下一步budget-close协议、初态cooldown标准化及有限独立比较；P5全面验收/规模就绪/真实训练时间截断与系统崩溃/收益未建立。

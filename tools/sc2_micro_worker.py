@@ -19,6 +19,7 @@ from bot.micro import DECISION_LOOPS
 from bot.micro_env_bot import MicroEnvBot, PROTOCOL
 from bot.telemetry import Telemetry
 from tools.run_micro_scenario import Opponent
+from envs.sc2_micro_env import SCENARIOS, training_task
 
 
 def main():
@@ -29,16 +30,20 @@ def main():
     parser.add_argument("--game-path", required=True)
     parser.add_argument("--max-game-seconds", type=float, default=20)
     parser.add_argument("--map", default="Ancient Cistern LE")
+    parser.add_argument("--scenario", choices=SCENARIOS, default="marine-vs-marine")
+    parser.add_argument("--distance", type=float, default=6.0)
     args = parser.parse_args()
     if not 0 < args.max_game_seconds <= 120:
         parser.error("max-game-seconds must be in (0,120]")
+    task = training_task(scenario=args.scenario, distance=args.distance,
+                         max_game_seconds=args.max_game_seconds, map_name=args.map)
     os.environ["SC2PATH"] = str(Path(args.game_path).resolve())
     os.chdir(ROOT)
     connection = Client((os.environ["SC2_MICRO_HOST"], int(os.environ["SC2_MICRO_PORT"])),
                         family="AF_INET", authkey=bytes.fromhex(os.environ["SC2_MICRO_AUTHKEY"]))
     # Parent owns the episode root and worker.log; Telemetry owns a new child.
     telemetry = Telemetry(Path(args.output_dir) / "game")
-    options = SimpleNamespace(**vars(args), scenario="marine-vs-marine", distance=6.0,
+    options = SimpleNamespace(**vars(args), training_task=task,
                               enemy_count=1, second_distance=8.0, second_enemy_health_fraction=0.5,
                               health_fraction=1.0, enemy_health_fraction=1.0, enemy_hidden=False,
                               data_split=None, expert="kite", policy="external", mode="micro_env",
@@ -47,13 +52,14 @@ def main():
     try:
         bot = MicroEnvBot(options, telemetry, connection, args.episode_id)
         settings = maps.get(args.map)
-        telemetry.write_json("manifest.json", dict(config=vars(args), protocol=PROTOCOL,
+        telemetry.write_json("manifest.json", dict(config=vars(args), task=task, protocol=PROTOCOL,
             provenance="real-sc2-external-action", expert_labels=False,
             project_commit=run_local.git("rev-parse", "HEAD"), python=sys.executable,
             map_sha256=hashlib.sha256(Path(settings.path).read_bytes()).hexdigest(),
             decision_game_loops=DECISION_LOOPS))
         with recover_completed_game(telemetry, expected_players=2):
-            result = run_game(settings, [Bot(Race.Terran, bot), Bot(Race.Terran, Opponent())],
+            enemy_race = Race.Zerg if args.scenario == "marine-vs-zergling" else Race.Terran
+            result = run_game(settings, [Bot(Race.Terran, bot), Bot(enemy_race, Opponent())],
                               realtime=False, random_seed=args.seed,
                               save_replay_as=str(telemetry.output / "game.SC2Replay"))
         telemetry.finish(result)

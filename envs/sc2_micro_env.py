@@ -5,6 +5,7 @@ system failures always carry rollout_discard=True and must not train a policy.
 """
 from multiprocessing.connection import Listener
 import numbers
+import math
 import os
 from pathlib import Path
 import secrets
@@ -16,16 +17,38 @@ import uuid
 from envs.micro_ipc import HOLD_MASK, PROTOCOL, message, validate_state
 
 ROOT = Path(__file__).resolve().parents[1]
+SCENARIOS = ("marine-vs-marine", "marine-vs-zergling")
+
+
+def training_task(*, scenario="marine-vs-marine", distance=6.0,
+                  max_game_seconds=8.0, map_name="Ancient Cistern LE"):
+    """Serializable task contract; HP deltas use real unit HP, divided by 45."""
+    distance, max_game_seconds = float(distance), float(max_game_seconds)
+    if scenario not in SCENARIOS:
+        raise ValueError("Unsupported training scenario")
+    if not math.isfinite(distance) or not 0 < distance <= 10:
+        raise ValueError("distance must be finite and in (0,10]")
+    if not math.isfinite(max_game_seconds) or not 0 < max_game_seconds <= 120:
+        raise ValueError("max-game-seconds must be finite and in (0,120]")
+    return dict(scenario=scenario, scenario_version=scenario + "-v6", distance=distance,
+                max_game_seconds=max_game_seconds, map_name=map_name,
+                friendly_count=1, enemy_count=1, health_fraction=1.0,
+                enemy_health_fraction=1.0, enemy_hidden=False,
+                decision_game_loops=8, reward_scale=45.0,
+                reward_version="effective-hp-delta-45-terminal-1-v1")
 
 
 class SC2MicroEnv:
     def __init__(self, *, game_path=r"C:\Program Files (x86)\StarCraft II",
                  map_name="Ancient Cistern LE", max_game_seconds=20,
-                 startup_timeout=90, step_timeout=30, output_root=None, worker_python=None):
+                 startup_timeout=90, step_timeout=30, output_root=None, worker_python=None,
+                 scenario="marine-vs-marine", distance=6.0):
         self.game_path = str(game_path)
         self.worker_python = str(worker_python or sys.executable)
         self.map_name = map_name
         self.max_game_seconds = float(max_game_seconds)
+        self.task = training_task(scenario=scenario, distance=distance,
+                                  max_game_seconds=max_game_seconds, map_name=map_name)
         self.startup_timeout = float(startup_timeout)
         self.step_timeout = float(step_timeout)
         if min(self.max_game_seconds, self.startup_timeout, self.step_timeout) <= 0:
@@ -38,7 +61,7 @@ class SC2MicroEnv:
     def reset(self, *, seed=42, options=None):
         self.close()
         if options:
-            raise ValueError("MVP uses one fixed 1v1 Marine scenario; options are unsupported")
+            raise ValueError("Training task is fixed at construction; reset options are unsupported")
         self.episode_id = uuid.uuid4().hex
         self.output_dir = self.output_root / self.episode_id
         self.output_dir.mkdir(parents=True, exist_ok=False)
@@ -51,7 +74,8 @@ class SC2MicroEnv:
         command = [self.worker_python, "-s", "-u", str(ROOT / "tools" / "sc2_micro_worker.py"),
                    "--episode-id", self.episode_id, "--seed", str(int(seed)),
                    "--output-dir", str(self.output_dir), "--game-path", self.game_path,
-                   "--max-game-seconds", str(self.max_game_seconds), "--map", self.map_name]
+                   "--max-game-seconds", str(self.max_game_seconds), "--map", self.map_name,
+                   "--scenario", self.task["scenario"], "--distance", str(self.task["distance"])]
         self._log = (self.output_dir / "worker.log").open("w", encoding="utf-8")
         started = time.monotonic()
         try:
@@ -83,6 +107,8 @@ class SC2MicroEnv:
         return packet
 
     def _info(self, packet):
+        if packet["info"].get("task") != self.task:
+            raise ValueError("Worker task does not match the requested training task")
         return dict(packet["info"], episode_id=self.episode_id, decision_id=packet["decision_id"],
                     frame=packet["frame"], unit_slot=0, action_mask=tuple(packet["mask"]),
                     output_dir=str(self.output_dir))

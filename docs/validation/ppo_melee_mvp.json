@@ -1,0 +1,923 @@
+{
+  "date": "2026-10-19",
+  "status": "bounded_melee_bc128_mvp_complete",
+  "budget": {
+    "training_runs": 1,
+    "real_training_steps": 128,
+    "ppo_exploration_games": 1,
+    "rule_exploration_games": 1,
+    "additional_old_model_games": 0
+  },
+  "task": {
+    "scenario": "marine-vs-zergling",
+    "scenario_version": "marine-vs-zergling-v6",
+    "distance": 6.0,
+    "max_game_seconds": 12.0,
+    "map_name": "Ancient Cistern LE",
+    "friendly_count": 1,
+    "enemy_count": 1,
+    "health_fraction": 1.0,
+    "enemy_health_fraction": 1.0,
+    "enemy_hidden": false,
+    "decision_game_loops": 8,
+    "reward_scale": 45.0,
+    "reward_version": "effective-hp-delta-45-terminal-1-v1"
+  },
+  "initialization": {
+    "task": {
+      "scenario": "marine-vs-zergling",
+      "scenario_version": "marine-vs-zergling-v6",
+      "distance": 6.0,
+      "max_game_seconds": 12.0,
+      "map_name": "Ancient Cistern LE",
+      "friendly_count": 1,
+      "enemy_count": 1,
+      "health_fraction": 1.0,
+      "enemy_health_fraction": 1.0,
+      "enemy_hidden": false,
+      "decision_game_loops": 8,
+      "reward_scale": 45.0,
+      "reward_version": "effective-hp-delta-45-terminal-1-v1"
+    },
+    "initialization": "bc_actor",
+    "initial_timesteps": 0,
+    "initial_policy_sha256": "63433a6089338758c2263e43d354088d718357314401f71b9c130f27fda18e51",
+    "initial_actor_sha256": "f41c062cfc284803dd3f6518b6babdb6f991d2cfe03219b8e7ac11cb44ece043",
+    "optimizer_steps_before": []
+  },
+  "bc_initialization": {
+    "path": "C:\\code\\SC2Agent_llm\\artifacts\\models\\marine_bc_mvp_20261018_seed42",
+    "metadata_sha256": "1223a8341b2f5e5b1b98cb54fd6062d5cdfa31d6907c9e9086479d97e0d253fc",
+    "weights_sha256": "e36cba313c1d8e1731573595b1b975316e1522db3af8d1a4abf4f21e405c2dcf",
+    "dataset": "C:\\code\\SC2Agent_llm\\artifacts\\micro_datasets\\p3_v7_formal_20261018_115352_dataset",
+    "dataset_sha256": "6558232fea2386e1bef792b50e728b7f5e13ff6a47498837538dd4b0f91aee9e",
+    "dataset_metadata_sha256": "48df293d34accad041560193bf05c552b81c9c81a1515b7d975ce4c08a2611a5",
+    "parity_samples": 82,
+    "logits_max_abs_error": 2.86102294921875e-06,
+    "masked_probability_max_abs_error": 3.8743019104003906e-07,
+    "masked_actions_equal": true,
+    "critic_unchanged": true,
+    "optimizer_state_empty": true,
+    "initial_actor_sha256": "f41c062cfc284803dd3f6518b6babdb6f991d2cfe03219b8e7ac11cb44ece043",
+    "interpretation": "Frozen observations check transfer only; not expert PPO rollouts or formal 1000-observation acceptance."
+  },
+  "training": {
+    "task": {
+      "scenario": "marine-vs-zergling",
+      "scenario_version": "marine-vs-zergling-v6",
+      "distance": 6.0,
+      "max_game_seconds": 12.0,
+      "map_name": "Ancient Cistern LE",
+      "friendly_count": 1,
+      "enemy_count": 1,
+      "health_fraction": 1.0,
+      "enemy_health_fraction": 1.0,
+      "enemy_hidden": false,
+      "decision_game_loops": 8,
+      "reward_scale": 45.0,
+      "reward_version": "effective-hp-delta-45-terminal-1-v1"
+    },
+    "status": "success",
+    "actual_steps": 128,
+    "initial_timesteps": 0,
+    "additional_steps": 128,
+    "cumulative_timesteps": 128,
+    "initial_updates": 0,
+    "initial_policy_sha256": "63433a6089338758c2263e43d354088d718357314401f71b9c130f27fda18e51",
+    "initial_actor_sha256": "f41c062cfc284803dd3f6518b6babdb6f991d2cfe03219b8e7ac11cb44ece043",
+    "initialization": "bc_actor",
+    "original_bc_unchanged": true,
+    "parent_checkpoint": null,
+    "hyperparameter_source": "CLI/defaults",
+    "optimizer_steps_before": [],
+    "optimizer_steps_after": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
+    ],
+    "completed_episodes": [
+      {
+        "episode_id": "cceb36680a57498c87f3ef12fe73c0d6",
+        "steps": 14,
+        "reward": 1.000000020954758,
+        "reason": "enemy_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\episodes\\cceb36680a57498c87f3ef12fe73c0d6"
+      },
+      {
+        "episode_id": "df8ee4184d4f4566928683e842cc86ad",
+        "steps": 14,
+        "reward": 1.1111111175268888,
+        "reason": "enemy_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\episodes\\df8ee4184d4f4566928683e842cc86ad"
+      },
+      {
+        "episode_id": "4fca1afa06234e4c882d3c4fbd51f6c3",
+        "steps": 14,
+        "reward": 0.9999999958090484,
+        "reason": "enemy_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\episodes\\4fca1afa06234e4c882d3c4fbd51f6c3"
+      },
+      {
+        "episode_id": "9afac31755204ce29d073b2db6b20ac0",
+        "steps": 14,
+        "reward": 0.9999999990686774,
+        "reason": "enemy_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\episodes\\9afac31755204ce29d073b2db6b20ac0"
+      },
+      {
+        "episode_id": "0a150de49b9c49d6b0558051aca32e5a",
+        "steps": 14,
+        "reward": 0.9999999958090484,
+        "reason": "enemy_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\episodes\\0a150de49b9c49d6b0558051aca32e5a"
+      },
+      {
+        "episode_id": "971e44758c5f46deb2d238e53bdb29ba",
+        "steps": 14,
+        "reward": 0.9999999878928065,
+        "reason": "enemy_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\episodes\\971e44758c5f46deb2d238e53bdb29ba"
+      },
+      {
+        "episode_id": "78cee3ea9a7b4769a0137d1a90503df3",
+        "steps": 14,
+        "reward": 1.000000009778887,
+        "reason": "enemy_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\episodes\\78cee3ea9a7b4769a0137d1a90503df3"
+      },
+      {
+        "episode_id": "106f02d31f27427da5a535a73866ea86",
+        "steps": 13,
+        "reward": 1.1111111105419695,
+        "reason": "enemy_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\episodes\\106f02d31f27427da5a535a73866ea86"
+      },
+      {
+        "episode_id": "5320d6e7f7494c52acc38bb7edc0657a",
+        "steps": 14,
+        "reward": 0.9999999799765646,
+        "reason": "enemy_dead",
+        "time_limit_truncated": false,
+        "official_close_confirmed": true,
+        "worker_close": {
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        },
+        "output_dir": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\episodes\\5320d6e7f7494c52acc38bb7edc0657a"
+      }
+    ],
+    "observed_episode_count": 10,
+    "reward_sum": 9.239887156523764,
+    "updates": 8,
+    "parameters_finite": true,
+    "actor_parameters_changed": true,
+    "reload": {
+      "probability_max_abs_error": 0.0,
+      "masked_action_equal": true,
+      "action": 2,
+      "observation": [
+        1.0,
+        0.0,
+        0.16985677182674408,
+        0.26123046875,
+        0.0,
+        0.26123046875,
+        1.0,
+        0.0,
+        0.0,
+        0.26123046875,
+        0.0,
+        1.0,
+        0.0,
+        0.0625,
+        0.08935546875,
+        0.0
+      ],
+      "mask": [
+        false,
+        false,
+        true,
+        true,
+        true
+      ],
+      "probabilities": [
+        0.0,
+        0.0,
+        0.9998605251312256,
+        1.9062766920541208e-09,
+        0.00013941084034740925
+      ]
+    },
+    "training_metrics": {
+      "train/learning_rate": 0.0003,
+      "train/entropy_loss": -0.00037059732858324423,
+      "train/policy_gradient_loss": 2.9336661100387573e-08,
+      "train/value_loss": 0.2146107517182827,
+      "train/approx_kl": 1.525677362224087e-10,
+      "train/clip_fraction": 0.0,
+      "train/loss": 0.10778570175170898,
+      "train/explained_variance": -0.6597781181335449,
+      "train/n_updates": 8.0,
+      "train/clip_range": 0.2
+    },
+    "wall_seconds": 169.68799999996554,
+    "rollout_trace": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\training_transitions.jsonl",
+    "checkpoint_sha256": "177d1b91f420acfbdfa39e0ffc3d18b53975b23a75f394f9fe5122177b9158ea",
+    "interpretation": "Engineering update and reload only; no combat-strength evaluation.",
+    "parameter_max_abs_change": 0.004950175527483225,
+    "actor_parameter_max_abs_change": 0.00127507746219635,
+    "hyperparameters": {
+      "total_timesteps": 128,
+      "n_steps": 32,
+      "batch_size": 16,
+      "n_epochs": 2,
+      "learning_rate": 0.0003,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "clip_range": 0.2,
+      "device": "cpu"
+    }
+  },
+  "rollout_validation": {
+    "steps": 128,
+    "all_masks_legal": true,
+    "all_actual_loops_8": true,
+    "raw_reward_max_abs_error": 0.0,
+    "trace_float32_reward_max_abs_error": 3.178914398382915e-08,
+    "system_failures": 0,
+    "discarded_rows": 0,
+    "expert_labels": 0,
+    "command_conflicts": 0,
+    "sampled_actions": [
+      0,
+      24,
+      20,
+      0,
+      84
+    ],
+    "command_results": {
+      "engine_confirmed": 39,
+      "hold": 84,
+      "order_preserved": 5
+    },
+    "observed_enemy_types": [
+      "ZERGLING"
+    ],
+    "observed_enemy_type_ids": [
+      105
+    ],
+    "observed_enemy_health_max": [
+      35.0
+    ],
+    "observed_enemy_ground_ranges": [
+      0.10009765625
+    ],
+    "enemy_regeneration_rows": 55,
+    "episode_boundaries": [
+      {
+        "episode_id": "0a150de49b9c49d6b0558051aca32e5a",
+        "steps": 14,
+        "terminated": true,
+        "truncated": false,
+        "reason": "enemy_dead",
+        "own_final_hp": 10.0,
+        "enemy_final_hp": 0,
+        "worker_log_anomalies": [],
+        "summary_available": true,
+        "scenario_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 137,
+          "game_seconds": 6.116071428571429
+        }
+      },
+      {
+        "episode_id": "106f02d31f27427da5a535a73866ea86",
+        "steps": 13,
+        "terminated": true,
+        "truncated": false,
+        "reason": "enemy_dead",
+        "own_final_hp": 15.0,
+        "enemy_final_hp": 0,
+        "worker_log_anomalies": [],
+        "summary_available": true,
+        "scenario_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 130,
+          "game_seconds": 5.803571428571429
+        }
+      },
+      {
+        "episode_id": "4fca1afa06234e4c882d3c4fbd51f6c3",
+        "steps": 14,
+        "terminated": true,
+        "truncated": false,
+        "reason": "enemy_dead",
+        "own_final_hp": 10.0,
+        "enemy_final_hp": 0,
+        "worker_log_anomalies": [],
+        "summary_available": true,
+        "scenario_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 138,
+          "game_seconds": 6.1607142857142865
+        }
+      },
+      {
+        "episode_id": "5320d6e7f7494c52acc38bb7edc0657a",
+        "steps": 14,
+        "terminated": true,
+        "truncated": false,
+        "reason": "enemy_dead",
+        "own_final_hp": 10.0,
+        "enemy_final_hp": 0,
+        "worker_log_anomalies": [],
+        "summary_available": true,
+        "scenario_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 138,
+          "game_seconds": 6.1607142857142865
+        }
+      },
+      {
+        "episode_id": "78cee3ea9a7b4769a0137d1a90503df3",
+        "steps": 14,
+        "terminated": true,
+        "truncated": false,
+        "reason": "enemy_dead",
+        "own_final_hp": 10.0,
+        "enemy_final_hp": 0,
+        "worker_log_anomalies": [],
+        "summary_available": true,
+        "scenario_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 137,
+          "game_seconds": 6.116071428571429
+        }
+      },
+      {
+        "episode_id": "7a80245835cd412fa2f0da939736a542",
+        "steps": 3,
+        "terminated": false,
+        "truncated": false,
+        "reason": null,
+        "own_final_hp": 40.0,
+        "enemy_final_hp": 29.205078125,
+        "worker_log_anomalies": [
+          "EOFError",
+          "Traceback"
+        ],
+        "summary_available": false,
+        "scenario_result": null
+      },
+      {
+        "episode_id": "971e44758c5f46deb2d238e53bdb29ba",
+        "steps": 14,
+        "terminated": true,
+        "truncated": false,
+        "reason": "enemy_dead",
+        "own_final_hp": 10.0,
+        "enemy_final_hp": 0,
+        "worker_log_anomalies": [],
+        "summary_available": true,
+        "scenario_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 138,
+          "game_seconds": 6.1607142857142865
+        }
+      },
+      {
+        "episode_id": "9afac31755204ce29d073b2db6b20ac0",
+        "steps": 14,
+        "terminated": true,
+        "truncated": false,
+        "reason": "enemy_dead",
+        "own_final_hp": 10.0,
+        "enemy_final_hp": 0,
+        "worker_log_anomalies": [],
+        "summary_available": true,
+        "scenario_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 137,
+          "game_seconds": 6.116071428571429
+        }
+      },
+      {
+        "episode_id": "cceb36680a57498c87f3ef12fe73c0d6",
+        "steps": 14,
+        "terminated": true,
+        "truncated": false,
+        "reason": "enemy_dead",
+        "own_final_hp": 10.0,
+        "enemy_final_hp": 0,
+        "worker_log_anomalies": [],
+        "summary_available": true,
+        "scenario_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 137,
+          "game_seconds": 6.116071428571429
+        }
+      },
+      {
+        "episode_id": "df8ee4184d4f4566928683e842cc86ad",
+        "steps": 14,
+        "terminated": true,
+        "truncated": false,
+        "reason": "enemy_dead",
+        "own_final_hp": 15.0,
+        "enemy_final_hp": 0,
+        "worker_log_anomalies": [],
+        "summary_available": true,
+        "scenario_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 131,
+          "game_seconds": 5.8482142857142865
+        }
+      }
+    ],
+    "export_parity": {
+      "source": "128 existing real training source_obs+source_mask; no extra games",
+      "rows": 128,
+      "probability_max_abs_error": 1.0477378964424133e-09,
+      "actions_equal": 128,
+      "masked_probability_zero": true
+    },
+    "hp_loss_recomputed_from_consecutive_real_hp": true,
+    "offline_bc_vs_updated_same_128_obs": {
+      "source": "same existing training observations, no games",
+      "bc_action_counts": [
+        0,
+        24,
+        20,
+        0,
+        84
+      ],
+      "updated_action_counts": [
+        0,
+        24,
+        20,
+        0,
+        84
+      ],
+      "changed_actions": 0,
+      "probability_max_abs_change": 0.00018906593322753906,
+      "interpretation": "No independent evaluation or evidence of training benefit."
+    },
+    "sc2_processes_remaining_after_training": 0
+  },
+  "initial_training_state_summary": {
+    "requested_spawn_distance": 6.0,
+    "actual_ready_distances": [
+      2.9501953125,
+      3.134765625,
+      4.4267578125
+    ],
+    "actual_ready_weapon_cooldowns": [
+      0.0,
+      0.091796875,
+      0.133544921875,
+      0.353515625,
+      1.120361328125,
+      1.407958984375,
+      1.464599609375,
+      1.5927734375,
+      2.5478515625,
+      7.44921875
+    ],
+    "initial_hp_full": true,
+    "interpretation": "Spawn spacing is nominal; engine moves/autoattacks before ready. Cooldown not standardized."
+  },
+  "export": {
+    "actor_dir": "artifacts/models/marine_ppo_melee_bc128_20261019",
+    "weights_sha256": "4f22c0f05e428600183983244b0be2e48a024326fa1a8b404341f95d3681f0d2",
+    "source_checkpoint_sha256": "177d1b91f420acfbdfa39e0ffc3d18b53975b23a75f394f9fe5122177b9158ea",
+    "task_provenance_equal": true,
+    "bc_provenance_preserved": true
+  },
+  "behavior": {
+    "games": [
+      {
+        "policy": "ppo",
+        "run_dir": "artifacts\\runs\\p5_melee_ppo_20261019",
+        "scenario": {
+          "version": "marine-vs-zergling-v6",
+          "friendly": "MARINE",
+          "enemy": "ZERGLING",
+          "friendly_position": [
+            82,
+            80
+          ],
+          "enemy_position": [
+            88.0,
+            80
+          ],
+          "enemy_positions": [
+            [
+              88.0,
+              80
+            ]
+          ],
+          "enemy_count": 1,
+          "second_distance": 8.0,
+          "second_enemy_health_fraction": 0.5,
+          "seed": 20261019,
+          "decision_game_loops": 8,
+          "time_limit_seconds": 12.0,
+          "opponent_script": "visible-nearest-attack-v1",
+          "macro": "disabled",
+          "expert": "kite",
+          "requested_distance": 6.0,
+          "health_fraction": 1.0,
+          "enemy_health_fraction": 1.0,
+          "enemy_hidden": false,
+          "split": "train"
+        },
+        "local_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 137,
+          "game_seconds": 6.116071428571429
+        },
+        "initial_observation": {
+          "game_loop": 25,
+          "initialization_confirmed": true,
+          "friendly_tag": 4356308993,
+          "friendly_position": [
+            82.28125,
+            80.0
+          ],
+          "health": 45.0,
+          "visible_enemy_count": 1,
+          "enemy_positions": [
+            [
+              85.416015625,
+              80.0
+            ]
+          ],
+          "enemies": [
+            {
+              "tag": 4356571137,
+              "role": 0,
+              "position": [
+                85.416015625,
+                80.0
+              ],
+              "health": 35.0,
+              "health_max": 35.0,
+              "distance": 3.134765625,
+              "in_range": true
+            }
+          ],
+          "nearest_tag": 4356571137,
+          "weakest_tag": 4356571137,
+          "weapon_cooldown": 0.52783203125,
+          "obs": [
+            1.0,
+            0.0,
+            0.03518880208333333,
+            0.26123046875,
+            0.0,
+            0.26123046875,
+            1.0,
+            0.0,
+            0.0,
+            0.26123046875,
+            0.0,
+            1.0,
+            0.0,
+            0.0625,
+            0.08935546875,
+            0.0
+          ],
+          "mask": [
+            false,
+            false,
+            true,
+            true,
+            true
+          ],
+          "expert_action": 2
+        },
+        "action_counts": [
+          0,
+          2,
+          2,
+          0,
+          10
+        ],
+        "command_results": {
+          "engine_confirmed": 4,
+          "hold": 10
+        },
+        "decisions": 14,
+        "all_masks_legal": true,
+        "all_actual_loops_8": true,
+        "all_nonexpert": true,
+        "summary": {
+          "status": "truncated",
+          "result": "Result.Defeat",
+          "stop_reason": "game_time_limit",
+          "error": null,
+          "counters": {
+            "marines_created": 1,
+            "ppo_inference_decisions": 14,
+            "micro_action_retreat": 2,
+            "micro_decision_steps": 14,
+            "micro_owned_decisions": 14,
+            "command_conflicts": 0,
+            "callbacks": 15,
+            "micro_action_weakest": 2,
+            "micro_action_hold": 10
+          },
+          "game_span_seconds": 5.0,
+          "wall_span_seconds": 0.396299599960912,
+          "game_to_wall_ratio": 12.616717252536116,
+          "on_step_p50_seconds": 0.0018362000118941069,
+          "on_step_p95_seconds": 0.0023489000159315765,
+          "on_step_p99_seconds": 0.0023489000159315765,
+          "on_step_max_seconds": 0.0031216000206768513,
+          "peak_workers": 12,
+          "peak_marines": 1,
+          "peak_bases": 1
+        },
+        "final_observation": [
+          0.2222222222222222,
+          0.0,
+          0.5077962239583333,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.13818359375,
+          0.0
+        ],
+        "exit_code": 0,
+        "final_own_hp": 10.0,
+        "final_enemy_hp": 0.0,
+        "fallback_count": 0,
+        "sc2_processes_remaining_after_pair": 0
+      },
+      {
+        "policy": "rule",
+        "run_dir": "artifacts\\runs\\p5_melee_rule_20261019",
+        "scenario": {
+          "version": "marine-vs-zergling-v6",
+          "friendly": "MARINE",
+          "enemy": "ZERGLING",
+          "friendly_position": [
+            82,
+            80
+          ],
+          "enemy_position": [
+            88.0,
+            80
+          ],
+          "enemy_positions": [
+            [
+              88.0,
+              80
+            ]
+          ],
+          "enemy_count": 1,
+          "second_distance": 8.0,
+          "second_enemy_health_fraction": 0.5,
+          "seed": 20261019,
+          "decision_game_loops": 8,
+          "time_limit_seconds": 12.0,
+          "opponent_script": "visible-nearest-attack-v1",
+          "macro": "disabled",
+          "expert": "kite",
+          "requested_distance": 6.0,
+          "health_fraction": 1.0,
+          "enemy_health_fraction": 1.0,
+          "enemy_hidden": false,
+          "split": "train"
+        },
+        "local_result": {
+          "outcome": "enemy_dead",
+          "terminated": true,
+          "truncated": false,
+          "game_loop": 137,
+          "game_seconds": 6.116071428571429
+        },
+        "initial_observation": {
+          "game_loop": 25,
+          "initialization_confirmed": true,
+          "friendly_tag": 4356308993,
+          "friendly_position": [
+            82.28125,
+            80.0
+          ],
+          "health": 45.0,
+          "visible_enemy_count": 1,
+          "enemy_positions": [
+            [
+              85.416015625,
+              80.0
+            ]
+          ],
+          "enemies": [
+            {
+              "tag": 4356571137,
+              "role": 0,
+              "position": [
+                85.416015625,
+                80.0
+              ],
+              "health": 35.0,
+              "health_max": 35.0,
+              "distance": 3.134765625,
+              "in_range": true
+            }
+          ],
+          "nearest_tag": 4356571137,
+          "weakest_tag": 4356571137,
+          "weapon_cooldown": 0.417236328125,
+          "obs": [
+            1.0,
+            0.0,
+            0.027815755208333334,
+            0.26123046875,
+            0.0,
+            0.26123046875,
+            1.0,
+            0.0,
+            0.0,
+            0.26123046875,
+            0.0,
+            1.0,
+            0.0,
+            0.0625,
+            0.08935546875,
+            0.0
+          ],
+          "mask": [
+            false,
+            false,
+            true,
+            true,
+            true
+          ],
+          "expert_action": 2
+        },
+        "action_counts": [
+          0,
+          3,
+          2,
+          0,
+          9
+        ],
+        "command_results": {
+          "engine_confirmed": 4,
+          "hold": 9,
+          "order_preserved": 1
+        },
+        "decisions": 14,
+        "all_masks_legal": true,
+        "all_actual_loops_8": true,
+        "all_nonexpert": null,
+        "summary": {
+          "status": "truncated",
+          "result": "Result.Defeat",
+          "stop_reason": "game_time_limit",
+          "error": null,
+          "counters": {
+            "marines_created": 1,
+            "micro_action_retreat": 2,
+            "micro_decision_steps": 14,
+            "micro_owned_decisions": 14,
+            "command_conflicts": 0,
+            "callbacks": 15,
+            "micro_action_weakest": 3,
+            "micro_action_hold": 9
+          },
+          "game_span_seconds": 5.0,
+          "wall_span_seconds": 0.44284390000393614,
+          "game_to_wall_ratio": 11.290660207706503,
+          "on_step_p50_seconds": 0.002012500015553087,
+          "on_step_p95_seconds": 0.0022748999763280153,
+          "on_step_p99_seconds": 0.0022748999763280153,
+          "on_step_max_seconds": 0.002895299985539168,
+          "peak_workers": 12,
+          "peak_marines": 1,
+          "peak_bases": 1
+        },
+        "final_observation": [
+          0.2222222222222222,
+          0.0,
+          0.7240071614583333,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.13818359375,
+          0.0
+        ],
+        "exit_code": 0,
+        "final_own_hp": 10.0,
+        "final_enemy_hp": 0.0,
+        "fallback_count": 0,
+        "sc2_processes_remaining_after_pair": 0
+      }
+    ],
+    "source_hashes_equal": true,
+    "initial_state_fully_matched": false,
+    "controlled_comparison": false,
+    "interpretation": "Two fixed-budget same-seed exploratory samples; initial engine cooldown/positions recorded, no strength/win-rate/training-gain inference."
+  },
+  "default_actor_unchanged": "artifacts/models/marine_ppo_mvp_20261019",
+  "implementation_validation": {
+    "merged_task_contract_test": "1 passed; implementation agent",
+    "compile_cli_checks": true,
+    "historical_full_suite_repeated": false
+  },
+  "limitations": [
+    "Fresh BC initialized 0->128, not Marine checkpoint task-changing resume",
+    "Frozen82 transfer parity is not formal1000 acceptance",
+    "Two same-seed exploration games differ in initial cooldown; no controlled comparison, win rate or training benefit established",
+    "Budget-close final partial episode3steps still EOFError/Traceback with no official result/summary; no failure transition entered buffer",
+    "No real time-limit truncation or system-crash rollout tested this run; system failures remain raise-and-discard before buffer",
+    "P5 full acceptance and scale readiness not established",
+    "Models/raw artifacts are Git-ignored and require separate transfer"
+  ]
+}
