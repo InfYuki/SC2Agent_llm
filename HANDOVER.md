@@ -15,6 +15,7 @@
 | P3 微操接口与规则专家数据 | 接口、双目标及v7覆盖批次工程验证通过；训练就绪未建立 | 12case×2专家24/24通过，82条冻结技术合格样本，每split五动作均出现；见 `docs/P3_COVERAGE_REPORT.md` |
 | P4 BC工程原型 | 已训练并提供显式运行入口 | NumPy 16→64→64→5，冻结82条；见 `docs/PHASE_04_MVP_REPORT.md`，不代表训练就绪或战斗收益 |
 | P5真实训练桥接与PPO MVP | Gymnasium适配、32步真实PPO更新及保存重载通过；整阶段未正式验收 | 独立训练环境，2完整+1部分episode；见 `docs/PHASE_05_PPO_MVP_REPORT.md` |
+| P6统一评估矩阵 | E3/E4完整局工程MVP与E0–E4离线汇总可用；正式评估未完成 | 所选3 attempts含1 crashed，E0–E2 missing；见 `docs/PHASE_06_EVALUATION_MATRIX_MVP_REPORT.md` |
 
 当前默认入口仍是规则版。LLM是单独入口，网络失败不会同步卡住游戏。完整规划已经复制到仓库 [docs/DEVELOPMENT_PLAN.zh-CN.md](docs/DEVELOPMENT_PLAN.zh-CN.md)，无需访问旧电脑 D:\GPT-personal 才能阅读。详细实现及证据见 [P1报告](docs/PHASE_01_REPORT.md)、[P2报告](docs/PHASE_02_REPORT.md)、[本地说明](README_LOCAL.md)。规划中的未实施条目不能当作现成代码。
 
@@ -291,3 +292,15 @@ run `artifacts/runs/e3_fullmatch_ppo_20261019`，冻结/console/执行证据 `ar
 重验run `e4_fullmatch_llm_ppo_20261019_snapshotfix`自然官方Victory、exit0，370游戏秒/39.858实际秒；6HTTP200/6valid active、428LLM及经济目标步、361军队目标步、251等待callbacks。240PPOinfer=owned=240真8loops，25Marine tags、mask合法；其中102PPO命令/34owned微步/17tags发生于LLM实际激活区间。159engine_confirmed+71hold+3preserved+7unconfirmed，后者不冒充确认。43工人/56Marine峰、生产60、2基地/8兵营快照、采矿8020；零冲突/模型fallback/重验error/残留，replay保存。snapshot锁retry/skip均0，不声称实机复现了锁修复。
 
 两run共350行均expert=null/bc_eligible=false，旧split=train文字由按rawSHA永久learning_exclusion排除训练，reward仍null。保护继续规则、最多4Marine共享单体actor、敌type与逐保护原因未记录；一个Easy成功样本加一个中止局不推强度/胜率/训练收益。训练budgetclose EOFError历史缺口仍在，正式P6未完成。模型/raw Git忽略需另带。完整双attempt、异常/观察干扰边界、plan/source/model/mapSHA与cleanup见 `docs/PHASE_06_E4_FULLMATCH_MVP_REPORT.md`、`docs/validation/e4_fullmatch_mvp.json`。
+
+## 2026-10-19 P6统一离线评估矩阵接续
+
+新增 `tools/report_evaluation_matrix.py`，统一E0 Rule/Rule、E1 LLM/Rule、E2 Rule/BC、E3 Rule/PPO、E4 LLM/PPO；只读指定历史run，不启动游戏/API/训练。JSON及Markdown已生成于 `docs/validation/p6_evaluation_matrix_mvp.json` 与 `docs/PHASE_06_EVALUATION_MATRIX_MVP_REPORT.md`。需要原始artifacts另带；仓库根目录复现：
+
+```powershell
+python -s tools/report_evaluation_matrix.py e3_fullmatch_ppo_20261019 e4_fullmatch_llm_ppo_20261019 e4_fullmatch_llm_ppo_20261019_snapshotfix --output docs/validation/p6_evaluation_matrix_mvp.json --markdown docs/PHASE_06_EVALUATION_MATRIX_MVP_REPORT.md
+```
+
+本轮所选3 attempts：E3 completed/Victory 1，E4 crashed/unknown 1与修复重验completed/Victory 1；E0–E2 missing，不能把历史P1/P2/BC证据自动当成本轮配对。失败完整保留分母、unknown不记竞赛负或胜；已知结果2/2与端到端Victory 2/3只描述所选工件，E4完整1/2，missing比例null。局部micro截断不是整场截断。调用者须提供所选轮次全部attempt，工具不会自动证明无遗漏。
+
+缺game_build、E4缺LLM模型记录、共享源码SHA存在差异，E4 cap20→16与修复重验也不是独立同配置种子；公平配置不完整，不构成正式P6或强度/泛化/训练收益结论。工程可运行与正式比较资格分开记录，不从Easy单局推收益。下一明确小步是统一固定配置的小预算runner，冻结配置和attempt清单、补齐缺失模式；未来游戏/API预算另行授权。本轮无新游戏/HTTP/训练，原始工件及模型保持原样，budgetclose历史缺口仍待解决。

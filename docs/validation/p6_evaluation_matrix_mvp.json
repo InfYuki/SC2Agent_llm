@@ -1,0 +1,494 @@
+{
+  "schema": "p6-offline-evaluation-matrix-v1",
+  "scope": "Selected existing attempts only; engineering inventory, not a frozen comparison or strength acceptance",
+  "denominator_policy": "All supplied unique attempts retained; failures/truncations have unknown competitive result, never automatic defeat. Missing modes have zero attempts, not zero win rate.",
+  "comparison_policy": "Shared configuration and source hashes must be complete/equal; mode adapters, actor identity and LLM budget are explicit interventions. Same-policy models/budgets must also match for a formal paired design. No formal design is inferred from artifacts.",
+  "totals": {
+    "attempts": 3,
+    "completed": 2,
+    "failed": 1,
+    "truncated": 0,
+    "unknown": 0,
+    "wins": 2,
+    "losses": 0,
+    "ties": 0,
+    "unknown_results": 1,
+    "known_result_denominator": 2,
+    "descriptive_win_fraction_known": 1.0,
+    "descriptive_wilson_95_known": [
+      0.34238022750666547,
+      1.0
+    ],
+    "end_to_end_victory_fraction": 0.6666666666666666,
+    "end_to_end_completion_fraction": 0.6666666666666666
+  },
+  "matrix": [
+    {
+      "experiment": "E0",
+      "mode": "Rule/Rule",
+      "availability": "missing",
+      "attempts": 0,
+      "completed": 0,
+      "failed": 0,
+      "truncated": 0,
+      "unknown": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "unknown_results": 0,
+      "known_result_denominator": 0,
+      "descriptive_win_fraction_known": null,
+      "descriptive_wilson_95_known": null,
+      "end_to_end_victory_fraction": null,
+      "end_to_end_completion_fraction": null
+    },
+    {
+      "experiment": "E1",
+      "mode": "LLM/Rule",
+      "availability": "missing",
+      "attempts": 0,
+      "completed": 0,
+      "failed": 0,
+      "truncated": 0,
+      "unknown": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "unknown_results": 0,
+      "known_result_denominator": 0,
+      "descriptive_win_fraction_known": null,
+      "descriptive_wilson_95_known": null,
+      "end_to_end_victory_fraction": null,
+      "end_to_end_completion_fraction": null
+    },
+    {
+      "experiment": "E2",
+      "mode": "Rule/BC",
+      "availability": "missing",
+      "attempts": 0,
+      "completed": 0,
+      "failed": 0,
+      "truncated": 0,
+      "unknown": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "unknown_results": 0,
+      "known_result_denominator": 0,
+      "descriptive_win_fraction_known": null,
+      "descriptive_wilson_95_known": null,
+      "end_to_end_victory_fraction": null,
+      "end_to_end_completion_fraction": null
+    },
+    {
+      "experiment": "E3",
+      "mode": "Rule/PPO",
+      "availability": "present",
+      "attempts": 1,
+      "completed": 1,
+      "failed": 0,
+      "truncated": 0,
+      "unknown": 0,
+      "wins": 1,
+      "losses": 0,
+      "ties": 0,
+      "unknown_results": 0,
+      "known_result_denominator": 1,
+      "descriptive_win_fraction_known": 1.0,
+      "descriptive_wilson_95_known": [
+        0.20654931437724644,
+        0.9999999999999999
+      ],
+      "end_to_end_victory_fraction": 1.0,
+      "end_to_end_completion_fraction": 1.0
+    },
+    {
+      "experiment": "E4",
+      "mode": "LLM/PPO",
+      "availability": "present",
+      "attempts": 2,
+      "completed": 1,
+      "failed": 1,
+      "truncated": 0,
+      "unknown": 0,
+      "wins": 1,
+      "losses": 0,
+      "ties": 0,
+      "unknown_results": 1,
+      "known_result_denominator": 1,
+      "descriptive_win_fraction_known": 1.0,
+      "descriptive_wilson_95_known": [
+        0.20654931437724644,
+        0.9999999999999999
+      ],
+      "end_to_end_victory_fraction": 0.5,
+      "end_to_end_completion_fraction": 0.5
+    }
+  ],
+  "attempts": [
+    {
+      "run_id": "e3_fullmatch_ppo_20261019",
+      "experiment": "E3",
+      "fair_config": {
+        "map": "Ancient Cistern LE",
+        "opponent": "Zerg",
+        "difficulty": "Easy",
+        "realtime": false,
+        "game_step": 8,
+        "seed": 20261019,
+        "max_game_seconds": 1200.0,
+        "micro_max_units": 4,
+        "map_sha256": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+        "ares_commit": "70a151a66fdd00d6c1ee44718735d0da396b902e",
+        "game_build": null,
+        "packages": {
+          "ares-sc2": "3.15.0",
+          "burnysc2": "7.1.0",
+          "map-analyzer": "0.2.0",
+          "cython-extensions-sc2": "0.18.0",
+          "numpy": "2.4.6"
+        },
+        "shared_source_hashes": {
+          "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+          "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+          "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+          "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+          "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+          "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+          "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+          "bot/telemetry.py": "0116284d9189dd2dd86154ecf4b05655bc5da4a20208f66d4bdcf1918470e038",
+          "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+          "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+        }
+      },
+      "identity": {
+        "mode": "rule_ppo",
+        "llm_max_calls": 0,
+        "project_commit": "0f31a6223b8ca3ede86f6385d3319af608d3569a",
+        "dirty_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "actor_weights_sha256": "8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1",
+        "llm_model": null,
+        "llm_request_date_utc": "2026-10-19T07:02:40.101203+00:00",
+        "mode_source_hashes": {
+          "bot/budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+          "bot/llm_bot.py": "d863d0f3e255181766ed9257386986078757069302abb91c7115e653bf19e9c2",
+          "bot/llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+          "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+          "bot/micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+          "bot/micro_bot.py": "11bb5426621d7d790c72ed5fc7f68d7079192566831df3fbeadcf4015f48db6a",
+          "bot/micro_env_bot.py": "cc1656b22e3485fce0f72c008c29da0bc25f1ead4c9fd0b01412bb75aab0b89a",
+          "bot/micro_ppo.py": "c2378864c5cbd78b2410eb7fb90eca15033fb12e1c1a6b3f8ccd3239e9a04bdf",
+          "bot/probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+          "bot/strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d"
+        }
+      },
+      "missing_comparison_fields": [
+        "game_build"
+      ],
+      "status": "completed",
+      "category": "completed",
+      "outcome": "win",
+      "official_result": "Result.Victory",
+      "error_present": false,
+      "stop_reason": null,
+      "evidence_sha256": {
+        "manifest.json": "2642c6ff602493d6d24751ab7b17dbfaba80402c23c091cfd130ad9c31d251dc",
+        "summary.json": "54b00a78dd4cf302c2fae7815221b99232d2f1901b7ce64ecb6eb33e74f78c2f",
+        "micro_summary.json": "66e66d428643c6d9543ecf3972915fa642dbef9c59f9ea5772366379d19365b8",
+        "events.jsonl": "18fe5176440d3387adebe414bd696a57b4b2a54952b8aef77a349903c0375b94"
+      },
+      "warnings": [],
+      "engineering": {
+        "natural_known_result": true,
+        "replay_present": true,
+        "command_conflicts": 0
+      },
+      "metrics": {
+        "game_seconds": 371.78571428571433,
+        "game_to_wall_ratio": 14.96511064293019,
+        "llm_steps": null,
+        "economy_goal_steps": null,
+        "combat_goal_steps": null,
+        "ppo_inference_decisions": 233,
+        "micro_owned_decisions": 233,
+        "micro_transitions": 233,
+        "local_micro_truncated": 54
+      }
+    },
+    {
+      "run_id": "e4_fullmatch_llm_ppo_20261019",
+      "experiment": "E4",
+      "fair_config": {
+        "map": "Ancient Cistern LE",
+        "opponent": "Zerg",
+        "difficulty": "Easy",
+        "realtime": false,
+        "game_step": 8,
+        "seed": 20261019,
+        "max_game_seconds": 1200.0,
+        "micro_max_units": 4,
+        "map_sha256": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+        "ares_commit": "70a151a66fdd00d6c1ee44718735d0da396b902e",
+        "game_build": null,
+        "packages": {
+          "ares-sc2": "3.15.0",
+          "burnysc2": "7.1.0",
+          "map-analyzer": "0.2.0",
+          "cython-extensions-sc2": "0.18.0",
+          "numpy": "2.4.6"
+        },
+        "shared_source_hashes": {
+          "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+          "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+          "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+          "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+          "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+          "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+          "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+          "bot/telemetry.py": "0116284d9189dd2dd86154ecf4b05655bc5da4a20208f66d4bdcf1918470e038",
+          "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+          "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+        }
+      },
+      "identity": {
+        "mode": "llm_ppo",
+        "llm_max_calls": 20,
+        "project_commit": "1e40ddf74bdb256ec8fa150d3210483050f8f9ae",
+        "dirty_diff_sha256": "108ec2258bc29b137aff7267b9062f5179715e91b855acc831dd558d63fc0745",
+        "actor_weights_sha256": "8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1",
+        "llm_model": null,
+        "llm_request_date_utc": "2026-10-19T09:31:14.762126+00:00",
+        "mode_source_hashes": {
+          "bot/llm_ppo_bot.py": "049956798f12aae606cffd971860c253984a93112a212b233d81ee1ff52ce4af",
+          "bot/budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+          "bot/llm_bot.py": "e98503fb63c069c4070e1416b4d327da75bbc80f1c61bd656d9027129b4e0a3a",
+          "bot/llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+          "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+          "bot/micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+          "bot/micro_bot.py": "1950f7938c08d550cfbb0c47b30c3d25e3e89b76e9c2979b530267aed2f07f38",
+          "bot/micro_env_bot.py": "cc1656b22e3485fce0f72c008c29da0bc25f1ead4c9fd0b01412bb75aab0b89a",
+          "bot/micro_ppo.py": "c2378864c5cbd78b2410eb7fb90eca15033fb12e1c1a6b3f8ccd3239e9a04bdf",
+          "bot/probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+          "bot/strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d"
+        }
+      },
+      "missing_comparison_fields": [
+        "game_build",
+        "llm_model"
+      ],
+      "status": "crashed",
+      "category": "failed",
+      "outcome": "unknown",
+      "official_result": null,
+      "error_present": true,
+      "stop_reason": null,
+      "evidence_sha256": {
+        "manifest.json": "024051c9c1dfd984e78cc48a7ba02bed8ee4746cd616f68e77d34ea2bf3ea93e",
+        "summary.json": "dac60dcade0aca19e6db7bb5ddf0ef5e7200e83fbc223300aa13a2ff13844e6a",
+        "strategy_summary.json": "43d15ef3596c2bc667e598468159743d53f7c8413b941f6a26ef8b0fbafae0ab",
+        "micro_summary.json": "de742cf29a0453e57fd35edf1ebaf0c2e06149f36038a0e911444a5a6dddfc70",
+        "events.jsonl": "ba5d0d4c6d849935de9df29a069a111657a33b79d5e79c478a27f76adb62f20e"
+      },
+      "warnings": [],
+      "engineering": {
+        "natural_known_result": false,
+        "replay_present": false,
+        "command_conflicts": 0
+      },
+      "metrics": {
+        "game_seconds": 273.2142857142857,
+        "game_to_wall_ratio": 16.487676053109915,
+        "llm_steps": 231,
+        "economy_goal_steps": 231,
+        "combat_goal_steps": 166,
+        "ppo_inference_decisions": 110,
+        "micro_owned_decisions": 110,
+        "micro_transitions": 110,
+        "local_micro_truncated": 22
+      }
+    },
+    {
+      "run_id": "e4_fullmatch_llm_ppo_20261019_snapshotfix",
+      "experiment": "E4",
+      "fair_config": {
+        "map": "Ancient Cistern LE",
+        "opponent": "Zerg",
+        "difficulty": "Easy",
+        "realtime": false,
+        "game_step": 8,
+        "seed": 20261019,
+        "max_game_seconds": 1200.0,
+        "micro_max_units": 4,
+        "map_sha256": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+        "ares_commit": "70a151a66fdd00d6c1ee44718735d0da396b902e",
+        "game_build": null,
+        "packages": {
+          "ares-sc2": "3.15.0",
+          "burnysc2": "7.1.0",
+          "map-analyzer": "0.2.0",
+          "cython-extensions-sc2": "0.18.0",
+          "numpy": "2.4.6"
+        },
+        "shared_source_hashes": {
+          "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+          "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+          "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+          "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+          "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+          "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+          "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+          "bot/telemetry.py": "d6d6d67cba9f18b82590a7eaf70d81efc73bae84f01eab1abfaa50b7b2d0363d",
+          "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+          "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+        }
+      },
+      "identity": {
+        "mode": "llm_ppo",
+        "llm_max_calls": 16,
+        "project_commit": "1e40ddf74bdb256ec8fa150d3210483050f8f9ae",
+        "dirty_diff_sha256": "016a9526d946f6e28368d90379a625176df71e52df12df385f2999dfa2b9afc4",
+        "actor_weights_sha256": "8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1",
+        "llm_model": null,
+        "llm_request_date_utc": "2026-10-19T09:34:46.127458+00:00",
+        "mode_source_hashes": {
+          "bot/llm_ppo_bot.py": "049956798f12aae606cffd971860c253984a93112a212b233d81ee1ff52ce4af",
+          "bot/budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+          "bot/llm_bot.py": "e98503fb63c069c4070e1416b4d327da75bbc80f1c61bd656d9027129b4e0a3a",
+          "bot/llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+          "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+          "bot/micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+          "bot/micro_bot.py": "1950f7938c08d550cfbb0c47b30c3d25e3e89b76e9c2979b530267aed2f07f38",
+          "bot/micro_env_bot.py": "cc1656b22e3485fce0f72c008c29da0bc25f1ead4c9fd0b01412bb75aab0b89a",
+          "bot/micro_ppo.py": "c2378864c5cbd78b2410eb7fb90eca15033fb12e1c1a6b3f8ccd3239e9a04bdf",
+          "bot/probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+          "bot/strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d"
+        }
+      },
+      "missing_comparison_fields": [
+        "game_build",
+        "llm_model"
+      ],
+      "status": "completed",
+      "category": "completed",
+      "outcome": "win",
+      "official_result": "Result.Victory",
+      "error_present": false,
+      "stop_reason": null,
+      "evidence_sha256": {
+        "manifest.json": "d6278d46e21bddb54321000b6a11943c18ed6e88b677386ffbb7205e16e24397",
+        "summary.json": "49015735e12832efa62971cb878b78ff01d62086f329881817af5f786446bb6b",
+        "strategy_summary.json": "9d3ed74a811d0bd24741dc131c69c5c7e4d86fcc2f848a2c3d319583bd489d22",
+        "micro_summary.json": "4e94042e25f6a9502e3c7100873e8e77679971ff185651f0789a9f9e6b596b3f",
+        "events.jsonl": "85294cbe219cb607f4fc6c8ca952a59d9ee9502788943f4490bd5f9396b3aba4"
+      },
+      "warnings": [],
+      "engineering": {
+        "natural_known_result": true,
+        "replay_present": true,
+        "command_conflicts": 0
+      },
+      "metrics": {
+        "game_seconds": 370.0,
+        "game_to_wall_ratio": 13.781950318281874,
+        "llm_steps": 428,
+        "economy_goal_steps": 428,
+        "combat_goal_steps": 361,
+        "ppo_inference_decisions": 240,
+        "micro_owned_decisions": 240,
+        "micro_transitions": 240,
+        "local_micro_truncated": 71
+      }
+    }
+  ],
+  "duplicate_inputs_ignored": [],
+  "comparison_groups": [
+    {
+      "group": 1,
+      "run_ids": [
+        "e3_fullmatch_ppo_20261019"
+      ],
+      "shared_config_complete": false,
+      "missing_fields": [
+        "game_build"
+      ],
+      "shared_intervention_identities_match": true,
+      "cross_mode_config_match": false,
+      "formal_strength_evidence": false
+    },
+    {
+      "group": 2,
+      "run_ids": [
+        "e4_fullmatch_llm_ppo_20261019"
+      ],
+      "shared_config_complete": false,
+      "missing_fields": [
+        "game_build",
+        "llm_model"
+      ],
+      "shared_intervention_identities_match": true,
+      "cross_mode_config_match": false,
+      "formal_strength_evidence": false
+    },
+    {
+      "group": 3,
+      "run_ids": [
+        "e4_fullmatch_llm_ppo_20261019_snapshotfix"
+      ],
+      "shared_config_complete": false,
+      "missing_fields": [
+        "game_build",
+        "llm_model"
+      ],
+      "shared_intervention_identities_match": true,
+      "cross_mode_config_match": false,
+      "formal_strength_evidence": false
+    }
+  ],
+  "differing_shared_fields": {
+    "shared_source_hashes": {
+      "e3_fullmatch_ppo_20261019": {
+        "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+        "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+        "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+        "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+        "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+        "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+        "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+        "bot/telemetry.py": "0116284d9189dd2dd86154ecf4b05655bc5da4a20208f66d4bdcf1918470e038",
+        "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+        "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+      },
+      "e4_fullmatch_llm_ppo_20261019": {
+        "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+        "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+        "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+        "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+        "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+        "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+        "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+        "bot/telemetry.py": "0116284d9189dd2dd86154ecf4b05655bc5da4a20208f66d4bdcf1918470e038",
+        "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+        "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+      },
+      "e4_fullmatch_llm_ppo_20261019_snapshotfix": {
+        "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+        "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+        "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+        "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+        "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+        "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+        "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+        "bot/telemetry.py": "d6d6d67cba9f18b82590a7eaf70d81efc73bae84f01eab1abfaa50b7b2d0363d",
+        "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+        "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+      }
+    }
+  },
+  "formal_comparison_ready": false,
+  "limitations": [
+    "No sampling frame/planned attempts inferred; caller must include every attempted run in the selected round.",
+    "Descriptive fractions/intervals cannot establish mode advantage; repeated repaired runs are not independent training seeds.",
+    "Game build/opponent version and remote LLM reproducibility may be absent; missing is never assumed equal.",
+    "Local micro truncation is a release event, not match truncation; reward not reconstructed."
+  ]
+}

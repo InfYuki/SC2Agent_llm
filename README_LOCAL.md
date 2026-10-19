@@ -259,3 +259,15 @@ run `artifacts/runs/e3_fullmatch_ppo_20261019`，冻结/console/执行证据 `ar
 重验run `e4_fullmatch_llm_ppo_20261019_snapshotfix`自然官方Victory、exit0，370游戏秒/39.858实际秒；6HTTP200/6valid active、428LLM及经济目标步、361军队目标步、251等待callbacks。240PPOinfer=owned=240真8loops，25Marine tags、mask合法；其中102PPO命令/34owned微步/17tags发生于LLM实际激活区间。159engine_confirmed+71hold+3preserved+7unconfirmed，后者不冒充确认。43工人/56Marine峰、生产60、2基地/8兵营快照、采矿8020；零冲突/模型fallback/重验error/残留，replay保存。snapshot锁retry/skip均0，不声称实机复现了锁修复。
 
 两run共350行均expert=null/bc_eligible=false，旧split=train文字由按rawSHA永久learning_exclusion排除训练，reward仍null。保护继续规则、最多4Marine共享单体actor、敌type与逐保护原因未记录；一个Easy成功样本加一个中止局不推强度/胜率/训练收益。训练budgetclose EOFError历史缺口仍在，正式P6未完成。模型/raw Git忽略需另带。完整双attempt、异常/观察干扰边界、plan/source/model/mapSHA与cleanup见 `docs/PHASE_06_E4_FULLMATCH_MVP_REPORT.md`、`docs/validation/e4_fullmatch_mvp.json`。
+
+## 2026-10-19 P6统一E0–E4离线评估矩阵MVP
+
+`tools/report_evaluation_matrix.py` 可读取 `artifacts/runs` 下run-id或已有run目录，输出统一JSON与可选Markdown；只读已有证据，不启动SC2、API或训练。复现本轮所选历史清单（需另带原始artifacts，在仓库根目录运行）：
+
+```powershell
+python -s tools/report_evaluation_matrix.py e3_fullmatch_ppo_20261019 e4_fullmatch_llm_ppo_20261019 e4_fullmatch_llm_ppo_20261019_snapshotfix --output docs/validation/p6_evaluation_matrix_mvp.json --markdown docs/PHASE_06_EVALUATION_MATRIX_MVP_REPORT.md
+```
+
+本轮3 attempts＝E3完整Victory 1次＋E4 crashed 1次及完整Victory重验1次。失败保留在attempt分母；未知竞赛结果不记负或胜。已知结果2/2与端到端Victory 2/3仅描述这些工件，不是可推广胜率；E4完整1/2，E0–E2在本轮清单missing，比例为null而非0。局部micro释放/截断不能当作整场截断。汇总器仅汇总调用者提供的run，不能自动证明轮次无遗漏，后续必须显式纳入全部attempt。
+
+共享配置缺少game_build，E4另缺LLM模型记录，已有共享源码SHA也有差异；E4原cap20/重验cap16和修复重验不能当作独立同配置样本。报告[矩阵MVP](docs/PHASE_06_EVALUATION_MATRIX_MVP_REPORT.md)与[共享JSON](docs/validation/p6_evaluation_matrix_mvp.json)分别保留可运行证据、失败、缺失项和比较资格；不构成正式P6验收、强度、泛化或训练收益结论。下一明确小步是统一固定配置的小预算runner，冻结配置/全部attempt清单并补齐缺失模式；新游戏/API预算需另行授权，本轮未执行。
