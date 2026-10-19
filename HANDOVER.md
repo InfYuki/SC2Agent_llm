@@ -303,4 +303,16 @@ python -s tools/report_evaluation_matrix.py e3_fullmatch_ppo_20261019 e4_fullmat
 
 本轮所选3 attempts：E3 completed/Victory 1，E4 crashed/unknown 1与修复重验completed/Victory 1；E0–E2 missing，不能把历史P1/P2/BC证据自动当成本轮配对。失败完整保留分母、unknown不记竞赛负或胜；已知结果2/2与端到端Victory 2/3只描述所选工件，E4完整1/2，missing比例null。局部micro截断不是整场截断。调用者须提供所选轮次全部attempt，工具不会自动证明无遗漏。
 
-缺game_build、E4缺LLM模型记录、共享源码SHA存在差异，E4 cap20→16与修复重验也不是独立同配置种子；公平配置不完整，不构成正式P6或强度/泛化/训练收益结论。工程可运行与正式比较资格分开记录，不从Easy单局推收益。下一明确小步是统一固定配置的小预算runner，冻结配置和attempt清单、补齐缺失模式；未来游戏/API预算另行授权。本轮无新游戏/HTTP/训练，原始工件及模型保持原样，budgetclose历史缺口仍待解决。
+缺game_build、E4缺LLM模型记录、共享源码SHA存在差异，E4 cap20→16与修复重验也不是独立同配置种子；公平配置不完整，不构成正式P6或强度/泛化/训练收益结论。工程可运行与正式比较资格分开记录，不从Easy单局推收益。下一明确小步是统一固定配置的小预算runner，冻结配置和attempt清单、补齐缺失模式；未来游戏/API预算另行授权。本历史轮次无新游戏/HTTP/训练，原始工件及模型保持原样，budgetclose历史缺口仍待解决。
+
+## 2026-10-20 P6固定配置runner最新接续
+
+`tools/run_evaluation_matrix.py` 默认dryrun冻结plan不启动游戏，显式`--execute`顺序运行每个选中模式一次；用`--resume <batch目录> --execute`只执行pending。失败/unknown/interrupted不重试，碰撞不覆盖且foreign raw不入离线报告。plan保存完整attempt清单、固定配置、源码（含未跟踪实现）/解释器/模型/实际安装地图SHA；每局前复核，变化拒绝。批次锁与全仓runner执行锁不协调其它手工启动器，陈旧锁须先核实owner PID已退出；不读活跃latest_state。LLM总cap默认0、最多20，预分配E1/E4且未用不转移；本轮未执行LLM模式。
+
+真实唯一batch `artifacts/evaluation_batches/p6_runner_e0e2_20261020`，固定Ancient Cistern LE/Zerg Easy/非实时8/seed20261020/控4，1200游戏秒/600墙秒，E0/E2各1、0请求/0训练。run `p6_runner_e0e2_20261020_E0`与`_E2`均completed/官方Victory/exit0/回放/无SC2残留，353.571429/354.285714游戏秒、37.328/34.656 runner墙秒；0conflict/summary.error=null。全终态后唯一resume execute exit0、0.415秒，无新增局、原attempt时间/PID/证据保持。无失败重跑或补局。
+
+BC仍`artifacts/models/marine_bc_mvp_20261018_seed42`，weights SHA e36cba313c1d8e1731573595b1b975316e1522db3af8d1a4abf4f21e405c2dcf；248infer=owned=248实际8loops、24tags、mask合法，动作[0,2,120,9,117]，125engine_confirmed/117hold/2preserved/4unconfirmed，不能全称命令确认；无模型fallback事件。78局部truncated不是整场截断。248行validation/expert=null/bc_eligible=false/reward=null，新增learning_exclusion按rawSHA永久排除未来训练，未改旧artifact/模型/默认PPO。
+
+plan规范化SHA6da47137d7e0f5c4952f6c8d0c6030673c529094e6204491f4488e1517496d01；运行时HEAD9f896dee、未提交runner/test按实际SHA冻结。两局map/source相同，赛后复核source/model/map身份未变；报告文档在resume结束后写。两原始manifest仍缺game_build，本批E1/E3/E4 missing，不并历史轮次、不推强度/胜率/泛化/BC训练收益；正式P6未完成、训练budgetclose EOFError仍未修。
+
+完整命令/锁/恢复限制、各日志和回放SHA、batch state/aggregate见[runner报告](docs/PHASE_06_MATRIX_RUNNER_MVP_REPORT.md)与[共享JSON](docs/validation/p6_matrix_runner_mvp.json)。模型和原始batch/run Git忽略需另带。本轮仅必要1项合并定向测试/help/diff与原生独立scope审查后上述两游戏+终态resume，无外部模型开发子代理/安装/凭据读取。下一步新授权小预算补缺失模式/独立seed、记录build，避免直接把小样本工程运行作正式比较。

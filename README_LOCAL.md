@@ -270,4 +270,19 @@ python -s tools/report_evaluation_matrix.py e3_fullmatch_ppo_20261019 e4_fullmat
 
 本轮3 attempts＝E3完整Victory 1次＋E4 crashed 1次及完整Victory重验1次。失败保留在attempt分母；未知竞赛结果不记负或胜。已知结果2/2与端到端Victory 2/3仅描述这些工件，不是可推广胜率；E4完整1/2，E0–E2在本轮清单missing，比例为null而非0。局部micro释放/截断不能当作整场截断。汇总器仅汇总调用者提供的run，不能自动证明轮次无遗漏，后续必须显式纳入全部attempt。
 
-共享配置缺少game_build，E4另缺LLM模型记录，已有共享源码SHA也有差异；E4原cap20/重验cap16和修复重验不能当作独立同配置样本。报告[矩阵MVP](docs/PHASE_06_EVALUATION_MATRIX_MVP_REPORT.md)与[共享JSON](docs/validation/p6_evaluation_matrix_mvp.json)分别保留可运行证据、失败、缺失项和比较资格；不构成正式P6验收、强度、泛化或训练收益结论。下一明确小步是统一固定配置的小预算runner，冻结配置/全部attempt清单并补齐缺失模式；新游戏/API预算需另行授权，本轮未执行。
+共享配置缺少game_build，E4另缺LLM模型记录，已有共享源码SHA也有差异；E4原cap20/重验cap16和修复重验不能当作独立同配置样本。报告[矩阵MVP](docs/PHASE_06_EVALUATION_MATRIX_MVP_REPORT.md)与[共享JSON](docs/validation/p6_evaluation_matrix_mvp.json)分别保留可运行证据、失败、缺失项和比较资格；不构成正式P6验收、强度、泛化或训练收益结论。下一明确小步是统一固定配置的小预算runner，冻结配置/全部attempt清单并补齐缺失模式；新游戏/API预算需另行授权，本历史轮次未执行。
+
+## 2026-10-20 P6固定矩阵runner MVP
+
+`tools/run_evaluation_matrix.py` 默认只冻结plan、0游戏；显式 `--execute` 才运行。仓库根目录用锁定runtime创建新批（目录须新建），例如：
+
+```powershell
+& C:\Users\27932\anaconda3\envs\sc2-ares-runtime\python.exe -s tools/run_evaluation_matrix.py --modes E0 E2 --llm-max-calls 0 --batch-dir artifacts/evaluation_batches/NEW_BATCH_ID
+& C:\Users\27932\anaconda3\envs\sc2-ares-runtime\python.exe -s tools/run_evaluation_matrix.py --resume artifacts/evaluation_batches/NEW_BATCH_ID --execute
+```
+
+每选中模式一次、固定E0→E4顺序，pending才运行，失败/unknown/interrupted保留且不自动重试；冻结源码/解释器/模型/安装地图SHA，变化即拒绝。LLM总预算默认0、上限20，E1/E4分配后不转移；选择LLM模式仍沿用其本地私密配置。batch `state.json`保留全部attempt分母，离线report排除碰撞的foreign raw。批次锁+全仓runner执行锁不协调其它启动器，陈旧锁须先确认owner已退出。
+
+唯一真实批 `p6_runner_e0e2_20261020`：Ancient Cistern LE/Zerg Easy/非实时8/seed20261020/控4，1200游戏秒与600墙秒上限。E0、E2各1局自然官方Victory、exit0，353.571/354.286游戏秒、37.328/34.656 runner墙秒；BC248推理/owned，125确认+117hold+2preserved+4unconfirmed，0fallback/冲突/error，2回放。总0LLM请求/0训练，终态resume实测0新增局。全部248条validation/expert=null/bc_eligible=false/reward=null，rawSHA sidecar永久排除训练；模型/旧raw不变。
+
+详见[runner报告](docs/PHASE_06_MATRIX_RUNNER_MVP_REPORT.md)与[共享JSON](docs/validation/p6_matrix_runner_mvp.json)。原始batch/run/model不入Git、迁移另带。仍缺game_build，本批E1/E3/E4 missing；每模式仅一局Easy、不作强度/胜率/训练收益结论，不合并旧轮次为配对证据。正式P6与训练budget-close历史缺口仍未完成。
