@@ -9,6 +9,10 @@ from bot.rule_bot import RuleBot
 
 
 class MicroRuleBot(RuleBot):
+    def terminal_evaluation(self):
+        # Production entry points never opt out of the low-health safety gate.
+        return False
+
     def __init__(self, options, telemetry):
         super().__init__(options, telemetry)
         self.recorder = Recorder(telemetry.output, options.seed)
@@ -66,6 +70,8 @@ class MicroRuleBot(RuleBot):
         )
 
     def _ppo_fallback(self, phase, exc):
+        if self.terminal_evaluation():
+            raise RuntimeError("terminal_evaluation_ppo_" + phase + "_failure") from exc
         self._ppo_policy = None
         self.telemetry.counts["ppo_" + phase + "_fallback"] += 1
         self.telemetry.event(
@@ -167,11 +173,13 @@ class MicroRuleBot(RuleBot):
                 for unit in army
                 if unit.tag in contexts
                 and contexts[unit.tag].supported
-                and unit.health_percentage > 0.2
+                and (unit.health_percentage > 0.2 or self.terminal_evaluation())
                 and frame - self._released_at.get(unit.tag, -100) >= 16
                 and state in {"attack", "defend"}
             }
         except Exception as exc:
+            if self.terminal_evaluation():
+                raise
             # Fail closed for this match; never partly continue an invalid policy.
             self._micro_disabled = True
             eligible = set()
@@ -221,6 +229,8 @@ class MicroRuleBot(RuleBot):
                 requested = self.choose_micro_action(unit, ctx)
                 self._execute_micro(unit, ctx, requested, army, target, frame)
             except Exception as exc:
+                if self.terminal_evaluation():
+                    raise
                 self._micro_disabled = True
                 self.telemetry.event(
                     "micro_fallback",

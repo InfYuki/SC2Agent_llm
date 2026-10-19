@@ -22,7 +22,7 @@ from sc2.main import run_game
 from sc2.player import Bot
 from sc2.position import Point2
 from bot.lifecycle import recover_completed_game
-from bot.micro import DECISION_LOOPS, clear_segment, context, expert
+from bot.micro import DECISION_LOOPS, clear_segment, context, effective_health, expert
 from bot.micro_bot import MicroRuleBot
 from bot.telemetry import Telemetry
 
@@ -41,6 +41,9 @@ class Opponent(BotAI):
 
 
 class ScenarioBot(MicroRuleBot):
+    def terminal_evaluation(self):
+        return bool(getattr(self.options, "allow_low_health_eval", False))
+
     async def on_start(self):
         try:
             await self._setup_scene()
@@ -53,6 +56,9 @@ class ScenarioBot(MicroRuleBot):
         self.recorder.scenario = self.options.scenario + "-v6"
         if self.options.data_split:
             self.recorder.split = self.options.data_split
+        if self.terminal_evaluation():
+            self.recorder.split = "test"
+            self.recorder.bc_labels = False
         self._health_ready = False
         self._health_written = False
         self._enemy_tags = set()
@@ -135,6 +141,7 @@ class ScenarioBot(MicroRuleBot):
                         enemy_health_fraction=self.options.enemy_health_fraction,
                         enemy_hidden=self.options.enemy_hidden,
                         split=self.recorder.split,
+                        allow_low_health_eval=self.terminal_evaluation(),
                     ),
                 )
                 return
@@ -197,8 +204,26 @@ class ScenarioBot(MicroRuleBot):
                 truncated=not terminated,
                 game_loop=frame,
                 game_seconds=float(self.time),
+                **self._evaluation_health(),
             ),
         )
+
+    def _evaluation_health(self):
+        if not self.terminal_evaluation():
+            return {}
+        army = self.units(UnitTypeId.MARINE)
+        marine = army.find_by_tag(self._scene_tag)
+        dead = self._scene_tag in self.state.dead_units
+        enemies = {e.tag: e for e in self.enemy_units
+                   if e.is_visible and not e.is_memory and not e.is_snapshot}
+        dead_enemies = self._dead_enemy_tags | (self._enemy_tags & self.state.dead_units)
+        live = self._enemy_tags - dead_enemies
+        return dict(allow_low_health_eval=True, expert_labels=False,
+                    own_dead_confirmed=dead,
+                    enemy_dead_confirmed=bool(self._enemy_tags) and not live,
+                    own_effective_hp=0.0 if dead else effective_health(marine) if marine else None,
+                    enemy_effective_hp=sum(effective_health(enemies[tag]) for tag in live)
+                    if not live - enemies.keys() else None)
 
     def play_step(self, iteration):
         # Deliberately bypass RuleBot's economy/production and strategic state.
@@ -220,9 +245,13 @@ class ScenarioBot(MicroRuleBot):
         if live_tags - {e.tag for e in enemies}:
             self._finish_scene("enemy_not_visible", False)
             return
-        if army and army.first.health_percentage <= 0.2:
+        if army and army.first.health_percentage <= 0.2 and not self.terminal_evaluation():
             self._finish_scene("low_health_safety_exit", False)
             return
+        if self.terminal_evaluation() and army and enemies:
+            if not context(self, army.first, army, self.scene_goal).supported:
+                self._finish_scene("unsupported_context", False)
+                return
         frame = int(self.state.game_loop)
         if army and enemies and frame - self._last_combat_frame >= DECISION_LOOPS:
             self._last_combat_frame = frame
@@ -346,6 +375,7 @@ class ScenarioBot(MicroRuleBot):
                     terminated=False,
                     truncated=True,
                     game_loop=int(self.state.game_loop),
+                    **self._evaluation_health(),
                 ),
             )
         super().close_micro(reason)
@@ -376,6 +406,8 @@ def main():
     parser.add_argument("--policy", choices=["rule", "bc", "ppo"], default="rule")
     parser.add_argument("--bc-model", default=None, help="Prototype model directory; invalid models fall back to kite rules.")
     parser.add_argument("--ppo-model", default=None, help="Exported NumPy PPO actor; invalid models fall back to kite rules.")
+    parser.add_argument("--allow-low-health-eval", action="store_true",
+                        help="Evaluation only: retain five-action policy below 20%% HP until death/kill/time; test split, no expert labels, PPO failures are errors.")
     parser.add_argument("--distance", type=scenario_distance, default=6.0)
     parser.add_argument("--enemy-hidden", action="store_true")
     parser.add_argument("--enemy-count", type=int, choices=[1, 2], default=1)
@@ -389,6 +421,12 @@ def main():
     parser.add_argument("--max-game-seconds", type=float, default=45)
     parser.add_argument("--run-id", default=None)
     args = parser.parse_args()
+    if args.allow_low_health_eval:
+        if args.policy not in {"rule", "ppo"} or args.expert != "kite":
+            parser.error("Low-health evaluation requires rule/PPO with --expert kite")
+        if args.data_split not in {None, "test"}:
+            parser.error("Low-health evaluation requires --data-split test")
+        args.data_split = "test"
     if args.policy in {"bc", "ppo"} and args.expert != "kite":
         parser.error("BC/PPO policy requires the five-action kite adapter (--expert kite)")
     if args.max_game_seconds <= 0:

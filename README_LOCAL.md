@@ -228,3 +228,12 @@ checkpoint `artifacts/micro_ppo/p5_melee_bc128_20261019/model.zip`；NumPy actor
 仅2场预冻结未训练名义配置距7/己.8/敌1/seed20261019/12秒探索，PPO与规则各13决策、动作均[0,3,3,1,6]，均5.401785714秒low_health_safety_exit、己6HP，敌约.606445/.589355HP；可观测初态含CD0完全一致，但仅1pair不推强度/收益/泛化。安全截断不是死亡/失败；训练与部署保护边界不同。规则raw split=train且12行eligibletrue为旧默认，未进入学习；两run的learning_exclusion sidecar及共享JSON按raw SHA永久排除未来训练。后续探索应显式`--data-split test`，本轮未改raw或重跑。
 
 续训256目录继承内嵌课程，勿再次initBC；任务变化需allow-task-change。模型/证据Git忽略需另带，报告[课程MVP](docs/PHASE_05_CURRICULUM_MVP_REPORT.md)、[共享摘要](docs/validation/ppo_curriculum_mvp.json)。下一步预算关闭协议/训练部署安全边界，再新授权小预算比较；本轮不追加游戏/训练，P5全面验收/规模就绪/收益未建立。
+
+
+## 2026-10-19 heldout完整终局评估接续
+
+本轮未训练，NumPy curriculum256与原规则kite在同heldout Zergling距7/己.8/敌1/time12/seed20261019串行仅各1局。新增仅本地场景`--allow-low-health-eval`同时绕过场景20%退出和微操20%门禁，仍保留支持域/mask/仲裁，强制test+非专家，PPO加载/推理异常显式失败；生产默认保护与默认64actor不改。执行前plan SHA `a0bfb7c3b7fbc11c07ac078b43a5ed7de69bf936ea2e49d4e5be1e362b6ccfea`，模型/源/map等hash前后不变。
+
+两局初frame17/HP36vs35/实际距5.892578125/CD0/完整obs与mask一致，仍未固定完整引擎状态。PPO15infer/15owned、请求[0,4,3,1,7]，frame137/6.116071429秒enemy_dead、己6HP；规则16owned/请求[0,3,3,1,9]，frame145/6.473214286秒enemy_dead、己1HP。均enemy_dead_confirmed真/own_dead假、terminated真/truncated假。低HP source6HP的PPO仍选HOLD，规则6HP和1HP仍HOLD，全部controlled=1；HOLD延续已有攻击，不冒充新增命令确认。PPO7engineconfirmed+7hold+1preserved，规则7confirmed+9hold，无fallback/conflict/error/残留，exit0。31条均test/expert=null/bc_eligible=false，各run sidecar按rawSHA永久排除训练。
+
+外层主动leave的官方Defeat/Victory与旧summary truncated标签不能替代局部真实击杀；raw reward仍null/not_implemented，未造训练奖励。只1pair不推强度、胜率、泛化或训练收益，不以PPO剩HP/结束时间差排名；此前低HP截断并非死亡，本轮仅证明这次继续至击杀。详见[终局报告](docs/PHASE_05_TERMINAL_EVAL_REPORT.md)、[共享证据](docs/validation/ppo_terminal_eval.json)。模型/原始工件Git忽略需另带；budgetclose EOFError仍待修复，下一步新授权有限比较前先关闭协议/初态标准化；P5全面验收/规模就绪/收益未建立。

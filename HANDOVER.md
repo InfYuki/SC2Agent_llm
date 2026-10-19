@@ -260,3 +260,12 @@ actor`artifacts/models/marine_ppo_bc_warmstart_20261019`（weights SHA bccce3aa1
 仅2场heldout：训练后、执行前冻结plan SHA301db03560426486423a363f5ad50704af48c61b04e48dd94428963a68d6e956，nominal距7/己.8/敌1/12秒/seed20261019，PPO/规则各1；两者13决策均[0,3,3,1,6]、5.401785714秒low_health_safety_exit、己6HP，敌.6064453125/.58935546875。可观测初态frame17/距5.892578125/HP36vs35/CD0/obs/mask一致，仅1pair非严格引擎因果对照，不推胜率/收益/泛化；低HP安全截断非死亡，不判失败或假设继续必胜。runner的distance有限(0,10]支持7在训练结束后修复，默认6及旧3/6/10保留。
 
 规则raw split=train、前12行bc_eligible=true/末1false为旧专家默认；PPO13条validation/eligiblefalse。两run均未导出数据集/进入已结束训练，raw不改；各learning_exclusion.json及共享JSON保存rawSHA、excluded_from_future_training=true，后续不得收集为BC/PPO训练。未来探索显式--data-split test，本轮不重跑。详见docs/PHASE_05_CURRICULUM_MVP_REPORT.md及docs/validation/ppo_curriculum_mvp.json；只必要task1检查/CLI静态+唯一128训练+128真obs离线核验+2heldout，无外部模型/安装/.env/扫参/旧suite。下一步先预算close与安全边界，再新授权有限比较；P5全面验收/规模就绪/收益未建立。
+
+
+## 2026-10-19 heldout完整终局评估接续
+
+本轮未训练，NumPy curriculum256与原规则kite在同heldout Zergling距7/己.8/敌1/time12/seed20261019串行仅各1局。新增仅本地场景`--allow-low-health-eval`同时绕过场景20%退出和微操20%门禁，仍保留支持域/mask/仲裁，强制test+非专家，PPO加载/推理异常显式失败；生产默认保护与默认64actor不改。执行前plan SHA `a0bfb7c3b7fbc11c07ac078b43a5ed7de69bf936ea2e49d4e5be1e362b6ccfea`，模型/源/map等hash前后不变。
+
+两局初frame17/HP36vs35/实际距5.892578125/CD0/完整obs与mask一致，仍未固定完整引擎状态。PPO15infer/15owned、请求[0,4,3,1,7]，frame137/6.116071429秒enemy_dead、己6HP；规则16owned/请求[0,3,3,1,9]，frame145/6.473214286秒enemy_dead、己1HP。均enemy_dead_confirmed真/own_dead假、terminated真/truncated假。低HP source6HP的PPO仍选HOLD，规则6HP和1HP仍HOLD，全部controlled=1；HOLD延续已有攻击，不冒充新增命令确认。PPO7engineconfirmed+7hold+1preserved，规则7confirmed+9hold，无fallback/conflict/error/残留，exit0。31条均test/expert=null/bc_eligible=false，各run sidecar按rawSHA永久排除训练。
+
+外层主动leave的官方Defeat/Victory与旧summary truncated标签不能替代局部真实击杀；raw reward仍null/not_implemented，未造训练奖励。只1pair不推强度、胜率、泛化或训练收益，不以PPO剩HP/结束时间差排名；此前低HP截断并非死亡，本轮仅证明这次继续至击杀。详见[终局报告](docs/PHASE_05_TERMINAL_EVAL_REPORT.md)、[共享证据](docs/validation/ppo_terminal_eval.json)。模型/原始工件Git忽略需另带；budgetclose EOFError仍待修复，下一步新授权有限比较前先关闭协议/初态标准化；P5全面验收/规模就绪/收益未建立。
