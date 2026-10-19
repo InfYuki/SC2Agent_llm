@@ -50,7 +50,8 @@ def export_actor(model, checkpoint, output):
         if source.get("checkpoint_sha256") != checkpoint_hash:
             raise ValueError("Source metadata checkpoint hash mismatch")
         provenance = {key: source[key] for key in
-                      ("initialization", "bc_weights_used", "bc_initialization", "dataset", "task")
+                      ("initialization", "bc_weights_used", "bc_initialization", "dataset", "task",
+                       "task_semantics", "curriculum", "task_change", "parent_checkpoint")
                       if key in source}
     # Refuse provenance that attributes a different in-memory actor to the zip.
     saved = MaskablePPO.load(checkpoint, device="cpu")

@@ -21,34 +21,63 @@ SCENARIOS = ("marine-vs-marine", "marine-vs-zergling")
 
 
 def training_task(*, scenario="marine-vs-marine", distance=6.0,
-                  max_game_seconds=8.0, map_name="Ancient Cistern LE"):
+                  max_game_seconds=8.0, map_name="Ancient Cistern LE",
+                  own_health_fraction=1.0, enemy_health_fraction=1.0):
     """Serializable task contract; HP deltas use real unit HP, divided by 45."""
     distance, max_game_seconds = float(distance), float(max_game_seconds)
+    own_health_fraction, enemy_health_fraction = float(own_health_fraction), float(enemy_health_fraction)
     if scenario not in SCENARIOS:
         raise ValueError("Unsupported training scenario")
     if not math.isfinite(distance) or not 0 < distance <= 10:
         raise ValueError("distance must be finite and in (0,10]")
     if not math.isfinite(max_game_seconds) or not 0 < max_game_seconds <= 120:
         raise ValueError("max-game-seconds must be finite and in (0,120]")
+    if not (math.isfinite(own_health_fraction) and 0.2 < own_health_fraction <= 1
+            and math.isfinite(enemy_health_fraction) and 0 < enemy_health_fraction <= 1):
+        raise ValueError("Health fractions require own in (0.2,1], enemy in (0,1]")
     return dict(scenario=scenario, scenario_version=scenario + "-v6", distance=distance,
                 max_game_seconds=max_game_seconds, map_name=map_name,
-                friendly_count=1, enemy_count=1, health_fraction=1.0,
-                enemy_health_fraction=1.0, enemy_hidden=False,
+                friendly_count=1, enemy_count=1, health_fraction=own_health_fraction,
+                enemy_health_fraction=enemy_health_fraction, enemy_hidden=False,
                 decision_game_loops=8, reward_scale=45.0,
                 reward_version="effective-hp-delta-45-terminal-1-v1")
+
+
+def normalize_training_task(task):
+    """Validate a full stored contract, including legacy full-health tasks."""
+    normalized = training_task(**{key: task[key] for key in
+        ("scenario", "distance", "max_game_seconds", "map_name")},
+        own_health_fraction=task.get("health_fraction", 1.0),
+        enemy_health_fraction=task.get("enemy_health_fraction", 1.0))
+    if task != normalized:
+        raise ValueError("Incompatible resume task metadata")
+    return normalized
+
+
+def normalize_curriculum(value):
+    if (not isinstance(value, dict) or set(value) != {"format", "selection", "tasks"}
+            or value["format"] != "marine-micro-curriculum-v1"
+            or value["selection"] != "round-robin"
+            or not isinstance(value["tasks"], list) or not value["tasks"]):
+        raise ValueError("Invalid frozen curriculum")
+    return dict(format=value["format"], selection=value["selection"],
+                tasks=[normalize_training_task(task) for task in value["tasks"]])
 
 
 class SC2MicroEnv:
     def __init__(self, *, game_path=r"C:\Program Files (x86)\StarCraft II",
                  map_name="Ancient Cistern LE", max_game_seconds=20,
                  startup_timeout=90, step_timeout=30, output_root=None, worker_python=None,
-                 scenario="marine-vs-marine", distance=6.0):
+                 scenario="marine-vs-marine", distance=6.0,
+                 own_health_fraction=1.0, enemy_health_fraction=1.0):
         self.game_path = str(game_path)
         self.worker_python = str(worker_python or sys.executable)
         self.map_name = map_name
         self.max_game_seconds = float(max_game_seconds)
         self.task = training_task(scenario=scenario, distance=distance,
-                                  max_game_seconds=max_game_seconds, map_name=map_name)
+                                  max_game_seconds=max_game_seconds, map_name=map_name,
+                                  own_health_fraction=own_health_fraction,
+                                  enemy_health_fraction=enemy_health_fraction)
         self.startup_timeout = float(startup_timeout)
         self.step_timeout = float(step_timeout)
         if min(self.max_game_seconds, self.startup_timeout, self.step_timeout) <= 0:
@@ -75,7 +104,9 @@ class SC2MicroEnv:
                    "--episode-id", self.episode_id, "--seed", str(int(seed)),
                    "--output-dir", str(self.output_dir), "--game-path", self.game_path,
                    "--max-game-seconds", str(self.max_game_seconds), "--map", self.map_name,
-                   "--scenario", self.task["scenario"], "--distance", str(self.task["distance"])]
+                   "--scenario", self.task["scenario"], "--distance", str(self.task["distance"]),
+                   "--health-fraction", str(self.task["health_fraction"]),
+                   "--enemy-health-fraction", str(self.task["enemy_health_fraction"])]
         self._log = (self.output_dir / "worker.log").open("w", encoding="utf-8")
         started = time.monotonic()
         try:

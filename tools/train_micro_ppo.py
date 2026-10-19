@@ -14,7 +14,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from envs.sc2_micro_env import SCENARIOS, training_task
+from envs.sc2_micro_env import SCENARIOS, training_task, normalize_training_task, normalize_curriculum
 
 try:
     import numpy as np
@@ -157,20 +157,49 @@ def resume_checkpoint(source):
     return checkpoint, metadata, digest
 
 
-def resolve_training_task(metadata=None, **requested):
+def resolve_training_task(metadata=None, allow_task_change=False, **requested):
     """Inherit the recorded task; legacy checkpoints mean the old Marine task."""
     inherited = metadata.get("task") if metadata is not None else None
-    baseline = training_task() if inherited is None else training_task(**{
-        key: inherited[key] for key in ("scenario", "distance", "max_game_seconds", "map_name")})
-    if inherited is not None and inherited != baseline:
-        raise ValueError("Incompatible resume task metadata")
+    baseline = training_task() if inherited is None else normalize_training_task(inherited)
     values = {}
-    for key in ("scenario", "distance", "max_game_seconds", "map_name"):
+    for key in ("scenario", "distance", "max_game_seconds", "map_name", "own_health_fraction", "enemy_health_fraction"):
         value = requested.get(key)
-        if metadata is not None and value is not None and value != baseline[key]:
-            raise ValueError(f"Resume inherits task {key}={baseline[key]}; conflicting override")
-        values[key] = baseline[key] if value is None else value
+        baseline_value = baseline["health_fraction" if key == "own_health_fraction" else key]
+        if metadata is not None and not allow_task_change and value is not None and value != baseline_value:
+            raise ValueError(f"Resume inherits task {key}={baseline_value}; conflicting override")
+        values[key] = baseline_value if value is None else value
     return training_task(**values)
+
+
+def resolve_task_set(metadata=None, *, curriculum=None, allow_task_change=False, **requested):
+    """Freeze one task set before launching SC2; changes require an explicit flag."""
+    parent_curriculum = (normalize_curriculum(metadata["curriculum"])
+                         if metadata and metadata.get("curriculum") is not None else None)
+    parent_task = resolve_training_task(metadata)
+    if parent_curriculum and parent_task != parent_curriculum["tasks"][0]:
+        raise ValueError("Parent task differs from curriculum compatibility task")
+    supplied = any(value is not None for value in requested.values())
+    if curriculum is not None:
+        if supplied:
+            raise ValueError("--curriculum cannot be combined with individual task overrides")
+        selected = normalize_curriculum(curriculum)
+        task = selected["tasks"][0]
+    elif parent_curriculum is not None and not supplied:
+        selected, task = parent_curriculum, parent_task
+    else:
+        selected = None
+        task = resolve_training_task(metadata, allow_task_change=allow_task_change, **requested)
+    parent_tasks = parent_curriculum["tasks"] if parent_curriculum else [parent_task]
+    new_tasks = selected["tasks"] if selected else [task]
+    changed = metadata is not None and (parent_tasks != new_tasks or bool(parent_curriculum) != bool(selected))
+    if changed and not allow_task_change:
+        raise ValueError("Resume task set conflicting override; --allow-task-change is required")
+    def digest(tasks):
+        return hashlib.sha256(json.dumps(tasks, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+    change = (dict(explicitly_allowed=True, parent_tasks=parent_tasks, new_tasks=new_tasks,
+                   parent_task_set_sha256=digest(parent_tasks), new_task_set_sha256=digest(new_tasks))
+              if changed else None)
+    return task, selected, change
 
 
 def probe(model, obs, mask):
@@ -213,6 +242,7 @@ class TraceCallback(BaseCallback):
         if not mask[action]:
             raise ValueError("Training selected a masked action")
         row = dict(step=self.num_timesteps, episode_id=episode_id,
+                   curriculum_index=info.get("curriculum_index"), episode_index=info.get("episode_index"),
                    task=info.get("task"), own_effective_hp=info.get("own_effective_hp"),
                    enemy_effective_hp=info.get("enemy_effective_hp"),
                    own_hp_loss=info.get("own_hp_loss"), enemy_hp_loss=info.get("enemy_hp_loss"),
@@ -231,6 +261,8 @@ class TraceCallback(BaseCallback):
         if row["done"]:
             self.episodes.append(dict(
                 episode_id=episode_id, steps=sum(r["episode_id"] == episode_id for r in self.rows),
+                task=info.get("task"), curriculum_index=info.get("curriculum_index"),
+                episode_index=info.get("episode_index"),
                 reward=self.episode_rewards[episode_id], reason=info.get("reason"),
                 time_limit_truncated=bool(info.get("TimeLimit.truncated")),
                 official_close_confirmed=bool(info.get("official_close_confirmed")),
@@ -242,6 +274,7 @@ class TraceCallback(BaseCallback):
 
 def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft II",
           map_name=None, max_game_seconds=None, scenario=None, distance=None, seed=None,
+          own_health_fraction=None, enemy_health_fraction=None, curriculum=None, allow_task_change=False,
           total_timesteps=32, n_steps=None, batch_size=None, n_epochs=None,
           learning_rate=None, resume=None, init_bc=None, init_bc_dataset=None, environment=None):
     if resume is not None and init_bc is not None:
@@ -249,8 +282,13 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
     if init_bc_dataset is not None and init_bc is None:
         raise ValueError("--init-bc-dataset requires --init-bc")
     parent = resume_checkpoint(resume) if resume is not None else None
-    task = resolve_training_task(parent[1] if parent else None, map_name=map_name,
-                                 max_game_seconds=max_game_seconds, scenario=scenario, distance=distance)
+    if curriculum is not None and not isinstance(curriculum, dict):
+        curriculum = json.loads(Path(curriculum).read_text(encoding="utf-8-sig"))
+    task, curriculum, task_change = resolve_task_set(
+        parent[1] if parent else None, curriculum=curriculum, allow_task_change=allow_task_change,
+        map_name=map_name, max_game_seconds=max_game_seconds, scenario=scenario, distance=distance,
+        own_health_fraction=own_health_fraction, enemy_health_fraction=enemy_health_fraction)
+    task_semantics = "compatibility_default; curriculum governs reset" if curriculum else "single fixed task"
     requested = dict(n_steps=n_steps, batch_size=batch_size, n_epochs=n_epochs,
                      learning_rate=learning_rate)
     defaults = dict(n_steps=32, batch_size=16, n_epochs=2, learning_rate=3e-4)
@@ -275,7 +313,9 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
     env = environment if environment is not None else GymSC2MicroEnv(
         worker_python=worker_python, game_path=game_path, map_name=task["map_name"],
         max_game_seconds=task["max_game_seconds"], scenario=task["scenario"],
-        distance=task["distance"], output_root=output / "episodes")
+        distance=task["distance"], own_health_fraction=task["health_fraction"],
+        enemy_health_fraction=task["enemy_health_fraction"], curriculum=curriculum,
+        output_root=output / "episodes")
     trace = TraceCallback(env, output / "training_transitions.jsonl")
     environment_closed = False
     try:
@@ -305,6 +345,11 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
         initial_actor_hash = actor_sha256(model)
         optimizer_steps_before = [int(state["step"]) for state in
                                   model.policy.optimizer.state.values() if "step" in state]
+        write_json(output / "task_manifest.json", dict(
+            task=task, curriculum=curriculum, task_semantics=task_semantics, task_change=task_change,
+            parent_checkpoint=(dict(path=str(parent[0]), sha256=parent[2]) if parent else None),
+            initial_timesteps=initial_steps, requested_additional_timesteps=total_timesteps,
+            selection_start_index=0, reset_semantics="Cold environment reset; curriculum restarts at index 0; no trajectory replay."))
         if init_bc is not None:
             write_json(output / "initialization_report.json", dict(
                 task=task,
@@ -347,7 +392,8 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
                     != bc_initialization["weights_sha256"]):
                 raise ValueError("Original BC files changed during training")
         metadata = dict(
-            task=task,
+            task=task, curriculum=curriculum, task_semantics=task_semantics, task_change=task_change,
+            curriculum_cursor_semantics="Each run restarts at index 0; parent trajectory is not replayed.",
             format="marine-maskable-ppo-sb3-v1", feature_version="marine-16-v1",
             action_version="marine-5-v1", decision_game_loops=8,
             reward_version="effective-hp-delta-45-terminal-1-v1",
@@ -374,7 +420,7 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
             engineering_prototype=True, combat_strength_evaluated=False,
             deployment_exported=False)
         report = dict(
-            task=task,
+            task=task, curriculum=curriculum, task_semantics=task_semantics, task_change=task_change,
             status="success", actual_steps=model.num_timesteps,
             initial_timesteps=initial_steps, additional_steps=model.num_timesteps - initial_steps,
             cumulative_timesteps=model.num_timesteps, initial_updates=initial_updates,
@@ -430,6 +476,10 @@ def main():
     parser.add_argument("--max-game-seconds", type=float, help="New run default: 8; resume inherits task")
     parser.add_argument("--scenario", choices=SCENARIOS, help="New run default: marine-vs-marine; resume inherits task")
     parser.add_argument("--distance", type=float, help="New run default: 6; resume inherits task")
+    parser.add_argument("--own-health-fraction", type=float)
+    parser.add_argument("--enemy-health-fraction", type=float)
+    parser.add_argument("--curriculum", type=Path, help="Frozen round-robin task JSON; resume inherits embedded curriculum")
+    parser.add_argument("--allow-task-change", action="store_true", help="Explicitly authorize a recorded resume task-set change")
     initialization = parser.add_mutually_exclusive_group()
     initialization.add_argument("--resume", type=Path, help="Parent model directory or .zip with adjacent metadata.json; inherits hyperparameters")
     initialization.add_argument("--init-bc", type=Path, help="Initialize a new PPO actor from a validated BC directory")
@@ -446,6 +496,8 @@ def main():
         args.output, worker_python=args.worker_python, game_path=args.game_path,
         map_name=args.map, max_game_seconds=args.max_game_seconds, seed=args.seed,
         scenario=args.scenario, distance=args.distance,
+        own_health_fraction=args.own_health_fraction, enemy_health_fraction=args.enemy_health_fraction,
+        curriculum=args.curriculum, allow_task_change=args.allow_task_change,
         total_timesteps=args.total_timesteps, n_steps=args.n_steps,
         batch_size=args.batch_size, n_epochs=args.n_epochs,
         learning_rate=args.learning_rate, resume=args.resume, init_bc=args.init_bc,

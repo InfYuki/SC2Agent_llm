@@ -248,3 +248,15 @@ actor`artifacts/models/marine_ppo_bc_warmstart_20261019`（weights SHA bccce3aa1
 唯一2短探索PPO/规则同seed20261019，均14决策/6.116071秒enemy_dead/己10HP；PPO actions[0,2,2,0,10]、规则[0,3,2,0,9]，无fallback/冲突/error。名义距6而ready距3.134765625，cooldown .52783203125/.417236328125不同，不能严格对照/推胜率；同128训练obs原BC与新actor argmax零变化，不能推128步收益。默认run_ppo仍64步，新actor显式--ppo-model选择，模型/证据Git忽略需另带；继续新近战checkpoint用--resume，不再initBC或换任务。
 
 共享docs/PHASE_05_MELEE_PPO_MVP_REPORT.md与docs/validation/ppo_melee_mvp.json。仅1项实现任务契约检查+compile/CLI、唯一128步训练+2探索，无外部模型/安装/凭据/旧suite。下一步budget-close协议、初态cooldown标准化及有限独立比较；P5全面验收/规模就绪/真实训练时间截断与系统崩溃/收益未建立。
+
+## 2026-10-19 三任务课程PPO256最新接续
+
+唯一新增128步，从BC来源近战128恢复actor/critic/Adam→累计256，seed42/nsteps32/batch16/epochs2/lr.0003继承，154.375秒、updates8→16、12个Adam step16→32。三任务预冻结：Zergling距6/fullHP→距8/fullHP→距8/己.6（敌1、time12、scale45），按reset轮转0/1/2重复，A41/B44/C43采样步，己初HP45/45/27、敌35。--curriculum configs/micro_curriculum_v1.json --allow-task-change显式记录父/新任务集；task字段只是兼容默认A，curriculum治理reset，新run从0开始；导出producer保留task_semantics/course/taskchange/parent及BC源。
+
+8完整局6enemy_dead+2marine_dead，完整回报均.59352不能跨任务与历史比较；末C14步己2/敌.743164预算close仍EOFError/Traceback，无summary/官方结果，异常未入buffer、无SC2/worker残留。128真8loops/mask/相邻HP奖励核验通过raw误差0，系统failure/discard/conflict/专家0；53engineconfirmed+72hold+3orderpreserved。有限actor更新max.00319707、reload概率误差0，128已有真obs导出误差5.66244e-7/动作全同；同obs父/新3argmax变化，不作训练收益。
+
+新checkpoint artifacts/micro_ppo/p5_curriculum256_20261019/model.zip SHA9c94690a2cb8eaabfb5fd24c6c0984896825d6f27f87700335f9e41df3aaafd1；新actor artifacts/models/marine_ppo_curriculum256_20261019 weights SHA8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1。父zip/metadata不变，默认run_ppo仍原64actor，显式--ppo-model选新目录；后续resume256自动继承课程，不再initBC。工件Git忽略，迁移另带。
+
+仅2场heldout：训练后、执行前冻结plan SHA301db03560426486423a363f5ad50704af48c61b04e48dd94428963a68d6e956，nominal距7/己.8/敌1/12秒/seed20261019，PPO/规则各1；两者13决策均[0,3,3,1,6]、5.401785714秒low_health_safety_exit、己6HP，敌.6064453125/.58935546875。可观测初态frame17/距5.892578125/HP36vs35/CD0/obs/mask一致，仅1pair非严格引擎因果对照，不推胜率/收益/泛化；低HP安全截断非死亡，不判失败或假设继续必胜。runner的distance有限(0,10]支持7在训练结束后修复，默认6及旧3/6/10保留。
+
+规则raw split=train、前12行bc_eligible=true/末1false为旧专家默认；PPO13条validation/eligiblefalse。两run均未导出数据集/进入已结束训练，raw不改；各learning_exclusion.json及共享JSON保存rawSHA、excluded_from_future_training=true，后续不得收集为BC/PPO训练。未来探索显式--data-split test，本轮不重跑。详见docs/PHASE_05_CURRICULUM_MVP_REPORT.md及docs/validation/ppo_curriculum_mvp.json；只必要task1检查/CLI静态+唯一128训练+128真obs离线核验+2heldout，无外部模型/安装/.env/扫参/旧suite。下一步先预算close与安全边界，再新授权有限比较；P5全面验收/规模就绪/收益未建立。

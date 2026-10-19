@@ -4,6 +4,7 @@ from collections import Counter
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import subprocess
@@ -350,6 +351,13 @@ class ScenarioBot(MicroRuleBot):
         super().close_micro(reason)
 
 
+def scenario_distance(value):
+    distance = float(value)
+    if not math.isfinite(distance) or not 0 < distance <= 10:
+        raise argparse.ArgumentTypeError("distance must be finite and in (0,10]")
+    return distance
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -368,7 +376,7 @@ def main():
     parser.add_argument("--policy", choices=["rule", "bc", "ppo"], default="rule")
     parser.add_argument("--bc-model", default=None, help="Prototype model directory; invalid models fall back to kite rules.")
     parser.add_argument("--ppo-model", default=None, help="Exported NumPy PPO actor; invalid models fall back to kite rules.")
-    parser.add_argument("--distance", type=float, choices=[3.0, 6.0, 10.0], default=6.0)
+    parser.add_argument("--distance", type=scenario_distance, default=6.0)
     parser.add_argument("--enemy-hidden", action="store_true")
     parser.add_argument("--enemy-count", type=int, choices=[1, 2], default=1)
     parser.add_argument("--second-distance", type=float, default=8.0)

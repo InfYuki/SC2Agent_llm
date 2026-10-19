@@ -214,3 +214,17 @@ python -s tools/smoke_micro_env.py --seed 42 --max-game-seconds 8 --game-path 'C
 checkpoint `artifacts/micro_ppo/p5_melee_bc128_20261019/model.zip`；NumPy actor `artifacts/models/marine_ppo_melee_bc128_20261019`，producer保留BC和近战task。显式`.\run_ppo.cmd --ppo-model artifacts/models/marine_ppo_melee_bc128_20261019`选用；默认仍原64步actor，工件Git忽略需另带。继续本近战checkpoint用`--resume`继承task，冲突覆盖拒绝。
 
 仅2局同seed20261019探索：PPO/规则均14决策、6.116071秒enemy_dead、己10HP，动作分别[0,2,2,0,10]/[0,3,2,0,9]。初ready距3.134765625（出生名义距6），cooldown .52783203125/.417236328125不同，无严格对照；同128训练obs原BC/新actor argmax零变化，不推训练收益或胜率。详见[近战报告](docs/PHASE_05_MELEE_PPO_MVP_REPORT.md)与[共享摘要](docs/validation/ppo_melee_mvp.json)。下一步budgetclose、初态标准化及有限独立比较；P5全面验收/规模就绪未建立。
+
+## 2026-10-19 三任务课程续训至PPO256
+
+最新唯一续训从BC来源近战128保留actor/Adam→累计256（新增128、154.375秒），预冻结课程按reset轮转：Zergling距6/满HP→距8/满HP→距8/己HP.6，均敌满HP/12秒/8loops/scale45。显式`--curriculum configs/micro_curriculum_v1.json --allow-task-change`记录父/新任务集；实际A41/B44/C43步，Adam16→32/updates8→16，父文件不变。8完整局6 enemy_dead+2 marine_dead，末C14步budgetclose仍EOFError/Traceback、无summary/官方结果；未入异常transition、无残留。128已有真实观测导出parity概率误差5.66244e-7、动作全同；同观测父/新3个argmax改变，仅证明更新。
+
+新checkpoint：`artifacts/micro_ppo/p5_curriculum256_20261019/model.zip`；actor：`artifacts/models/marine_ppo_curriculum256_20261019`。`run_ppo.cmd`默认仍原64步，显式选择：
+
+```powershell
+.\run_ppo.cmd --ppo-model artifacts/models/marine_ppo_curriculum256_20261019
+```
+
+仅2场预冻结未训练名义配置距7/己.8/敌1/seed20261019/12秒探索，PPO与规则各13决策、动作均[0,3,3,1,6]，均5.401785714秒low_health_safety_exit、己6HP，敌约.606445/.589355HP；可观测初态含CD0完全一致，但仅1pair不推强度/收益/泛化。安全截断不是死亡/失败；训练与部署保护边界不同。规则raw split=train且12行eligibletrue为旧默认，未进入学习；两run的learning_exclusion sidecar及共享JSON按raw SHA永久排除未来训练。后续探索应显式`--data-split test`，本轮未改raw或重跑。
+
+续训256目录继承内嵌课程，勿再次initBC；任务变化需allow-task-change。模型/证据Git忽略需另带，报告[课程MVP](docs/PHASE_05_CURRICULUM_MVP_REPORT.md)、[共享摘要](docs/validation/ppo_curriculum_mvp.json)。下一步预算关闭协议/训练部署安全边界，再新授权小预算比较；本轮不追加游戏/训练，P5全面验收/规模就绪/收益未建立。
