@@ -315,3 +315,11 @@ base_build来自当局SC2 ping，只是部分引擎身份，不是完整version/
 唯一2真实短case（Zergling距8/满HP/12秒/seed20261020）：reset-close在decision0/frame17、reset+合法action2退却一步后close在decision1/frame25；原始RL/micro均0/1行，实际一步8loops/engine_confirmed/reward0。两次close各2.094秒、summary先于ACK存在、身份匹配/exit0，无EOFError/Traceback/冲突/worker或SC2残留；base_build98370。68源/两map/4历史证据SHA前后一致，两新case rawSHA sidecar排除未来训练。
 
 plan SHA `9cb3779c2e5f9d850b0f7b217c84286453b6760265535d55dbb55752c2af78ed`，新artifact `artifacts/p5_graceful_close_20261020`；完整结果/33文件SHA见[graceful close报告](docs/PHASE_05_GRACEFUL_CLOSE_MVP_REPORT.md)与[共享JSON](docs/validation/p5_graceful_close_mvp.json)。强制清理/超时失败路径仅mock，未真实kill；旧EOF失败证据保留，未训练/更新模型/调用LLM/完整对局/读凭据或live快照/重跑全suite。两case不是P5全面验收或收益证明。原始工件Git忽略，迁移另带。先推基线f2618cc已在origin/MacZhi-P6；本轮本地待提交、未push。
+
+## 2026-10-21 P5关闭修复后续训最新接续
+
+沿curriculum256唯一实际续训新增64步→累计320，trainer exit0/89.078墙秒（上限300），旧课程/nsteps32/batch16/epochs2/seed42继承，actor/critic/Adam恢复、updates16→20、12项Adamstep32→40，finite且actor改变。64条mask合法/实际8loops、系统失败与discard0；4完整训练局3enemy_dead/1marine_dead，末第5局7步预算close。末466fdd…在decision7/frame73正常close返回并worker78396exit0早于pending save，summary interrupted/training_budget_close/resultnull/errornull、不额外造transition。harness观测正常close返回，未独立抓原始ACK包；身份检查由生产close强制。官方leave结果不计自然战斗胜负，自有PID无残留。
+
+首次artifact observer在初始化空close读未初始化episode_id而exit1，0worker/0真实step、无有效checkpoint；失败完整保留。root仅授权修artifact getter并用新observerfix目录，之后唯一实际64step，不声称全轮零错误。新checkpoint `artifacts/micro_ppo/p5_close_resume320_20261021_observerfix` SHA429b53d24e87c5b0f67bce8da7eabdb696451c37d5d9370809096606792b7b6a；新actor `artifacts/models/marine_ppo_close_resume320_20261021_observerfix` weights SHA2b9a7355f8b2251ae4163ffb0e20e2851ca37081fbfd93e17a0b58f3c4a070cc，producer保留BC/dataset/parent/course来源。旧14文件hash不变、两个默认启动器仍curriculum256，未切默认。SB3reload概率误差0；NumPy只核本次已有1条probe、概率误差2.3283064365386963e-10/动作同，非64条或千条验收。
+
+见[续训闭环报告](docs/PHASE_05_CLOSE_RESUME_MVP_REPORT.md)与[共享JSON](docs/validation/p5_close_resume_mvp.json)，原始证据在 `artifacts/micro_ppo/p5_close_resume320_harness_20261021/observerfix_evidence`。模型/raw Git忽略迁移另带；不推强度/胜率/收益或P5/P6全面验收。无新LLM/API/完整Easy局/安装/源码更改/历史suite；旧EOF证据不改，真实失败kill/timeout与千样本验收仍未覆盖。本轮待root最终保存、未push；后续训练/评估需新授权预算。
