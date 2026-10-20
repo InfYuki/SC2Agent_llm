@@ -1,0 +1,1417 @@
+{
+  "schema": 1,
+  "date_local": "2026-10-20",
+  "scope": "remaining E1/E3/E4 engineering MVP; fixed-five inventory is descriptive only",
+  "batch_id": "p6_runner_e1e3e4_20261020",
+  "plan_sha256": "fa0c21372c9f10c7c24ad2aa9f48cd182c2b45534ee9d82bf9af24388fcdc298",
+  "plan_file_sha256": "515daed74ccce7903b9d0c39d4090f394e8eeec5a5b30e34dad1a3dfa6f9f336",
+  "frozen_plan": {
+    "schema": 1,
+    "batch_id": "p6_runner_e1e3e4_20261020",
+    "scope": "engineering only; no strength inference",
+    "created_utc": "2026-10-20T01:06:46.130144+00:00",
+    "common": {
+      "map": "Ancient Cistern LE",
+      "opponent": "Zerg",
+      "difficulty": "Easy",
+      "realtime": false,
+      "game_step": 8,
+      "seed": 20261020,
+      "max_game_seconds": 1200,
+      "micro_max_units": 4,
+      "wall_timeout": 600
+    },
+    "game_path": "C:\\Program Files (x86)\\StarCraft II",
+    "models": {
+      "ppo": {
+        "path": "C:\\code\\SC2Agent_llm\\artifacts\\models\\marine_ppo_curriculum256_20261019",
+        "sha256": {
+          "metadata.json": "7f8c0754a6dc65f5d13bbfac18608e26b48b72ebc5f2215fa2bf0674cc932e07",
+          "weights.npz": "8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1"
+        }
+      }
+    },
+    "installed_map": {
+      "path": "C:\\Program Files (x86)\\StarCraft II\\Maps\\Ancient Cistern LE.SC2Map",
+      "sha256": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59"
+    },
+    "llm_total_call_cap": 20,
+    "max_games": 3,
+    "inputs": {
+      "project_commit": "88206e9c22798d3de1bcaf8c6a9f8d664ff71de4",
+      "ares_commit": "70a151a66fdd00d6c1ee44718735d0da396b902e",
+      "source_hashes": {
+        ".github/workflows/build_windows_exe.yaml": "ecf43d6d5a60bc8a4073ec44c0c22490ce909f8e1ed5cdd69000a94bde2d2e79",
+        ".github/workflows/ladder_zip.yml": "51798b6c68d78b40071b42b2cee22ba83ea26cca0e3b25d4a0c2cf7e8eaa4c77",
+        "[template]_builds.yml": "3da6091d8a2e21c4e9384165d374cc254b06579f0187ebfe05ce7bcb514eb86d",
+        "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+        "bot/budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+        "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+        "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+        "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+        "bot/llm_bot.py": "e98503fb63c069c4070e1416b4d327da75bbc80f1c61bd656d9027129b4e0a3a",
+        "bot/llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+        "bot/llm_ppo_bot.py": "049956798f12aae606cffd971860c253984a93112a212b233d81ee1ff52ce4af",
+        "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+        "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+        "bot/micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+        "bot/micro_bot.py": "1950f7938c08d550cfbb0c47b30c3d25e3e89b76e9c2979b530267aed2f07f38",
+        "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8",
+        "bot/micro_env_bot.py": "cc1656b22e3485fce0f72c008c29da0bc25f1ead4c9fd0b01412bb75aab0b89a",
+        "bot/micro_ppo.py": "c2378864c5cbd78b2410eb7fb90eca15033fb12e1c1a6b3f8ccd3239e9a04bdf",
+        "bot/probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+        "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+        "bot/strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d",
+        "bot/telemetry.py": "d6d6d67cba9f18b82590a7eaf70d81efc73bae84f01eab1abfaa50b7b2d0363d",
+        "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+        "envs/__init__.py": "add1335323862acab30dff44529ea1fb45fa8c9381c9a047f9ca6857b3ce6b1e",
+        "envs/gym_sc2_micro_env.py": "0816f9c8b907c740d84d390a05550e596937c4c52e29c2980b608b3e50d2f110",
+        "envs/micro_ipc.py": "9eefaa8f00d8036f49bbeb929d3b2e77b83168ab027e0fc93ff639e89f3e533b",
+        "envs/sc2_micro_env.py": "92efda033e2b637cdd6c18c991c19044db8ac198fc1c87493f6b4116365c8b96",
+        "ladder.py": "704cc63380886077a72187bf85057eebb334c2c3d769ae7dab347b11870f658b",
+        "maps/Ancient Cistern LE.SC2Map": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+        "maps/Babylon LE.SC2Map": "3908388d77beee80d79af6dfa93fe12e9931b7a6d57cbb710b31821b33f8638f",
+        "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+        "pyproject.toml": "8300f4f7c7ce0817495ff5f51ec2755493002cce1536649131aa483f24b69a41",
+        "run.py": "1a2f7e03ecc07800416941dacb8b36075bb01d5a587cb8c31c42f30984dbea5a",
+        "run_local.py": "f63e65ed42ef72a101c0644b5d9e4fbfb93f169d3dd14ce70545d17c8fc6c4a0",
+        "scripts/create_ladder_zip.py": "4cca7070c1f87ed6a371a67a3bf6dc4277d402df4216f0f15181f72f38942f1f",
+        "scripts/create_pyinstaller_exe.py": "81ba9fd6b99ea35163c7619f3876f030941faed9ac26f82d1a76115c8c1e3016",
+        "scripts/update_ares.py": "01bd8e4fa763847dfe16c302f022037510e0038108cb2030049fe14a9f386846",
+        "scripts/upload_to_ai_arena.py": "ed35d3cbb452b83492a4d546eb087b7a523efa993b61b8542e0ccbde4c28d6ba",
+        "tests/test_building_manager.py": "747dc0c1e45d7f37c1aaa9a2f400fef72b9ebaa59b1710dab96a3006aceafdcf",
+        "tests/test_evaluation_matrix.py": "e0c0d6a74821a1278def534333bb9f93904fe52eb2a5729271917aa5d4eded1c",
+        "tests/test_gym_sc2_micro_env.py": "5ed6e0fee6731023fd513e308527b421832173ac19fe16245e4e8ad053a93d3e",
+        "tests/test_lifecycle.py": "b50d39e6ec945388e2b0bb6fa57ce9be71c98d2137924cea0ae2bfa00432332a",
+        "tests/test_live_abilities.py": "9ab4584ac69412428a52244c4af4b3c7373923f6e20407175d851678b7ab7e20",
+        "tests/test_llm_ppo_runtime.py": "9ebf0d9a36d2788906355a6e91946f92ea77976a8f22668fa7e31f8196371c20",
+        "tests/test_local_runtime.py": "bf5b22d6c3e16e7ab8150c23a74fc0056bc302d0b67a753a3309e484d8667d41",
+        "tests/test_micro.py": "a5fbf9b76e6bb809ce570e75287e618f3ad1c4641fb1ef56e2b4e42f2f074a0f",
+        "tests/test_micro_bc.py": "bdf85dc8a3fe1a1f470a1badfb3dd0ded3e8ffae1fea14e3b4c32dcf43894e56",
+        "tests/test_micro_bc_training.py": "0f3592e4c016a0378cc57ea2303fe8444d4724bb5b90aab200c7948d061c542b",
+        "tests/test_micro_dataset.py": "1e543e9551db5d38cdc1f59d8338c0a049888be30b3fd02f8f405b9eac17fb16",
+        "tests/test_micro_ppo.py": "3e5c96a7961c2fa141e343416b71fc3af1edcc1112e117dfdfb7bdd7e8c97f29",
+        "tests/test_micro_ppo_runtime.py": "6682e0ec989e11d88720ecca76900fb63f94a81eab094785cb1cd5ee04e55150",
+        "tests/test_micro_scenario.py": "d99859c37511d4c77f9c6666cc6ac73d6c9a8cde94ae60213c3a72092e881753",
+        "tests/test_micro_terminal_eval.py": "eb0c6b7974f465c4e0134fa0989f93722eb9f6c90ae90f3af91cdce96f6e6e94",
+        "tests/test_micro_training_task.py": "e4fd0b331ec3bfa2302fe870f4f9ae8aed135209d605b1b10f1283485611afe1",
+        "tests/test_run_evaluation_matrix.py": "841f887b41d25c394be8c9cd76d3b7de93f4572cda00fade5ecdaa6e93965493",
+        "tests/test_sc2_micro_env.py": "42c3e35be7043e6abfb80f4e4961ee85e14f302870f7d74b5318832e498aab98",
+        "tests/test_strategy.py": "ff49af686154a8ba55d28ae043eac61fb2bda6219e869c2159abeebfbbb6df55",
+        "tests/test_strategy_adapter.py": "9a1401a8c081f65cdedbb52e865ef9977238a4f150e1abd03431d0fc950b9be7",
+        "tests/test_telemetry_snapshot.py": "daea42766bb35bb40b98dc730ed4b5661b0caf10312b9904c2a06432b28258c6",
+        "tools/evaluate_micro.py": "8f61f183c600e64122d8f1c415a9990f1a4397c5bad6eff523318908a461f976",
+        "tools/evaluate_rule.py": "86808ee51cef764ae335acd083c3daea5d39b79a2f569077af7e6f452eec4ec1",
+        "tools/evaluate_strategy.py": "cf1bce97cfeaa68e1e7c0d15dc8d82ccf31be813cf7950972d9a2efaf70eae8e",
+        "tools/export_micro_dataset.py": "d7646ef20e5cc4e196116ba4f71e02f204547785289a40e8c89e83b9588e5d5d",
+        "tools/export_micro_ppo.py": "dcafe188530c1ecef5f5c793a410d1c20b6bbe960e1f0568a179d8647812a48c",
+        "tools/probe.py": "6ab1438fd506a89734edc2482827e6d2ba4a2558d9dd57efbb0ed5ed79f0b24b",
+        "tools/report_evaluation_matrix.py": "9aecbc458b38f9d4c3f3aacb5133e0642d6eeaf645e0233e247f41c47c331438",
+        "tools/report_micro.py": "2dd0b4081391691e7e6f6de32f6b1e90ebb4613b37699839e0a6cbefdda85773",
+        "tools/report_strategy.py": "b2151130df9dccfdb640cedd0cdb7fdbcef139f2b6bd96705423bb1e871d31db",
+        "tools/report_suite.py": "5ba1f31520d59034ed2b86f146a1494c2dbece414207ba2a58f8cffefcba66c0",
+        "tools/run_evaluation_matrix.py": "1940b268de9d43e8a26d4a230d4338835a7c692f9150cb6ba83ea686fb749d4a",
+        "tools/run_logged.py": "1b3770f8ae6247d59c3c354a7aa9a3d7da1e4f55f2309c3cebea2663416b966b",
+        "tools/run_micro_scenario.py": "0eca8a551f2e90079a841214cfe2a644492212faccedcca5821ad0a502087aeb",
+        "tools/sc2_micro_worker.py": "4c23b4acf68c024d950399f9fafa6bd00c0e68d7d6e31b32a85b8e4a46f6ee00",
+        "tools/smoke_micro_env.py": "257ac08d97a9afbc273611954b32a4fd5b032b77b2d9295f123430e3473f4220",
+        "tools/train_micro_bc.py": "9432bc365d4f5b0f3100d94d840fb69c34ed43870d2bdea48eb19cd38507edb4",
+        "tools/train_micro_ppo.py": "f0f49f1e939d218d13d389cca9e836f34380face618ad3a51fc890c163526bcd",
+        "ares-sc2/.github/workflows/lint.yml": "2377ce0ef63320f4f6c8c16e7a69fdcd6bd8592529b66932f43b9404c6bde0ec",
+        "ares-sc2/.github/workflows/orchestrator.yml": "01a37a9733589e736ea6a8cc5d29c087abd5174fb1789298c96859c3bc523f83",
+        "ares-sc2/.github/workflows/pages.yml": "ce90ec9fef9fb5ce5c61c9892932a469b099973acd97baef1011ff22b09dc768",
+        "ares-sc2/.github/workflows/release.yml": "900a03f6c039a9460ad3fdb704bce50661382062a691aee9493544a74e2c6894",
+        "ares-sc2/.github/workflows/run_bot_game.yml": "d9da075a7f23ab8fd9fe1d1d77f74a66ec7456bc25cfeb77c1785ccca690fd0f",
+        "ares-sc2/.github/workflows/test.yml": "f912659fc1b82dee8985878dd6e6a107b3db809922d8a6d8ac99bf546d8d2f59",
+        "ares-sc2/.pre-commit-config.yaml": "598bd0ee71ce1c1e6c5ee0c08e09cd4ee093e107953aab72d8d6cc23d4a0b887",
+        "ares-sc2/examples/build_runner_examples/protoss_builds.yml": "351ff58b9c97532483006da77dc6c9e08bb50615b60afb1a337aedf166e1c912",
+        "ares-sc2/examples/build_runner_examples/terran_builds.yml": "6c7567c62d6f936f098692105a9aa5585f96059d695f6b829ad5a22832518777",
+        "ares-sc2/examples/build_runner_examples/zerg_builds.yml": "45ef22c8cbc222212681319be96a86101c8997a5785352e727a4e68d4d6416fa",
+        "ares-sc2/mkdocs.yml": "ad5b4fae16182dd297c8a3c82ca9095c3f816ffda70bd74699342f9461f53ac2",
+        "ares-sc2/poetry.lock": "258a765300f8c703d64abb457ad3323be528ada5259897f4fa80c1cb0b6e1f4c",
+        "ares-sc2/pyproject.toml": "0c0b6af9ab364aee20d427a0622758df4bcf2390a29626d6bbc61d59bcc297c2",
+        "ares-sc2/sc2_helper/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "ares-sc2/sc2_helper/combat_simulator.py": "c380a4511aaa995fb3691020058ae6a1631a09d960ab2b54f0dccb5c70876b28",
+        "ares-sc2/sc2_helper/helper_functions.py": "2ace3b6728f5e450e43940109e4d84d9d62b35ceaafad0d2b812719e96995b4c",
+        "ares-sc2/sc2_helper/test.py": "7a0e18e78bbfe96a0058ed54041a3425b1ed70ddef671fc314f87fa622d1e7bb",
+        "ares-sc2/src/ares/__init__.py": "bbb9d3bdfc3810ed7a9139fb87844ed62c42cc7497c33ac17a6068621cec6eaf",
+        "ares-sc2/src/ares/behavior_exectioner.py": "6e8f961887dd7a3c12405985cccf87620d74157c270e46ab66d04245ca5523c2",
+        "ares-sc2/src/ares/behaviors/__init__.py": "7fabe93970f0b04361f9d7ec3a54e113645bb100560fd389f723e383face9e44",
+        "ares-sc2/src/ares/behaviors/behavior.py": "1b51ee3d4b84c3e69c200239e5465b5f1e4695f5a1ba48994239739b93b87245",
+        "ares-sc2/src/ares/behaviors/combat/__init__.py": "b35c458f411c0a4ff76a66a23630b2a6b48d4b9bce2a2a149d9bb90eee36de7e",
+        "ares-sc2/src/ares/behaviors/combat/combat_behavior.py": "1c3033354f6d5b01ebcdae939413c74d2f7fa5c0c1646f61e6da2e56d328e4d5",
+        "ares-sc2/src/ares/behaviors/combat/combat_maneuver.py": "c4476c0bd65b4dd74b75fa726eda853ddbd2d8ba20458c504c456e893b0b4b8e",
+        "ares-sc2/src/ares/behaviors/combat/group/__init__.py": "722df67daaa6e7ab842c09494d14fa9091d3327188848d8b00b5c5f539558431",
+        "ares-sc2/src/ares/behaviors/combat/group/a_move_group.py": "492126ec936ee69f8342238777d98cfd181be917606f50711deae5c16b2da0f3",
+        "ares-sc2/src/ares/behaviors/combat/group/combat_group_behavior.py": "85cd5c03acfd9bb84538b0050a4f638525717ec26a444c15578658c230eba26d",
+        "ares-sc2/src/ares/behaviors/combat/group/group_use_ability.py": "c7bcd15d6a3a20e3f7c136f695dba90235b8e617b7d43dfb6886207241a009a8",
+        "ares-sc2/src/ares/behaviors/combat/group/keep_group_safe.py": "691100ff3bac082b8e11a1a21a61aef5395000a0a52231bf68e6babf51594f89",
+        "ares-sc2/src/ares/behaviors/combat/group/path_group_to_target.py": "5895a4270d095d9f8d370cba5baa19f2e823949ca7aaba048d386609f6cb2a98",
+        "ares-sc2/src/ares/behaviors/combat/group/stutter_group_back.py": "8c1d0cd3565057cd13af3f2d120dfc316d2aa20d5f05b27cb1c85121d90456c8",
+        "ares-sc2/src/ares/behaviors/combat/group/stutter_group_forward.py": "c5983997355ef1142b12accd6deca9d22c57b15d06ea1e000237089cab9e3b9c",
+        "ares-sc2/src/ares/behaviors/combat/individual/__init__.py": "0e4c8a09405f7645793482b2a63f565a46957f2c16eb11da482bfd9fe0659a16",
+        "ares-sc2/src/ares/behaviors/combat/individual/a_move.py": "1b44c16a738cecf1302ebd51103662cc0ddeb1982dcb295673dae7d6254fb202",
+        "ares-sc2/src/ares/behaviors/combat/individual/attack_target.py": "d0793d1036ea8c9aac26f9ecdcd54f01c551795eaa13c57620226ad533e2ecfe",
+        "ares-sc2/src/ares/behaviors/combat/individual/auto_use_aoe_ability.py": "5ba4ae408ca783b45db1e09d10d6afd3e5d95d5463af9bd2ba3de88ebdf4e9a9",
+        "ares-sc2/src/ares/behaviors/combat/individual/combat_individual_behavior.py": "4afad7a51b5ebdda6d2201c52aff790209d1796127a1195c8b078049f04ba8f4",
+        "ares-sc2/src/ares/behaviors/combat/individual/drop_cargo.py": "9356cf5d53e7627bbd157c2a9c9acb456cbf70f8596a7c7a6292ca89bb357e00",
+        "ares-sc2/src/ares/behaviors/combat/individual/ghost_snipe.py": "ec2bf16c9e4bf97e4672b76b9c1aba839133b889a03d93264914c965921ea4a1",
+        "ares-sc2/src/ares/behaviors/combat/individual/keep_unit_safe.py": "e10be5483cd8dd8730612746c3fbd5eb5d978d70d63a901719026c23a50f4108",
+        "ares-sc2/src/ares/behaviors/combat/individual/medivac_heal.py": "0a37f378c1aebd25e6147ad7afc6d98225940e7da5dedfc0be907752be211854",
+        "ares-sc2/src/ares/behaviors/combat/individual/move_to_safe_target.py": "aae41ad024436af9bb07310de57afdab4bf2ecfdaa94e8555b9537ae850546f9",
+        "ares-sc2/src/ares/behaviors/combat/individual/nydus_path_unit_to_target.py": "a1bdcd6111c34e76b6d96eade8ba43e7fd831fa703b4f2fa79746b75819bb174",
+        "ares-sc2/src/ares/behaviors/combat/individual/path_unit_to_target.py": "41bca53fada0f3de5e178b587f5ef7e046fe5cd9b91c3c0d0425fa7d118c106b",
+        "ares-sc2/src/ares/behaviors/combat/individual/pick_up_and_drop_cargo.py": "755a9e6d3f5bcf39f6440f4d45f3415614c6958472d2e43c0ce331d7b7cfa65c",
+        "ares-sc2/src/ares/behaviors/combat/individual/pick_up_cargo.py": "3ba6ce9bedff381eccc827d8e53a9f1969e0593659a3f0043102d582fc294e32",
+        "ares-sc2/src/ares/behaviors/combat/individual/place_predictive_aoe.py": "898d4f23f8f75fe48aa0b1df36a18174424e3f5ab8f19b8e2d1380b813dcf454",
+        "ares-sc2/src/ares/behaviors/combat/individual/queen_spread_creep.py": "e643f7d680fca2d397af0b5c8429057c57b990f641b9dc0bdb2d1e592fe3f9d9",
+        "ares-sc2/src/ares/behaviors/combat/individual/raven_auto_turret.py": "9835338dd67fee47e442a71b48582e5e1365303261b44e8de250a893d9317d8a",
+        "ares-sc2/src/ares/behaviors/combat/individual/reaper_grenade.py": "c55652a9e83c16b98866a269074b225b325683925d89994d62e6bf397d333e65",
+        "ares-sc2/src/ares/behaviors/combat/individual/shoot_and_move_to_target.py": "fbbfc68a3b9841d29f695bd37d301e7297d8106aef364c2a9f30e10e3078fd97",
+        "ares-sc2/src/ares/behaviors/combat/individual/shoot_target_in_range.py": "d167987c07be4bd3493e326ecccd1ffc4912c6870992b4ece7c19aac97707cfc",
+        "ares-sc2/src/ares/behaviors/combat/individual/siege_tank_decision.py": "2b20970aa8a33755a00385f5f00344d1e64152a051d76f04acb6ff9c8dd381aa",
+        "ares-sc2/src/ares/behaviors/combat/individual/stutter_unit_back.py": "1c37831cb5aba600b94b5fa45d15adaad65182925876d492d994a1ba77ca37fe",
+        "ares-sc2/src/ares/behaviors/combat/individual/stutter_unit_forward.py": "51da39d4fdde67cdb1ce29833c5b406427f3584535604315c288f5ba096027ad",
+        "ares-sc2/src/ares/behaviors/combat/individual/tumor_spread_creep.py": "f760c334a9c64a00dfb94124bcfb7b242167535c5bf2e4bb5f6c55dc1f8d1628",
+        "ares-sc2/src/ares/behaviors/combat/individual/use_ability.py": "443ce2322e47268652ff27f2d279f86e85d679ed397ad91718e9a11d32149206",
+        "ares-sc2/src/ares/behaviors/combat/individual/use_aoe_ability.py": "05dbb9bf5099769526bb360dee0d077507cb50ca7f788d87c9090b635196be38",
+        "ares-sc2/src/ares/behaviors/combat/individual/use_transfuse.py": "4fe566bfd4af412291f610ceb7c427865caaa71a768c42e112d696bfacfd0355",
+        "ares-sc2/src/ares/behaviors/combat/individual/worker_kite_back.py": "d83f18b5287f1cec7bb2668b53d5e7a60851f72dd448176565ee97f0c24226e4",
+        "ares-sc2/src/ares/behaviors/macro/__init__.py": "a05947324b7f6a7573ad1080cf1e2d4c92603670c28eff8280f988210a97fd1e",
+        "ares-sc2/src/ares/behaviors/macro/addon_swap.py": "d5b4eef5aa4cbd1393ee00b68e212f7f8dddf99c47df605967ec87821ac001f0",
+        "ares-sc2/src/ares/behaviors/macro/auto_supply.py": "c397e73df8c3420b565bdfb93654342f088da448e7dd1c47f4f134281c73e647",
+        "ares-sc2/src/ares/behaviors/macro/build_structure.py": "0be0e59b0df8941157d79a4d0c22ecb5a27d425e1e4c3994888a8fe3eb31e1bf",
+        "ares-sc2/src/ares/behaviors/macro/build_workers.py": "ee926048c675cc506286fc47feeed55a8fbcd67c35331dfec19db9baa973f65e",
+        "ares-sc2/src/ares/behaviors/macro/expansion_controller.py": "51112960bd506462c689c3612db4e6d03aaf658f908ff65c7c9cf5d7418656fd",
+        "ares-sc2/src/ares/behaviors/macro/gas_building_controller.py": "e580744414e73d323ba38cd478ad779f2348803856e57ba7f8b8292bdc60a175",
+        "ares-sc2/src/ares/behaviors/macro/macro_behavior.py": "784e10e881420486864f175132329df3dcb1def6414c7b592b31dccc2a75297b",
+        "ares-sc2/src/ares/behaviors/macro/macro_plan.py": "a6d1b1420b92a2cf681ce542f2834b770b0ca24aeb68811537bc20507dff8a82",
+        "ares-sc2/src/ares/behaviors/macro/mining.py": "6909e6b6fb374b9c55ccc6f028e8fae88d017ac66021c6176ada7c6f3f9a6e5e",
+        "ares-sc2/src/ares/behaviors/macro/production_controller.py": "97fdec59c2f4e2aeef092958463f50dcf134ae8e7a0a3ae12bbb0d5060fa8c7c",
+        "ares-sc2/src/ares/behaviors/macro/protoss_static_defence.py": "5912d9baad2636459bbed328ed21c6fae6819b94a5e55d836488bdd074f50c2c",
+        "ares-sc2/src/ares/behaviors/macro/restore_power.py": "474637cf53180ca5737a0c5090f04119f85c9b5cfac22981d97b7afbac618c22",
+        "ares-sc2/src/ares/behaviors/macro/spawn_controller.py": "36e5d18851f8121dc514401d2dd9ea8c99ab30036feae5cf98d3eb27eca64cd4",
+        "ares-sc2/src/ares/behaviors/macro/speed_mining.py": "56c627fe8e0f75d59da3ba99342e650b7faa25b9e7d16dd99f3003465ea9b84e",
+        "ares-sc2/src/ares/behaviors/macro/tech_up.py": "5aa4f9694aee52217b1f675dd715371c910465cf885c82302a80a18ea94724c0",
+        "ares-sc2/src/ares/behaviors/macro/upgrade_ccs.py": "40088aa0116ff54cc6562deab89c5da007d92e4146036ff465949d7eed337e3f",
+        "ares-sc2/src/ares/behaviors/macro/upgrade_controller.py": "cebc2e411f6b1c5f72dc3d63127ca65cfe59ffb8891eef1aa18ead22701889ff",
+        "ares-sc2/src/ares/build_runner/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "ares-sc2/src/ares/build_runner/build_order_parser.py": "14fde7efa0512c098b952fbeb80708c773be29d8ca86028e02f3137bfbbeb908",
+        "ares-sc2/src/ares/build_runner/build_order_runner.py": "bb440a83c57f6e833d2ccc167bd0dc08961d4919b784d865ac6a39dd2e260536",
+        "ares-sc2/src/ares/build_runner/build_order_step.py": "7c397de69e4bae15ccf26c92ccdb8362334066969820fbb4a1bc526ff701a10e",
+        "ares-sc2/src/ares/cache.py": "43f63a5c07ba9a51465223f1f2e7a1ba1aa3e3acb8252641955ef5f8ee8bc892",
+        "ares-sc2/src/ares/chat_debug.py": "bc44724bed2d59952e8188ae37b84645dae35c8b6241b269f38c3dc7907825e5",
+        "ares-sc2/src/ares/config.yml": "5efbc7ab5717b62e86a040618b8a9a81d8a822c4a14a3e35249694a60f76e47d",
+        "ares-sc2/src/ares/config_parser.py": "6d0a8d510922b78490fec06957727d856b7025fba91456e5b030a64e6a76d327",
+        "ares-sc2/src/ares/consts.py": "56cfce4fe2fa50f8cc347323f3e9536e62118434aeb9af074ae43925e3695a5b",
+        "ares-sc2/src/ares/custom_bot_ai.py": "5c9f47158e8ec85df0e5b6b63244f03295f344f7569387071871f0a0151fda34",
+        "ares-sc2/src/ares/dicts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "ares-sc2/src/ares/dicts/ability_cooldowns.py": "be0e1ebe39968eae06f0757188ead3bae0614af97fda78d2700c22f4bb3266c7",
+        "ares-sc2/src/ares/dicts/aoe_ability_to_range.py": "06df61f70f65bdfe01052fab1b112b8d3f1eba3d1a09c907224d9477528a2a5f",
+        "ares-sc2/src/ares/dicts/cost_dict.py": "e062b2a7a4619258f783bd48739fd4225d294767cae1b82d5c8bf20e6bb8f0bd",
+        "ares-sc2/src/ares/dicts/does_not_use_larva.py": "05cdb57ad08a5e8a22dcfa6476b1c82adbf730410984e309f5d1f99c88548bbb",
+        "ares-sc2/src/ares/dicts/enemy_detector_ranges.py": "6aa1cb3ac912908f1ebcee98f6f289928bd09f8eec3c13b79c6c0d00bed2f389",
+        "ares-sc2/src/ares/dicts/enemy_vs_ground_static_defense_ranges.py": "c5f6023c3638d12b6c4bcb8a2aefb31ff513d80d953dd925953071b515211413",
+        "ares-sc2/src/ares/dicts/pickup_range.py": "42405dd33be7cb50a9833ed2e34705dc64296d44e9f72c3583aa43f064779da7",
+        "ares-sc2/src/ares/dicts/structure_to_building_size.py": "5f38436b95df0c925e6aaeead2da6bc88e9a45e104c1ff5ee015c5ccaa8b731d",
+        "ares-sc2/src/ares/dicts/turn_rate.py": "88d6a92aae6d8fe2ccd4a7997e788cfcd8c56e5ed20f6563d8205c7f87e77fcc",
+        "ares-sc2/src/ares/dicts/unit_alias.py": "da14018b20ac6b09c54431d98752f253ec307dd3c9dbab89d84e1c3bb604b577",
+        "ares-sc2/src/ares/dicts/unit_data.py": "fbe9463bd00fe7acb0297912498aaf2f512a23000681edd6892f9037e4cb608d",
+        "ares-sc2/src/ares/dicts/unit_tech_requirement.py": "68fbb057f101b8a7112b25b7081ce1493b646d1ece8f3b196fc3cb176f60fcb5",
+        "ares-sc2/src/ares/dicts/weight_costs.py": "112c030f999f9c0661d7f6731d3052e4039f0889a53c9b8570a329ef93efb0f6",
+        "ares-sc2/src/ares/main.py": "5d7ca0030b0e13c5464d0cec73accc51f75b49788896df06fbbbda37b32ed266",
+        "ares-sc2/src/ares/managers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "ares-sc2/src/ares/managers/ability_tracker_manager.py": "b8baacd65b7274f4a61cb1cb23cd5b8e593cb58a77aeef93c2bcd3d5ad1300cc",
+        "ares-sc2/src/ares/managers/building_manager.py": "6e6c382060afdffe62883c38063b5c991d2d2da6c5896cb32ee92f5815a1c494",
+        "ares-sc2/src/ares/managers/combat_sim_manager.py": "07c9826df85e4bdcf80b68e3d5c81e64b8d86c57d5689b8d4f21a8bd1ca97745",
+        "ares-sc2/src/ares/managers/creep_manager.py": "7cb3279399408fc1c63c99c25f252dfa3fdc0dae3c2d59db09f03523c6552c46",
+        "ares-sc2/src/ares/managers/data_manager.py": "6eed80627c9c1d7cbd9e8e424be591292d730bb4b0a57a1cae3aaadcc69b9a77",
+        "ares-sc2/src/ares/managers/enemy_to_base_manager.py": "de47c131f2e91f272e9d19bc8e59536baf8183343a94f93a24b6dc6bcb6dcd58",
+        "ares-sc2/src/ares/managers/flying_structure_manager.py": "87953eba5062dcf725328706a64985c4815b04c026dda26059d78aa271308bdf",
+        "ares-sc2/src/ares/managers/grid_manager.py": "c44b93a1696519d8548559f79183117c26162927a4b5c8740be33c4d03bc0e77",
+        "ares-sc2/src/ares/managers/hub.py": "a7558100c00d003b8b0bfd3aa6ec215dd6ec30eb150e4852febc4fbf88fdcdc9",
+        "ares-sc2/src/ares/managers/intel_manager.py": "a34db1e4cde62a1ce8e06d345384380adad9b8ab80b8ce725dea0057c33618ee",
+        "ares-sc2/src/ares/managers/manager.py": "0337a6ea238e4d10e2c0862abf7b68185aa987d3ffeb983295ac8b70577f457b",
+        "ares-sc2/src/ares/managers/manager_mediator.py": "5756fa66e0ad0bdf85030c9446cd57bd316fcdd5ca4cc37980129af33bbe8453",
+        "ares-sc2/src/ares/managers/nydus_manager.py": "cfbca9519b0a9256c6907ffc1147b4c6f9a85ea9b68b169098ff54775e746569",
+        "ares-sc2/src/ares/managers/path_manager.py": "a543c290685ac4774644b88115af54cc7cb1186708a871391cc18d4dbd4418da",
+        "ares-sc2/src/ares/managers/placement_manager.py": "ce919b8b314400ad8312d53a901632362d602a2c044119c96ab1b350d80cce78",
+        "ares-sc2/src/ares/managers/resource_manager.py": "9de323c167331c4a6882a328a7c0a1fc7b5d0186375e6c133d71c7102cb67279",
+        "ares-sc2/src/ares/managers/squad_manager.py": "5d9faf1071a09e7b9458336e3790c27bbe5a5c907938414cb358dda2ce69b902",
+        "ares-sc2/src/ares/managers/terrain_manager.py": "7734cb300b48b6c3b906bacbbdc92fccf109a6b70cb0579d70bdcde5bcb38e36",
+        "ares-sc2/src/ares/managers/unit_cache_manager.py": "db9430c575e421477b0b2ef6d9b452ddde95c3cdcefeced5865aed32cd57f196",
+        "ares-sc2/src/ares/managers/unit_memory_manager.py": "0f201dcbfffc9f4970d8eaad16a287399f9c5c11a4e1c5a860c550f14e3acb6a",
+        "ares-sc2/src/ares/managers/unit_role_manager.py": "8a0235c7ae42e0b1889346b7d57deef51c4b2980eeecdfb786c1a0dd284a8d78",
+        "ares-sc2/src/ares/managers/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "ares-sc2/src/ares/managers/utils/placement_strategy.py": "9f48ae496ecf4251e9f708426d0f2eee4b607bdfd41250f0435d19fa59f1b317",
+        "ares-sc2/src/ares/managers/utils/user_placement_extractor.py": "df27ceeecadbfbe94ac36804c2d67d2b3826112dc447d910f0eb58a05bd35902",
+        "ares-sc2/src/ares/managers/warp_in_manager.py": "2cb027877f39cce7150757a8b01c34aba286f39ea19da73bbe2efee1ad22144a",
+        "ares-sc2/src/ares/protoss_building_placements.yml": "122d4a6bd731ca220d2d01070877fbc1dd24c874fe44fc39698d5b4ab29ebd6e",
+        "ares-sc2/tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "ares-sc2/tests/behaviors/combat/group/test_stutter_group_back.py": "08c29215e34a464cc74e826f2797527de5a7851610867609062362dd1d63fd96",
+        "ares-sc2/tests/behaviors/combat/individual/test_a_move.py": "0e02982aba8fda42e93dcead2647b9a92101b24db08997f6deba86162b6cdffe",
+        "ares-sc2/tests/behaviors/combat/individual/test_attack_target.py": "efe7fde46419e4c8c425ec91994fe360f7e92598afffdd4df356ef06f11addd2",
+        "ares-sc2/tests/behaviors/combat/individual/test_keep_unit_safe.py": "912b651f6751156f9a10c6d58a76a6017d2527ebb9706a57c230202f1a52e493",
+        "ares-sc2/tests/behaviors/combat/individual/test_shoot_target_in_range.py": "b420dd2f394aa22999d31b98be4227dc7e26c7e597762781d4bc5650f67449d9",
+        "ares-sc2/tests/behaviors/combat/test_combat_maneuver.py": "b8eb7fc2d21135c148694f1ab41148a5be668711f770b34d0c0e4525b35ea2dc",
+        "ares-sc2/tests/behaviors/macro/test_auto_supply.py": "15c615e50cb8e33eb0026710bbcdc7ec8eaf6262577b8a27bf1459b735ac1124",
+        "ares-sc2/tests/conftest.py": "024521bf89830f19587b2c65ba7b02ccf0f0d95f07522d9ea961b52e957db7d2",
+        "ares-sc2/tests/generate_pickle_data.py": "bd2e50a0fbc0e6f816b8c8d9356f3b292a90028d37f4d28a848c525798a36236",
+        "ares-sc2/tests/load_bot_from_pickle.py": "fa814e031ed9e4d2309fca288a72e5a1f17a3e54a90c59ef35c107eeea67006f",
+        "ares-sc2/tests/managers/test_ability_tracker_manager.py": "957f60b21708e47c29b5662012a41427dc7372040f9226575097be0bf04a318b",
+        "ares-sc2/tests/managers/test_building_manager.py": "1fff228b28f0641053f6780c97d1e2b12bac4681ea7dc88a454a1b59ca70479b",
+        "ares-sc2/tests/managers/test_data_manager.py": "92dd58bc9881239cbba4c8f855d3f320006cff9a08a6a00fcd7f6c63686daef6",
+        "ares-sc2/tests/managers/test_grid_manager.py": "f0afe150b13ff1d49b1e6815a2a9f0418ac0837dc10a91f1dbe30ac1784d077d",
+        "ares-sc2/tests/managers/test_intel_manager.py": "092e26bf4c797b4260723032f12176a035260495ef6063ebea4efd706b139abf",
+        "ares-sc2/tests/managers/test_placement_manager.py": "3c99349cce1469a768f2cb24f2957e3420afbf8af459f93f0c51557cb39fe481",
+        "ares-sc2/tests/managers/test_resource_manager.py": "63a78a73afd3e4417e83016d969c496b476baf8601f5f0d8d75a8461cdfa3186",
+        "ares-sc2/tests/managers/test_unit_role_manager.py": "894c84574acd4c546e7602953d6df7642ab37ab4a0b3b591b26a1070c3a4fb22",
+        "ares-sc2/tests/maps/BotMicroArena_6.SC2Map": "4be730f6044916dab41f78211c39361130072212565656b6f8dca7ae772a913b",
+        "ares-sc2/tests/maps/IncorporealAIE_v4.SC2Map": "2c0e7fefa85915f7ad3fed7fcea5afb68c21ad65e23093991bdb2a313c623891",
+        "ares-sc2/tests/maps/PersephoneAIE_v4.SC2Map": "47f11086f707ab7203d201aa71c8b59037e3f2c1116476f62ce7f53d54926c9d",
+        "ares-sc2/tests/maps/PylonAIE_v4.SC2Map": "9ba3dd682578107b07cb9f02127f99944e01a9c017836e1518c16b260bc4a812",
+        "ares-sc2/tests/maps/TorchesAIE_v4.SC2Map": "2c807ab5b500b0f487d25023f118b65d9745d5c196db6857cf521b56ba92c513",
+        "ares-sc2/tests/mock_build_order.py": "bb833492db540c6bc54c5df16c15c5dbc27fe4547c536294adec8293f2aa3bd4",
+        "ares-sc2/tests/mock_config.py": "562c9e78d69b3557bfcc9d8a8dad38722934bd89cc30d4391c18a36e66bb6200",
+        "ares-sc2/tests/test_bots/build_runner_bot.py": "aadc33843ffd09ed7e14f8be7768602203571c50f82b5c746c32168557d7ed20",
+        "ares-sc2/tests/test_bots/melee_bot.py": "41287562920b1df1812697df32a97c152307675fa649a7da2dddeb4903088063",
+        "ares-sc2/tests/test_bots/micro_bot.py": "e961325076ba26903065e7abce1b99f46a0245aa7742032b4a8e94601fd07d62",
+        "ares-sc2/tests/test_build_runner.py": "4d9eee9d8fe9a121389f9f1f31e1aa6647df24c55e6dc675b186c1e855cbc818",
+        "ares-sc2/tests/test_custom_bot_ai.py": "9d87c4e110e333830b51457eff2a915c37df537f80099cec730005f936213819",
+        "ares-sc2/tests/test_manager_mediator.py": "bfbcd8a799151f1e6d90bce385ee9d301395767827e92e6088133c99e722d400",
+        "ares-sc2/tests/test_run.py": "485b75fa145a5a095458006bed7eccb0fe2ae7e76e1610f999d56c9d750bdab9",
+        "ares-sc2/tests/travis_test_script.py": "0e81fcc9028214cbc424efb916200710b401ed500d3d7fefdda808bf8cfbf546"
+      },
+      "python": "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe",
+      "python_version": "3.11.17 | packaged by Anaconda, Inc. | (main, Oct  1 2026, 20:16:54) [MSC v.1942 64 bit (AMD64)]"
+    },
+    "attempts": [
+      {
+        "experiment": "E1",
+        "mode": "llm",
+        "run_id": "p6_runner_e1e3e4_20261020_E1",
+        "llm_max_calls": 10
+      },
+      {
+        "experiment": "E3",
+        "mode": "rule_ppo",
+        "run_id": "p6_runner_e1e3e4_20261020_E3",
+        "llm_max_calls": 0
+      },
+      {
+        "experiment": "E4",
+        "mode": "llm_ppo",
+        "run_id": "p6_runner_e1e3e4_20261020_E4",
+        "llm_max_calls": 10
+      }
+    ],
+    "limitations": [
+      "game build and remote provider behavior are not frozen",
+      "NPZ content is hash-checked; actor runtime performs tensor validation",
+      "missing raw manifests remain unmapped in the offline report"
+    ]
+  },
+  "batch_state": {
+    "plan_sha256": "fa0c21372c9f10c7c24ad2aa9f48cd182c2b45534ee9d82bf9af24388fcdc298",
+    "attempts": [
+      {
+        "run_id": "p6_runner_e1e3e4_20261020_E1",
+        "experiment": "E1",
+        "mode": "llm",
+        "status": "completed",
+        "outcome": "win",
+        "started_utc": "2026-10-20T01:06:54.915121+00:00",
+        "pid": 57124,
+        "exit_code": 0,
+        "wall_seconds": 39.39100000000326,
+        "ended_utc": "2026-10-20T01:07:34.305398+00:00",
+        "evidence_category": "completed"
+      },
+      {
+        "run_id": "p6_runner_e1e3e4_20261020_E3",
+        "experiment": "E3",
+        "mode": "rule_ppo",
+        "status": "completed",
+        "outcome": "win",
+        "started_utc": "2026-10-20T01:07:34.479015+00:00",
+        "pid": 64920,
+        "exit_code": 0,
+        "wall_seconds": 36.67200000002049,
+        "ended_utc": "2026-10-20T01:08:11.142497+00:00",
+        "evidence_category": "completed"
+      },
+      {
+        "run_id": "p6_runner_e1e3e4_20261020_E4",
+        "experiment": "E4",
+        "mode": "llm_ppo",
+        "status": "completed",
+        "outcome": "win",
+        "started_utc": "2026-10-20T01:08:11.312843+00:00",
+        "pid": 64076,
+        "exit_code": 0,
+        "wall_seconds": 40.36000000004424,
+        "ended_utc": "2026-10-20T01:08:51.683700+00:00",
+        "evidence_category": "completed"
+      }
+    ],
+    "counts": {
+      "completed": 3
+    },
+    "report_status": "written; collision/foreign raw excluded; use state.json for complete selected denominator and mode mapping"
+  },
+  "terminal_resume": {
+    "exit_code": 0,
+    "wall_seconds": 0.375,
+    "stdout": "{\"batch\": \"C:\\\\code\\\\SC2Agent_llm\\\\artifacts\\\\evaluation_batches\\\\p6_runner_e1e3e4_20261020\", \"games_started\": \"explicit execution\", \"selected\": [\"E1\", \"E3\", \"E4\"], \"max_games\": 3, \"llm_total_call_cap\": 20}\n",
+    "stderr": "",
+    "zero_new_games": true
+  },
+  "details": [
+    {
+      "run_id": "p6_runner_e1e3e4_20261020_E1",
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1023,
+          "completed_SUPPLYDEPOT": 10,
+          "completed_BARRACKS": 6,
+          "marines_created": 58,
+          "combat_commands": 5169,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 31,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 365.0,
+        "wall_span_seconds": 24.046380900021177,
+        "game_to_wall_ratio": 15.17899934786771,
+        "on_step_p50_seconds": 0.0009926999919116497,
+        "on_step_p95_seconds": 0.002955599979031831,
+        "on_step_p99_seconds": 0.004039399966131896,
+        "on_step_max_seconds": 0.005316499969922006,
+        "peak_workers": 45,
+        "peak_marines": 53,
+        "peak_bases": 2
+      },
+      "event_counts": {
+        "started": 1,
+        "strategy_source": 10,
+        "llm_request": 5,
+        "state": 341,
+        "llm_response": 5,
+        "llm_plan": 5,
+        "plan_transition": 9,
+        "goal_progress": 6,
+        "strategy_changed": 8,
+        "expansion_reservation": 2
+      },
+      "evidence_sha256": {
+        "events.jsonl": "fb7bb2a3bfc5d7fedf9aeb67009e42db96c6cf49e92620d1f582dbafe70d883d",
+        "game.SC2Replay": "d948685d9955567ce66858b789dd34eb4fee86e17254529f1e0b7f5d98ddbdf7",
+        "manifest.json": "9b0705a77765f043f40d53250663f3f3c930a628d905ac6ff14ad78def93f3f4",
+        "strategy_summary.json": "e2c48fabdd9cee50fc7f6926c6b633a63a3203d50f1d5a6729fa7077cf448b51",
+        "summary.json": "8837d022405fb3156ae0fa3dbeae4839cecc9487bf5b2cbb09d7ad5bb4c15d98"
+      },
+      "log_sha256": "cfea405cfafbf0f5297c700ef9aaabbf988047b1fcfb615edaf82719750332e7",
+      "http_status_counts": {
+        "200": 5
+      },
+      "strategy_summary": {
+        "mode": "llm",
+        "counters": {
+          "rule_steps": 621,
+          "requests": 5,
+          "responses": 5,
+          "callbacks_while_waiting": 223,
+          "valid_plans": 5,
+          "plan_active": 5,
+          "llm_steps": 402,
+          "economy_goal_steps": 402,
+          "expired_active_plans": 4,
+          "combat_goal_steps": 316
+        },
+        "latency_seconds": [
+          0.9839999999967404,
+          1.1880000000237487,
+          0.9679999999934807,
+          1.2339999999967404,
+          1.0
+        ],
+        "request_inflight_at_exit": false,
+        "end_result": "Result.Victory",
+        "active_plan": {
+          "request_id": "strategy-303",
+          "snapshot_seq": 303,
+          "stance": "pressure",
+          "worker_target": 44,
+          "base_target": 2,
+          "task": "attack",
+          "target_id": "enemy_main",
+          "min_army_supply": 30,
+          "reason_summary": "Enemy Lair/roach warren visible; 40 marines plus 5 pending reach attack gate to pressure enemy main."
+        },
+        "pending_plan": null
+      }
+    },
+    {
+      "run_id": "p6_runner_e1e3e4_20261020_E3",
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1010,
+          "completed_SUPPLYDEPOT": 10,
+          "completed_BARRACKS": 6,
+          "marines_created": 57,
+          "combat_commands": 4393,
+          "micro_decision_steps": 733,
+          "micro_owned_decisions": 220,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 34,
+          "ppo_inference_decisions": 220,
+          "micro_action_hold": 78,
+          "micro_action_retreat": 123,
+          "micro_action_weakest": 5,
+          "micro_action_approach": 14,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 360.3571428571429,
+        "wall_span_seconds": 23.567203500017058,
+        "game_to_wall_ratio": 15.290619561921382,
+        "on_step_p50_seconds": 0.0009538999875076115,
+        "on_step_p95_seconds": 0.004800800001248717,
+        "on_step_p99_seconds": 0.00828069995623082,
+        "on_step_max_seconds": 0.024922500015236437,
+        "peak_workers": 45,
+        "peak_marines": 49,
+        "peak_bases": 2
+      },
+      "event_counts": {
+        "ppo_model_loaded": 1,
+        "started": 1,
+        "state": 337,
+        "strategy_changed": 6,
+        "micro_timing": 733,
+        "expansion_reservation": 2,
+        "micro_ownership": 154,
+        "micro_command": 220
+      },
+      "evidence_sha256": {
+        "events.jsonl": "c23995f9b302d44747eb453cc0d65379273163dd9f776b18c899d19cbdc8a2fb",
+        "game.SC2Replay": "85ab464a267a7f206a96a4e0bee7cb964749555f4a7798815e5dcc6f1e8447ff",
+        "manifest.json": "db64f3de2b36018a03e04ffdfc557eda41c6cd57d17c6cf429b2e4bb08a7968e",
+        "micro_summary.json": "0d21828ed1c835931c4bdc6da88675d822a64cebad0bad4808bd4cf91c5df0ad",
+        "micro_transitions.jsonl": "2052c094b5df6dfe45ae43be69dfb1385f70871aea7f6f9acaf9cea117432cea",
+        "summary.json": "99c492feb354632dee72d5d1447613eb791c3d0f341b442be3fc1b814960ff93"
+      },
+      "log_sha256": "25a4b1bad76b4f46e9d67f4ae529a94261bd84452364196a44740b3b97573f16",
+      "http_status_counts": {},
+      "micro": {
+        "rows": 220,
+        "unit_tags": 28,
+        "actual_game_loops": {
+          "8": 220
+        },
+        "actions": {
+          "4": 78,
+          "2": 123,
+          "1": 5,
+          "3": 14
+        },
+        "command_result": {
+          "hold": 78,
+          "engine_confirmed": 134,
+          "order_preserved": 4,
+          "engine_unconfirmed": 4
+        },
+        "splits": {
+          "train": 220
+        },
+        "mask_legal": true,
+        "expert_null": true,
+        "bc_eligible_false": true,
+        "reward_null": true
+      },
+      "learning_exclusion": {
+        "schema": 1,
+        "run_id": "p6_runner_e1e3e4_20261020_E3",
+        "reason": "P6 engineering evaluation; permanently excluded from future training",
+        "excluded_from_future_training": true,
+        "raw_sha256": {
+          "micro_transitions.jsonl": "2052c094b5df6dfe45ae43be69dfb1385f70871aea7f6f9acaf9cea117432cea"
+        }
+      }
+    },
+    {
+      "run_id": "p6_runner_e1e3e4_20261020_E4",
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1109,
+          "completed_SUPPLYDEPOT": 14,
+          "completed_BARRACKS": 8,
+          "marines_created": 70,
+          "combat_commands": 5786,
+          "micro_decision_steps": 832,
+          "micro_owned_decisions": 203,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 47,
+          "ppo_inference_decisions": 203,
+          "micro_action_hold": 62,
+          "micro_action_retreat": 92,
+          "micro_action_weakest": 8,
+          "micro_action_approach": 41,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 395.7142857142857,
+        "wall_span_seconds": 27.605148599948734,
+        "game_to_wall_ratio": 14.334800056646701,
+        "on_step_p50_seconds": 0.0016341999871656299,
+        "on_step_p95_seconds": 0.0061867000185884535,
+        "on_step_p99_seconds": 0.007887199986726046,
+        "on_step_max_seconds": 0.02446260000579059,
+        "peak_workers": 45,
+        "peak_marines": 57,
+        "peak_bases": 2
+      },
+      "event_counts": {
+        "ppo_model_loaded": 1,
+        "started": 1,
+        "strategy_source": 12,
+        "llm_request": 6,
+        "state": 370,
+        "llm_response": 6,
+        "llm_plan": 6,
+        "plan_transition": 11,
+        "goal_progress": 6,
+        "strategy_changed": 9,
+        "micro_timing": 832,
+        "expansion_reservation": 2,
+        "micro_ownership": 100,
+        "micro_command": 203
+      },
+      "evidence_sha256": {
+        "events.jsonl": "ef364626a8745cca269eabb30a0fd17deaaf0df03f731687987b1bb92da635cf",
+        "game.SC2Replay": "f02d7f20e2dfebd145e84e9c7851a2f3a20796da16409344dec7ab9505556b64",
+        "manifest.json": "f3626803749bb228a6136a5a945ea74929982c07bb8395f513b05d913a6f26ff",
+        "micro_summary.json": "18cd13f1151c576aac03b51d7351cedabac1da316c06f2cd05aded9f91931897",
+        "micro_transitions.jsonl": "de02cc766a04e784f6f591f23996b077ba332d39504ec3371e13a159a7919012",
+        "strategy_summary.json": "0d9ba7acbc0e7d9397a2498502f097b92a0fd2472c9434bc59c26f277d426e30",
+        "summary.json": "f31e03e7606b56f98559aa58cb0a874e5eef3ce1b7b88581667dfc2695fabe2a"
+      },
+      "log_sha256": "56724302e5adafc4690d7cd026d06c9f6a3870169032f8f51b1cc98d2f7bd700",
+      "http_status_counts": {
+        "200": 6
+      },
+      "strategy_summary": {
+        "mode": "llm_ppo",
+        "counters": {
+          "rule_steps": 675,
+          "requests": 6,
+          "responses": 6,
+          "callbacks_while_waiting": 263,
+          "valid_plans": 6,
+          "plan_active": 6,
+          "llm_steps": 434,
+          "economy_goal_steps": 434,
+          "expired_active_plans": 5,
+          "combat_goal_steps": 372
+        },
+        "latency_seconds": [
+          1.1089999999967404,
+          1.1880000000237487,
+          1.202999999979511,
+          1.0309999999590218,
+          0.9220000000204891,
+          1.125
+        ],
+        "request_inflight_at_exit": false,
+        "end_result": "Result.Victory",
+        "active_plan": {
+          "request_id": "strategy-350",
+          "snapshot_seq": 350,
+          "stance": "pressure",
+          "worker_target": 45,
+          "base_target": 2,
+          "task": "attack",
+          "target_id": "enemy_main",
+          "min_army_supply": 20,
+          "reason_summary": "Army nearing 50 marines; enemy visible Zerg at main. Push with 20+ supply gate to pressure."
+        },
+        "pending_plan": null
+      },
+      "micro": {
+        "rows": 203,
+        "unit_tags": 24,
+        "actual_game_loops": {
+          "8": 203
+        },
+        "actions": {
+          "4": 62,
+          "2": 92,
+          "1": 8,
+          "3": 41
+        },
+        "command_result": {
+          "hold": 62,
+          "engine_confirmed": 132,
+          "order_preserved": 1,
+          "engine_unconfirmed": 8
+        },
+        "splits": {
+          "train": 203
+        },
+        "mask_legal": true,
+        "expert_null": true,
+        "bc_eligible_false": true,
+        "reward_null": true
+      },
+      "learning_exclusion": {
+        "schema": 1,
+        "run_id": "p6_runner_e1e3e4_20261020_E4",
+        "reason": "P6 engineering evaluation; permanently excluded from future training",
+        "excluded_from_future_training": true,
+        "raw_sha256": {
+          "micro_transitions.jsonl": "de02cc766a04e784f6f591f23996b077ba332d39504ec3371e13a159a7919012"
+        }
+      }
+    }
+  ],
+  "fixed_five_inventory": {
+    "schema": "p6-offline-evaluation-matrix-v1",
+    "scope": "Selected existing attempts only; engineering inventory, not a frozen comparison or strength acceptance",
+    "denominator_policy": "All supplied unique attempts retained; failures/truncations have unknown competitive result, never automatic defeat. Missing modes have zero attempts, not zero win rate.",
+    "comparison_policy": "Shared configuration and source hashes must be complete/equal; mode adapters, actor identity and LLM budget are explicit interventions. Same-policy models/budgets must also match for a formal paired design. No formal design is inferred from artifacts.",
+    "totals": {
+      "attempts": 5,
+      "completed": 5,
+      "failed": 0,
+      "truncated": 0,
+      "unknown": 0,
+      "wins": 5,
+      "losses": 0,
+      "ties": 0,
+      "unknown_results": 0,
+      "known_result_denominator": 5,
+      "descriptive_win_fraction_known": 1.0,
+      "descriptive_wilson_95_known": [
+        0.5655175352168389,
+        1.0
+      ],
+      "end_to_end_victory_fraction": 1.0,
+      "end_to_end_completion_fraction": 1.0
+    },
+    "matrix": [
+      {
+        "experiment": "E0",
+        "mode": "Rule/Rule",
+        "availability": "present",
+        "attempts": 1,
+        "completed": 1,
+        "failed": 0,
+        "truncated": 0,
+        "unknown": 0,
+        "wins": 1,
+        "losses": 0,
+        "ties": 0,
+        "unknown_results": 0,
+        "known_result_denominator": 1,
+        "descriptive_win_fraction_known": 1.0,
+        "descriptive_wilson_95_known": [
+          0.20654931437724644,
+          0.9999999999999999
+        ],
+        "end_to_end_victory_fraction": 1.0,
+        "end_to_end_completion_fraction": 1.0
+      },
+      {
+        "experiment": "E1",
+        "mode": "LLM/Rule",
+        "availability": "present",
+        "attempts": 1,
+        "completed": 1,
+        "failed": 0,
+        "truncated": 0,
+        "unknown": 0,
+        "wins": 1,
+        "losses": 0,
+        "ties": 0,
+        "unknown_results": 0,
+        "known_result_denominator": 1,
+        "descriptive_win_fraction_known": 1.0,
+        "descriptive_wilson_95_known": [
+          0.20654931437724644,
+          0.9999999999999999
+        ],
+        "end_to_end_victory_fraction": 1.0,
+        "end_to_end_completion_fraction": 1.0
+      },
+      {
+        "experiment": "E2",
+        "mode": "Rule/BC",
+        "availability": "present",
+        "attempts": 1,
+        "completed": 1,
+        "failed": 0,
+        "truncated": 0,
+        "unknown": 0,
+        "wins": 1,
+        "losses": 0,
+        "ties": 0,
+        "unknown_results": 0,
+        "known_result_denominator": 1,
+        "descriptive_win_fraction_known": 1.0,
+        "descriptive_wilson_95_known": [
+          0.20654931437724644,
+          0.9999999999999999
+        ],
+        "end_to_end_victory_fraction": 1.0,
+        "end_to_end_completion_fraction": 1.0
+      },
+      {
+        "experiment": "E3",
+        "mode": "Rule/PPO",
+        "availability": "present",
+        "attempts": 1,
+        "completed": 1,
+        "failed": 0,
+        "truncated": 0,
+        "unknown": 0,
+        "wins": 1,
+        "losses": 0,
+        "ties": 0,
+        "unknown_results": 0,
+        "known_result_denominator": 1,
+        "descriptive_win_fraction_known": 1.0,
+        "descriptive_wilson_95_known": [
+          0.20654931437724644,
+          0.9999999999999999
+        ],
+        "end_to_end_victory_fraction": 1.0,
+        "end_to_end_completion_fraction": 1.0
+      },
+      {
+        "experiment": "E4",
+        "mode": "LLM/PPO",
+        "availability": "present",
+        "attempts": 1,
+        "completed": 1,
+        "failed": 0,
+        "truncated": 0,
+        "unknown": 0,
+        "wins": 1,
+        "losses": 0,
+        "ties": 0,
+        "unknown_results": 0,
+        "known_result_denominator": 1,
+        "descriptive_win_fraction_known": 1.0,
+        "descriptive_wilson_95_known": [
+          0.20654931437724644,
+          0.9999999999999999
+        ],
+        "end_to_end_victory_fraction": 1.0,
+        "end_to_end_completion_fraction": 1.0
+      }
+    ],
+    "attempts": [
+      {
+        "run_id": "p6_runner_e0e2_20261020_E0",
+        "experiment": "E0",
+        "fair_config": {
+          "map": "Ancient Cistern LE",
+          "opponent": "Zerg",
+          "difficulty": "Easy",
+          "realtime": false,
+          "game_step": 8,
+          "seed": 20261020,
+          "max_game_seconds": 1200.0,
+          "micro_max_units": 4,
+          "map_sha256": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+          "ares_commit": "70a151a66fdd00d6c1ee44718735d0da396b902e",
+          "game_build": null,
+          "packages": {
+            "ares-sc2": "3.15.0",
+            "burnysc2": "7.1.0",
+            "map-analyzer": "0.2.0",
+            "cython-extensions-sc2": "0.18.0",
+            "numpy": "2.4.6"
+          },
+          "shared_source_hashes": {
+            "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+            "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+            "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+            "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+            "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+            "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+            "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+            "bot/telemetry.py": "d6d6d67cba9f18b82590a7eaf70d81efc73bae84f01eab1abfaa50b7b2d0363d",
+            "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+            "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+          }
+        },
+        "identity": {
+          "mode": "rule",
+          "llm_max_calls": 0,
+          "project_commit": "9f896dee0b640db9bb4d2a4dfbd58ff62b32050c",
+          "dirty_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actor_weights_sha256": null,
+          "llm_model": null,
+          "llm_request_date_utc": "2026-10-19T16:42:22.330025+00:00",
+          "mode_source_hashes": {
+            "bot/budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+            "bot/llm_bot.py": "e98503fb63c069c4070e1416b4d327da75bbc80f1c61bd656d9027129b4e0a3a",
+            "bot/llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+            "bot/llm_ppo_bot.py": "049956798f12aae606cffd971860c253984a93112a212b233d81ee1ff52ce4af",
+            "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+            "bot/micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+            "bot/micro_bot.py": "1950f7938c08d550cfbb0c47b30c3d25e3e89b76e9c2979b530267aed2f07f38",
+            "bot/micro_env_bot.py": "cc1656b22e3485fce0f72c008c29da0bc25f1ead4c9fd0b01412bb75aab0b89a",
+            "bot/micro_ppo.py": "c2378864c5cbd78b2410eb7fb90eca15033fb12e1c1a6b3f8ccd3239e9a04bdf",
+            "bot/probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+            "bot/strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d"
+          }
+        },
+        "missing_comparison_fields": [
+          "game_build"
+        ],
+        "status": "completed",
+        "category": "completed",
+        "outcome": "win",
+        "official_result": "Result.Victory",
+        "error_present": false,
+        "stop_reason": null,
+        "evidence_sha256": {
+          "manifest.json": "aa863cd7d85309f8642419721c1b46e35de06b6b966311401a03506bffbf5043",
+          "summary.json": "f2216d157e1dc3723db28403da894b90131a6de70d6be034d57f9ac75dee3783",
+          "events.jsonl": "04af33525079905892a6b1490ff1edccf435686145009985eaf6bd1ca0b83770"
+        },
+        "warnings": [],
+        "engineering": {
+          "natural_known_result": true,
+          "replay_present": true,
+          "command_conflicts": 0
+        },
+        "metrics": {
+          "game_seconds": 353.5714285714286,
+          "game_to_wall_ratio": 16.98450286125777,
+          "llm_steps": null,
+          "economy_goal_steps": null,
+          "combat_goal_steps": null,
+          "ppo_inference_decisions": null,
+          "micro_owned_decisions": null,
+          "micro_transitions": null,
+          "local_micro_truncated": null
+        }
+      },
+      {
+        "run_id": "p6_runner_e1e3e4_20261020_E1",
+        "experiment": "E1",
+        "fair_config": {
+          "map": "Ancient Cistern LE",
+          "opponent": "Zerg",
+          "difficulty": "Easy",
+          "realtime": false,
+          "game_step": 8,
+          "seed": 20261020,
+          "max_game_seconds": 1200.0,
+          "micro_max_units": 4,
+          "map_sha256": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+          "ares_commit": "70a151a66fdd00d6c1ee44718735d0da396b902e",
+          "game_build": null,
+          "packages": {
+            "ares-sc2": "3.15.0",
+            "burnysc2": "7.1.0",
+            "map-analyzer": "0.2.0",
+            "cython-extensions-sc2": "0.18.0",
+            "numpy": "2.4.6"
+          },
+          "shared_source_hashes": {
+            "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+            "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+            "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+            "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+            "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+            "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+            "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+            "bot/telemetry.py": "d6d6d67cba9f18b82590a7eaf70d81efc73bae84f01eab1abfaa50b7b2d0363d",
+            "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+            "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+          }
+        },
+        "identity": {
+          "mode": "llm",
+          "llm_max_calls": 10,
+          "project_commit": "88206e9c22798d3de1bcaf8c6a9f8d664ff71de4",
+          "dirty_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actor_weights_sha256": null,
+          "llm_model": null,
+          "llm_request_date_utc": "2026-10-20T01:06:56.150039+00:00",
+          "mode_source_hashes": {
+            "bot/budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+            "bot/llm_bot.py": "e98503fb63c069c4070e1416b4d327da75bbc80f1c61bd656d9027129b4e0a3a",
+            "bot/llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+            "bot/llm_ppo_bot.py": "049956798f12aae606cffd971860c253984a93112a212b233d81ee1ff52ce4af",
+            "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+            "bot/micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+            "bot/micro_bot.py": "1950f7938c08d550cfbb0c47b30c3d25e3e89b76e9c2979b530267aed2f07f38",
+            "bot/micro_env_bot.py": "cc1656b22e3485fce0f72c008c29da0bc25f1ead4c9fd0b01412bb75aab0b89a",
+            "bot/micro_ppo.py": "c2378864c5cbd78b2410eb7fb90eca15033fb12e1c1a6b3f8ccd3239e9a04bdf",
+            "bot/probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+            "bot/strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d"
+          }
+        },
+        "missing_comparison_fields": [
+          "game_build",
+          "llm_model"
+        ],
+        "status": "completed",
+        "category": "completed",
+        "outcome": "win",
+        "official_result": "Result.Victory",
+        "error_present": false,
+        "stop_reason": null,
+        "evidence_sha256": {
+          "manifest.json": "9b0705a77765f043f40d53250663f3f3c930a628d905ac6ff14ad78def93f3f4",
+          "summary.json": "8837d022405fb3156ae0fa3dbeae4839cecc9487bf5b2cbb09d7ad5bb4c15d98",
+          "strategy_summary.json": "e2c48fabdd9cee50fc7f6926c6b633a63a3203d50f1d5a6729fa7077cf448b51",
+          "events.jsonl": "fb7bb2a3bfc5d7fedf9aeb67009e42db96c6cf49e92620d1f582dbafe70d883d"
+        },
+        "warnings": [],
+        "engineering": {
+          "natural_known_result": true,
+          "replay_present": true,
+          "command_conflicts": 0
+        },
+        "metrics": {
+          "game_seconds": 365.0,
+          "game_to_wall_ratio": 15.17899934786771,
+          "llm_steps": 402,
+          "economy_goal_steps": 402,
+          "combat_goal_steps": 316,
+          "ppo_inference_decisions": null,
+          "micro_owned_decisions": null,
+          "micro_transitions": null,
+          "local_micro_truncated": null
+        }
+      },
+      {
+        "run_id": "p6_runner_e0e2_20261020_E2",
+        "experiment": "E2",
+        "fair_config": {
+          "map": "Ancient Cistern LE",
+          "opponent": "Zerg",
+          "difficulty": "Easy",
+          "realtime": false,
+          "game_step": 8,
+          "seed": 20261020,
+          "max_game_seconds": 1200.0,
+          "micro_max_units": 4,
+          "map_sha256": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+          "ares_commit": "70a151a66fdd00d6c1ee44718735d0da396b902e",
+          "game_build": null,
+          "packages": {
+            "ares-sc2": "3.15.0",
+            "burnysc2": "7.1.0",
+            "map-analyzer": "0.2.0",
+            "cython-extensions-sc2": "0.18.0",
+            "numpy": "2.4.6"
+          },
+          "shared_source_hashes": {
+            "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+            "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+            "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+            "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+            "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+            "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+            "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+            "bot/telemetry.py": "d6d6d67cba9f18b82590a7eaf70d81efc73bae84f01eab1abfaa50b7b2d0363d",
+            "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+            "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+          }
+        },
+        "identity": {
+          "mode": "rule_bc",
+          "llm_max_calls": 0,
+          "project_commit": "9f896dee0b640db9bb4d2a4dfbd58ff62b32050c",
+          "dirty_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actor_weights_sha256": "e36cba313c1d8e1731573595b1b975316e1522db3af8d1a4abf4f21e405c2dcf",
+          "llm_model": null,
+          "llm_request_date_utc": "2026-10-19T16:42:59.101461+00:00",
+          "mode_source_hashes": {
+            "bot/budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+            "bot/llm_bot.py": "e98503fb63c069c4070e1416b4d327da75bbc80f1c61bd656d9027129b4e0a3a",
+            "bot/llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+            "bot/llm_ppo_bot.py": "049956798f12aae606cffd971860c253984a93112a212b233d81ee1ff52ce4af",
+            "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+            "bot/micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+            "bot/micro_bot.py": "1950f7938c08d550cfbb0c47b30c3d25e3e89b76e9c2979b530267aed2f07f38",
+            "bot/micro_env_bot.py": "cc1656b22e3485fce0f72c008c29da0bc25f1ead4c9fd0b01412bb75aab0b89a",
+            "bot/micro_ppo.py": "c2378864c5cbd78b2410eb7fb90eca15033fb12e1c1a6b3f8ccd3239e9a04bdf",
+            "bot/probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+            "bot/strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d"
+          }
+        },
+        "missing_comparison_fields": [
+          "game_build"
+        ],
+        "status": "completed",
+        "category": "completed",
+        "outcome": "win",
+        "official_result": "Result.Victory",
+        "error_present": false,
+        "stop_reason": null,
+        "evidence_sha256": {
+          "manifest.json": "ea51da4410f107cab603d6d47a9cde3f1f5fa2710bde85af1c883a0de4c9076c",
+          "summary.json": "555c4a7d974a08f4ca805beaaf5722f7380bf40682f0d0b31f133b64b4a9539a",
+          "micro_summary.json": "1a8c937091da7f9c690771b2040f5495fd39ce10fb5be6f834b026ca14739d0a",
+          "events.jsonl": "ba2baeb8a1809b7f6bf3ffff158c0ca69c1befc8a1bd44f788fb9da4b1fc90bb"
+        },
+        "warnings": [],
+        "engineering": {
+          "natural_known_result": true,
+          "replay_present": true,
+          "command_conflicts": 0
+        },
+        "metrics": {
+          "game_seconds": 354.28571428571433,
+          "game_to_wall_ratio": 16.06983688807496,
+          "llm_steps": null,
+          "economy_goal_steps": null,
+          "combat_goal_steps": null,
+          "ppo_inference_decisions": null,
+          "micro_owned_decisions": 248,
+          "micro_transitions": 248,
+          "local_micro_truncated": 78
+        }
+      },
+      {
+        "run_id": "p6_runner_e1e3e4_20261020_E3",
+        "experiment": "E3",
+        "fair_config": {
+          "map": "Ancient Cistern LE",
+          "opponent": "Zerg",
+          "difficulty": "Easy",
+          "realtime": false,
+          "game_step": 8,
+          "seed": 20261020,
+          "max_game_seconds": 1200.0,
+          "micro_max_units": 4,
+          "map_sha256": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+          "ares_commit": "70a151a66fdd00d6c1ee44718735d0da396b902e",
+          "game_build": null,
+          "packages": {
+            "ares-sc2": "3.15.0",
+            "burnysc2": "7.1.0",
+            "map-analyzer": "0.2.0",
+            "cython-extensions-sc2": "0.18.0",
+            "numpy": "2.4.6"
+          },
+          "shared_source_hashes": {
+            "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+            "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+            "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+            "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+            "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+            "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+            "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+            "bot/telemetry.py": "d6d6d67cba9f18b82590a7eaf70d81efc73bae84f01eab1abfaa50b7b2d0363d",
+            "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+            "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+          }
+        },
+        "identity": {
+          "mode": "rule_ppo",
+          "llm_max_calls": 0,
+          "project_commit": "88206e9c22798d3de1bcaf8c6a9f8d664ff71de4",
+          "dirty_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actor_weights_sha256": "8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1",
+          "llm_model": null,
+          "llm_request_date_utc": "2026-10-20T01:07:35.425926+00:00",
+          "mode_source_hashes": {
+            "bot/budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+            "bot/llm_bot.py": "e98503fb63c069c4070e1416b4d327da75bbc80f1c61bd656d9027129b4e0a3a",
+            "bot/llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+            "bot/llm_ppo_bot.py": "049956798f12aae606cffd971860c253984a93112a212b233d81ee1ff52ce4af",
+            "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+            "bot/micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+            "bot/micro_bot.py": "1950f7938c08d550cfbb0c47b30c3d25e3e89b76e9c2979b530267aed2f07f38",
+            "bot/micro_env_bot.py": "cc1656b22e3485fce0f72c008c29da0bc25f1ead4c9fd0b01412bb75aab0b89a",
+            "bot/micro_ppo.py": "c2378864c5cbd78b2410eb7fb90eca15033fb12e1c1a6b3f8ccd3239e9a04bdf",
+            "bot/probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+            "bot/strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d"
+          }
+        },
+        "missing_comparison_fields": [
+          "game_build"
+        ],
+        "status": "completed",
+        "category": "completed",
+        "outcome": "win",
+        "official_result": "Result.Victory",
+        "error_present": false,
+        "stop_reason": null,
+        "evidence_sha256": {
+          "manifest.json": "db64f3de2b36018a03e04ffdfc557eda41c6cd57d17c6cf429b2e4bb08a7968e",
+          "summary.json": "99c492feb354632dee72d5d1447613eb791c3d0f341b442be3fc1b814960ff93",
+          "micro_summary.json": "0d21828ed1c835931c4bdc6da88675d822a64cebad0bad4808bd4cf91c5df0ad",
+          "events.jsonl": "c23995f9b302d44747eb453cc0d65379273163dd9f776b18c899d19cbdc8a2fb"
+        },
+        "warnings": [],
+        "engineering": {
+          "natural_known_result": true,
+          "replay_present": true,
+          "command_conflicts": 0
+        },
+        "metrics": {
+          "game_seconds": 360.3571428571429,
+          "game_to_wall_ratio": 15.290619561921382,
+          "llm_steps": null,
+          "economy_goal_steps": null,
+          "combat_goal_steps": null,
+          "ppo_inference_decisions": 220,
+          "micro_owned_decisions": 220,
+          "micro_transitions": 220,
+          "local_micro_truncated": 77
+        }
+      },
+      {
+        "run_id": "p6_runner_e1e3e4_20261020_E4",
+        "experiment": "E4",
+        "fair_config": {
+          "map": "Ancient Cistern LE",
+          "opponent": "Zerg",
+          "difficulty": "Easy",
+          "realtime": false,
+          "game_step": 8,
+          "seed": 20261020,
+          "max_game_seconds": 1200.0,
+          "micro_max_units": 4,
+          "map_sha256": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+          "ares_commit": "70a151a66fdd00d6c1ee44718735d0da396b902e",
+          "game_build": null,
+          "packages": {
+            "ares-sc2": "3.15.0",
+            "burnysc2": "7.1.0",
+            "map-analyzer": "0.2.0",
+            "cython-extensions-sc2": "0.18.0",
+            "numpy": "2.4.6"
+          },
+          "shared_source_hashes": {
+            "config.yml": "b353e65a2bdb5005a798065260c950342b444d5253eef8e522c0bd2208065d40",
+            "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32",
+            "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+            "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+            "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+            "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+            "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+            "bot/telemetry.py": "d6d6d67cba9f18b82590a7eaf70d81efc73bae84f01eab1abfaa50b7b2d0363d",
+            "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+            "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8"
+          }
+        },
+        "identity": {
+          "mode": "llm_ppo",
+          "llm_max_calls": 10,
+          "project_commit": "88206e9c22798d3de1bcaf8c6a9f8d664ff71de4",
+          "dirty_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actor_weights_sha256": "8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1",
+          "llm_model": null,
+          "llm_request_date_utc": "2026-10-20T01:08:12.184376+00:00",
+          "mode_source_hashes": {
+            "bot/budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+            "bot/llm_bot.py": "e98503fb63c069c4070e1416b4d327da75bbc80f1c61bd656d9027129b4e0a3a",
+            "bot/llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+            "bot/llm_ppo_bot.py": "049956798f12aae606cffd971860c253984a93112a212b233d81ee1ff52ce4af",
+            "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+            "bot/micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+            "bot/micro_bot.py": "1950f7938c08d550cfbb0c47b30c3d25e3e89b76e9c2979b530267aed2f07f38",
+            "bot/micro_env_bot.py": "cc1656b22e3485fce0f72c008c29da0bc25f1ead4c9fd0b01412bb75aab0b89a",
+            "bot/micro_ppo.py": "c2378864c5cbd78b2410eb7fb90eca15033fb12e1c1a6b3f8ccd3239e9a04bdf",
+            "bot/probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+            "bot/strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d"
+          }
+        },
+        "missing_comparison_fields": [
+          "game_build",
+          "llm_model"
+        ],
+        "status": "completed",
+        "category": "completed",
+        "outcome": "win",
+        "official_result": "Result.Victory",
+        "error_present": false,
+        "stop_reason": null,
+        "evidence_sha256": {
+          "manifest.json": "f3626803749bb228a6136a5a945ea74929982c07bb8395f513b05d913a6f26ff",
+          "summary.json": "f31e03e7606b56f98559aa58cb0a874e5eef3ce1b7b88581667dfc2695fabe2a",
+          "strategy_summary.json": "0d9ba7acbc0e7d9397a2498502f097b92a0fd2472c9434bc59c26f277d426e30",
+          "micro_summary.json": "18cd13f1151c576aac03b51d7351cedabac1da316c06f2cd05aded9f91931897",
+          "events.jsonl": "ef364626a8745cca269eabb30a0fd17deaaf0df03f731687987b1bb92da635cf"
+        },
+        "warnings": [],
+        "engineering": {
+          "natural_known_result": true,
+          "replay_present": true,
+          "command_conflicts": 0
+        },
+        "metrics": {
+          "game_seconds": 395.7142857142857,
+          "game_to_wall_ratio": 14.334800056646701,
+          "llm_steps": 434,
+          "economy_goal_steps": 434,
+          "combat_goal_steps": 372,
+          "ppo_inference_decisions": 203,
+          "micro_owned_decisions": 203,
+          "micro_transitions": 203,
+          "local_micro_truncated": 50
+        }
+      }
+    ],
+    "duplicate_inputs_ignored": [],
+    "comparison_groups": [
+      {
+        "group": 1,
+        "run_ids": [
+          "p6_runner_e0e2_20261020_E0"
+        ],
+        "shared_config_complete": false,
+        "missing_fields": [
+          "game_build"
+        ],
+        "shared_intervention_identities_match": true,
+        "cross_mode_config_match": false,
+        "formal_strength_evidence": false
+      },
+      {
+        "group": 2,
+        "run_ids": [
+          "p6_runner_e1e3e4_20261020_E1"
+        ],
+        "shared_config_complete": false,
+        "missing_fields": [
+          "game_build",
+          "llm_model"
+        ],
+        "shared_intervention_identities_match": true,
+        "cross_mode_config_match": false,
+        "formal_strength_evidence": false
+      },
+      {
+        "group": 3,
+        "run_ids": [
+          "p6_runner_e0e2_20261020_E2"
+        ],
+        "shared_config_complete": false,
+        "missing_fields": [
+          "game_build"
+        ],
+        "shared_intervention_identities_match": true,
+        "cross_mode_config_match": false,
+        "formal_strength_evidence": false
+      },
+      {
+        "group": 4,
+        "run_ids": [
+          "p6_runner_e1e3e4_20261020_E3"
+        ],
+        "shared_config_complete": false,
+        "missing_fields": [
+          "game_build"
+        ],
+        "shared_intervention_identities_match": true,
+        "cross_mode_config_match": false,
+        "formal_strength_evidence": false
+      },
+      {
+        "group": 5,
+        "run_ids": [
+          "p6_runner_e1e3e4_20261020_E4"
+        ],
+        "shared_config_complete": false,
+        "missing_fields": [
+          "game_build",
+          "llm_model"
+        ],
+        "shared_intervention_identities_match": true,
+        "cross_mode_config_match": false,
+        "formal_strength_evidence": false
+      }
+    ],
+    "differing_shared_fields": {},
+    "formal_comparison_ready": false,
+    "limitations": [
+      "No sampling frame/planned attempts inferred; caller must include every attempted run in the selected round.",
+      "Descriptive fractions/intervals cannot establish mode advantage; repeated repaired runs are not independent training seeds.",
+      "Game build/opponent version and remote LLM reproducibility may be absent; missing is never assumed equal.",
+      "Local micro truncation is a release event, not match truncation; reward not reconstructed."
+    ]
+  },
+  "cross_batch_identity": {
+    "old_project_commit": "9f896dee0b640db9bb4d2a4dfbd58ff62b32050c",
+    "new_project_commit": "88206e9c22798d3de1bcaf8c6a9f8d664ff71de4",
+    "common_equal": true,
+    "installed_map_equal": true,
+    "python_equal": true,
+    "python_version_equal": true,
+    "ares_commit_equal": true,
+    "all_recorded_source_hashes_equal": true,
+    "source_count_old": 240,
+    "source_count_new": 240
+  },
+  "historical_failure_retained": {
+    "run_id": "e4_fullmatch_llm_ppo_20261019",
+    "status": "crashed",
+    "outcome": "unknown",
+    "reason": "optional latest_state atomic replacement WinError5",
+    "report": "docs/PHASE_06_E4_FULLMATCH_MVP_REPORT.md",
+    "matrix": "docs/validation/p6_evaluation_matrix_mvp.json",
+    "included_in_fixed_five": false,
+    "explanation": "fixed-five is an explicitly selected 20261020 engineering inventory, not all historical attempts"
+  },
+  "limitations": [
+    "game_build absent in raw manifests",
+    "LLM model absent in request telemetry; existing DeepSeek private loader used without reading credential files",
+    "remote behavior and full engine initial state not frozen",
+    "one seed and n=1 per mode; no strength/win-rate/generalization/training benefit inference",
+    "two separately frozen plans and different project revisions, despite equal recorded source hashes",
+    "production guards and at most four Marines share single-unit PPO actor; no group-policy training",
+    "training budget-close EOFError remains unresolved"
+  ],
+  "training": false,
+  "new_games": 3,
+  "actual_logical_requests": 11,
+  "max_logical_requests": 20,
+  "formal_comparison_ready": false,
+  "e4_overlap": {
+    "method": "events.jsonl file order; latest strategy_source=llm at event time",
+    "ppo_owned_command_events": 43,
+    "owned_micro_steps": 14,
+    "unit_tags": 11,
+    "caution": "micro_command events include HOLD/preserved/unconfirmed; not all are newly engine-confirmed commands"
+  },
+  "cleanup": {
+    "sc2_x64_remaining": 0,
+    "checked_after_all_attempts": true,
+    "batch_lock_removed": true,
+    "global_runner_lock_removed": true
+  },
+  "log_scan": {
+    "patterns": [
+      "ERROR",
+      "Traceback",
+      "Exception"
+    ],
+    "matches": 0,
+    "scope": "three terminal batch logs; no live latest_state read"
+  }
+}

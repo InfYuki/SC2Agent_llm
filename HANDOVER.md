@@ -316,3 +316,14 @@ BC仍`artifacts/models/marine_bc_mvp_20261018_seed42`，weights SHA e36cba313c1d
 plan规范化SHA6da47137d7e0f5c4952f6c8d0c6030673c529094e6204491f4488e1517496d01；运行时HEAD9f896dee、未提交runner/test按实际SHA冻结。两局map/source相同，赛后复核source/model/map身份未变；报告文档在resume结束后写。两原始manifest仍缺game_build，本批E1/E3/E4 missing，不并历史轮次、不推强度/胜率/泛化/BC训练收益；正式P6未完成、训练budgetclose EOFError仍未修。
 
 完整命令/锁/恢复限制、各日志和回放SHA、batch state/aggregate见[runner报告](docs/PHASE_06_MATRIX_RUNNER_MVP_REPORT.md)与[共享JSON](docs/validation/p6_matrix_runner_mvp.json)。模型和原始batch/run Git忽略需另带。本轮仅必要1项合并定向测试/help/diff与原生独立scope审查后上述两游戏+终态resume，无外部模型开发子代理/安装/凭据读取。下一步新授权小预算补缺失模式/独立seed、记录build，避免直接把小样本工程运行作正式比较。
+
+
+## 2026-10-20 P6剩余模式最新接续
+
+唯一新batch `p6_runner_e1e3e4_20261020`预冻结E1/E3/E4各1（Ancient Cistern LE/Zerg Easy/非实时8/seed20261020/控4、1200游戏秒/600墙秒），全部自然官方Victory/exit0/回放，365.000/360.357143/395.714286游戏秒，39.391/36.672/40.360 runner墙秒。实际逻辑请求5+6=11≤总20，分配10/0/10不转移；全部HTTP200/valid active。E1采用402经济/316军队目标步，E4采用434/372。全终态唯一resume exit0/0.375秒、0新增局，0冲突/error/模型fallback事件/SC2残留，无重试/训练/外部模型开发代理/凭据读取/live快照读取。
+
+E3/E4同curriculum256 actor，220/203推理=owned=真实8loops，确认134/132、hold78/62、preserved4/1、unconfirmed4/8，不能称423全下发。423条mask合法/expert=null/bc_eligible=false/reward=null，旧split=train由新增rawSHA learning_exclusion永久排除未来训练，raw/模型不改。生产保护与最多4Marine共享单体actor边界保留。
+
+与旧E0/E2公共配置、地图、Ares、Python及两plan全部240源SHA相同，但冻结revision9f896dee→88206e9为不同plan。限定固定5run集合（旧p6_runner_e0e2的E0/E2＋新p6_runner_e1e3e4的E1/E3/E4）可描述5模式各1工程完成，不泛称所有历史5/5；旧E4首次crashed/unknown仍保留原E4报告与原3attempt矩阵，原完整1/2不变。全部5run缺game_build，E1/E4缺LLM模型标识；单seed n1无强度/胜率/泛化/收益结论，正式P6与训练budget-close历史缺口仍未完成。
+
+plan规范化SHA `fa0c21372c9f10c7c24ad2aa9f48cd182c2b45534ee9d82bf9af24388fcdc298`；完整命令、采用/重叠、source/model/map/log/replay SHA、清单/历史边界见[剩余模式报告](docs/PHASE_06_REMAINING_MODES_MVP_REPORT.md)与[共享JSON](docs/validation/p6_remaining_modes_mvp.json)。原始batch/run/model Git忽略、迁移另带。后续先记录build/LLM模型和评估设计，游戏需新授权；本轮只保存文档，未push。
