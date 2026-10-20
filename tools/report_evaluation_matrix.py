@@ -4,6 +4,7 @@ from collections import Counter
 import hashlib
 import json
 import math
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,7 +18,22 @@ SHARED_SOURCES = ("config.yml", "poetry.lock", "bot/rule_bot.py", "bot/arbiter.p
                   "bot/building_manager.py", "bot/compat.py", "bot/lifecycle.py",
                   "bot/telemetry.py", "bot/micro.py", "bot/micro_data.py")
 FILES = ("manifest.json", "summary.json", "strategy_summary.json",
-         "micro_summary.json", "events.jsonl")
+         "micro_summary.json", "events.jsonl", "compatibility-report.json", "llm_config.json")
+
+
+def identity_value(value, build=False):
+    """Only bounded identity scalars, never URLs, headers or config objects."""
+    if build:
+        return int(value) if type(value) in (int, str) and re.fullmatch(r"[1-9][0-9]{0,9}", str(value)) else None
+    return value if isinstance(value, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_./-]{0,159}", value) else None
+
+
+def resolve_identity(candidates, name, warnings, missing):
+    """First source wins for display; contradictory evidence blocks comparison."""
+    if len({item["value"] for item in candidates}) > 1:
+        warnings.append(f"identity_conflict:{name}")
+        missing.append(f"identity_conflict:{name}")
+    return candidates[0]["value"] if candidates else None
 
 
 def digest(value):
@@ -55,6 +71,20 @@ def load_attempt(run):
     mode = config.get("mode")
     strategy = read_json(run / "strategy_summary.json", warnings) if mode in ("llm", "llm_ppo") else {}
     micro = read_json(run / "micro_summary.json", warnings) if mode in ("rule_bc", "rule_ppo", "llm_ppo") else {}
+    llm_applicable = mode in ("llm", "llm_ppo")
+    compatibility = read_json(run / "compatibility-report.json", warnings) if (run / "compatibility-report.json").is_file() else {}
+    llm_config = read_json(run / "llm_config.json", warnings) if llm_applicable and (run / "llm_config.json").is_file() else {}
+    candidates = {name: [] for name in ("game_build", "llm_configured_model", "llm_configured_provider", "llm_requested_model", "llm_response_model")}
+
+    def candidate(name, value, source):
+        value = identity_value(value, build=name == "game_build")
+        if value is not None:
+            candidates[name].append(dict(value=value, source=source))
+
+    candidate("game_build", manifest.get("game_build"), "manifest.json:game_build")
+    if llm_applicable:
+        candidate("llm_configured_model", config.get("llm_model"), "manifest.json:config.llm_model")
+        candidate("llm_configured_provider", config.get("llm_provider"), "manifest.json:config.llm_provider")
     identity = {"mode": mode, "llm_max_calls": config.get("llm_max_calls"),
                 "project_commit": manifest.get("project_commit"),
                 "dirty_diff_sha256": manifest.get("dirty_diff_sha256"),
@@ -76,23 +106,45 @@ def load_attempt(run):
                     continue
                 if event.get("event") in ("ppo_model_loaded", "bc_model_loaded"):
                     identity["actor_weights_sha256"] = event.get("weights_sha256")
-                if event.get("event") == "llm_request" and event.get("model"):
-                    identity["llm_model"] = event["model"]
+                if event.get("event") in ("started", "game_identity"):
+                    candidate("game_build", event.get("game_build"), "events.jsonl:" + event["event"] + ".game_build")
+                if llm_applicable and event.get("event") == "llm_request":
+                    candidate("llm_requested_model", event.get("model"), "events.jsonl:llm_request.model")
+                if llm_applicable and event.get("event") == "llm_response":
+                    # Existing responses do not record a model. Never infer it from requests.
+                    candidate("llm_response_model", event.get("response_model"), "events.jsonl:llm_response.response_model")
     else:
         warnings.append("missing:events.jsonl")
+    candidate("game_build", compatibility.get("sc2_base_build"), "compatibility-report.json:sc2_base_build (runtime SC2 ping via BotAI.base_build)")
+    if llm_applicable:
+        candidate("llm_configured_model", llm_config.get("model"), "llm_config.json:model")
+        candidate("llm_configured_provider", llm_config.get("provider"), "llm_config.json:provider")
+    identity_missing = []
+    resolved = {name: resolve_identity(items, name, warnings, identity_missing) for name, items in candidates.items()}
+    identity.update({name: resolved[name] for name in candidates if name != "game_build"})
+    identity.update(llm_model=resolved["llm_requested_model"] or resolved["llm_configured_model"],
+                    llm_identity_status=("recorded" if any(resolved[name] is not None for name in candidates if name != "game_build") else "unknown") if llm_applicable else "not_applicable",
+                    llm_remote_behavior_frozen=False if llm_applicable else None,
+                    identity_evidence=candidates)
+    if llm_applicable and resolved["llm_requested_model"] and resolved["llm_configured_model"] and resolved["llm_requested_model"] != resolved["llm_configured_model"]:
+        warnings.append("configured_requested_model_mismatch")
+        identity_missing.append("configured_requested_model_mismatch")
     fair = {key: config.get(key) for key in FAIR_FIELDS}
     fair.update(map_sha256=manifest.get("map_sha256"),
                 ares_commit=manifest.get("ares_commit"),
-                game_build=manifest.get("game_build"),
+                game_build=resolved["game_build"],
                 packages=manifest.get("packages"),
                 shared_source_hashes={key: sources.get(key)
                                       for key in SHARED_SOURCES})
     missing = [key for key, value in fair.items() if value is None]
+    missing += identity_missing
     missing += [f"source:{key}" for key, value in fair["shared_source_hashes"].items() if value is None]
     if identity["actor_weights_sha256"] is None and mode in ("rule_bc", "rule_ppo", "llm_ppo"):
         missing.append("actor_weights_sha256")
     if mode in ("llm", "llm_ppo") and identity["llm_model"] is None:
         missing.append("llm_model")
+    if llm_applicable and identity["llm_configured_provider"] is None:
+        missing.append("llm_configured_provider")
     status, result = summary.get("status"), summary.get("result")
     natural = status == "completed" and summary.get("error") is None and summary.get("stop_reason") is None
     outcome = {"Result.Victory": "win", "Result.Defeat": "loss", "Result.Tie": "tie"}.get(result, "unknown") if natural else "unknown"
@@ -179,7 +231,7 @@ def build_report(paths):
         # which actually share that intervention (E3/E4 both use PPO).
         actors = {row["identity"]["actor_weights_sha256"] for row in rows
                   if row["identity"]["mode"] in ("rule_ppo", "llm_ppo")}
-        llm_settings = {(row["identity"]["llm_model"], row["identity"]["llm_max_calls"])
+        llm_settings = {(row["identity"]["llm_configured_provider"], row["identity"]["llm_model"], row["identity"]["llm_max_calls"])
                         for row in rows if row["identity"]["mode"] in ("llm", "llm_ppo")}
         interventions_match = len(actors) <= 1 and len(llm_settings) <= 1
         comparisons.append(dict(group=index, run_ids=[row["run_id"] for row in rows],
@@ -201,7 +253,8 @@ def build_report(paths):
                 formal_comparison_ready=False,
                 limitations=["No sampling frame/planned attempts inferred; caller must include every attempted run in the selected round.",
                              "Descriptive fractions/intervals cannot establish mode advantage; repeated repaired runs are not independent training seeds.",
-                             "Game build/opponent version and remote LLM reproducibility may be absent; missing is never assumed equal.",
+                             "SC2 base_build from runtime ping is a partial engine identity, not full game_version/data_version or a frozen engine. Missing is never assumed equal.",
+                             "Configured/requested models are distinct from response-reported models; remote behavior is not frozen even when provider/model names match.",
                              "Local micro truncation is a release event, not match truncation; reward not reconstructed."])
 
 

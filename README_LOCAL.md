@@ -297,3 +297,12 @@ E3/E4同curriculum256 actor，220/203推理=owned=真实8loops，确认134/132�
 与旧E0/E2公共配置、地图、Ares、Python及两plan全部240源SHA相同，但冻结revision9f896dee→88206e9为不同plan。限定固定5run集合（旧p6_runner_e0e2的E0/E2＋新p6_runner_e1e3e4的E1/E3/E4）可描述5模式各1工程完成，不泛称所有历史5/5；旧E4首次crashed/unknown仍保留原E4报告与原3attempt矩阵，原完整1/2不变。全部5run缺game_build，E1/E4缺LLM模型标识；单seed n1无强度/胜率/泛化/收益结论，正式P6与训练budget-close历史缺口仍未完成。
 
 plan规范化SHA `fa0c21372c9f10c7c24ad2aa9f48cd182c2b45534ee9d82bf9af24388fcdc298`；完整命令、采用/重叠、source/model/map/log/replay SHA、清单/历史边界见[剩余模式报告](docs/PHASE_06_REMAINING_MODES_MVP_REPORT.md)与[共享JSON](docs/validation/p6_remaining_modes_mvp.json)。原始batch/run/model Git忽略、迁移另带。后续先记录build/LLM模型和评估设计，游戏需新授权；本轮只保存文档，未push。
+
+
+## 2026-10-20 P6身份追溯离线MVP最新接续
+
+仅离线重生成限定固定5run（p6_runner_e0e2_20261020的E0/E2＋p6_runner_e1e3e4_20261020的E1/E3/E4），无新游戏/API/训练。报告工具现消费本局compatibility-report.sc2_base_build，五run均98370；E1/E4消费llm_config白名单provider/model为DeepSeek/deepseek-flash。旧库存缺game_build 5项与llm_model 2项现均0，无冲突；来源value/source保留。此为报告读取范围补齐，旧manifest/raw不补写。
+
+base_build来自当局SC2 ping，只是部分引擎身份，不是完整version/data_version；LLM仅配置身份，requested/response model仍null、远端行为未冻结。规则模式LLM not_applicable。新工具shared_config_complete/cross_mode_config_match为true仅指跟踪字段匹配，formal_comparison_ready=false；两个plan/revision与单seed每模式n1边界保留，不推正式P6、强度/胜率/泛化/收益。来源冲突/配置请求不一致会阻匹配，legacy缺失保留unknown。
+
+辅助矩阵artifacts/p6_identity_trace_20261020/evaluation_matrix.json/.md；完整命令、旧新缺项、来源及前后SHA见[身份追溯报告](docs/PHASE_06_IDENTITY_TRACE_MVP_REPORT.md)与[共享JSON](docs/validation/p6_identity_trace_mvp.json)。固定5run的33指定证据文件及4个旧报告文件SHA全部不变，raw未改；旧E4 crashed/unknown与原E4完整1/2、原3attempt完整2/3仍完整保留，不泛称所有历史5/5。实现仅扩展现有1项合并定向检查且1/1通过，证据仅唯一CLI/hash/JSON/diff，无额外测试/游戏。未读.env/key/完整配置/base_url、未copy任意配置；未commit/push。正式P6及训练budget-close历史缺口仍未完成，原始工件迁移另带。

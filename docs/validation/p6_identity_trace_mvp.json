@@ -1,0 +1,378 @@
+{
+  "schema": "p6-identity-trace-mvp-v1",
+  "date_local": "2026-10-20",
+  "based_on_head": "11996a55a163d4be16b6af369aceaf21d922c70e",
+  "scope": "Offline identity recovery for explicitly selected fixed five runs only",
+  "new_games": 0,
+  "new_api_requests": 0,
+  "training_steps": 0,
+  "cli_command": "& C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe -s tools/report_evaluation_matrix.py p6_runner_e0e2_20261020_E0 p6_runner_e1e3e4_20261020_E1 p6_runner_e0e2_20261020_E2 p6_runner_e1e3e4_20261020_E3 p6_runner_e1e3e4_20261020_E4 --output artifacts/p6_identity_trace_20261020/evaluation_matrix.json --markdown artifacts/p6_identity_trace_20261020/evaluation_matrix.md",
+  "cli_exit_code": 0,
+  "offline_matrix_path": "artifacts/p6_identity_trace_20261020/evaluation_matrix.json",
+  "offline_matrix_sha256": "40715b1f4d1053384f440d9498368ba49223aa6bb5ae97bc7551083ba674e421",
+  "previous_inventory_source": "docs/validation/p6_remaining_modes_mvp.json:fixed_five_inventory",
+  "attempts": [
+    {
+      "run_id": "p6_runner_e0e2_20261020_E0",
+      "experiment": "E0",
+      "status": "completed",
+      "outcome": "win",
+      "game_build": 98370,
+      "llm_configured_provider": null,
+      "llm_configured_model": null,
+      "llm_requested_model": null,
+      "llm_response_model": null,
+      "llm_identity_status": "not_applicable",
+      "llm_remote_behavior_frozen": null,
+      "identity_evidence": {
+        "game_build": [
+          {
+            "value": 98370,
+            "source": "compatibility-report.json:sc2_base_build (runtime SC2 ping via BotAI.base_build)"
+          }
+        ],
+        "llm_configured_model": [],
+        "llm_configured_provider": [],
+        "llm_requested_model": [],
+        "llm_response_model": []
+      },
+      "missing_before": [
+        "game_build"
+      ],
+      "missing_after": [],
+      "warnings": [],
+      "evidence_sha256": {
+        "manifest.json": "aa863cd7d85309f8642419721c1b46e35de06b6b966311401a03506bffbf5043",
+        "summary.json": "f2216d157e1dc3723db28403da894b90131a6de70d6be034d57f9ac75dee3783",
+        "events.jsonl": "04af33525079905892a6b1490ff1edccf435686145009985eaf6bd1ca0b83770",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23"
+      }
+    },
+    {
+      "run_id": "p6_runner_e1e3e4_20261020_E1",
+      "experiment": "E1",
+      "status": "completed",
+      "outcome": "win",
+      "game_build": 98370,
+      "llm_configured_provider": "DeepSeek",
+      "llm_configured_model": "deepseek-flash",
+      "llm_requested_model": null,
+      "llm_response_model": null,
+      "llm_identity_status": "recorded",
+      "llm_remote_behavior_frozen": false,
+      "identity_evidence": {
+        "game_build": [
+          {
+            "value": 98370,
+            "source": "compatibility-report.json:sc2_base_build (runtime SC2 ping via BotAI.base_build)"
+          }
+        ],
+        "llm_configured_model": [
+          {
+            "value": "deepseek-flash",
+            "source": "llm_config.json:model"
+          }
+        ],
+        "llm_configured_provider": [
+          {
+            "value": "DeepSeek",
+            "source": "llm_config.json:provider"
+          }
+        ],
+        "llm_requested_model": [],
+        "llm_response_model": []
+      },
+      "missing_before": [
+        "game_build",
+        "llm_model"
+      ],
+      "missing_after": [],
+      "warnings": [],
+      "evidence_sha256": {
+        "manifest.json": "9b0705a77765f043f40d53250663f3f3c930a628d905ac6ff14ad78def93f3f4",
+        "summary.json": "8837d022405fb3156ae0fa3dbeae4839cecc9487bf5b2cbb09d7ad5bb4c15d98",
+        "strategy_summary.json": "e2c48fabdd9cee50fc7f6926c6b633a63a3203d50f1d5a6729fa7077cf448b51",
+        "events.jsonl": "fb7bb2a3bfc5d7fedf9aeb67009e42db96c6cf49e92620d1f582dbafe70d883d",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "llm_config.json": "5fabc72f231f43d83ccc4b785c628c3697f65f9aaac72a967af89875c96831f6"
+      }
+    },
+    {
+      "run_id": "p6_runner_e0e2_20261020_E2",
+      "experiment": "E2",
+      "status": "completed",
+      "outcome": "win",
+      "game_build": 98370,
+      "llm_configured_provider": null,
+      "llm_configured_model": null,
+      "llm_requested_model": null,
+      "llm_response_model": null,
+      "llm_identity_status": "not_applicable",
+      "llm_remote_behavior_frozen": null,
+      "identity_evidence": {
+        "game_build": [
+          {
+            "value": 98370,
+            "source": "compatibility-report.json:sc2_base_build (runtime SC2 ping via BotAI.base_build)"
+          }
+        ],
+        "llm_configured_model": [],
+        "llm_configured_provider": [],
+        "llm_requested_model": [],
+        "llm_response_model": []
+      },
+      "missing_before": [
+        "game_build"
+      ],
+      "missing_after": [],
+      "warnings": [],
+      "evidence_sha256": {
+        "manifest.json": "ea51da4410f107cab603d6d47a9cde3f1f5fa2710bde85af1c883a0de4c9076c",
+        "summary.json": "555c4a7d974a08f4ca805beaaf5722f7380bf40682f0d0b31f133b64b4a9539a",
+        "micro_summary.json": "1a8c937091da7f9c690771b2040f5495fd39ce10fb5be6f834b026ca14739d0a",
+        "events.jsonl": "ba2baeb8a1809b7f6bf3ffff158c0ca69c1befc8a1bd44f788fb9da4b1fc90bb",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23"
+      }
+    },
+    {
+      "run_id": "p6_runner_e1e3e4_20261020_E3",
+      "experiment": "E3",
+      "status": "completed",
+      "outcome": "win",
+      "game_build": 98370,
+      "llm_configured_provider": null,
+      "llm_configured_model": null,
+      "llm_requested_model": null,
+      "llm_response_model": null,
+      "llm_identity_status": "not_applicable",
+      "llm_remote_behavior_frozen": null,
+      "identity_evidence": {
+        "game_build": [
+          {
+            "value": 98370,
+            "source": "compatibility-report.json:sc2_base_build (runtime SC2 ping via BotAI.base_build)"
+          }
+        ],
+        "llm_configured_model": [],
+        "llm_configured_provider": [],
+        "llm_requested_model": [],
+        "llm_response_model": []
+      },
+      "missing_before": [
+        "game_build"
+      ],
+      "missing_after": [],
+      "warnings": [],
+      "evidence_sha256": {
+        "manifest.json": "db64f3de2b36018a03e04ffdfc557eda41c6cd57d17c6cf429b2e4bb08a7968e",
+        "summary.json": "99c492feb354632dee72d5d1447613eb791c3d0f341b442be3fc1b814960ff93",
+        "micro_summary.json": "0d21828ed1c835931c4bdc6da88675d822a64cebad0bad4808bd4cf91c5df0ad",
+        "events.jsonl": "c23995f9b302d44747eb453cc0d65379273163dd9f776b18c899d19cbdc8a2fb",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23"
+      }
+    },
+    {
+      "run_id": "p6_runner_e1e3e4_20261020_E4",
+      "experiment": "E4",
+      "status": "completed",
+      "outcome": "win",
+      "game_build": 98370,
+      "llm_configured_provider": "DeepSeek",
+      "llm_configured_model": "deepseek-flash",
+      "llm_requested_model": null,
+      "llm_response_model": null,
+      "llm_identity_status": "recorded",
+      "llm_remote_behavior_frozen": false,
+      "identity_evidence": {
+        "game_build": [
+          {
+            "value": 98370,
+            "source": "compatibility-report.json:sc2_base_build (runtime SC2 ping via BotAI.base_build)"
+          }
+        ],
+        "llm_configured_model": [
+          {
+            "value": "deepseek-flash",
+            "source": "llm_config.json:model"
+          }
+        ],
+        "llm_configured_provider": [
+          {
+            "value": "DeepSeek",
+            "source": "llm_config.json:provider"
+          }
+        ],
+        "llm_requested_model": [],
+        "llm_response_model": []
+      },
+      "missing_before": [
+        "game_build",
+        "llm_model"
+      ],
+      "missing_after": [],
+      "warnings": [],
+      "evidence_sha256": {
+        "manifest.json": "f3626803749bb228a6136a5a945ea74929982c07bb8395f513b05d913a6f26ff",
+        "summary.json": "f31e03e7606b56f98559aa58cb0a874e5eef3ce1b7b88581667dfc2695fabe2a",
+        "strategy_summary.json": "0d9ba7acbc0e7d9397a2498502f097b92a0fd2472c9434bc59c26f277d426e30",
+        "micro_summary.json": "18cd13f1151c576aac03b51d7351cedabac1da316c06f2cd05aded9f91931897",
+        "events.jsonl": "ef364626a8745cca269eabb30a0fd17deaaf0df03f731687987b1bb92da635cf",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "llm_config.json": "336799a29899fdff024f088cc0a1f2ee5f0e9798f18c385685cecd065c5172a2"
+      }
+    }
+  ],
+  "tracked_missing_counts_before": {
+    "game_build": 5,
+    "llm_model": 2
+  },
+  "tracked_missing_counts_after": {
+    "game_build": 0,
+    "llm_model": 0
+  },
+  "comparison_groups": [
+    {
+      "group": 1,
+      "run_ids": [
+        "p6_runner_e0e2_20261020_E0",
+        "p6_runner_e1e3e4_20261020_E1",
+        "p6_runner_e0e2_20261020_E2",
+        "p6_runner_e1e3e4_20261020_E3",
+        "p6_runner_e1e3e4_20261020_E4"
+      ],
+      "shared_config_complete": true,
+      "missing_fields": [],
+      "shared_intervention_identities_match": true,
+      "cross_mode_config_match": true,
+      "formal_strength_evidence": false
+    }
+  ],
+  "differing_shared_fields": [],
+  "formal_comparison_ready": false,
+  "formal_strength_evidence": false,
+  "integrity": {
+    "selected_evidence_file_count": 33,
+    "evidence_before": {
+      "p6_runner_e0e2_20261020_E0": {
+        "manifest.json": "aa863cd7d85309f8642419721c1b46e35de06b6b966311401a03506bffbf5043",
+        "summary.json": "f2216d157e1dc3723db28403da894b90131a6de70d6be034d57f9ac75dee3783",
+        "events.jsonl": "04af33525079905892a6b1490ff1edccf435686145009985eaf6bd1ca0b83770",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "game.SC2Replay": "30b7288ddb19a75bf598a472a47171ac00be840851bfa9ff956490489d12c36c"
+      },
+      "p6_runner_e1e3e4_20261020_E1": {
+        "manifest.json": "9b0705a77765f043f40d53250663f3f3c930a628d905ac6ff14ad78def93f3f4",
+        "summary.json": "8837d022405fb3156ae0fa3dbeae4839cecc9487bf5b2cbb09d7ad5bb4c15d98",
+        "events.jsonl": "fb7bb2a3bfc5d7fedf9aeb67009e42db96c6cf49e92620d1f582dbafe70d883d",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "llm_config.json": "5fabc72f231f43d83ccc4b785c628c3697f65f9aaac72a967af89875c96831f6",
+        "game.SC2Replay": "d948685d9955567ce66858b789dd34eb4fee86e17254529f1e0b7f5d98ddbdf7"
+      },
+      "p6_runner_e0e2_20261020_E2": {
+        "manifest.json": "ea51da4410f107cab603d6d47a9cde3f1f5fa2710bde85af1c883a0de4c9076c",
+        "summary.json": "555c4a7d974a08f4ca805beaaf5722f7380bf40682f0d0b31f133b64b4a9539a",
+        "events.jsonl": "ba2baeb8a1809b7f6bf3ffff158c0ca69c1befc8a1bd44f788fb9da4b1fc90bb",
+        "micro_transitions.jsonl": "ed57564c41ef2e5260bcff725bfe1c3a34a2aff6d04f8a118a7b7df33cc2cc2d",
+        "learning_exclusion.json": "9f8fd30eb43dcfaccb2db4ed6556e3520b4da00299282d59525767ec6b8f4d86",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "game.SC2Replay": "020799539529ddc194dcfef9aeba650551a0992d9724be6f4503ac0b1b880d87"
+      },
+      "p6_runner_e1e3e4_20261020_E3": {
+        "manifest.json": "db64f3de2b36018a03e04ffdfc557eda41c6cd57d17c6cf429b2e4bb08a7968e",
+        "summary.json": "99c492feb354632dee72d5d1447613eb791c3d0f341b442be3fc1b814960ff93",
+        "events.jsonl": "c23995f9b302d44747eb453cc0d65379273163dd9f776b18c899d19cbdc8a2fb",
+        "micro_transitions.jsonl": "2052c094b5df6dfe45ae43be69dfb1385f70871aea7f6f9acaf9cea117432cea",
+        "learning_exclusion.json": "73922a2f4b175dab44b4fc8b1808a124c391cb10dac2d1c2acc22ca11e478390",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "game.SC2Replay": "85ab464a267a7f206a96a4e0bee7cb964749555f4a7798815e5dcc6f1e8447ff"
+      },
+      "p6_runner_e1e3e4_20261020_E4": {
+        "manifest.json": "f3626803749bb228a6136a5a945ea74929982c07bb8395f513b05d913a6f26ff",
+        "summary.json": "f31e03e7606b56f98559aa58cb0a874e5eef3ce1b7b88581667dfc2695fabe2a",
+        "events.jsonl": "ef364626a8745cca269eabb30a0fd17deaaf0df03f731687987b1bb92da635cf",
+        "micro_transitions.jsonl": "de02cc766a04e784f6f591f23996b077ba332d39504ec3371e13a159a7919012",
+        "learning_exclusion.json": "bf24fc493ef31d9c38890ed97ec4f40a63c1e1065d391b3cba41f4551cfb988a",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "llm_config.json": "336799a29899fdff024f088cc0a1f2ee5f0e9798f18c385685cecd065c5172a2",
+        "game.SC2Replay": "f02d7f20e2dfebd145e84e9c7851a2f3a20796da16409344dec7ab9505556b64"
+      }
+    },
+    "evidence_after": {
+      "p6_runner_e0e2_20261020_E0": {
+        "manifest.json": "aa863cd7d85309f8642419721c1b46e35de06b6b966311401a03506bffbf5043",
+        "summary.json": "f2216d157e1dc3723db28403da894b90131a6de70d6be034d57f9ac75dee3783",
+        "events.jsonl": "04af33525079905892a6b1490ff1edccf435686145009985eaf6bd1ca0b83770",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "game.SC2Replay": "30b7288ddb19a75bf598a472a47171ac00be840851bfa9ff956490489d12c36c"
+      },
+      "p6_runner_e1e3e4_20261020_E1": {
+        "manifest.json": "9b0705a77765f043f40d53250663f3f3c930a628d905ac6ff14ad78def93f3f4",
+        "summary.json": "8837d022405fb3156ae0fa3dbeae4839cecc9487bf5b2cbb09d7ad5bb4c15d98",
+        "events.jsonl": "fb7bb2a3bfc5d7fedf9aeb67009e42db96c6cf49e92620d1f582dbafe70d883d",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "llm_config.json": "5fabc72f231f43d83ccc4b785c628c3697f65f9aaac72a967af89875c96831f6",
+        "game.SC2Replay": "d948685d9955567ce66858b789dd34eb4fee86e17254529f1e0b7f5d98ddbdf7"
+      },
+      "p6_runner_e0e2_20261020_E2": {
+        "manifest.json": "ea51da4410f107cab603d6d47a9cde3f1f5fa2710bde85af1c883a0de4c9076c",
+        "summary.json": "555c4a7d974a08f4ca805beaaf5722f7380bf40682f0d0b31f133b64b4a9539a",
+        "events.jsonl": "ba2baeb8a1809b7f6bf3ffff158c0ca69c1befc8a1bd44f788fb9da4b1fc90bb",
+        "micro_transitions.jsonl": "ed57564c41ef2e5260bcff725bfe1c3a34a2aff6d04f8a118a7b7df33cc2cc2d",
+        "learning_exclusion.json": "9f8fd30eb43dcfaccb2db4ed6556e3520b4da00299282d59525767ec6b8f4d86",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "game.SC2Replay": "020799539529ddc194dcfef9aeba650551a0992d9724be6f4503ac0b1b880d87"
+      },
+      "p6_runner_e1e3e4_20261020_E3": {
+        "manifest.json": "db64f3de2b36018a03e04ffdfc557eda41c6cd57d17c6cf429b2e4bb08a7968e",
+        "summary.json": "99c492feb354632dee72d5d1447613eb791c3d0f341b442be3fc1b814960ff93",
+        "events.jsonl": "c23995f9b302d44747eb453cc0d65379273163dd9f776b18c899d19cbdc8a2fb",
+        "micro_transitions.jsonl": "2052c094b5df6dfe45ae43be69dfb1385f70871aea7f6f9acaf9cea117432cea",
+        "learning_exclusion.json": "73922a2f4b175dab44b4fc8b1808a124c391cb10dac2d1c2acc22ca11e478390",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "game.SC2Replay": "85ab464a267a7f206a96a4e0bee7cb964749555f4a7798815e5dcc6f1e8447ff"
+      },
+      "p6_runner_e1e3e4_20261020_E4": {
+        "manifest.json": "f3626803749bb228a6136a5a945ea74929982c07bb8395f513b05d913a6f26ff",
+        "summary.json": "f31e03e7606b56f98559aa58cb0a874e5eef3ce1b7b88581667dfc2695fabe2a",
+        "events.jsonl": "ef364626a8745cca269eabb30a0fd17deaaf0df03f731687987b1bb92da635cf",
+        "micro_transitions.jsonl": "de02cc766a04e784f6f591f23996b077ba332d39504ec3371e13a159a7919012",
+        "learning_exclusion.json": "bf24fc493ef31d9c38890ed97ec4f40a63c1e1065d391b3cba41f4551cfb988a",
+        "compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "llm_config.json": "336799a29899fdff024f088cc0a1f2ee5f0e9798f18c385685cecd065c5172a2",
+        "game.SC2Replay": "f02d7f20e2dfebd145e84e9c7851a2f3a20796da16409344dec7ab9505556b64"
+      }
+    },
+    "selected_evidence_unchanged": true,
+    "raw_sha256_unchanged": true,
+    "historical_report_sha256_before": {
+      "docs/PHASE_06_REMAINING_MODES_MVP_REPORT.md": "1105d6bf7d990ea9bf60c6864234141902e18586277b288352ff22a6be9a6745",
+      "docs/validation/p6_remaining_modes_mvp.json": "6e6afe7bcec6d60e581ab7a4a1ecce9827bb475322f8e35cb5f25007c837567a",
+      "docs/PHASE_06_E4_FULLMATCH_MVP_REPORT.md": "d018414e8da31f28890fd812e309ecec152b9d9e87cb658ab64e537ede65a868",
+      "docs/validation/p6_evaluation_matrix_mvp.json": "da7b864545180bdec4ae8b51e8beb81ef62f6d6341439dc1da6110535b084fab"
+    },
+    "historical_report_sha256_after": {
+      "docs/PHASE_06_REMAINING_MODES_MVP_REPORT.md": "1105d6bf7d990ea9bf60c6864234141902e18586277b288352ff22a6be9a6745",
+      "docs/validation/p6_remaining_modes_mvp.json": "6e6afe7bcec6d60e581ab7a4a1ecce9827bb475322f8e35cb5f25007c837567a",
+      "docs/PHASE_06_E4_FULLMATCH_MVP_REPORT.md": "d018414e8da31f28890fd812e309ecec152b9d9e87cb658ab64e537ede65a868",
+      "docs/validation/p6_evaluation_matrix_mvp.json": "da7b864545180bdec4ae8b51e8beb81ef62f6d6341439dc1da6110535b084fab"
+    },
+    "historical_reports_unchanged": true
+  },
+  "historical_failure_retained": {
+    "run_id": "e4_fullmatch_llm_ppo_20261019",
+    "status": "crashed",
+    "outcome": "unknown",
+    "source": "docs/validation/p6_evaluation_matrix_mvp.json",
+    "original_e4_completion": "1/2",
+    "original_three_attempt_completion": "2/3"
+  },
+  "implementation_validation": "实现代理扩展现有1项合并定向测试并通过1/1；证据代理仅运行本次离线CLI和JSON/hash/diff核验，未追加测试。",
+  "limitations": [
+    "base_build来自当局SC2 ping，只是引擎部分身份；完整游戏version与data_version未补齐。",
+    "DeepSeek/deepseek-flash来自当局保存的配置，不等于请求遥测或服务端响应模型；二者旧日志仍null，远端后端/权重/行为不可冻结。",
+    "missing列表为空和cross_mode_config_match=true仅表示工具所跟踪字段齐全/一致，不能代表完整引擎状态或正式评估设计就绪。",
+    "两个独立plan/revision、单seed每模式n=1，缺交叉顺序、多地图/独立种子与完整初态冻结；不证明强度、胜率、泛化或训练收益。",
+    "固定5run仅是指定工件集合；旧E4 crashed/unknown历史失败与原3attempt分母保持，不代表所有历史5/5。",
+    "正式P6/P5全面验收、训练budget-close EOFError缺口仍未完成。"
+  ]
+}
