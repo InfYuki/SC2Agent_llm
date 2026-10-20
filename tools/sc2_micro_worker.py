@@ -22,6 +22,18 @@ from tools.run_micro_scenario import Opponent
 from envs.sc2_micro_env import SCENARIOS, training_task
 
 
+class WorkerTelemetry(Telemetry):
+    """Defer inherited on_end finalization until both SDK players return."""
+
+    def finish(self, result=None):
+        # InstrumentedAresBot.on_end calls this before run_game returns.
+        # The worker owns the final result/stop classification and summary.
+        pass
+
+    def finish_worker(self, result=None):
+        super().finish(result)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--episode-id", required=True)
@@ -46,7 +58,7 @@ def main():
     connection = Client((os.environ["SC2_MICRO_HOST"], int(os.environ["SC2_MICRO_PORT"])),
                         family="AF_INET", authkey=bytes.fromhex(os.environ["SC2_MICRO_AUTHKEY"]))
     # Parent owns the episode root and worker.log; Telemetry owns a new child.
-    telemetry = Telemetry(Path(args.output_dir) / "game")
+    telemetry = WorkerTelemetry(Path(args.output_dir) / "game")
     options = SimpleNamespace(**vars(args), training_task=task,
                               enemy_count=1, second_distance=8.0, second_enemy_health_fraction=0.5,
                               enemy_hidden=False,
@@ -66,14 +78,21 @@ def main():
             result = run_game(settings, [Bot(Race.Terran, bot), Bot(enemy_race, Opponent())],
                               realtime=False, random_seed=args.seed,
                               save_replay_as=str(telemetry.output / "game.SC2Replay"))
-        telemetry.finish(result)
-        connection.send(dict(protocol=PROTOCOL, type="closed", episode_id=args.episode_id,
-                             decision_id=bot._decision_id, unit_slot=0,
-                             frame=int(bot.state.game_loop), info=dict(official_results=str(result))))
+        budget_close = bot._budget_close_identity
+        # The leave handshake still requires both official SDK results, but a
+        # budget stop is not a combat win/loss in the training summary.
+        if budget_close:
+            telemetry.event("training_budget_close", official_results=str(result))
+        bot.close_micro()
+        telemetry.finish_worker(None if budget_close else result)
+        identity = budget_close or bot._message("closed")
+        connection.send(dict(identity, type="closed", info=dict(
+            reason="training_budget_close" if budget_close else "episode_boundary",
+            official_results=str(result))))
         return 0
     except Exception as exc:
         telemetry.fail("micro_env_worker")
-        telemetry.finish()
+        telemetry.finish_worker()
         try:
             connection.send(dict(protocol=PROTOCOL, type="error", episode_id=args.episode_id,
                                  decision_id=getattr(bot, "_decision_id", 0), unit_slot=0,

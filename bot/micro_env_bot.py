@@ -26,6 +26,7 @@ class MicroEnvBot(ScenarioBot):
         self._previous = None
         self._pending_action = None
         self._env_finished = False
+        self._budget_close_identity = None
         self._rollout = (telemetry.output / "rl_rollout.jsonl").open("x", encoding="utf-8")
 
     def play_step(self, iteration):
@@ -42,9 +43,13 @@ class MicroEnvBot(ScenarioBot):
         if not self.connection.poll(self.action_timeout):
             raise TimeoutError("action_timeout")
         message = self.connection.recv()
-        expected = self._message("action")
+        kind = message.get("type") if isinstance(message, dict) else None
+        expected = self._message(kind if kind == "close" else "action")
         if not isinstance(message, dict) or any(message.get(k) != v for k, v in expected.items()):
             raise ValueError("stale_or_invalid_action_identity")
+        if kind == "close":
+            self._budget_close_identity = expected
+            return None
         action = message.get("action")
         if type(action) is not int or action not in range(5):
             raise ValueError("invalid_action")
@@ -123,6 +128,12 @@ class MicroEnvBot(ScenarioBot):
             await self.client.leave()
             return
         requested = await asyncio.to_thread(self._receive_action)
+        if requested is None:
+            self._env_finished = True
+            self.telemetry.stop_reason = "training_budget_close"
+            self._finish_scene("training_budget_close", False)
+            await self.client.leave()
+            return
         if not ctx.mask[requested]:
             raise ValueError("masked_action")
         self.arbiter.begin_step({marine.tag: "micro_rule"})

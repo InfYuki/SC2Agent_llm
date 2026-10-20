@@ -464,7 +464,13 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
         raise
     finally:
         if not environment_closed:
-            env.close()
+            active_error = sys.exc_info()[1]
+            try:
+                env.close()
+            except Exception as close_error:
+                if active_error is None:
+                    raise
+                active_error.add_note(f"Environment cleanup also failed: {close_error}")
 
 
 def main():

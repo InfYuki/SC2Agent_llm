@@ -1,0 +1,431 @@
+{
+  "format": "p5-graceful-close-mvp-v1",
+  "date": "2026-10-20",
+  "status": "passed_limited_engineering_validation",
+  "artifact_root": "artifacts/p5_graceful_close_20261020",
+  "plan_sha256": "9cb3779c2e5f9d850b0f7b217c84286453b6760265535d55dbb55752c2af78ed",
+  "hashes_file_sha256": "9af1310d8f89a7389d8f214bcfb7922479cb6f4526b98a61a50791116213848b",
+  "runtime_python": "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe",
+  "game_path": "C:\\Program Files (x86)\\StarCraft II",
+  "source_revision": "f2618ccf589225ef776dece79f5c45b30acc6cf8",
+  "runtime_source_sha256": {
+    "bot/arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+    "bot/budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+    "bot/building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+    "bot/compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+    "bot/lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+    "bot/llm_bot.py": "e98503fb63c069c4070e1416b4d327da75bbc80f1c61bd656d9027129b4e0a3a",
+    "bot/llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+    "bot/llm_ppo_bot.py": "049956798f12aae606cffd971860c253984a93112a212b233d81ee1ff52ce4af",
+    "bot/main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+    "bot/micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+    "bot/micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+    "bot/micro_bot.py": "1950f7938c08d550cfbb0c47b30c3d25e3e89b76e9c2979b530267aed2f07f38",
+    "bot/micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8",
+    "bot/micro_env_bot.py": "70c09cfff203cbf2409bfc520696bfe538caa32eb8d38a5d97d5333676b74d63",
+    "bot/micro_ppo.py": "c2378864c5cbd78b2410eb7fb90eca15033fb12e1c1a6b3f8ccd3239e9a04bdf",
+    "bot/probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+    "bot/rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+    "bot/strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d",
+    "bot/telemetry.py": "d6d6d67cba9f18b82590a7eaf70d81efc73bae84f01eab1abfaa50b7b2d0363d",
+    "envs/__init__.py": "add1335323862acab30dff44529ea1fb45fa8c9381c9a047f9ca6857b3ce6b1e",
+    "envs/gym_sc2_micro_env.py": "0816f9c8b907c740d84d390a05550e596937c4c52e29c2980b608b3e50d2f110",
+    "envs/micro_ipc.py": "9eefaa8f00d8036f49bbeb929d3b2e77b83168ab027e0fc93ff639e89f3e533b",
+    "envs/sc2_micro_env.py": "3bf748004db5b33bf003940dbe958060a0b15532cfdd78aeed19e99a6be6b0a2",
+    "ladder.py": "704cc63380886077a72187bf85057eebb334c2c3d769ae7dab347b11870f658b",
+    "run.py": "1a2f7e03ecc07800416941dacb8b36075bb01d5a587cb8c31c42f30984dbea5a",
+    "run_local.py": "f63e65ed42ef72a101c0644b5d9e4fbfb93f169d3dd14ce70545d17c8fc6c4a0",
+    "scripts/create_ladder_zip.py": "4cca7070c1f87ed6a371a67a3bf6dc4277d402df4216f0f15181f72f38942f1f",
+    "scripts/create_pyinstaller_exe.py": "81ba9fd6b99ea35163c7619f3876f030941faed9ac26f82d1a76115c8c1e3016",
+    "scripts/update_ares.py": "01bd8e4fa763847dfe16c302f022037510e0038108cb2030049fe14a9f386846",
+    "scripts/upload_to_ai_arena.py": "ed35d3cbb452b83492a4d546eb087b7a523efa993b61b8542e0ccbde4c28d6ba",
+    "tests/test_building_manager.py": "747dc0c1e45d7f37c1aaa9a2f400fef72b9ebaa59b1710dab96a3006aceafdcf",
+    "tests/test_evaluation_matrix.py": "08d176153ae55931dcaf19a731f4110d1fb1653274c5ca0e8bb4766d4c2a1245",
+    "tests/test_gym_sc2_micro_env.py": "5ed6e0fee6731023fd513e308527b421832173ac19fe16245e4e8ad053a93d3e",
+    "tests/test_lifecycle.py": "b50d39e6ec945388e2b0bb6fa57ce9be71c98d2137924cea0ae2bfa00432332a",
+    "tests/test_live_abilities.py": "9ab4584ac69412428a52244c4af4b3c7373923f6e20407175d851678b7ab7e20",
+    "tests/test_llm_ppo_runtime.py": "9ebf0d9a36d2788906355a6e91946f92ea77976a8f22668fa7e31f8196371c20",
+    "tests/test_local_runtime.py": "bf5b22d6c3e16e7ab8150c23a74fc0056bc302d0b67a753a3309e484d8667d41",
+    "tests/test_micro.py": "a5fbf9b76e6bb809ce570e75287e618f3ad1c4641fb1ef56e2b4e42f2f074a0f",
+    "tests/test_micro_bc.py": "bdf85dc8a3fe1a1f470a1badfb3dd0ded3e8ffae1fea14e3b4c32dcf43894e56",
+    "tests/test_micro_bc_training.py": "0f3592e4c016a0378cc57ea2303fe8444d4724bb5b90aab200c7948d061c542b",
+    "tests/test_micro_dataset.py": "1e543e9551db5d38cdc1f59d8338c0a049888be30b3fd02f8f405b9eac17fb16",
+    "tests/test_micro_ppo.py": "3e5c96a7961c2fa141e343416b71fc3af1edcc1112e117dfdfb7bdd7e8c97f29",
+    "tests/test_micro_ppo_runtime.py": "6682e0ec989e11d88720ecca76900fb63f94a81eab094785cb1cd5ee04e55150",
+    "tests/test_micro_scenario.py": "d99859c37511d4c77f9c6666cc6ac73d6c9a8cde94ae60213c3a72092e881753",
+    "tests/test_micro_terminal_eval.py": "eb0c6b7974f465c4e0134fa0989f93722eb9f6c90ae90f3af91cdce96f6e6e94",
+    "tests/test_micro_training_task.py": "e4fd0b331ec3bfa2302fe870f4f9ae8aed135209d605b1b10f1283485611afe1",
+    "tests/test_run_evaluation_matrix.py": "841f887b41d25c394be8c9cd76d3b7de93f4572cda00fade5ecdaa6e93965493",
+    "tests/test_sc2_micro_env.py": "9a1ddc432898ab37e2fd67a173c425e750dd2caf65881aeacddd979177517510",
+    "tests/test_strategy.py": "ff49af686154a8ba55d28ae043eac61fb2bda6219e869c2159abeebfbbb6df55",
+    "tests/test_strategy_adapter.py": "9a1401a8c081f65cdedbb52e865ef9977238a4f150e1abd03431d0fc950b9be7",
+    "tests/test_telemetry_snapshot.py": "daea42766bb35bb40b98dc730ed4b5661b0caf10312b9904c2a06432b28258c6",
+    "tools/evaluate_micro.py": "8f61f183c600e64122d8f1c415a9990f1a4397c5bad6eff523318908a461f976",
+    "tools/evaluate_rule.py": "86808ee51cef764ae335acd083c3daea5d39b79a2f569077af7e6f452eec4ec1",
+    "tools/evaluate_strategy.py": "cf1bce97cfeaa68e1e7c0d15dc8d82ccf31be813cf7950972d9a2efaf70eae8e",
+    "tools/export_micro_dataset.py": "d7646ef20e5cc4e196116ba4f71e02f204547785289a40e8c89e83b9588e5d5d",
+    "tools/export_micro_ppo.py": "dcafe188530c1ecef5f5c793a410d1c20b6bbe960e1f0568a179d8647812a48c",
+    "tools/probe.py": "6ab1438fd506a89734edc2482827e6d2ba4a2558d9dd57efbb0ed5ed79f0b24b",
+    "tools/report_evaluation_matrix.py": "f3aa3d6b429c7786b839bb12a3ae437f479e2789f9e11cc481a63eea4adb7ad2",
+    "tools/report_micro.py": "2dd0b4081391691e7e6f6de32f6b1e90ebb4613b37699839e0a6cbefdda85773",
+    "tools/report_strategy.py": "b2151130df9dccfdb640cedd0cdb7fdbcef139f2b6bd96705423bb1e871d31db",
+    "tools/report_suite.py": "5ba1f31520d59034ed2b86f146a1494c2dbece414207ba2a58f8cffefcba66c0",
+    "tools/run_evaluation_matrix.py": "1940b268de9d43e8a26d4a230d4338835a7c692f9150cb6ba83ea686fb749d4a",
+    "tools/run_logged.py": "1b3770f8ae6247d59c3c354a7aa9a3d7da1e4f55f2309c3cebea2663416b966b",
+    "tools/run_micro_scenario.py": "0eca8a551f2e90079a841214cfe2a644492212faccedcca5821ad0a502087aeb",
+    "tools/sc2_micro_worker.py": "4f0084a11d26d567ca718dff26c34e33d6ee2f98bd1ae678476a78517876a225",
+    "tools/smoke_micro_env.py": "257ac08d97a9afbc273611954b32a4fd5b032b77b2d9295f123430e3473f4220",
+    "tools/train_micro_bc.py": "9432bc365d4f5b0f3100d94d840fb69c34ed43870d2bdea48eb19cd38507edb4",
+    "tools/train_micro_ppo.py": "a55023819fb9d2a4eafb809ea15b492d5cdbe7632407108a3f415bae47f996a3"
+  },
+  "map_sha256": {
+    "C:\\code\\SC2Agent_llm\\maps\\Ancient Cistern LE.SC2Map": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+    "C:\\Program Files (x86)\\StarCraft II\\Maps\\Ancient Cistern LE.SC2Map": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59"
+  },
+  "historical_evidence_sha256": {
+    "docs/PHASE_05_CURRICULUM_MVP_REPORT.md": "26b04e4b6e0efcdbe5d9dcd07f3c2153e43036926db33073509540a1ca902117",
+    "docs/validation/ppo_curriculum_mvp.json": "d2586339849a1fb18a0cdef06045c87c589b02c1d0c172764dcc5848b70c50ab",
+    "docs/PHASE_05_PPO_MVP_REPORT.md": "851507a98514ad1e5ab6644cc60fdc5335a3aa7f2a971408aa7bd0220ee02a6b",
+    "docs/validation/micro_ppo_mvp.json": "d765820795a9cee5a55caa4c095a0c5a1314f025a940fc4b04b710556c42eb4a"
+  },
+  "runtime_source_count": 68,
+  "source_unchanged": true,
+  "map_unchanged": true,
+  "historical_evidence_unchanged": true,
+  "case_count": 2,
+  "retries": 0,
+  "training_steps": 0,
+  "model_updates": 0,
+  "llm_calls": 0,
+  "full_matches": 0,
+  "case_configuration": {
+    "seed": 20261020,
+    "scenario": "marine-vs-zergling",
+    "distance": 8.0,
+    "max_game_seconds": 12.0,
+    "own_health_fraction": 1.0,
+    "enemy_health_fraction": 1.0,
+    "map_name": "Ancient Cistern LE",
+    "action_selection": "lowest_index_legal"
+  },
+  "cases": [
+    {
+      "name": "reset_close",
+      "episode_id": "686151eb64bb4328ba4905a75571bcf5",
+      "output_dir": "artifacts/p5_graceful_close_20261020/reset_close/686151eb64bb4328ba4905a75571bcf5",
+      "worker_pid": 63792,
+      "reset_frame": 17,
+      "reset_wall_seconds": 17.18700000003446,
+      "action": null,
+      "reward": null,
+      "step_info": {
+        "frame": null,
+        "decision_id": null,
+        "actual_game_loops": null,
+        "requested_action": null,
+        "executed_action": null,
+        "command_result": null,
+        "confirmed_game_loop": null,
+        "own_effective_hp": null,
+        "enemy_effective_hp": null,
+        "rollout_discard": null,
+        "command_conflicts": null
+      },
+      "close_identity": {
+        "protocol": "sc2-micro-v1",
+        "episode_id": "686151eb64bb4328ba4905a75571bcf5",
+        "decision_id": 0,
+        "frame": 17,
+        "unit_slot": 0
+      },
+      "ack": {
+        "protocol": "sc2-micro-v1",
+        "type": "closed",
+        "episode_id": "686151eb64bb4328ba4905a75571bcf5",
+        "decision_id": 0,
+        "unit_slot": 0,
+        "frame": 17,
+        "info": {
+          "reason": "training_budget_close",
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        }
+      },
+      "summary_exists_at_ack": true,
+      "close_info": {
+        "reason": "training_budget_close",
+        "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]",
+        "worker_exit_code": 0
+      },
+      "close_wall_seconds": 2.0939999999827705,
+      "summary": {
+        "status": "interrupted",
+        "result": null,
+        "stop_reason": "training_budget_close",
+        "error": null,
+        "counters": {
+          "marines_created": 1,
+          "callbacks": 1
+        },
+        "game_span_seconds": 0.0,
+        "wall_span_seconds": 0.0,
+        "game_to_wall_ratio": null,
+        "on_step_p50_seconds": 0.0029344999929890037,
+        "on_step_p95_seconds": 0.0029344999929890037,
+        "on_step_p99_seconds": 0.0029344999929890037,
+        "on_step_max_seconds": 0.0029344999929890037,
+        "peak_workers": 12,
+        "peak_marines": 1,
+        "peak_bases": 1
+      },
+      "scenario_result": {
+        "outcome": "training_budget_close",
+        "terminated": false,
+        "truncated": true,
+        "game_loop": 17,
+        "game_seconds": 0.7589285714285715
+      },
+      "rl_rollout_count": 0,
+      "micro_transition_count": 0,
+      "expert_labels": false,
+      "bc_eligible_count": 0,
+      "learning_exclusion": {
+        "format": "learning-exclusion-v1",
+        "excluded_from_future_training": true,
+        "reason": "graceful-close-engineering-validation-only; no learning authorized",
+        "plan_sha256": "9cb3779c2e5f9d850b0f7b217c84286453b6760265535d55dbb55752c2af78ed",
+        "episode_id": "686151eb64bb4328ba4905a75571bcf5",
+        "raw_sha256": {
+          "rl_rollout.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "micro_transitions.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "budget_close_events": [
+        {
+          "event": "training_budget_close",
+          "wall_time": 1792511414.493794,
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        }
+      ],
+      "sc2_base_build": 98370,
+      "checks": {
+        "close_confirmed": true,
+        "summary_before_ack": true,
+        "ack_identity": true,
+        "budget_close_reason": true,
+        "exit_zero": true,
+        "summary_budget_interrupted": true,
+        "scenario_budget_truncated": true,
+        "no_extra_transition": true,
+        "no_traceback": true,
+        "no_eoferror": true,
+        "no_sc2_orphan": true,
+        "no_conflict": true
+      },
+      "passed": true
+    },
+    {
+      "name": "reset_step_close",
+      "episode_id": "6e796a83c28840689078903e20794c40",
+      "output_dir": "artifacts/p5_graceful_close_20261020/reset_step_close/6e796a83c28840689078903e20794c40",
+      "worker_pid": 70792,
+      "reset_frame": 17,
+      "reset_wall_seconds": 14.139999999955762,
+      "action": 2,
+      "reward": 0.0,
+      "step_info": {
+        "frame": 25,
+        "decision_id": 1,
+        "actual_game_loops": 8,
+        "requested_action": 2,
+        "executed_action": 2,
+        "command_result": "engine_confirmed",
+        "confirmed_game_loop": 18,
+        "own_effective_hp": 45.0,
+        "enemy_effective_hp": 35.0,
+        "rollout_discard": false,
+        "command_conflicts": 0
+      },
+      "close_identity": {
+        "protocol": "sc2-micro-v1",
+        "episode_id": "6e796a83c28840689078903e20794c40",
+        "decision_id": 1,
+        "frame": 25,
+        "unit_slot": 0
+      },
+      "ack": {
+        "protocol": "sc2-micro-v1",
+        "type": "closed",
+        "episode_id": "6e796a83c28840689078903e20794c40",
+        "decision_id": 1,
+        "unit_slot": 0,
+        "frame": 25,
+        "info": {
+          "reason": "training_budget_close",
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        }
+      },
+      "summary_exists_at_ack": true,
+      "close_info": {
+        "reason": "training_budget_close",
+        "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]",
+        "worker_exit_code": 0
+      },
+      "close_wall_seconds": 2.0939999999827705,
+      "summary": {
+        "status": "interrupted",
+        "result": null,
+        "stop_reason": "training_budget_close",
+        "error": null,
+        "counters": {
+          "marines_created": 1,
+          "callbacks": 2,
+          "micro_action_retreat": 1
+        },
+        "game_span_seconds": 0.3571428571428571,
+        "wall_span_seconds": 0.09032000001752749,
+        "game_to_wall_ratio": 3.9541946088745568,
+        "on_step_p50_seconds": 0.0009810999617911875,
+        "on_step_p95_seconds": 0.0009810999617911875,
+        "on_step_p99_seconds": 0.0009810999617911875,
+        "on_step_max_seconds": 0.001090400037355721,
+        "peak_workers": 12,
+        "peak_marines": 1,
+        "peak_bases": 1
+      },
+      "scenario_result": {
+        "outcome": "training_budget_close",
+        "terminated": false,
+        "truncated": true,
+        "game_loop": 25,
+        "game_seconds": 1.1160714285714286
+      },
+      "rl_rollout_count": 1,
+      "micro_transition_count": 1,
+      "expert_labels": false,
+      "bc_eligible_count": 0,
+      "learning_exclusion": {
+        "format": "learning-exclusion-v1",
+        "excluded_from_future_training": true,
+        "reason": "graceful-close-engineering-validation-only; no learning authorized",
+        "plan_sha256": "9cb3779c2e5f9d850b0f7b217c84286453b6760265535d55dbb55752c2af78ed",
+        "episode_id": "6e796a83c28840689078903e20794c40",
+        "raw_sha256": {
+          "rl_rollout.jsonl": "74ed03fe42e0df4a0bd15ea2b109e06be83272a6864649fbadaee33db52c07f7",
+          "micro_transitions.jsonl": "4b338de0e3c2b0b191b06e64d88da0215796473eec5da0c40b996baf53728e05"
+        }
+      },
+      "budget_close_events": [
+        {
+          "event": "training_budget_close",
+          "wall_time": 1792511431.0899522,
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        }
+      ],
+      "sc2_base_build": 98370,
+      "checks": {
+        "close_confirmed": true,
+        "summary_before_ack": true,
+        "ack_identity": true,
+        "budget_close_reason": true,
+        "exit_zero": true,
+        "summary_budget_interrupted": true,
+        "scenario_budget_truncated": true,
+        "no_extra_transition": true,
+        "no_traceback": true,
+        "no_eoferror": true,
+        "no_sc2_orphan": true,
+        "no_conflict": true
+      },
+      "passed": true
+    }
+  ],
+  "artifact_sha256": {
+    "console.log": "56c98216aa10c9a58aed104894f8a12871c53ce28b784403b751cf520554f278",
+    "plan.json": "9cb3779c2e5f9d850b0f7b217c84286453b6760265535d55dbb55752c2af78ed",
+    "postcheck.json": "43b2226ad69af0a7e37be85e03b4cc86c01677592073343d88a1d93d5b94749e",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/events.jsonl": "66d9be634723a17849df9a0542c4cbd7161bb120ba4eb9fb3d28f0ad583b6e05",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/game.SC2Replay": "3faf7f82ff2c2b026d6bf3b9a8d37d335975724728948f7e68434b11d9eef9a3",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/initial_scene_observation.json": "86c366a968a0ae5b0685b436b2d24ddd1d4c7b99ca3bf1e959e6333ed296b2bb",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/learning_exclusion.json": "c459470dc8066f7f1a2f80234422a9a57fa30e7618bed7307d07135530589b06",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/manifest.json": "b834b5099512592a22d6c243f9a36c9b5cd7f36bbd01d32c6b869a3d063e5f2e",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/micro_summary.json": "7eef4eab114f13d6e8ce977d1442e1f958bc3a8a0d6c485729532cf153a301a6",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/micro_transitions.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/rl_rollout.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/runtime_abilities.json": "44834a304ca6650651f43b032ecbb5f18ef2087a3ccbdc36691d4c186998fb72",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/scenario.json": "305b6d6a109a5aa7f613422f5b7e729ef0edc22ac41a587599f317a98219094d",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/scenario_result.json": "f073903898c619ce5c0e46469b0a07b84d048dcf718408474541a2544cdd8b61",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/game/summary.json": "a5baa3cc3602852102a115840fe0ff5fa8b374b5424b1eec433145d163f9d4e6",
+    "reset_close/686151eb64bb4328ba4905a75571bcf5/worker.log": "4c0aec867b1b85e6fb70fb06aa9df121f74a1203273156a0b1f8243902b8b228",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/compatibility-report.json": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/events.jsonl": "6cec64913d12db96b64c3b32d4ef812ec18286d6f54862b6f97e87c9a9f1a3f3",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/game.SC2Replay": "b822c7c4c3fa5ca2e030de9b369701aea98481d0fb3e39a72d79df769cf52a93",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/initial_scene_observation.json": "86c366a968a0ae5b0685b436b2d24ddd1d4c7b99ca3bf1e959e6333ed296b2bb",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/learning_exclusion.json": "f8dd9520848d25625815b04d38a38aaf462ba24485d0a625aac0c88447791dd0",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/manifest.json": "24a35e1311b7879080732e1edfd9f6988e743b66840e30e67102598004afd751",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/micro_summary.json": "ac20afdf9fe6155f1e6678c802c8df6e144409e43e29731981fd6e98c98a2033",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/micro_transitions.jsonl": "4b338de0e3c2b0b191b06e64d88da0215796473eec5da0c40b996baf53728e05",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/rl_rollout.jsonl": "74ed03fe42e0df4a0bd15ea2b109e06be83272a6864649fbadaee33db52c07f7",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/runtime_abilities.json": "44834a304ca6650651f43b032ecbb5f18ef2087a3ccbdc36691d4c186998fb72",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/scenario.json": "305b6d6a109a5aa7f613422f5b7e729ef0edc22ac41a587599f317a98219094d",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/scenario_result.json": "890b2f2a1f460a003c50878f76bac7dbb62beabe16e23f68eb14e52bab313baa",
+    "reset_step_close/6e796a83c28840689078903e20794c40/game/summary.json": "cab6a7c6b62d9e3d4ae6fe215f56eb63c6d32692dea11ea8adc4108ea27612cc",
+    "reset_step_close/6e796a83c28840689078903e20794c40/worker.log": "d883ddc94bd6607aaad37d9d040b1fd6f0b46374dfb50e6a8e779f12e9b06962",
+    "results.json": "28d82815f223aaa1c80089cc01c7a9d07364a46598af1c4ac0598e39ef532fc6",
+    "validate_close.py": "13de8d71a05e4fabd0d9429f014d673eb38100b280e3818d895e5aab244f0085"
+  },
+  "validation_scope": {
+    "real": [
+      "reset_then_budget_close",
+      "reset_legal_step_then_budget_close",
+      "summary_persisted_before_ack",
+      "ack_identity_and_exit_zero",
+      "no_extra_rollout_transition",
+      "no_EOFError_or_Traceback",
+      "no_owned_worker_or_SC2_orphan"
+    ],
+    "mock_only": [
+      "close_timeout",
+      "mismatched_ack_identity",
+      "nonzero_worker_exit",
+      "forced_owned_process_cleanup"
+    ],
+    "not_verified": [
+      "real_timeout_or_kill_failure",
+      "PPO_training_after_fix",
+      "natural_terminal_regression_after_fix",
+      "training_quality",
+      "model_strength",
+      "full_P5_acceptance"
+    ]
+  },
+  "constraints": {
+    "no_credentials_read": true,
+    "no_live_latest_state_read": true,
+    "no_install": true,
+    "no_historical_artifact_modification": true
+  },
+  "save_state": {
+    "baseline_f2618cc": "already_pushed_to_origin/MacZhi-P6_before_this_work",
+    "this_change": "local_changes_pending_commit_no_push"
+  },
+  "static_validation": {
+    "source": "implementation_agent_execution_report",
+    "targeted_test": "python -s -m unittest tests.test_sc2_micro_env.MicroEnvContractTests.test_budget_close_handshake_cleanup_and_no_extra_transition -v",
+    "distinct_test_count": 1,
+    "total_executions": 2,
+    "initial_result": "1/1 passed before scope found inherited on_end early-finish defect",
+    "final_result": "same merged test extended after defect repair, rerun 1/1 passed; no further rerun",
+    "compile_files": [
+      "envs/sc2_micro_env.py",
+      "bot/micro_env_bot.py",
+      "tools/sc2_micro_worker.py",
+      "tools/train_micro_ppo.py",
+      "tests/test_sc2_micro_env.py"
+    ],
+    "py_compile": "passed",
+    "worker_help": "passed",
+    "diff_check": "passed",
+    "scope_review": "no blocking findings after on_end repair"
+  }
+}

@@ -20,6 +20,10 @@ ROOT = Path(__file__).resolve().parents[1]
 SCENARIOS = ("marine-vs-marine", "marine-vs-zergling")
 
 
+class MicroEnvCloseError(RuntimeError):
+    """The owned worker was cleaned up without a confirmed graceful close."""
+
+
 def training_task(*, scenario="marine-vs-marine", distance=6.0,
                   max_game_seconds=8.0, map_name="Ancient Cistern LE",
                   own_health_fraction=1.0, enemy_health_fraction=1.0):
@@ -86,9 +90,13 @@ class SC2MicroEnv:
         self._process = self._listener = self._connection = self._log = None
         self._state = None
         self._done = True
+        self._close_confirmed = False
+        self.close_info = None
 
     def reset(self, *, seed=42, options=None):
         self.close()
+        self._close_confirmed = False
+        self.close_info = None
         if options:
             raise ValueError("Training task is fixed at construction; reset options are unsupported")
         self.episode_id = uuid.uuid4().hex
@@ -125,7 +133,7 @@ class SC2MicroEnv:
             info["reset_wall_seconds"] = time.monotonic() - started
             return tuple(packet["obs"]), info
         except Exception as exc:
-            self.close()
+            self._cleanup()
             raise RuntimeError(f"SC2 reset failed ({type(exc).__name__}: {exc}); log: {self.output_dir / 'worker.log'}") from exc
 
     def _receive(self, timeout):
@@ -173,7 +181,10 @@ class SC2MicroEnv:
                     raise ValueError("Missing official episode close confirmation")
                 info["worker_close"] = closed.get("info", {})
                 info["official_close_confirmed"] = True
-                self._process.wait(timeout=5)
+                if self._process.wait(timeout=5) != 0:
+                    raise RuntimeError("Worker exited nonzero after close confirmation")
+                self._close_confirmed = True
+                self.close_info = dict(closed["info"], worker_exit_code=0)
             info["step_wall_seconds"] = time.monotonic() - started
             obs = None if packet["obs"] is None else tuple(packet["obs"])
             return obs, float(packet["reward"]), packet["terminated"], packet["truncated"], info
@@ -183,10 +194,37 @@ class SC2MicroEnv:
                         decision_id=state["decision_id"], frame=state["frame"],
                         observation_source="unavailable", action_mask=HOLD_MASK,
                         output_dir=str(self.output_dir))
-            self.close()
+            self._cleanup()
             return None, 0.0, False, True, info
 
     def close(self):
+        try:
+            if self._process is None or self._close_confirmed:
+                return
+            if self._state is None or self._done:
+                raise MicroEnvCloseError("Worker has no live state for graceful close")
+            state = self._state
+            started = time.monotonic()
+            self._connection.send(message("close", self.episode_id, state["decision_id"],
+                                          state["frame"]))
+            closed = self._receive(self.step_timeout)
+            expected = message("closed", self.episode_id, state["decision_id"], state["frame"])
+            if (not isinstance(closed, dict)
+                    or any(closed.get(key) != value for key, value in expected.items())
+                    or closed.get("info", {}).get("reason") != "training_budget_close"):
+                raise ValueError("Missing training budget close confirmation")
+            remaining = max(0.01, self.step_timeout - (time.monotonic() - started))
+            if self._process.wait(timeout=remaining) != 0:
+                raise RuntimeError("Worker exited nonzero after close confirmation")
+            self._close_confirmed = True
+            self.close_info = dict(closed["info"], worker_exit_code=0)
+        except Exception as exc:
+            raise MicroEnvCloseError(f"SC2 graceful close failed: {exc}") from exc
+        finally:
+            self._cleanup()
+
+    def _cleanup(self):
+        """Release IPC and, on failure, force only this worker's process tree."""
         self._done = True
         self._state = None
         if self._connection is not None:
@@ -218,5 +256,10 @@ class SC2MicroEnv:
     def __enter__(self):
         return self
 
-    def __exit__(self, *_):
-        self.close()
+    def __exit__(self, exc_type, exc, traceback):
+        try:
+            self.close()
+        except MicroEnvCloseError as close_error:
+            if exc is None:
+                raise
+            exc.add_note(str(close_error))
