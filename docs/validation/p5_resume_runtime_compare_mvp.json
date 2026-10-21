@@ -1,0 +1,400 @@
+{
+  "schema": "p5-resume-runtime-compare-mvp-v1",
+  "date": "2026-10-21",
+  "base_head": "8254e82af6fded6e4b973cb3cb86539cad9de247",
+  "interpretation": "One repeated heldout nominal task at a new seed; engineering observation only, no training-benefit or strength claim.",
+  "evidence": [
+    {
+      "path": "artifacts/runtime_compare320_20261021/plan.json",
+      "sha256": "b22bdf7310784e3bd51191062c3f0f2965bc88e0ae5855c4bd12266439bc4108"
+    },
+    {
+      "path": "artifacts/runtime_compare320_20261021/comparison.json",
+      "sha256": "382ff790d1e330967bc8e45dd6e96f1f959cc3b5fb0703cebc2eaa3ead850a6b"
+    },
+    {
+      "path": "artifacts/runtime_compare320_20261021/execution.json",
+      "sha256": "0df78615d2fdc3e7d0275a3ab716600e401deefd1b3aebe394da514ed33cbfeb"
+    },
+    {
+      "path": "artifacts/runtime_compare320_20261021/integrity.json",
+      "sha256": "5dda5a6f95c96eed7caa0f95ad84158264046fb583a3f86e5bee277884d7cf42"
+    },
+    {
+      "path": "artifacts/runtime_compare320_20261021/RELEASE.md",
+      "sha256": "38b083ef3563234e878fa2bd3414257af519209a9819c2035a19a85cd125fe2c"
+    }
+  ],
+  "scope": {
+    "authorized_cases": 2,
+    "serial": true,
+    "retries": 0,
+    "per_case_wall_limit_seconds": 60,
+    "total_wall_limit_seconds": 180,
+    "training": false,
+    "llm_api": false,
+    "full_easy_game": false,
+    "code_or_default_change": false,
+    "commit_push": false
+  },
+  "task": {
+    "map": "Ancient Cistern LE",
+    "scenario": "marine-vs-zergling-v6",
+    "requested_distance": 7,
+    "health_fraction": 0.8,
+    "enemy_health_fraction": 1,
+    "friendly_count": 1,
+    "enemy_count": 1,
+    "enemy_hidden": false,
+    "seed": 20261021,
+    "realtime": false,
+    "decision_game_loops": 8,
+    "max_game_seconds": 12,
+    "allow_low_health_eval": true,
+    "split": "test",
+    "expert_labels": false
+  },
+  "lineage": {
+    "initialization": "BC -> melee128 -> curriculum256 -> resumed320",
+    "bc_weights_sha256": "e36cba313c1d8e1731573595b1b975316e1522db3af8d1a4abf4f21e405c2dcf",
+    "dataset_sha256": "6558232fea2386e1bef792b50e728b7f5e13ff6a47498837538dd4b0f91aee9e",
+    "curriculum": "configs/micro_curriculum_v1.json",
+    "full_producer_evidence": "artifacts/runtime_compare320_20261021/plan.json and comparison.json"
+  },
+  "execution": {
+    "plan_sha256": "b22bdf7310784e3bd51191062c3f0f2965bc88e0ae5855c4bd12266439bc4108",
+    "cases": [
+      {
+        "run_id": "p5_resume_compare256_20261021",
+        "pid": 65628,
+        "timeout_seconds": 60,
+        "timed_out": false,
+        "exit_code": 0,
+        "wall_seconds": 18.469000000040978
+      },
+      {
+        "run_id": "p5_resume_compare320_20261021",
+        "pid": 76892,
+        "timeout_seconds": 60,
+        "timed_out": false,
+        "exit_code": 0,
+        "wall_seconds": 17.42200000002049
+      }
+    ],
+    "wall_seconds": 35.92200000002049
+  },
+  "pairing": {
+    "observed_initial_fields_equal": {
+      "mask": true,
+      "game_loop": true,
+      "friendly_tag": true,
+      "expert_action": true,
+      "visible_enemy_count": true,
+      "weapon_cooldown": true,
+      "weakest_tag": true,
+      "friendly_position": true,
+      "initialization_confirmed": true,
+      "health": true,
+      "enemy_positions": true,
+      "obs": true,
+      "enemies": true,
+      "nearest_tag": true
+    },
+    "observed_initial": {
+      "game_loop": 17,
+      "initialization_confirmed": true,
+      "friendly_tag": 4356308993,
+      "friendly_position": [
+        82.0,
+        80.0
+      ],
+      "health": 36.0,
+      "visible_enemy_count": 1,
+      "enemy_positions": [
+        [
+          87.892578125,
+          80.0
+        ]
+      ],
+      "enemies": [
+        {
+          "tag": 4356571137,
+          "role": 0,
+          "position": [
+            87.892578125,
+            80.0
+          ],
+          "health": 35.0,
+          "health_max": 35.0,
+          "distance": 5.892578125,
+          "in_range": false
+        }
+      ],
+      "nearest_tag": 4356571137,
+      "weakest_tag": 4356571137,
+      "weapon_cooldown": 0.0,
+      "obs": [
+        0.8,
+        0.0,
+        0.0,
+        0.4910481770833333,
+        0.0,
+        0.4910481770833333,
+        1.0,
+        0.0,
+        0.0,
+        0.4910481770833333,
+        0.0,
+        1.0,
+        0.0,
+        0.0625,
+        0.109375,
+        0.0
+      ],
+      "mask": [
+        false,
+        false,
+        true,
+        true,
+        true
+      ],
+      "expert_action": 3
+    },
+    "scene_field_equal": {
+      "second_distance": true,
+      "time_limit_seconds": true,
+      "enemy_health_fraction": true,
+      "decision_game_loops": true,
+      "opponent_script": true,
+      "friendly": true,
+      "expert": true,
+      "enemy_positions": true,
+      "split": true,
+      "macro": true,
+      "enemy_count": true,
+      "enemy_hidden": true,
+      "version": true,
+      "second_enemy_health_fraction": true,
+      "health_fraction": true,
+      "friendly_position": true,
+      "allow_low_health_eval": true,
+      "requested_distance": true,
+      "enemy_position": true,
+      "enemy": true,
+      "seed": true
+    },
+    "common_manifest_config_equal": true,
+    "map_and_source_equal": true,
+    "full_hidden_engine_state_fixed": false,
+    "limitation": "Enemy cooldown and full hidden engine state were not logged or fixed; nominal spawn distance differs from ready observation distance."
+  },
+  "cases": [
+    {
+      "run_id": "p5_resume_compare256_20261021",
+      "raw_directory": "artifacts/runs/p5_resume_compare256_20261021",
+      "actor": "artifacts/models/marine_ppo_curriculum256_20261019",
+      "actor_weights_sha256": "8a0e810b5e686fd71fa74f4a7f7b5be486401647b3119b4ec7bd87e1a94bbfc1",
+      "actor_metadata_sha256": "7f8c0754a6dc65f5d13bbfac18608e26b48b72ebc5f2215fa2bf0674cc932e07",
+      "checkpoint": {
+        "path": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_curriculum256_20261019\\model.zip",
+        "sha256": "9c94690a2cb8eaabfb5fd24c6c0984896825d6f27f87700335f9e41df3aaafd1",
+        "parent": {
+          "path": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_melee_bc128_20261019\\model.zip",
+          "sha256": "177d1b91f420acfbdfa39e0ffc3d18b53975b23a75f394f9fe5122177b9158ea"
+        }
+      },
+      "result": {
+        "outcome": "enemy_dead",
+        "terminated": true,
+        "truncated": false,
+        "game_loop": 129,
+        "game_seconds": 5.758928571428572,
+        "allow_low_health_eval": true,
+        "expert_labels": false,
+        "own_dead_confirmed": false,
+        "enemy_dead_confirmed": true,
+        "own_effective_hp": 6.0,
+        "enemy_effective_hp": 0
+      },
+      "transitions": 14,
+      "ppo_inference_decisions": 14,
+      "owned_decisions": 14,
+      "requested_actions_0_to_4": [
+        0,
+        4,
+        3,
+        1,
+        6
+      ],
+      "executed_actions_0_to_4": [
+        0,
+        3,
+        3,
+        1,
+        7
+      ],
+      "command_results": {
+        "engine_confirmed": 7,
+        "hold": 6,
+        "order_preserved": 1
+      },
+      "requested_mask_legal": true,
+      "executed_mask_legal": true,
+      "all_actual_game_loops_8": true,
+      "all_nonexpert_test_excluded": true,
+      "raw_rewards_all_null": true,
+      "low_health_source_transition_count": 1,
+      "low_health_actions": [
+        4
+      ],
+      "command_conflicts": 0,
+      "model_fallback_events": 0,
+      "micro_fallback_events": 0,
+      "summary_error": null,
+      "log_error_tokens": {
+        "Traceback": 0,
+        "EOFError": 0,
+        "Unknown exception": 0
+      },
+      "raw_sha256": {
+        "micro_transitions.jsonl": "3599459d917cf36cf6180231f3f656cfada5a2719f3e6bdbb73b3c703c43b60d",
+        "scenario_result.json": "f2c49c028e1823b9b4ee6ef8d133bf00a85389b4d81950a415f0785cab1f84a1",
+        "manifest.json": "9177c10cc3f5cd203a2dc4982ccd8913ff46a310a9f472b6fb2bc861ba7372b7",
+        "initial_scene_observation.json": "557dee1e6dc2789577d5dbb1bdcb679cb5cc20c9946db1c764f325fe8e3939c0",
+        "scenario.json": "20f8a03533e79fa7bd08914e92bd668ed78a46882b669a280c507d3b0b4d4384"
+      },
+      "learning_exclusion": {
+        "path": "artifacts/runs/p5_resume_compare256_20261021/learning_exclusion.json",
+        "sha256": "a2911642bdd69cd19c35b3344725e2d4835bf71b67fb52a279b74907537367f5",
+        "excluded_from_future_training": true
+      }
+    },
+    {
+      "run_id": "p5_resume_compare320_20261021",
+      "raw_directory": "artifacts/runs/p5_resume_compare320_20261021",
+      "actor": "artifacts/models/marine_ppo_close_resume320_20261021_observerfix",
+      "actor_weights_sha256": "2b9a7355f8b2251ae4163ffb0e20e2851ca37081fbfd93e17a0b58f3c4a070cc",
+      "actor_metadata_sha256": "d77630d8e40030b6404c2b1a86285032463d325d7e75c2d9211447e6b444cbda",
+      "checkpoint": {
+        "path": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_close_resume320_20261021_observerfix\\model.zip",
+        "sha256": "429b53d24e87c5b0f67bce8da7eabdb696451c37d5d9370809096606792b7b6a",
+        "parent": {
+          "path": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_curriculum256_20261019\\model.zip",
+          "sha256": "9c94690a2cb8eaabfb5fd24c6c0984896825d6f27f87700335f9e41df3aaafd1"
+        }
+      },
+      "result": {
+        "outcome": "enemy_dead",
+        "terminated": true,
+        "truncated": false,
+        "game_loop": 129,
+        "game_seconds": 5.758928571428572,
+        "allow_low_health_eval": true,
+        "expert_labels": false,
+        "own_dead_confirmed": false,
+        "enemy_dead_confirmed": true,
+        "own_effective_hp": 6.0,
+        "enemy_effective_hp": 0
+      },
+      "transitions": 14,
+      "ppo_inference_decisions": 14,
+      "owned_decisions": 14,
+      "requested_actions_0_to_4": [
+        0,
+        3,
+        3,
+        1,
+        7
+      ],
+      "executed_actions_0_to_4": [
+        0,
+        3,
+        3,
+        1,
+        7
+      ],
+      "command_results": {
+        "engine_confirmed": 7,
+        "hold": 7
+      },
+      "requested_mask_legal": true,
+      "executed_mask_legal": true,
+      "all_actual_game_loops_8": true,
+      "all_nonexpert_test_excluded": true,
+      "raw_rewards_all_null": true,
+      "low_health_source_transition_count": 1,
+      "low_health_actions": [
+        4
+      ],
+      "command_conflicts": 0,
+      "model_fallback_events": 0,
+      "micro_fallback_events": 0,
+      "summary_error": null,
+      "log_error_tokens": {
+        "Traceback": 0,
+        "EOFError": 0,
+        "Unknown exception": 0
+      },
+      "raw_sha256": {
+        "micro_transitions.jsonl": "aff068cb8a1d4818319eecdb7cf687842677e3ba3126dd37c8462de45d697a57",
+        "scenario_result.json": "f2c49c028e1823b9b4ee6ef8d133bf00a85389b4d81950a415f0785cab1f84a1",
+        "manifest.json": "ee4d24dc8441128fce99f973207a854bd89f3c19aeb7ed9079a50b03d7bdbeea",
+        "initial_scene_observation.json": "557dee1e6dc2789577d5dbb1bdcb679cb5cc20c9946db1c764f325fe8e3939c0",
+        "scenario.json": "20f8a03533e79fa7bd08914e92bd668ed78a46882b669a280c507d3b0b4d4384"
+      },
+      "learning_exclusion": {
+        "path": "artifacts/runs/p5_resume_compare320_20261021/learning_exclusion.json",
+        "sha256": "755ebc5c3bee1472c0ca831e7a432ae395b9b071064bf4e5564662d797ef2fa3",
+        "excluded_from_future_training": true
+      }
+    }
+  ],
+  "difference": {
+    "game_loop": 113,
+    "old_requested": 1,
+    "old_executed": 4,
+    "old_command_result": "order_preserved",
+    "new_requested": 4,
+    "new_executed": 4,
+    "new_command_result": "hold",
+    "confirmed_game_loop": null,
+    "interpretation": "Requested action differs on already different cooldown/enemy-HP observations and masks; executed actions equal. No same-input policy comparison or causal benefit of 64 extra steps. HOLD/preserved continue prior orders, not new engine-confirmed commands.",
+    "source_observation_equal": false,
+    "old_mask": [
+      true,
+      true,
+      false,
+      false,
+      true
+    ],
+    "new_mask": [
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "integrity": {
+    "all_frozen_hashes_unchanged": true,
+    "post_sc2_process_inventory_empty": true
+  },
+  "safety_boundary": "Low-health bypass is local evaluation only; production 20% gates, support, masks and arbiter retained. No reason-specific support fallback telemetry; do not infer per-reason counts.",
+  "local_result_source": "scenario_result.json and terminal transition; outer Result.Defeat / generic truncated summary describes leave, not the local battle outcome.",
+  "reward": "Raw runtime reward=null / reward_version=not_implemented; no training reward reconstructed.",
+  "decision": {
+    "same_terminal_outcome": true,
+    "benefit_established": false,
+    "promote_320": false,
+    "default_actor": "artifacts/models/marine_ppo_curriculum256_20261019",
+    "prior_failures_preserved": true,
+    "p5_p6_full_acceptance": false
+  },
+  "limits": [
+    "One pair only; no strength, win-rate, generalization or training-benefit claim.",
+    "Repeated heldout nominal task at new seed, not a new unseen benchmark.",
+    "Observed initial state matched; complete engine hidden state was not fixed.",
+    "Raw runtime reward is null/not_implemented; no training reward fabricated.",
+    "HOLD and order_preserved continue prior orders, not newly engine-confirmed commands."
+  ]
+}
