@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-21",
+  "status": "engineering_training_coverage_pass",
+  "source_head": "8e9969e5918b6752a59b9e1c2e9b922e5222593a",
+  "training_directory": "artifacts/micro_ppo/p5_two_enemy448_20261021",
+  "actor_directory": "artifacts/models/marine_ppo_two_enemy448_20261021",
+  "parent_checkpoint_sha256": "429b53d24e87c5b0f67bce8da7eabdb696451c37d5d9370809096606792b7b6a",
+  "checkpoint_sha256": "c8d9fdd27b7ace32f776e0a476d300ba22d3278b541810ba07a3d59baf4798b2",
+  "weights_sha256": "50f54edc174d6b0296be6aa9f98c86e4342c33357942db82cc7b0b23926a40c3",
+  "curriculum": {
+    "explicitly_allowed": true,
+    "selection": "round-robin",
+    "restart_index": 0,
+    "parent_task_set_sha256": "d9bd395a4c93492ca195c107f250863f8eee7afceedd60a8565369ff09ca53c6",
+    "new_task_set_sha256": "ab7a8033fbf1624a7aa3159d3cf67443a85171e13a58296740c6b9ffcfaed49e",
+    "per_task_steps": [
+      42,
+      30,
+      29,
+      27
+    ],
+    "two_enemy_steps": 27,
+    "two_enemy_episode_steps": [
+      13,
+      14
+    ],
+    "first_two_enemy_cumulative_step": 365,
+    "two_enemy_outcomes": [
+      "marine_dead",
+      "marine_dead"
+    ]
+  },
+  "training": {
+    "initial_timesteps": 320,
+    "additional_steps": 128,
+    "cumulative_timesteps": 448,
+    "seed": 42,
+    "n_steps": 32,
+    "batch_size": 16,
+    "n_epochs": 2,
+    "learning_rate": 0.0003,
+    "initial_updates": 20,
+    "updates": 28,
+    "optimizer_state_count": 12,
+    "optimizer_step_before": 40,
+    "optimizer_step_after": 56,
+    "parameters_finite": true,
+    "actor_parameters_changed": true,
+    "initial_actor_equals_parent": true,
+    "reload_probability_max_abs_error": 0,
+    "trainer_wall_seconds": 174.5,
+    "launcher_wall_seconds": 177.0004691,
+    "exit_code": 0
+  },
+  "raw_validation": {
+    "source": "independent scope read-only audit of worker raw + training trace",
+    "trace_steps": 128,
+    "worker_raw_steps": 128,
+    "observation_dimension": 16,
+    "mask_dimension": 5,
+    "actual_game_loops": 8,
+    "all_masks_legal": true,
+    "hp_reward_max_abs_error": 0,
+    "trace_float32_reward_max_abs_error": 3.1789144E-08,
+    "system_failure_count": 0,
+    "rollout_discard_count": 0,
+    "conflict_count": 0,
+    "expert_count": 0,
+    "completed_episodes": 9,
+    "enemy_dead": 5,
+    "marine_dead": 4,
+    "two_enemy_visible_type_ids": [
+      105,
+      105
+    ],
+    "first_two_enemy_raw_hp": [
+      35,
+      17.7392578125
+    ]
+  },
+  "close": {
+    "last_sample_done": true,
+    "auto_reset_empty_episode": "e11674f6abe249da8219c0bc468ef0d7",
+    "empty_episode_raw_steps": 0,
+    "status": "interrupted",
+    "reason": "training_budget_close",
+    "result": null,
+    "error": null,
+    "before_save_evidence": "Unchanged production trainer env.close success gate precedes provisional save/reload/final zip; report success and launcher exit0. No independent ACK timestamp capture.",
+    "remaining_sc2_or_run_python_count": 0
+  },
+  "export": {
+    "probe_count": 1,
+    "probe_source": "existing training_report reload probe; no new environment",
+    "probability_max_abs_error": 2.0372681319713593E-10,
+    "sb3_action": 2,
+    "numpy_action": 2,
+    "masked_action_equal": true,
+    "parent_file_count": 3,
+    "parent_files_unchanged": true,
+    "bc_dataset_parent_curriculum_lineage_retained": true
+  },
+  "default_actor_changed": false,
+  "combat_strength_evaluated": false,
+  "formal_p5_p6_acceptance": false,
+  "new_runtime_comparison_count": 0,
+  "llm_requests": 0,
+  "full_match_count": 0,
+  "scope": "Only one +128-step training and one export using an existing probe; no new tests/game evaluation/default promotion/commit/push. Historical failures unchanged; artifacts Git-ignored and require separate transfer.",
+  "sources": [
+    {
+      "path": "artifacts/micro_ppo/p5_two_enemy448_20261021/training_report.json",
+      "sha256": "963b20a07ca3654888a8f2506b1e82fff5af4d1d254f583de44c43ed19ec6371"
+    },
+    {
+      "path": "artifacts/micro_ppo/p5_two_enemy448_20261021/metadata.json",
+      "sha256": "e7934f2f380c14f12dd5dbbe5bf2b8a695ec6ce34d9053852c3779573de064ff"
+    },
+    {
+      "path": "artifacts/micro_ppo/p5_two_enemy448_20261021/task_manifest.json",
+      "sha256": "1e1bf2c2225466a35512398e2cead373a15e1c182f61632cdeb3a21e1832f81e"
+    },
+    {
+      "path": "artifacts/micro_ppo/p5_two_enemy448_20261021/training_transitions.jsonl",
+      "sha256": "a62139cf3d697fd8bc74554efcf908ec8c83f3a06ca62ecf4a513bf04f81386d"
+    },
+    {
+      "path": "artifacts/micro_ppo/p5_two_enemy448_20261021_evidence/launch.json",
+      "sha256": "1b978c252d0870043550436234cc93ed0754bdf9c2af729f9c8bfaea04700633"
+    },
+    {
+      "path": "artifacts/micro_ppo/p5_two_enemy448_20261021_evidence/completion.json",
+      "sha256": "1f0352e97cea3bf6fa1425f08b976bae2bd629c8cd12a5f0e68b71c7054e95d2"
+    },
+    {
+      "path": "artifacts/micro_ppo/p5_two_enemy448_20261021_evidence/export_parity_lineage.json",
+      "sha256": "905fbdf26e56105aac2a73fa3657727dd42c9a91f11bdc2cb1e178a4b48464d6"
+    },
+    {
+      "path": "artifacts/micro_ppo/p5_two_enemy448_20261021_evidence/close_and_residual_audit.json",
+      "sha256": "10ad56cb08c484b3222167258fd99c4e953bf1115bbcc60a4a3725253e551cef"
+    },
+    {
+      "path": "configs/micro_curriculum_two_enemy_v1.json",
+      "sha256": "cfa3731cf6b2889bec43af436168c4aff905ccde319ba8043557d3667a61f4eb"
+    },
+    {
+      "path": "run_ppo.cmd",
+      "sha256": "563d697577439e5d0c1c70aa96f71fd8e60d9ca89aed7eab253980427de0e5ab"
+    },
+    {
+      "path": "run_llm_ppo.cmd",
+      "sha256": "75604f527c07776e7be78c82a724c1489406615249a763cbbe8887134db13b1b"
+    }
+  ]
+}

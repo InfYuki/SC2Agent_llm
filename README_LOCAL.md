@@ -339,3 +339,13 @@ plan SHA `9cb3779c2e5f9d850b0f7b217c84286453b6760265535d55dbb55752c2af78ed`，�
 唯一真实case reset→3合法步[2,2,0]→close，exit0/16.437墙秒，plan SHA `cff7379132250081a9b6e5a8257a28ba24e93afa0d961048490355260d10807d`，artifact `artifacts/p5_two_enemy_task_20261021`。seed20261021，名义距6/second8、第二敌半HP/12秒；ready frame19两敌实际距4.426758/6.426758，HP35/17.602539合计52.602539，obs16/mask5。初始化移动/回血使实际值异于名义，未严格固定cooldown。3步实际8loops/confirmed，双敌HP总和52.739258→52.875977→47.063965，己45，奖励-0.0030381944/-0.0030381944/0.129155816逐条复核含第二敌回血；两敌未死，不称真实测all_dead终局。
 
 decision3/frame43原closeACK身份匹配且summary先存在、worker71588 exit0，无SC2/worker残留；summary interrupted/training_budget_close/resultnull/errornull，官方leave结果不计自然胜负。80文件SHA前后同，模型/旧raw/默认未改；3条工程raw按micro/rl SHA learning_exclusion永久排除未来训练，micro reward仍null。真实仅bridge，Gym/trainer仅静态/mock；没有实际1v2训练、学会1v2、收益或P5/P6全面验收。见[1v2任务报告](docs/PHASE_05_TWO_ENEMY_TASK_MVP_REPORT.md)与[共享JSON](docs/validation/p5_two_enemy_task_mvp.json)，原始工件Git忽略迁移另带。无重试/额外局/训练/LLM/API/安装/历史suite/凭据或live快照读取；本轮待root最终保存、未push。
+
+## 2026-10-21 P5首次双敌课程PPO训练最新接续
+
+唯一沿320 checkpoint实际新增128步→累计448，显式新课程/allow-task-change，trainer174.5/launcher177.000秒、exit0；seed42/nsteps32/batch16/epochs2/lr.0003继承，actor/critic/Adam恢复、updates20→28、12项Adam40→56，finite且actor改变/reload误差0。task-set SHA d9bd395a…→ab7a8033…，冷reset从index0开始；实际per-task42/30/29/27，首双敌累计365，2局13/14步共27条实际type105双敌样本，两局均marine_dead。128条obs16/mask5/合法8loops，真实HP奖励复算误差0、trace float32误差3.1789e-8，failure/discard/conflict/expert0；9完整5enemy_dead+4marine_dead，不推学会1v2或收益。
+
+第128步done后自动reset第10空episode e11674f6…，0raw预算close summary interrupted/training_budget_close/resultnull/errornull。生产close成功门先于save/reload/最终zip+成功report/exit0支撑正常保存；未新增observer/独立抓ACK时戳。无worker/SC2残留，旧EOF及observer失败保留。
+
+新checkpoint artifacts/micro_ppo/p5_two_enemy448_20261021 SHA c8d9fdd27b7ace32f776e0a476d300ba22d3278b541810ba07a3d59baf4798b2；新actor artifacts/models/marine_ppo_two_enemy448_20261021 weights SHA50f54edc174d6b0296be6aa9f98c86e4342c33357942db82cc7b0b23926a40c3，producer保留BC/dataset/parent/新旧课程来源。父320三hash不变；唯一已有1probe NumPy概率误差2.037268e-10/同action2，非128或千样本验收。默认两入口仍curriculum256，448显式--ppo-model选择，未promote。
+
+详见[首次双敌训练报告](docs/PHASE_05_TWO_ENEMY_TRAIN_MVP_REPORT.md)与[精简JSON](docs/validation/p5_two_enemy_train_mvp.json)，来源HEAD8e9969e；原始training/evidence/model Git忽略迁移另带。无额外游戏/LLM/API/runtime对照/默认切换/源码配置修改/历史suite/凭据读取；未commit/push。仅证明双敌训练覆盖与工程更新闭环，P5/P6全面验收/规模就绪/强度收益未建立，追加训练或评估需新预算。
