@@ -424,3 +424,15 @@ P5微操敌方是BotAI脚本nearest-attack，整局Difficulty与其无关，本�
 E3实际1306推理=owned=raw，mask合法/实际8loops，无模型fallback/conflict；721confirmed/543hold/23preserved/19unconfirmed，后三类非新增引擎确认。guardfalse，obs13×16的近处受支持非飞行敌数>2为370/1306（28.33%）确定超出448声明数量域下界；其余1/2缺type仍未知，0domain checks不等于0OOD。233control_released/5unit_death为局部ownership终止，不当全军损失或整局截断。raw SHA bd5faea46dd87fab20eaf5c6ff7b38b2076e8750d359af932950cad7804659f1永久learning_exclusion，split=train非训练许可、expert null/bc_eligible false/reward null。
 
 见[CheatInsane报告](docs/PHASE_06_CHEATINSANE_PAIR_MVP_REPORT.md)与[精简JSON](docs/validation/p6_cheatinsane_pair_mvp.json)，来源artifacts/p6_cheatinsane_pair_20261022冻结命令/哈希及双runs/回放。两manifest源/地图一致且匹配freeze/dirtydiff，map/actor前后不变，base_build98370但完整隐藏初态未固定；终态无SC2/run_local残留。P5脚本微操对手不受整局Difficulty影响；没有从记忆断言作弊倍数/机制。仅P6工程压力观察，P5/P6全面验收、胜率/收益/泛化未建立；无新增遥测、安装、额外游戏测试或默认切换。本轮本地保存、未push；原工件/模型Git忽略迁移另带，后续实验需新预算。
+
+## 2026-10-22 P6 可选PPO交战时机门禁MVP
+
+新增显式 `--ppo-engagement-gate`，默认off，仅生产rule_ppo/llm_ppo：CDready且所有局部支持enemy均在己有效groundrange与敌ground威胁range（双方radii+entry1.0）外才交回现有RuleBot宏观；oldowner额外exitbuffer.5。CD>0或unknown几何保留，低HP/support/mask/排序/最多4Marine及训练scenario/reward不改。actor仍448显式选择、默认两入口256，敌域guardfalse；未自动promote。5相关定向tests一次通过、独立scope通过，无历史全suite。
+
+唯一新CheatInsane E3 `p6_engagement_gate_e3_20261022`，与历史同名义Zerg/Ancient Cistern LE/seed20261020/nonrealtime8/4Marine/1200gamecap/600wall，0训练/LLM/API/重试/补局；completed/自然Victory/exit0/stop与error null，有回放/无SC2残留。406.428571game/40.390433launcher墙秒，比历史无gate E3 541.785714少135.357143游戏秒；旧E0 442.142857只作历史n1参照。运行代码已改、轨迹不同，不能称同冻结源码因果配对/模型训练收益/胜率或泛化。
+
+324infer=owned=raw，mask合法/实际8loops；252engine_confirmed/61hold/8preserved/3unconfirmed，后三者非新增引擎确认。1213候选checks=300readyoutside拒绝+692CD保留+221己射程保留，accepted913≠owned324；633去重checkevents/206reject，拒绝无同tagframePPO overlap。103原owner拒绝同frame释放并交回本地macro；128macro均attack/command_accepted true，仅本地出口接受，非引擎确认。旧同筛法CDready/nearest>7/两attackmaskfalse为735/1306→19/324；19全retreat距7.028–7.358、oldowner buffer1.5/own_attack_range，属设计hysteresis。旧缺type/range，735不等于几何门禁必拒数，不能称全部冗余退却。
+
+140/324 source enemycount>2为448声明数量域外下界，其余缺type未知，guardfalse/0domainchecks不等于0OOD。324行expert null/bc_eligible false/reward null，rawSHA77137bf3de5b0f6d14715f7b83fb64f4d9a0c3cb3d68817d1bfc1836a734994d按sidecar永久排除未来训练；split=train非训练许可。低血安全/冷却中合理撤退仍保留，不把所有retreat等同错误；生产库存非全军损失，P5/P6全面验收尚未完成。
+
+冻结HEAD e3b28651c69ba5ee7dd3fd8a683328d24d3fc850加dirtydiff1a192d60b2fb8d978fc66f6ca3e827d6d862390dd8c7b683a6382f1b8efda721，map/448与历史同、manifest全源匹配且事后runtime/assets不变，base_build98370/隐藏初态未完整固定。报告[交战门禁](docs/PHASE_06_PPO_ENGAGEMENT_GATE_MVP_REPORT.md)及[精简JSON](docs/validation/p6_ppo_engagement_gate_mvp.json)；来源artifacts/p6_engagement_gate_20261022/freeze SHAde4eb03773452447769e146c1bb79ea7221b88342d4f94a37487915cdc2c2022、evidence SHA9c69951bb5191a9fd443fad1e05a702181f115caacbe1734a9a92688e0934c97。原始工件/模型Git忽略迁移另带；待root最终本地保存、未push，后续游戏/训练需新预算。

@@ -31,6 +31,12 @@ class MicroRuleBot(RuleBot):
         )
         self._ppo_policy = None
         self._ppo_enemy_domain_guard = bool(getattr(options, "ppo_enemy_domain_guard", False))
+        # Production only: scenario/training policy="ppo" is not this feature.
+        self._ppo_engagement_gate = bool(
+            getattr(options, "ppo_engagement_gate", False)
+            and getattr(options, "mode", None) in {"rule_ppo", "llm_ppo"}
+        )
+        self._ppo_engagement_logged = {}
         self._ppo_enemy_domain = dict(status="unknown", source=None, reason="model_unavailable", pairs=[])
         if self._ppo_requested:
             from bot.micro_ppo import NumpyPPOPolicy, POLICY_VERSION, enemy_domain
@@ -51,6 +57,12 @@ class MicroRuleBot(RuleBot):
             self.telemetry.event(
                 "ppo_enemy_domain_config", enabled=self._ppo_enemy_domain_guard,
                 **self._ppo_enemy_domain,
+            )
+            from bot.ppo_engagement import ENTRY_BUFFER, OWNER_EXIT_BUFFER
+
+            self.telemetry.event(
+                "ppo_engagement_config", enabled=self._ppo_engagement_gate,
+                entry_buffer=ENTRY_BUFFER, owner_exit_buffer=OWNER_EXIT_BUFFER,
             )
         if self._bc_requested:
             from bot.micro_bc import NumpyBCPolicy, POLICY_VERSION
@@ -170,6 +182,7 @@ class MicroRuleBot(RuleBot):
     def issue_combat_orders(self, army, state, target, frame):
         started = time.perf_counter()
         contexts = {}
+        engagement_rejected = set()
         try:
             if not self._micro_disabled:
                 contexts = {
@@ -203,6 +216,28 @@ class MicroRuleBot(RuleBot):
                 and frame - self._released_at.get(unit.tag, -100) >= 16
                 and state in {"attack", "defend"}
             }
+            if self._ppo_engagement_gate:
+                from bot.ppo_engagement import engagement_check
+
+                for unit in army:
+                    if unit.tag not in eligible:
+                        continue
+                    check = engagement_check(
+                        unit, contexts[unit.tag].enemies, unit.tag in self.controlled
+                    )
+                    self.telemetry.counts["ppo_engagement_" + check["reason"]] += 1
+                    # Counters count candidate checks, never ownership. Emit only
+                    # changes of the decision/reason/previous ownership per tag.
+                    signature = (check["accepted"], check["reason"], check["owned_previous"],
+                                 check["unknown_count"])
+                    if self._ppo_engagement_logged.get(unit.tag) != signature:
+                        self.telemetry.event(
+                            "ppo_engagement_check", unit_tag=unit.tag, game_loop=frame, **check
+                        )
+                        self._ppo_engagement_logged[unit.tag] = signature
+                    if not check["accepted"]:
+                        eligible.remove(unit.tag)
+                        engagement_rejected.add(unit.tag)
         except Exception as exc:
             if self.terminal_evaluation():
                 raise
@@ -248,7 +283,16 @@ class MicroRuleBot(RuleBot):
                 fallback_state, fallback_target = state, target
                 if unit.health_percentage <= 0.2:
                     fallback_state, fallback_target = "retreat", self.start_location
+                before = self.telemetry.counts["combat_commands"]
+                rejected_before = self.telemetry.counts["combat_command_rejected"]
                 self.issue_rule_order(unit, fallback_state, fallback_target, frame)
+                if unit.tag in engagement_rejected and self.telemetry.counts["combat_commands"] > before:
+                    self.telemetry.event(
+                        "ppo_engagement_macro", unit_tag=unit.tag, game_loop=frame,
+                        state=fallback_state,
+                        target_x=float(fallback_target.x), target_y=float(fallback_target.y),
+                        command_accepted=self.telemetry.counts["combat_command_rejected"] == rejected_before,
+                    )
                 continue
             ctx = contexts[unit.tag]
             try:

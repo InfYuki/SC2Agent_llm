@@ -54,6 +54,8 @@ def main():
     parser.add_argument("--ppo-model", default=None, help="Exported NumPy PPO actor directory; missing/invalid models use rule micro.")
     parser.add_argument("--ppo-enemy-domain-guard", action="store_true",
                         help="Require declared PPO enemy species/exact count before micro ownership; unknown/outside domains use rule combat. Does not certify friendly army, geometry, HP or terrain.")
+    parser.add_argument("--ppo-engagement-gate", action="store_true",
+                        help="Production PPO only: return ready Marines outside local attack/threat ranges to rule combat (entry buffer 1.0, previous-owner exit extra 0.5).")
     parser.add_argument("--llm-max-calls", type=int, default=60)
     parser.add_argument(
         "--game-path",

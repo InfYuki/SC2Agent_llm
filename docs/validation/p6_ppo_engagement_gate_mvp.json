@@ -1,0 +1,352 @@
+{
+  "schema": "p6-ppo-engagement-gate-mvp-v1",
+  "date": "2026-10-22",
+  "artifact_root": "artifacts/p6_engagement_gate_20261022",
+  "run_id": "p6_engagement_gate_e3_20261022",
+  "source_sha256": {
+    "freeze.json": "de4eb03773452447769e146c1bb79ea7221b88342d4f94a37487915cdc2c2022",
+    "actual_dirty.diff": "1a192d60b2fb8d978fc66f6ca3e827d6d862390dd8c7b683a6382f1b8efda721",
+    "evidence.json": "9c69951bb5191a9fd443fad1e05a702181f115caacbe1734a9a92688e0934c97"
+  },
+  "frozen_head": "e3b28651c69ba5ee7dd3fd8a683328d24d3fc850",
+  "frozen_dirty_diff_sha256": "1a192d60b2fb8d978fc66f6ca3e827d6d862390dd8c7b683a6382f1b8efda721",
+  "changed_file_sha256": {
+    "bot/ppo_engagement.py": "2ef4701eda6d8b77beee24e72e688eb1629b978764fb0b7f980218c95e30c698",
+    "bot/micro_bot.py": "0ba4f75febd19d7b391891b0831bffb68fc0e864c1ebda37c6010af165657bf0",
+    "run_local.py": "4c739c8649b48f9f39e27506559f3d30a9e516b6a38b8195625aa25cb853e03e",
+    "tests/test_ppo_engagement_gate.py": "fa46baebe05700b654d11e3291bdb73edbedfaeae10ac6fe513a3ce47927bacf"
+  },
+  "command": [
+    "C:\\Users\\27932\\anaconda3\\envs\\sc2-ares-runtime\\python.exe",
+    "-s",
+    "-u",
+    "C:\\code\\SC2Agent_llm\\run_local.py",
+    "--mode",
+    "rule_ppo",
+    "--run-id",
+    "p6_engagement_gate_e3_20261022",
+    "--difficulty",
+    "CheatInsane",
+    "--opponent",
+    "Zerg",
+    "--map",
+    "Ancient Cistern LE",
+    "--no-realtime",
+    "--game-step",
+    "8",
+    "--seed",
+    "20261020",
+    "--max-game-seconds",
+    "1200",
+    "--micro-max-units",
+    "4",
+    "--llm-max-calls",
+    "0",
+    "--game-path",
+    "C:\\Program Files (x86)\\StarCraft II",
+    "--ppo-model",
+    "artifacts/models/marine_ppo_two_enemy448_20261021",
+    "--ppo-engagement-gate"
+  ],
+  "configuration": {
+    "mode": "rule_ppo",
+    "micro_max_units": 4,
+    "bc_model": null,
+    "ppo_model": "artifacts/models/marine_ppo_two_enemy448_20261021",
+    "ppo_enemy_domain_guard": false,
+    "ppo_engagement_gate": true,
+    "llm_max_calls": 0,
+    "game_path": "C:\\Program Files (x86)\\StarCraft II",
+    "map": "Ancient Cistern LE",
+    "opponent": "Zerg",
+    "difficulty": "CheatInsane",
+    "realtime": false,
+    "game_step": 8,
+    "max_game_seconds": 1200.0,
+    "seed": 20261020,
+    "run_id": "p6_engagement_gate_e3_20261022",
+    "show_config": false
+  },
+  "sc2_base_build": 98370,
+  "budget": {
+    "attempts": 1,
+    "retries": 0,
+    "game_seconds": 1200,
+    "wall_seconds": 600,
+    "training_calls": 0,
+    "llm_calls": 0,
+    "api_calls": 0
+  },
+  "result": {
+    "status": "completed",
+    "result": "Result.Victory",
+    "stop_reason": null,
+    "error": null,
+    "game_seconds": 406.42857142857144,
+    "launcher_wall_seconds": 40.390432799991686,
+    "telemetry_wall_seconds": 28.164621599949896,
+    "exit_code": 0,
+    "timed_out": false,
+    "peak_workers": 45,
+    "peak_marines": 65,
+    "peak_bases": 2,
+    "marines_created": 74,
+    "command_conflicts": 0
+  },
+  "ppo": {
+    "inference": 324,
+    "owned": 324,
+    "raw_rows": 324,
+    "requested_actions": {
+      "4": 61,
+      "2": 242,
+      "1": 21
+    },
+    "executed_actions": {
+      "4": 69,
+      "2": 240,
+      "1": 15
+    },
+    "command_results": {
+      "hold": 61,
+      "engine_confirmed": 252,
+      "engine_unconfirmed": 3,
+      "order_preserved": 8
+    },
+    "illegal_requested": 0,
+    "illegal_executed": 0,
+    "actual_game_loops": {
+      "8": 324
+    },
+    "metadata_game_loops": {
+      "8": 324
+    },
+    "end_reasons": {
+      "unit_death": 4,
+      "None": 164,
+      "control_released": 156
+    },
+    "fallback_events": [],
+    "max_simultaneous_owned": 4,
+    "all_expert_null": true,
+    "all_bc_ineligible": true,
+    "all_reward_null": true
+  },
+  "gate": {
+    "candidate_checks_total": 1213,
+    "counters": {
+      "ppo_engagement_ready_outside_engagement": 300,
+      "ppo_engagement_cooldown_active": 692,
+      "ppo_engagement_own_attack_range": 221
+    },
+    "accepted_candidates_total": 913,
+    "deduplicated_check_events": 633,
+    "deduplicated_rejected_events": 206,
+    "rejected_previously_owned_events": 103,
+    "same_loop_owner_release_events": 103,
+    "same_loop_local_macro_events": 103,
+    "macro_events": 128,
+    "macro_command_accepted": {
+      "True": 128
+    },
+    "macro_states": {
+      "attack": 128
+    },
+    "rejected_logged_threshold_violations": 0,
+    "sample_reject": {
+      "event": "ppo_engagement_check",
+      "wall_time": 1792602880.8564837,
+      "unit_tag": 4369154051,
+      "game_loop": 5632,
+      "accepted": false,
+      "reason": "ready_outside_engagement",
+      "enemy_count": 7,
+      "unknown_count": 0,
+      "owned_previous": false,
+      "buffer": 1.0,
+      "enemy_tag": 4366270465,
+      "distance": 8.08663324504908,
+      "own_threshold": 6.75,
+      "threat_threshold": 1.85009765625
+    },
+    "sample_release": {
+      "event": "ppo_engagement_check",
+      "wall_time": 1792602881.0540628,
+      "unit_tag": 4353949699,
+      "game_loop": 5680,
+      "accepted": false,
+      "reason": "ready_outside_engagement",
+      "enemy_count": 3,
+      "unknown_count": 0,
+      "owned_previous": true,
+      "buffer": 1.5,
+      "enemy_tag": 4375445506,
+      "distance": 11.089640296717114,
+      "own_threshold": 7.375,
+      "threat_threshold": 6.375
+    },
+    "sample_macro": {
+      "event": "ppo_engagement_macro",
+      "wall_time": 1792602881.0556011,
+      "unit_tag": 4353949699,
+      "game_loop": 5680,
+      "state": "attack",
+      "target_x": 31.5,
+      "target_y": 26.5,
+      "command_accepted": true
+    },
+    "interpretation": "Counters count eligible candidate checks before max4 selection; events are deduplicated signature changes. Macro event proves local combat_commands increased; accepted is inferred from reject counter, not engine confirmation.",
+    "rejected_event_same_loop_ppo_source_rows": 0
+  },
+  "historical_same_filter": {
+    "expression": "obs[2] == 0 and obs[5]*12 > 7 and not mask[0] and not mask[1]",
+    "old_rows": 1306,
+    "old_far_ready": 735,
+    "new_rows": 324,
+    "new_far_ready": 19,
+    "old_requested_actions": {
+      "2": 494,
+      "4": 226,
+      "3": 15
+    },
+    "new_requested_actions": {
+      "2": 19
+    },
+    "absolute_reduction": 716,
+    "relative_reduction": 0.9741496598639455,
+    "old_game_seconds": 541.7857142857143,
+    "historical_e0_game_seconds": 442.14285714285717,
+    "interpretation": "Single historical n1 observations; changed production source and trajectories. Filter is not the geometric gate and reduction is descriptive, not causal benefit proof.",
+    "new_residual_details": {
+      "source_nearest_distance_min": 7.028459143423592,
+      "source_nearest_distance_max": 7.358049423152365,
+      "latest_signature_reasons": {
+        "own_attack_range": 19
+      },
+      "all_latest_previous_owned": true,
+      "latest_buffers": {
+        "1.5": 19
+      },
+      "interpretation": "Latest logged signature state, not fresh per-decision geometry: all19 are own_attack_range and previous-owner buffer1.5; >7 center distance alone does not trigger this gate."
+    }
+  },
+  "scope_verified_far_ready": {
+    "old_fraction": 0.5627871362940275,
+    "new_fraction": 0.05864197530864197,
+    "new_distance_min_approx": 7.028,
+    "new_distance_max_approx": 7.358,
+    "new_all_retreat": true,
+    "accepted_reason": "own_attack_range",
+    "owned_previous": true,
+    "buffer": 1.5,
+    "meaning": "Designed prior-owner hysteresis, not a gate miss",
+    "rejected_same_tag_frame_ppo_overlap": 0
+  },
+  "domain": {
+    "guard_enabled": false,
+    "check_events": 0,
+    "count_histogram": {
+      "8": 4,
+      "7": 4,
+      "6": 12,
+      "4": 61,
+      "3": 57,
+      "2": 57,
+      "1": 127,
+      "5": 2
+    },
+    "count_gt2": 140,
+    "total": 324,
+    "meaning": "Source obs[13]*16 restores supported visible nonflying local enemy count. >2 is outside declared quantity domain lower bound; types unrecorded, others unknown."
+  },
+  "learning_exclusion": {
+    "schema": "evaluation-learning-exclusion-v1",
+    "permanent_exclusion": true,
+    "reason": "Evaluation-only PPO production decisions; not expert or training data; split=train is only a hash bucket.",
+    "files": [
+      {
+        "path": "micro_transitions.jsonl",
+        "sha256": "77137bf3de5b0f6d14715f7b83fb64f4d9a0c3cb3d68817d1bfc1836a734994d",
+        "rows": 324
+      }
+    ]
+  },
+  "identity_checks": {
+    "source_manifest_mismatch": {},
+    "runtime_source_unchanged_after": true,
+    "assets_unchanged_after": true,
+    "common_assets_match_old": true,
+    "old_source_same": false,
+    "full_hidden_initial_state_fixed": false
+  },
+  "evidence_files": {
+    "compatibility-report.json": {
+      "bytes": 133,
+      "sha256": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23"
+    },
+    "events.jsonl": {
+      "bytes": 720980,
+      "sha256": "305dd3a7504616678ee7dce7ef6e4b07f935ac2968d48baae9a5d479c25e2fdb"
+    },
+    "game.SC2Replay": {
+      "bytes": 69631,
+      "sha256": "0c464027fc0699f1a6151634955d59180eb99748aecfc320c23c797532b521ce"
+    },
+    "learning_exclusion.json": {
+      "bytes": 386,
+      "sha256": "020bbe00b3fdf2627fcbd133756d7e099a875ffd9721ffd876689ee581619ec9"
+    },
+    "manifest.json": {
+      "bytes": 19616,
+      "sha256": "dfbd90eb474a322dddd4d72b6b29a9226986b836ca885556f354985bc16da3e8"
+    },
+    "micro_summary.json": {
+      "bytes": 461,
+      "sha256": "5e7e64a9880f91524a987f0153adbaa94af1099c29f90829e5d0faf5325bdda0"
+    },
+    "micro_transitions.jsonl": {
+      "bytes": 437062,
+      "sha256": "77137bf3de5b0f6d14715f7b83fb64f4d9a0c3cb3d68817d1bfc1836a734994d"
+    },
+    "runtime_abilities.json": {
+      "bytes": 445163,
+      "sha256": "44834a304ca6650651f43b032ecbb5f18ef2087a3ccbdc36691d4c186998fb72"
+    },
+    "summary.json": {
+      "bytes": 1113,
+      "sha256": "0ab5f590c6a4fd0bbf3edce1bd9755d6198e94fad1bf58681446e4b72e635d3f"
+    }
+  },
+  "no_orphan": {
+    "checked_utc": "2026-10-22T01:15:57.976276+08:00",
+    "query_exit": 0,
+    "matching_processes": [],
+    "stderr": ""
+  },
+  "log_errors": {
+    "Traceback": 0,
+    "ERROR": 0,
+    "CRITICAL": 0
+  },
+  "validation": {
+    "targeted_tests": 5,
+    "targeted_tests_passed": 5,
+    "targeted_test_runs": 1,
+    "full_suite_run": false,
+    "scope_independent_review": "passed",
+    "default_gate_enabled": false,
+    "default_actor_changed": false,
+    "training_scenario_mask_reward_changed": false
+  },
+  "limitations": [
+    "One new game and historical n1 references only; changed production runtime source and trajectories.",
+    "135.357143 fewer observed game seconds versus historical E3 is not model training gain, win-rate, or generalization evidence.",
+    "Candidate checks are before max4 ownership selection; signature-deduplicated events have a different denominator.",
+    "Macro command_accepted is local acceptance, not engine confirmation.",
+    "Enemy type/range absent in historical raw; old735 filter is not the geometric gate.",
+    "Count>2 is an OOD lower bound; types unknown for remaining rows.",
+    "No full-army loss metric; production and inventory are not losses.",
+    "Gate/default actor not promoted; P5/P6 full acceptance remains incomplete."
+  ],
+  "save_status": "Awaiting root local save; not pushed"
+}
