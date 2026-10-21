@@ -1,0 +1,175 @@
+{
+  "date": "2026-10-21",
+  "source_head": "7cf8e69170d81677ab35f7fec000bf6fb55a2d27",
+  "scope": "offline current448 SB3-to-NumPy parity; zero games/training/API",
+  "passed": true,
+  "parity_acceptance_for_this_actor": true,
+  "real_sample_threshold_met": true,
+  "real_sample_threshold": 1000,
+  "tolerance": 0.0001,
+  "tie_tolerance": 1e-06,
+  "count_unit": "valid source lines after file deduplication; not independent engine states",
+  "contract": {
+    "checkpoint": "C:\\code\\SC2Agent_llm\\artifacts\\micro_ppo\\p5_two_enemy448_20261021\\model.zip",
+    "checkpoint_sha256": "c8d9fdd27b7ace32f776e0a476d300ba22d3278b541810ba07a3d59baf4798b2",
+    "actor": "C:\\code\\SC2Agent_llm\\artifacts\\models\\marine_ppo_two_enemy448_20261021",
+    "actor_weights_sha256": "50f54edc174d6b0296be6aa9f98c86e4342c33357942db82cc7b0b23926a40c3",
+    "producer_versions": {
+      "torch": "2.10.0+cpu",
+      "stable-baselines3": "2.7.1",
+      "sb3-contrib": "2.7.1",
+      "numpy": "2.4.6"
+    },
+    "normalization": "marine-16-v1",
+    "feature_version": "marine-16-v1",
+    "action_version": "marine-5-v1"
+  },
+  "real": {
+    "samples": 1006,
+    "passed": true,
+    "max_logit_abs_error": 3.814697265625e-06,
+    "max_probability_abs_error": 9.834766387939453e-07,
+    "action_mismatches": 0,
+    "invalid_count": 0,
+    "unique_observations": 877,
+    "unique_observation_masks": 877,
+    "near_tie_count": 0,
+    "failures_count": 0
+  },
+  "synthetic": {
+    "samples": 8,
+    "passed": true,
+    "max_logit_abs_error": 1.9073486328125e-06,
+    "max_probability_abs_error": 2.444721758365631e-09,
+    "action_mismatches": 0,
+    "near_tie_count": 0,
+    "cases": [
+      "zero/all_legal",
+      "zero/hold_only",
+      "one/all_legal",
+      "one/hold_only",
+      "minus_one/all_legal",
+      "minus_one/hold_only",
+      "alternating_extremes/all_legal",
+      "alternating_extremes/hold_only"
+    ]
+  },
+  "sources": [
+    {
+      "path": "artifacts/runs/e3_fullmatch_ppo_20261019/micro_transitions.jsonl",
+      "sha256": "2fa80043f81845a40c6a4e36b3e9cd75cd681749bd038afece694a69c226668d",
+      "source_status": "completed/Victory",
+      "line_range": [
+        1,
+        233
+      ],
+      "valid_source_records": 233,
+      "invalid_records": 0,
+      "learning_exclusion_path": "artifacts/runs/e3_fullmatch_ppo_20261019/learning_exclusion.json",
+      "excluded_from_future_training": true,
+      "exclusion_raw_sha_matches": true
+    },
+    {
+      "path": "artifacts/runs/e4_fullmatch_llm_ppo_20261019/micro_transitions.jsonl",
+      "sha256": "f57c2b27124d1cb3612802ea407fb99cfc3ef59ddc731503a08985890d6b9ceb",
+      "source_status": "crashed/unknown",
+      "line_range": [
+        1,
+        110
+      ],
+      "valid_source_records": 110,
+      "invalid_records": 0,
+      "learning_exclusion_path": "artifacts/runs/e4_fullmatch_llm_ppo_20261019/learning_exclusion.json",
+      "excluded_from_future_training": true,
+      "exclusion_raw_sha_matches": true
+    },
+    {
+      "path": "artifacts/runs/e4_fullmatch_llm_ppo_20261019_snapshotfix/micro_transitions.jsonl",
+      "sha256": "2a02f6910cece90ce35cf6347ced765415b3fe24843284085ebdba2ebe105980",
+      "source_status": "completed/Victory",
+      "line_range": [
+        1,
+        240
+      ],
+      "valid_source_records": 240,
+      "invalid_records": 0,
+      "learning_exclusion_path": "artifacts/runs/e4_fullmatch_llm_ppo_20261019_snapshotfix/learning_exclusion.json",
+      "excluded_from_future_training": true,
+      "exclusion_raw_sha_matches": true
+    },
+    {
+      "path": "artifacts/runs/p6_runner_e1e3e4_20261020_E3/micro_transitions.jsonl",
+      "sha256": "2052c094b5df6dfe45ae43be69dfb1385f70871aea7f6f9acaf9cea117432cea",
+      "source_status": "completed/Victory",
+      "line_range": [
+        1,
+        220
+      ],
+      "valid_source_records": 220,
+      "invalid_records": 0,
+      "learning_exclusion_path": "artifacts/runs/p6_runner_e1e3e4_20261020_E3/learning_exclusion.json",
+      "excluded_from_future_training": true,
+      "exclusion_raw_sha_matches": true
+    },
+    {
+      "path": "artifacts/runs/p6_runner_e1e3e4_20261020_E4/micro_transitions.jsonl",
+      "sha256": "de02cc766a04e784f6f591f23996b077ba332d39504ec3371e13a159a7919012",
+      "source_status": "completed/Victory",
+      "line_range": [
+        1,
+        203
+      ],
+      "valid_source_records": 203,
+      "invalid_records": 0,
+      "learning_exclusion_path": "artifacts/runs/p6_runner_e1e3e4_20261020_E4/learning_exclusion.json",
+      "excluded_from_future_training": true,
+      "exclusion_raw_sha_matches": true
+    }
+  ],
+  "duplicate_sources": [],
+  "execution": {
+    "runs": 1,
+    "exit_code": 0,
+    "command_argv": [
+      "C:/code/sc2-ares-training/Scripts/python.exe",
+      "-s",
+      "tools/verify_micro_ppo_parity.py",
+      "artifacts/micro_ppo/p5_two_enemy448_20261021/model.zip",
+      "artifacts/models/marine_ppo_two_enemy448_20261021",
+      "--transitions",
+      "artifacts/runs/e3_fullmatch_ppo_20261019/micro_transitions.jsonl",
+      "--transitions",
+      "artifacts/runs/e4_fullmatch_llm_ppo_20261019/micro_transitions.jsonl",
+      "--transitions",
+      "artifacts/runs/e4_fullmatch_llm_ppo_20261019_snapshotfix/micro_transitions.jsonl",
+      "--transitions",
+      "artifacts/runs/p6_runner_e1e3e4_20261020_E3/micro_transitions.jsonl",
+      "--transitions",
+      "artifacts/runs/p6_runner_e1e3e4_20261020_E4/micro_transitions.jsonl",
+      "--output",
+      "artifacts/p5_ppo_parity_20261021/parity.json"
+    ],
+    "tool_sha256": "12fa4613a84a18279e6536cb45b33bfa455465bac91f7acf6eaee64f899136d0"
+  },
+  "evidence": {
+    "report": "artifacts/p5_ppo_parity_20261021/parity.json",
+    "report_sha256": "a735b95b9508165a074438c12ca5ba0d094d393da0ed0772a0af420a4a66d19f",
+    "before": "artifacts/p5_ppo_parity_20261021/before_sha256.json",
+    "before_sha256": "b8c916bdfb3c6e324419ab53e9fdbddbb622d4aebc7184a4bfc216387323cd1a",
+    "after": "artifacts/p5_ppo_parity_20261021/after_sha256.json",
+    "after_sha256": "b8c916bdfb3c6e324419ab53e9fdbddbb622d4aebc7184a4bfc216387323cd1a",
+    "frozen_files": 16,
+    "all_frozen_files_unchanged": true
+  },
+  "boundaries": [
+    "1006 source decision records, 877 distinct float32 observation values; not 1000 unique or independent states",
+    "No next_obs, synthetic records, or duplicate source lines counted as real samples",
+    "Crashed E4 source is valid pre-crash inference audit evidence only; original crash remains in history",
+    "All five raw sources remain permanently excluded from future training; raw/exclusion files untouched",
+    "Only current448 export parity accepted; no automatic P4 BC thousand-sample acceptance, training readiness, strength, winrate, generalization, or full P5/P6 acceptance",
+    "Synthetic eight boundary cases are not real SC2 observations and do not count toward 1000",
+    "Defaults remain curriculum256 and enemy-domain guard remains opt-in; weights/checkpoint unchanged",
+    "Raw artifacts/models ignored by Git and must be transferred separately"
+  ],
+  "saved_state": "uncommitted; root final save pending; no push"
+}
