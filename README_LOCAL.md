@@ -376,3 +376,11 @@ evaluate_micro新增显式--case/--expert与pending-only --resume，默认旧12�
 11eligible=4confirmed+7hold冻结独立新NPZ，末截断hold剔除；版本marine-kite-v1，label为eligible.executed_action，无expert_label伪字段。单group train11、动作[0,2,2,0,7]缺0/3、validation/test0；仅合法可供未来训练小样本，不能直接BC结论/训练readiness。export尊重rawSHA learning_exclusion（排除/无效即拒绝），本次专家raw无排除sidecar；旧82不改/不merge、不训练。新NPZ SHA f470c852696f6eb7a56f76cf0493544bd5d9a783ec3287ecd1dd0fe37b82b39a，raw SHA6d178d167a695bcc7917637af7f96d9aa9436c779f5afd58244f797fc5213317。
 
 plan SHA e7a9581ce3441d28c56f5cc9048c2d3389158053c9b8eff78634299769ba1e62，25源码/地图前后同；pending0全终态唯一resume exit0/.265秒/0新增游戏，raw所有hash+mtime与旧82两文件hash+mtime不变，无SC2残留。suite artifacts/micro_suites/p4_expert_subset_20261021、新dataset artifacts/micro_datasets/p4_expert_subset_20261021。详见[专家subset报告](docs/PHASE_04_EXPERT_SUBSET_MVP_REPORT.md)与[精简JSON](docs/validation/p4_expert_subset_mvp.json)。工件Git忽略迁移另带；不推强度/胜率/泛化/收益或P4P5P6全面验收。默认curriculum256不变；无训练/LLM/API/完整Easy/安装/额外测试游戏/凭据与live快照读取。本轮待root保存、未push。
+
+## 2026-10-22 P6 VeryHard 两局工程对照最新接续
+
+仅显式提高本轮内置Zerg至VeryHard；Ancient Cistern LE/no-realtime/8loops/seed20261020/1200游戏秒/每局600墙秒/最多4Marine/LLM0。冻结HEAD08129d7，同规则宏观E0与显式448 E3各1局串行，均completed/官方Victory/stop_reason及error null、exit0、有回放；366.428571/384.285714游戏秒、launcher38.218/37.703秒，总75.921，无重试/补局。峰worker/Marine/base分别44/54/2与44/52/2，Marine生产61/64；矿采样峰390/445、气峰0，库存与生产不当兵损。E3游戏时间多17.857143秒，n1不证明胜率或收益。
+
+E3 inference=owned=raw468；313confirmed/142hold/9unconfirmed/4preserved，后三者不冒充新确认命令，无模型fallback/conflict。guard维持默认false，448声明ZERGLING1/2；源obs13的12格受支持非飞行敌数>2共170/468（域外下界），其余1/2因缺type记录仍未知，domain-check0不能写域外0。低HP/support/mask保护不改；raw split=train非训练许可、expert null/bc_eligible false/reward null，rawSHA df43f49d05742595180d3dde4022c24839e2b9b9c6da3f9c9818af55223709d4 learning_exclusion永久排除未来训练。
+
+P5微操敌方是BotAI脚本nearest-attack，整局Difficulty与其无关，本轮只属P6更难完整局观察。历史Easy五模式旧revision/不同actor，仅描述性参考，不能作严格难度因果。见[VeryHard报告](docs/PHASE_06_VERYHARD_PAIR_MVP_REPORT.md)及[精简证据](docs/validation/p6_veryhard_pair_mvp.json)；freeze/evidence/两run回放位于artifacts，Git忽略迁移另带。两manifest冻结源/地图一致、actor及安装地图前后不变、base_build98370；完整隐藏初态未固定。无训练/API/额外游戏测试/新工具或源码配置修改/凭据内容输出，默认difficulty/actor256/guardfalse不改；P5/P6全面验收及收益未建立。本轮本地提交保存、未push，后续实验需新预算。

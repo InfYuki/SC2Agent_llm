@@ -1,0 +1,361 @@
+{
+  "schema": "p6-veryhard-pair-mvp-v1",
+  "date": "2026-10-22",
+  "frozen_head": "08129d758740bc9f0294f2f76855db38bb66afb2",
+  "artifact_root": "artifacts/p6_veryhard_pair_20261022",
+  "source_sha256": {
+    "artifacts\\p6_veryhard_pair_20261022\\freeze.json": "c9e1b4826a74d08f50288a1dd9938bc685f2aa09e87d2365c75b259ba7abd94a",
+    "artifacts\\p6_veryhard_pair_20261022\\run_pair.py": "6ed92f2f989f42822cf640b12947c64160a4c649b476b083a73b56a90f674d90",
+    "artifacts\\p6_veryhard_pair_20261022\\evidence.json": "919ce3bfb60675eff2062f91388728286c15a84982f3b2b737975fbee32f9b20",
+    "artifacts\\p6_veryhard_pair_20261022\\REPORT.md": "c560a4e6dc8414362a0a76a66adba9f3d6e97f46ccbd3bba43a466e3f6c3cc07",
+    "artifacts\\runs\\p6_veryhard_e0_20261022\\manifest.json": "00a7fff9269f56a65087c4c1a578085ff19349d18132b857ad2fe86f0b70c10c",
+    "artifacts\\runs\\p6_veryhard_e0_20261022\\summary.json": "3a49f0d33ae5078c68728bd5a3e40fc0703420b1b5bffaca234062582601b3d2",
+    "artifacts\\runs\\p6_veryhard_e0_20261022\\game.SC2Replay": "945a5086d54175de1c39f0f1a5d77981a0490b36a6ad28e41eae812b7d6b9114",
+    "artifacts\\runs\\p6_veryhard_e3_20261022\\manifest.json": "f9a2114f26af7c232ee7da5a87214c08bb4ec10ffac0a0bb4c2f366a4f67db20",
+    "artifacts\\runs\\p6_veryhard_e3_20261022\\summary.json": "978685ece4a1088a90922dbac80bbe7a9c6cca8f02679906a346e45d39f7cf55",
+    "artifacts\\runs\\p6_veryhard_e3_20261022\\game.SC2Replay": "8016539845cdd5ffee35fa9a7b14aebd82e7043dac540b9777e1dbfeb19ec5e9",
+    "artifacts\\runs\\p6_veryhard_e3_20261022\\micro_transitions.jsonl": "df43f49d05742595180d3dde4022c24839e2b9b9c6da3f9c9818af55223709d4",
+    "artifacts\\runs\\p6_veryhard_e3_20261022\\micro_summary.json": "5516589ee67de41e05558bdeb716359005d1ecb7b78e122a009dcb16f85e864c",
+    "artifacts\\runs\\p6_veryhard_e3_20261022\\learning_exclusion.json": "700ff76eb5eec9341a0eb4aa0371cd89ac98e50204882e76c36d809cf8a10a9d"
+  },
+  "budget": {
+    "attempts": 2,
+    "retries": 0,
+    "wall_each_seconds": 600,
+    "game_each_seconds": 1200,
+    "llm_calls": 0,
+    "training_steps": 0
+  },
+  "common": {
+    "difficulty": "VeryHard",
+    "opponent": "Zerg",
+    "map": "Ancient Cistern LE",
+    "realtime": false,
+    "game_step": 8,
+    "seed": 20261020,
+    "micro_max_units": 4,
+    "ppo_enemy_domain_guard": false,
+    "sc2_base_build": 98370
+  },
+  "model": {
+    "path": "artifacts/models/marine_ppo_two_enemy448_20261021",
+    "weights_sha256": "50f54edc174d6b0296be6aa9f98c86e4342c33357942db82cc7b0b23926a40c3",
+    "default_actor_changed": false
+  },
+  "runs": {
+    "e0": {
+      "run_id": "p6_veryhard_e0_20261022",
+      "mode": "rule",
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1027,
+          "completed_SUPPLYDEPOT": 10,
+          "completed_BARRACKS": 6,
+          "marines_created": 61,
+          "combat_commands": 5072,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 47,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 366.42857142857144,
+        "wall_span_seconds": 22.04411740001524,
+        "game_to_wall_ratio": 16.622510431210014,
+        "on_step_p50_seconds": 0.0005311999702826142,
+        "on_step_p95_seconds": 0.001591100008226931,
+        "on_step_p99_seconds": 0.0026285999920219183,
+        "on_step_max_seconds": 0.021699599979911,
+        "peak_workers": 44,
+        "peak_marines": 54,
+        "peak_bases": 2
+      },
+      "launcher_wall_seconds": 38.21799999999348,
+      "exit_code": 0,
+      "natural_result": true,
+      "last_sampled_state": {
+        "game_seconds": 366.42857142857144,
+        "game_loop": 8208,
+        "minerals": 55,
+        "vespene": 0,
+        "workers": 44,
+        "marines": 54,
+        "bases": 2,
+        "supply_used": 103,
+        "supply_cap": 110
+      },
+      "sampled_inventory_peaks": {
+        "minerals": 390,
+        "vespene": 0,
+        "supply_used": 103,
+        "supply_cap": 110
+      },
+      "log_diagnostic_counts": {
+        "Traceback (most recent call last)": 0,
+        "| ERROR": 0,
+        "| CRITICAL": 0
+      },
+      "hashes": {
+        "compatibility-report.json": {
+          "sha256": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+          "bytes": 133
+        },
+        "events.jsonl": {
+          "sha256": "4f4268539d3ef2803299aaa9512187a44607460c55a4584309555f859a60bf70",
+          "bytes": 173998
+        },
+        "game.SC2Replay": {
+          "sha256": "945a5086d54175de1c39f0f1a5d77981a0490b36a6ad28e41eae812b7d6b9114",
+          "bytes": 53014
+        },
+        "manifest.json": {
+          "sha256": "00a7fff9269f56a65087c4c1a578085ff19349d18132b857ad2fe86f0b70c10c",
+          "bytes": 18835
+        },
+        "runtime_abilities.json": {
+          "sha256": "44834a304ca6650651f43b032ecbb5f18ef2087a3ccbdc36691d4c186998fb72",
+          "bytes": 445163
+        },
+        "summary.json": {
+          "sha256": "3a49f0d33ae5078c68728bd5a3e40fc0703420b1b5bffaca234062582601b3d2",
+          "bytes": 803
+        }
+      }
+    },
+    "e3": {
+      "run_id": "p6_veryhard_e3_20261022",
+      "mode": "rule_ppo",
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1077,
+          "completed_SUPPLYDEPOT": 12,
+          "completed_BARRACKS": 7,
+          "marines_created": 64,
+          "combat_commands": 5467,
+          "micro_decision_steps": 800,
+          "micro_owned_decisions": 468,
+          "command_conflicts": 0,
+          "emergency_defense_steps": 44,
+          "ppo_inference_decisions": 468,
+          "micro_action_retreat": 283,
+          "micro_action_hold": 142,
+          "micro_action_approach": 20,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1,
+          "micro_action_weakest": 21,
+          "micro_action_nearest": 2
+        },
+        "game_span_seconds": 384.28571428571433,
+        "wall_span_seconds": 25.650577199994586,
+        "game_to_wall_ratio": 14.981562063476506,
+        "on_step_p50_seconds": 0.0010096000041812658,
+        "on_step_p95_seconds": 0.007857099990360439,
+        "on_step_p99_seconds": 0.00959800003329292,
+        "on_step_max_seconds": 0.026649899955373257,
+        "peak_workers": 44,
+        "peak_marines": 52,
+        "peak_bases": 2
+      },
+      "launcher_wall_seconds": 37.70299999997951,
+      "exit_code": 0,
+      "natural_result": true,
+      "last_sampled_state": {
+        "game_seconds": 383.5714285714286,
+        "game_loop": 8592,
+        "minerals": 430,
+        "vespene": 0,
+        "workers": 44,
+        "marines": 52,
+        "bases": 2,
+        "supply_used": 103,
+        "supply_cap": 126
+      },
+      "sampled_inventory_peaks": {
+        "minerals": 445,
+        "vespene": 0,
+        "supply_used": 103,
+        "supply_cap": 126
+      },
+      "log_diagnostic_counts": {
+        "Traceback (most recent call last)": 0,
+        "| ERROR": 0,
+        "| CRITICAL": 0
+      },
+      "hashes": {
+        "compatibility-report.json": {
+          "sha256": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+          "bytes": 133
+        },
+        "events.jsonl": {
+          "sha256": "bde3c90483742fae2005d7a1c28a7bcbc48d97d43bf0b55b33eac33b285c3f1c",
+          "bytes": 472789
+        },
+        "game.SC2Replay": {
+          "sha256": "8016539845cdd5ffee35fa9a7b14aebd82e7043dac540b9777e1dbfeb19ec5e9",
+          "bytes": 63550
+        },
+        "manifest.json": {
+          "sha256": "f9a2114f26af7c232ee7da5a87214c08bb4ec10ffac0a0bb4c2f366a4f67db20",
+          "bytes": 18886
+        },
+        "micro_summary.json": {
+          "sha256": "5516589ee67de41e05558bdeb716359005d1ecb7b78e122a009dcb16f85e864c",
+          "bytes": 454
+        },
+        "micro_transitions.jsonl": {
+          "sha256": "df43f49d05742595180d3dde4022c24839e2b9b9c6da3f9c9818af55223709d4",
+          "bytes": 609614
+        },
+        "runtime_abilities.json": {
+          "sha256": "44834a304ca6650651f43b032ecbb5f18ef2087a3ccbdc36691d4c186998fb72",
+          "bytes": 445163
+        },
+        "summary.json": {
+          "sha256": "978685ece4a1088a90922dbac80bbe7a9c6cca8f02679906a346e45d39f7cf55",
+          "bytes": 1075
+        },
+        "learning_exclusion.json": {
+          "sha256": "700ff76eb5eec9341a0eb4aa0371cd89ac98e50204882e76c36d809cf8a10a9d",
+          "bytes": 404
+        }
+      },
+      "ppo_audit": {
+        "domain_config_events": [
+          {
+            "event": "ppo_enemy_domain_config",
+            "wall_time": 1792599337.3223343,
+            "enabled": false,
+            "status": "known",
+            "source": "curriculum.tasks",
+            "reason": "declared",
+            "pairs": [
+              [
+                "ZERGLING",
+                1
+              ],
+              [
+                "ZERGLING",
+                2
+              ]
+            ]
+          }
+        ],
+        "domain_check_events": 0,
+        "fallback_events": [],
+        "source_rows": 468,
+        "all_rows_ppo_policy": true,
+        "all_rows_expert_null": true,
+        "all_rows_bc_ineligible": true,
+        "all_reward_null": true,
+        "requested_action_histogram": {
+          "2": 283,
+          "4": 142,
+          "3": 20,
+          "1": 21,
+          "0": 2
+        },
+        "executed_action_histogram": {
+          "2": 282,
+          "4": 146,
+          "3": 19,
+          "1": 19,
+          "0": 2
+        },
+        "command_results": {
+          "engine_confirmed": 313,
+          "hold": 142,
+          "engine_unconfirmed": 9,
+          "order_preserved": 4
+        },
+        "end_reasons": {
+          "None": 374,
+          "control_released": 93,
+          "unit_death": 1
+        },
+        "obs13_enemy_count_histogram": {
+          "1": 246,
+          "2": 52,
+          "3": 82,
+          "4": 75,
+          "5": 8,
+          "6": 3,
+          "7": 1,
+          "8": 1
+        },
+        "invalid_enemy_count_rows": 0,
+        "definitely_outside_declared_enemy_count_rows": 170,
+        "species": "unknown: raw transitions do not log enemy type; count 1/2 does not establish domain membership",
+        "count_method": "Only source obs[13]*16 per transition; not next_obs or global enemy_visible. Supported nearby nonflying enemy count within RADIUS=12; policy eligibility limits context to 1..8.",
+        "actual_ppo_rows_justification": "Rows=ppo_inference_decisions=micro_owned_decisions and no load/inference fallback event; policy version alone would not prove inference.",
+        "learning_exclusion": {
+          "path": "C:\\code\\SC2Agent_llm\\artifacts\\runs\\p6_veryhard_e3_20261022\\micro_transitions.jsonl",
+          "sha256": "df43f49d05742595180d3dde4022c24839e2b9b9c6da3f9c9818af55223709d4",
+          "excluded_from_future_training": true,
+          "reason": "evaluation-only PPO decisions; split=train is a hash bucket, not authorization for training"
+        }
+      },
+      "learning_exclusion_sidecar": {
+        "path": "C:\\code\\SC2Agent_llm\\artifacts\\runs\\p6_veryhard_e3_20261022\\learning_exclusion.json",
+        "sha256": "700ff76eb5eec9341a0eb4aa0371cd89ac98e50204882e76c36d809cf8a10a9d"
+      }
+    }
+  },
+  "pair_checks": {
+    "manifest_source_hashes_identical": true,
+    "manifest_map_hash_identical": true,
+    "shared_config_differences": {
+      "mode": [
+        "rule",
+        "rule_ppo"
+      ],
+      "ppo_model": [
+        null,
+        "artifacts/models/marine_ppo_two_enemy448_20261021"
+      ],
+      "run_id": [
+        "p6_veryhard_e0_20261022",
+        "p6_veryhard_e3_20261022"
+      ]
+    },
+    "assets_unchanged": {
+      "C:\\code\\SC2Agent_llm\\maps\\Ancient Cistern LE.SC2Map": true,
+      "C:\\Program Files (x86)\\StarCraft II\\Maps\\Ancient Cistern LE.SC2Map": true,
+      "C:\\code\\SC2Agent_llm\\artifacts\\models\\marine_ppo_two_enemy448_20261021\\metadata.json": true,
+      "C:\\code\\SC2Agent_llm\\artifacts\\models\\marine_ppo_two_enemy448_20261021\\weights.npz": true
+    },
+    "frozen_tracked_source_changed_now": [],
+    "total_watchdog_wall_seconds": 75.92099999997299
+  },
+  "post_run_process_check": {
+    "sc2_processes": 0,
+    "python_processes": 0,
+    "method": "Win32_Process filtered SC2_x64.exe/python.exe after both watchdog exits; none returned"
+  },
+  "interpretation": {
+    "formal_comparison_ready": false,
+    "sample_per_mode": 1,
+    "natural_results": 2,
+    "game_time_difference_e3_minus_e0": 17.85714285714289,
+    "strength_or_benefit_established": false,
+    "historical_easy_comparison": "Descriptive only: old revision and different actor; no strict difficulty causal comparison.",
+    "p5_enemy": "Scripted BotAI nearest-attack; fullmatch Computer Difficulty does not change P5 enemy behavior.",
+    "army_losses": null,
+    "reason": "Only sampled inventories, peaks and existing production counters; no dedicated cumulative loss telemetry.",
+    "guard": "Disabled as existing production default; zero checks does not mean zero OOD.",
+    "enemy_domain": "170 count>2 rows definitely outside declared count domain; count1/2 species unknown. Additional state and friendly coordination generalization unproven."
+  },
+  "independent_scope_review": {
+    "actual_computer_difficulty": "VeryHard",
+    "legal_mask_rows": 468,
+    "actual_8_loop_rows": 468,
+    "source": "Parent-relayed independent scope read-only audit",
+    "no_new_test_or_game": true
+  }
+}
