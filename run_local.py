@@ -73,8 +73,12 @@ def main():
             "Hard",
             "Harder",
             "VeryHard",
+            "CheatVision",
+            "CheatMoney",
+            "CheatInsane",
         ],
         default="Medium",
+        help="Computer opponent difficulty; Cheat options are available for stress testing.",
     )
     parser.add_argument(
         "--realtime", action=argparse.BooleanOptionalAction, default=True

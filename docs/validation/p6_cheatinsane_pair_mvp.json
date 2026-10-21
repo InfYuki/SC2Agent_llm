@@ -1,0 +1,304 @@
+{
+  "schema": "p6-cheatinsane-pair-mvp-v1",
+  "date": "2026-10-22",
+  "frozen_head": "af7ad148e3997369c3444f41e0f56ef0dbf79777",
+  "frozen_dirty_diff_sha256": "b003ab6ba629b50550972551c2a9e563bc7bb239f0cfb1e3b2192ca15f8c4379",
+  "run_local_sha256": "3e011748b49296a0679a62cb1310cd1c22a666603b19246c5b5820b6b52395fe",
+  "artifact_root": "artifacts/p6_cheatinsane_pair_20261022",
+  "source_sha256": {
+    "artifacts\\p6_cheatinsane_pair_20261022\\freeze.json": "35a772722936a651d35270949a7f575355c74722fdac7bbd49d5dffaf630c643",
+    "artifacts\\p6_cheatinsane_pair_20261022\\freeze.py": "c11c76013005e30153135c39a7236bad830951a1c3666553a02fb191bcc55747",
+    "artifacts\\p6_cheatinsane_pair_20261022\\run_pair.py": "517fd57a93533fa411b26c255e677d9aad0503b347e0311dd961878a14f0900a",
+    "artifacts\\p6_cheatinsane_pair_20261022\\analyze.py": "3c7f08c07de99a67f55ce79cf0ed27d155a79b2d983c1c805f2be88c13959a38",
+    "artifacts\\p6_cheatinsane_pair_20261022\\finalize.py": "d93a9d5349db2c98168d9a19ae7d510f6936d1a86249fad81c65cc007c8c8305",
+    "artifacts\\p6_cheatinsane_pair_20261022\\evidence.json": "0dea4b5a91ef46f144fd2e646333e14af86982c85c988a601c437ed64e06c76b",
+    "artifacts\\p6_cheatinsane_pair_20261022\\REPORT.md": "4e6eb9a50b9728b647c4c15f30f9306d610a40ff2de408a54a3cd3b733a5d3b1",
+    "artifacts\\runs\\p6_cheatinsane_e0_20261022\\manifest.json": "b8d7d63baf8d8feab4597e1e9157c79e015ddbe89570002a11b192372f030778",
+    "artifacts\\runs\\p6_cheatinsane_e0_20261022\\summary.json": "28b83befcb4c87f51a3ef11c263313866dc5f34a9d9299023c3a296e55431325",
+    "artifacts\\runs\\p6_cheatinsane_e0_20261022\\game.SC2Replay": "454b5dd83ee0a3a6a54c20f6209b8dde02d362ace6c20aad91e908e90f7a9094",
+    "artifacts\\runs\\p6_cheatinsane_e3_20261022\\manifest.json": "d54ed1876055a1ccd1b4260b2c484ee2bc35003861a08013824a5ef350388ecc",
+    "artifacts\\runs\\p6_cheatinsane_e3_20261022\\summary.json": "641e646026a96ef04cefcb8dd9bda10d8042ae742b8f44894ba689ad2a0637fc",
+    "artifacts\\runs\\p6_cheatinsane_e3_20261022\\game.SC2Replay": "3589e0b1d2c663413df1e1e828104d1a585facb7b586d4d3c2a1a019308183b6",
+    "artifacts\\runs\\p6_cheatinsane_e3_20261022\\micro_transitions.jsonl": "bd5faea46dd87fab20eaf5c6ff7b38b2076e8750d359af932950cad7804659f1",
+    "artifacts\\runs\\p6_cheatinsane_e3_20261022\\micro_summary.json": "1923cbac12cd743eb63f378591e388b267dbda05f05faf5a7928fa2734e7b38e",
+    "artifacts\\runs\\p6_cheatinsane_e3_20261022\\learning_exclusion.json": "a677f0f22a2411d808dc4617e19f97b9f049237972cba03cf1ab94ba11935114"
+  },
+  "budget": {
+    "attempts": 2,
+    "retries": 0,
+    "game_each_seconds": 1200,
+    "wall_each_seconds": 600,
+    "training_steps": 0,
+    "llm_calls": 0
+  },
+  "common": {
+    "difficulty": "CheatInsane",
+    "opponent": "Zerg",
+    "map": "Ancient Cistern LE",
+    "realtime": false,
+    "game_step": 8,
+    "seed": 20261020,
+    "micro_max_units": 4,
+    "ppo_enemy_domain_guard": false,
+    "sc2_base_build": 98370
+  },
+  "model": {
+    "path": "artifacts/models/marine_ppo_two_enemy448_20261021",
+    "weights_sha256": "50f54edc174d6b0296be6aa9f98c86e4342c33357942db82cc7b0b23926a40c3",
+    "default_actor_changed": false
+  },
+  "runs": {
+    "e0": {
+      "run_id": "p6_cheatinsane_e0_20261022",
+      "mode": "rule",
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1239,
+          "completed_SUPPLYDEPOT": 15,
+          "completed_BARRACKS": 8,
+          "marines_created": 86,
+          "combat_commands": 5667,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1
+        },
+        "game_span_seconds": 442.14285714285717,
+        "wall_span_seconds": 27.64726709999377,
+        "game_to_wall_ratio": 15.992280739493301,
+        "on_step_p50_seconds": 0.0006380000268109143,
+        "on_step_p95_seconds": 0.001698100008070469,
+        "on_step_p99_seconds": 0.002567299990914762,
+        "on_step_max_seconds": 0.02136610000161454,
+        "peak_workers": 45,
+        "peak_marines": 59,
+        "peak_bases": 2
+      },
+      "launcher_wall_seconds": 39.65600000001723,
+      "exit_code": 0,
+      "natural_result": true,
+      "last_sampled_state": {
+        "game_seconds": 441.42857142857144,
+        "game_loop": 9888,
+        "minerals": 1120,
+        "vespene": 0,
+        "workers": 45,
+        "marines": 59,
+        "bases": 2,
+        "supply_used": 112,
+        "supply_cap": 150
+      },
+      "sampled_resource_inventory_peaks": {
+        "minerals": 1120,
+        "vespene": 0,
+        "supply_used": 112,
+        "supply_cap": 150
+      },
+      "log_diagnostic_counts": {
+        "Traceback (most recent call last)": 0,
+        "| ERROR": 0,
+        "| CRITICAL": 0
+      }
+    },
+    "e3": {
+      "run_id": "p6_cheatinsane_e3_20261022",
+      "mode": "rule_ppo",
+      "summary": {
+        "status": "completed",
+        "result": "Result.Victory",
+        "stop_reason": null,
+        "error": null,
+        "counters": {
+          "callbacks": 1518,
+          "completed_SUPPLYDEPOT": 14,
+          "completed_BARRACKS": 8,
+          "marines_created": 128,
+          "combat_commands": 9364,
+          "micro_decision_steps": 1241,
+          "micro_owned_decisions": 1306,
+          "command_conflicts": 0,
+          "completed_COMMANDCENTER": 1,
+          "retired_completed_expansion_jobs": 1,
+          "ppo_inference_decisions": 1306,
+          "micro_action_retreat": 693,
+          "micro_action_weakest": 47,
+          "micro_action_hold": 543,
+          "micro_action_nearest": 7,
+          "micro_action_approach": 16
+        },
+        "game_span_seconds": 541.7857142857143,
+        "wall_span_seconds": 41.796605099982116,
+        "game_to_wall_ratio": 12.962433503623148,
+        "on_step_p50_seconds": 0.001860499964095652,
+        "on_step_p95_seconds": 0.007067399972584099,
+        "on_step_p99_seconds": 0.009267999965231866,
+        "on_step_max_seconds": 0.020009999978356063,
+        "peak_workers": 45,
+        "peak_marines": 72,
+        "peak_bases": 2
+      },
+      "launcher_wall_seconds": 53.92199999996228,
+      "exit_code": 0,
+      "natural_result": true,
+      "last_sampled_state": {
+        "game_seconds": 541.0714285714286,
+        "game_loop": 12120,
+        "minerals": 1745,
+        "vespene": 0,
+        "workers": 45,
+        "marines": 68,
+        "bases": 2,
+        "supply_used": 121,
+        "supply_cap": 142
+      },
+      "sampled_resource_inventory_peaks": {
+        "minerals": 1940,
+        "vespene": 0,
+        "supply_used": 124,
+        "supply_cap": 142
+      },
+      "log_diagnostic_counts": {
+        "Traceback (most recent call last)": 0,
+        "| ERROR": 0,
+        "| CRITICAL": 0
+      },
+      "ppo_audit": {
+        "domain_config_events": [
+          {
+            "event": "ppo_enemy_domain_config",
+            "wall_time": 1792601293.1821415,
+            "enabled": false,
+            "status": "known",
+            "source": "curriculum.tasks",
+            "reason": "declared",
+            "pairs": [
+              [
+                "ZERGLING",
+                1
+              ],
+              [
+                "ZERGLING",
+                2
+              ]
+            ]
+          }
+        ],
+        "domain_check_events": 0,
+        "fallback_events": [],
+        "source_rows": 1306,
+        "all_rows_ppo_policy": true,
+        "all_rows_expert_null": true,
+        "all_rows_bc_ineligible": true,
+        "all_reward_null": true,
+        "requested_action_histogram": {
+          "2": 693,
+          "1": 47,
+          "4": 543,
+          "0": 7,
+          "3": 16
+        },
+        "executed_action_histogram": {
+          "2": 693,
+          "4": 566,
+          "1": 29,
+          "0": 2,
+          "3": 16
+        },
+        "command_results": {
+          "engine_confirmed": 721,
+          "engine_unconfirmed": 19,
+          "order_preserved": 23,
+          "hold": 543
+        },
+        "end_reasons": {
+          "None": 1068,
+          "control_released": 233,
+          "unit_death": 5
+        },
+        "obs13_enemy_count_histogram": {
+          "1": 520,
+          "2": 416,
+          "3": 201,
+          "4": 129,
+          "5": 22,
+          "6": 13,
+          "7": 3,
+          "8": 2
+        },
+        "invalid_enemy_count_rows": 0,
+        "definitely_outside_declared_enemy_count_rows": 370,
+        "species": "unknown: raw transitions do not log enemy type; count 1/2 does not establish domain membership",
+        "count_method": "Only source obs[13]*16 per transition; not next_obs or global enemy_visible. Supported nearby nonflying enemy count within RADIUS=12; policy eligibility limits context to 1..8.",
+        "actual_ppo_rows_justification": "Rows=ppo_inference_decisions=micro_owned_decisions and no load/inference fallback event; policy version alone would not prove inference.",
+        "learning_exclusion": {
+          "path": "C:\\code\\SC2Agent_llm\\artifacts\\runs\\p6_cheatinsane_e3_20261022\\micro_transitions.jsonl",
+          "sha256": "bd5faea46dd87fab20eaf5c6ff7b38b2076e8750d359af932950cad7804659f1",
+          "excluded_from_future_training": true,
+          "reason": "evaluation-only PPO decisions; split=train is a hash bucket, not authorization for training"
+        },
+        "actual_inference_count": 1306,
+        "owned_decision_count": 1306,
+        "rows_inference_owned_equal": true,
+        "requested_mask_illegal_rows": 0,
+        "executed_mask_illegal_rows": 0,
+        "actual_game_loops_histogram": {
+          "8": 1306
+        },
+        "version_decision_game_loops_histogram": {
+          "8": 1306
+        },
+        "command_result_note": "engine_confirmed alone has engine feedback; hold and order_preserved are separate semantics; engine_unconfirmed is not confirmed.",
+        "domain_guard_note": "Guard disabled: zero domain check events does not mean zero out-of-domain decisions."
+      }
+    }
+  },
+  "pair_checks": {
+    "manifest_source_hashes_identical": true,
+    "manifest_map_hash_identical": true,
+    "shared_config_differences": {
+      "mode": [
+        "rule",
+        "rule_ppo"
+      ],
+      "ppo_model": [
+        null,
+        "artifacts/models/marine_ppo_two_enemy448_20261021"
+      ],
+      "run_id": [
+        "p6_cheatinsane_e0_20261022",
+        "p6_cheatinsane_e3_20261022"
+      ]
+    },
+    "assets_unchanged": {
+      "C:\\code\\SC2Agent_llm\\maps\\Ancient Cistern LE.SC2Map": true,
+      "C:\\Program Files (x86)\\StarCraft II\\Maps\\Ancient Cistern LE.SC2Map": true,
+      "C:\\code\\SC2Agent_llm\\artifacts\\models\\marine_ppo_two_enemy448_20261021\\metadata.json": true,
+      "C:\\code\\SC2Agent_llm\\artifacts\\models\\marine_ppo_two_enemy448_20261021\\weights.npz": true
+    },
+    "frozen_tracked_source_changed_now": [],
+    "total_watchdog_wall_seconds": 93.57799999997951
+  },
+  "post_run_process_check": {
+    "sc2_or_run_local_processes": [],
+    "method": "Win32_Process SC2_x64.exe or python.exe commandline run_local.py; read-only, no global process kills"
+  },
+  "interpretation": {
+    "difficulty_scope": "CheatInsane built-in cheating stress test; not an API Expert difficulty or a fair difficulty-strength comparison.",
+    "formal_comparison_ready": false,
+    "sample_per_mode": 1,
+    "natural_results": 2,
+    "game_time_difference_e3_minus_e0": 99.64285714285717,
+    "strength_or_benefit_established": false,
+    "army_losses": null,
+    "army_loss_reason": "No dedicated full-army loss metric; inventory and production are not losses.",
+    "old_veryhard_game_seconds": [
+      366.42857142857144,
+      384.28571428571433
+    ],
+    "historical_comparison": "Descriptive n=1 only; not general difficulty causality or learning benefit. P5 scripted opponent is unaffected by full-match Difficulty.",
+    "future_training_excluded": true
+  }
+}

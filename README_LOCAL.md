@@ -384,3 +384,13 @@ plan SHA e7a9581ce3441d28c56f5cc9048c2d3389158053c9b8eff78634299769ba1e62，25�
 E3 inference=owned=raw468；313confirmed/142hold/9unconfirmed/4preserved，后三者不冒充新确认命令，无模型fallback/conflict。guard维持默认false，448声明ZERGLING1/2；源obs13的12格受支持非飞行敌数>2共170/468（域外下界），其余1/2因缺type记录仍未知，domain-check0不能写域外0。低HP/support/mask保护不改；raw split=train非训练许可、expert null/bc_eligible false/reward null，rawSHA df43f49d05742595180d3dde4022c24839e2b9b9c6da3f9c9818af55223709d4 learning_exclusion永久排除未来训练。
 
 P5微操敌方是BotAI脚本nearest-attack，整局Difficulty与其无关，本轮只属P6更难完整局观察。历史Easy五模式旧revision/不同actor，仅描述性参考，不能作严格难度因果。见[VeryHard报告](docs/PHASE_06_VERYHARD_PAIR_MVP_REPORT.md)及[精简证据](docs/validation/p6_veryhard_pair_mvp.json)；freeze/evidence/两run回放位于artifacts，Git忽略迁移另带。两manifest冻结源/地图一致、actor及安装地图前后不变、base_build98370；完整隐藏初态未固定。无训练/API/额外游戏测试/新工具或源码配置修改/凭据内容输出，默认difficulty/actor256/guardfalse不改；P5/P6全面验收及收益未建立。本轮本地提交保存、未push，后续实验需新预算。
+
+## 2026-10-22 P6 CheatInsane 两局作弊压力测试最新接续
+
+显式提高至本地API枚举最高档CheatInsane，属于作弊压力测试、不冒称中文“专家”或公平难度比较。唯一源码变动run_local.py choices增加CheatVision/CheatMoney/CheatInsane并在help注明压力测试；默认Medium、两入口curriculum256/guardfalse不变。冻结HEADaf7ad14加dirty diff SHA b003ab6ba629b50550972551c2a9e563bc7bb239f0cfb1e3b2192ca15f8c4379，实际run_local SHA3e011748b49296a0679a62cb1310cd1c22a666603b19246c5b5820b6b52395fe。相同Zerg/Ancient Cistern LE/seed20261020/nonrealtime/8loops/4Marine/LLM0，1200游戏秒与每局600墙秒预算；E0规则、E3显式448串行各1局，无补局/训练/API。
+
+两局均completed/自然官方Victory/stop及error null、exit0、有回放；442.142857/541.785714游戏秒，launcher39.656/53.922秒，总93.578。E3比E0晚99.642857游戏秒；旧VeryHard同名义配置366.428571/384.285714秒仅历史描述，各模式n1不推普遍难度因果/退化或学习收益。峰worker/Marine/base为45/59/2与45/72/2，Marine生产86/128、矿库存采样峰1120/1940；库存生产不当累计损失，最后采样早于官方终局。
+
+E3实际1306推理=owned=raw，mask合法/实际8loops，无模型fallback/conflict；721confirmed/543hold/23preserved/19unconfirmed，后三类非新增引擎确认。guardfalse，obs13×16的近处受支持非飞行敌数>2为370/1306（28.33%）确定超出448声明数量域下界；其余1/2缺type仍未知，0domain checks不等于0OOD。233control_released/5unit_death为局部ownership终止，不当全军损失或整局截断。raw SHA bd5faea46dd87fab20eaf5c6ff7b38b2076e8750d359af932950cad7804659f1永久learning_exclusion，split=train非训练许可、expert null/bc_eligible false/reward null。
+
+见[CheatInsane报告](docs/PHASE_06_CHEATINSANE_PAIR_MVP_REPORT.md)与[精简JSON](docs/validation/p6_cheatinsane_pair_mvp.json)，来源artifacts/p6_cheatinsane_pair_20261022冻结命令/哈希及双runs/回放。两manifest源/地图一致且匹配freeze/dirtydiff，map/actor前后不变，base_build98370但完整隐藏初态未固定；终态无SC2/run_local残留。P5脚本微操对手不受整局Difficulty影响；没有从记忆断言作弊倍数/机制。仅P6工程压力观察，P5/P6全面验收、胜率/收益/泛化未建立；无新增遥测、安装、额外游戏测试或默认切换。本轮本地保存、未push；原工件/模型Git忽略迁移另带，后续实验需新预算。
