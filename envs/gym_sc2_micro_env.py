@@ -54,6 +54,9 @@ class GymSC2MicroEnv(gym.Env):
             kwargs.update({key: task[key] for key in
                 ("scenario", "distance", "max_game_seconds", "map_name", "enemy_health_fraction")})
             kwargs["own_health_fraction"] = task["health_fraction"]
+            kwargs["enemy_count"] = task["enemy_count"]
+            for key in ("second_distance", "second_enemy_health_fraction"):
+                kwargs[key] = task.get(key)
             self.bridge = SC2MicroEnv(**kwargs)
             self.task = self.bridge.task
         self._absorbing = False

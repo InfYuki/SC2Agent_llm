@@ -1,0 +1,68 @@
+{
+  "format": "marine-micro-curriculum-v1",
+  "selection": "round-robin",
+  "tasks": [
+    {
+      "scenario": "marine-vs-zergling",
+      "scenario_version": "marine-vs-zergling-v6",
+      "distance": 6.0,
+      "max_game_seconds": 12.0,
+      "map_name": "Ancient Cistern LE",
+      "friendly_count": 1,
+      "enemy_count": 1,
+      "health_fraction": 1.0,
+      "enemy_health_fraction": 1.0,
+      "enemy_hidden": false,
+      "decision_game_loops": 8,
+      "reward_scale": 45.0,
+      "reward_version": "effective-hp-delta-45-terminal-1-v1"
+    },
+    {
+      "scenario": "marine-vs-zergling",
+      "scenario_version": "marine-vs-zergling-v6",
+      "distance": 8.0,
+      "max_game_seconds": 12.0,
+      "map_name": "Ancient Cistern LE",
+      "friendly_count": 1,
+      "enemy_count": 1,
+      "health_fraction": 1.0,
+      "enemy_health_fraction": 1.0,
+      "enemy_hidden": false,
+      "decision_game_loops": 8,
+      "reward_scale": 45.0,
+      "reward_version": "effective-hp-delta-45-terminal-1-v1"
+    },
+    {
+      "scenario": "marine-vs-zergling",
+      "scenario_version": "marine-vs-zergling-v6",
+      "distance": 8.0,
+      "max_game_seconds": 12.0,
+      "map_name": "Ancient Cistern LE",
+      "friendly_count": 1,
+      "enemy_count": 1,
+      "health_fraction": 0.6,
+      "enemy_health_fraction": 1.0,
+      "enemy_hidden": false,
+      "decision_game_loops": 8,
+      "reward_scale": 45.0,
+      "reward_version": "effective-hp-delta-45-terminal-1-v1"
+    },
+    {
+      "scenario": "marine-vs-zergling",
+      "scenario_version": "marine-vs-zergling-1v2-v1",
+      "distance": 6.0,
+      "max_game_seconds": 12.0,
+      "map_name": "Ancient Cistern LE",
+      "friendly_count": 1,
+      "enemy_count": 2,
+      "health_fraction": 1.0,
+      "enemy_health_fraction": 1.0,
+      "enemy_hidden": false,
+      "decision_game_loops": 8,
+      "reward_scale": 45.0,
+      "reward_version": "effective-hp-delta-45-terminal-1-v1",
+      "second_distance": 8.0,
+      "second_enemy_health_fraction": 0.5
+    }
+  ]
+}

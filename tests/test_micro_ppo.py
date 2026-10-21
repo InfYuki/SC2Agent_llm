@@ -46,6 +46,126 @@ class TinyMaskedEnv(gym.Env):
 
 
 class PPOCheckpointTest(unittest.TestCase):
+    def test_explicit_two_enemy_task_chain_and_frozen_resume(self):
+        import argparse
+        import ast
+        import subprocess
+        import sys
+        from types import SimpleNamespace
+        from unittest.mock import Mock, patch
+        from envs.micro_ipc import HOLD_MASK, message
+        from envs.sc2_micro_env import SC2MicroEnv, training_task, normalize_training_task, normalize_curriculum
+        from envs.gym_sc2_micro_env import GymSC2MicroEnv
+        from tools.train_micro_ppo import resolve_training_task, resolve_task_set
+
+        root = Path(__file__).resolve().parents[1]
+        old = json.loads(subprocess.check_output(
+            ["git", "show", "HEAD:configs/micro_curriculum_v1.json"], cwd=root))
+        self.assertEqual(normalize_curriculum(old), old)
+        self.assertEqual((root / "configs/micro_curriculum_v1.json").read_text(),
+                         subprocess.check_output(["git", "show", "HEAD:configs/micro_curriculum_v1.json"], cwd=root).decode())
+        default = training_task()
+        legacy = dict(default)
+        legacy.pop("enemy_count")
+        self.assertEqual(normalize_training_task(legacy), default)
+        self.assertEqual(resolve_training_task({}), default)
+        self.assertEqual(default["scenario_version"], "marine-vs-marine-v6")
+        self.assertNotIn("second_distance", default)
+        for count in (0, 3, -1, True, False, 1.0, 2.0, "2", None):
+            with self.subTest(count=count), self.assertRaisesRegex(ValueError, "enemy_count"):
+                training_task(enemy_count=count)
+        for fields in ({"unknown": 1}, {"second_distance": 8}, {"friendly_count": 2},
+                       {"friendly_count": True}, {"friendly_count": 1.0}):
+            with self.assertRaises(ValueError):
+                normalize_training_task(dict(default, **fields))
+        two = training_task(enemy_count=2, second_distance=8, second_enemy_health_fraction=0.5)
+        self.assertEqual(normalize_training_task(two), two)
+        for fields in ({"second_distance": 6}, {"second_distance": float("nan")},
+                       {"second_enemy_health_fraction": 0}):
+            with self.assertRaises(ValueError):
+                training_task(enemy_count=2, **fields)
+        self.assertEqual(resolve_training_task({"task": two}), two)
+        self.assertEqual(resolve_training_task({"task": two}, True, enemy_count=1), default)
+        mixed = json.loads((root / "configs/micro_curriculum_two_enemy_v1.json").read_text())
+        self.assertEqual(mixed["tasks"][:-1], old["tasks"])
+        metadata = {"task": old["tasks"][0], "curriculum": old}
+        self.assertEqual(resolve_task_set(metadata)[1], old)
+        with self.assertRaisesRegex(ValueError, "allow-task-change"):
+            resolve_task_set(metadata, curriculum=mixed)
+        _, frozen, change = resolve_task_set(metadata, curriculum=mixed, allow_task_change=True)
+        self.assertEqual(frozen, mixed)
+        self.assertNotEqual(change["parent_task_set_sha256"], change["new_task_set_sha256"])
+        self.assertEqual(resolve_task_set({"task": mixed["tasks"][0], "curriculum": mixed})[1], mixed)
+        with self.assertRaisesRegex(ValueError, "conflicting override"):
+            resolve_training_task({"task": default}, enemy_count=2)
+
+        # Execute actual reset command building, without starting a worker/game.
+        with tempfile.TemporaryDirectory() as directory:
+            bridge = SC2MicroEnv(enemy_count=2, output_root=directory, max_game_seconds=8)
+            packet = message("ready", "placeholder", 0, 8, obs=[0.0]*16,
+                             mask=list(HOLD_MASK), reward=0.0, terminated=False,
+                             truncated=False, info={"task": bridge.task})
+            connection, process = Mock(), Mock()
+            process.poll.return_value = 0
+            listener = Mock(address=("127.0.0.1", 12345))
+            listener.accept.return_value = connection
+            def receive(_):
+                return dict(packet, episode_id=bridge.episode_id)
+            with patch("envs.sc2_micro_env.Listener", return_value=listener), \
+                    patch("envs.sc2_micro_env.subprocess.Popen", return_value=process) as popen, \
+                    patch.object(bridge, "_receive", side_effect=receive):
+                bridge.reset()
+                command = popen.call_args.args[0]
+                self.assertEqual(command[command.index("--enemy-count")+1], "2")
+                self.assertEqual(command[command.index("--second-distance")+1], "8.0")
+                self.assertEqual(command[command.index("--second-enemy-health-fraction")+1], "0.5")
+                bridge._close_confirmed = True
+                bridge.close()
+
+        # Run the worker's real parser/task/options prefix, excluding game imports/launch.
+        worker = ast.parse((root / "tools/sc2_micro_worker.py").read_text())
+        main = next(node for node in worker.body if isinstance(node, ast.FunctionDef) and node.name == "main")
+        stop = next(i for i, node in enumerate(main.body) if isinstance(node, ast.Assign)
+                    and any(isinstance(target, ast.Name) and target.id == "bot" for target in node.targets))
+        main.body = main.body[:stop] + [ast.Return(value=ast.Name(id="options", ctx=ast.Load()))]
+        module = ast.fix_missing_locations(ast.Module(body=[main], type_ignores=[]))
+        namespace = dict(argparse=argparse, training_task=training_task, SCENARIOS=("marine-vs-marine", "marine-vs-zergling"),
+                         os=Mock(), Path=Path, ROOT=root, Client=Mock(), WorkerTelemetry=Mock(),
+                         SimpleNamespace=SimpleNamespace, DECISION_LOOPS=8)
+        argv = ["worker", "--episode-id", "e", "--output-dir", "unused", "--game-path", "unused",
+                "--max-game-seconds", "8", "--enemy-count", "2", "--second-distance", "8",
+                "--second-enemy-health-fraction", "0.5"]
+        namespace["os"].environ = {"SC2_MICRO_HOST": "127.0.0.1", "SC2_MICRO_PORT": "1", "SC2_MICRO_AUTHKEY": "00"}
+        with patch.object(sys, "argv", argv):
+            exec(compile(module, "worker-options", "exec"), namespace)
+            options = namespace["main"]()
+        self.assertEqual(options.training_task, two)
+        self.assertEqual((options.enemy_count, options.second_distance, options.second_enemy_health_fraction), (2, 8, 0.5))
+
+        # Curriculum owns each reset, including clearing second-target values on 2 -> 1.
+        tasks = dict(format=mixed["format"], selection="round-robin", tasks=[two, default])
+        class Bridge:
+            def __init__(self, **kwargs):
+                self.task = training_task(**{k: v for k, v in kwargs.items() if k != "worker_python"})
+            def close(self):
+                pass
+            def reset(self, **kwargs):
+                return [0.0]*16, {"task": self.task}
+        with patch("envs.gym_sc2_micro_env.SC2MicroEnv", Bridge):
+            env = GymSC2MicroEnv(curriculum=tasks, enemy_count=2, second_distance=8)
+            self.assertEqual(env.reset(seed=42)[1]["task"], two)
+            self.assertEqual(env.reset(seed=43)[1]["task"], default)
+            env.close()
+        class StopBeforeTraining(Exception):
+            pass
+        with tempfile.TemporaryDirectory() as directory, \
+                patch("tools.train_micro_ppo.GymSC2MicroEnv", side_effect=StopBeforeTraining) as make_env:
+            with self.assertRaises(StopBeforeTraining):
+                train(Path(directory)/"run", worker_python="unused", enemy_count=2)
+            kwargs = make_env.call_args.kwargs
+            self.assertEqual(kwargs["enemy_count"], 2)
+            self.assertEqual((kwargs["second_distance"], kwargs["second_enemy_health_fraction"]), (8, 0.5))
+
     def test_bc_actor_transfer_and_exclusive_initialization(self):
         import hashlib
         with tempfile.TemporaryDirectory() as directory:

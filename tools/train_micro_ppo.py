@@ -162,12 +162,19 @@ def resolve_training_task(metadata=None, allow_task_change=False, **requested):
     inherited = metadata.get("task") if metadata is not None else None
     baseline = training_task() if inherited is None else normalize_training_task(inherited)
     values = {}
-    for key in ("scenario", "distance", "max_game_seconds", "map_name", "own_health_fraction", "enemy_health_fraction"):
+    for key in ("scenario", "distance", "max_game_seconds", "map_name", "own_health_fraction", "enemy_health_fraction",
+                "enemy_count", "second_distance", "second_enemy_health_fraction"):
         value = requested.get(key)
-        baseline_value = baseline["health_fraction" if key == "own_health_fraction" else key]
+        baseline_value = baseline.get("health_fraction" if key == "own_health_fraction" else key)
         if metadata is not None and not allow_task_change and value is not None and value != baseline_value:
             raise ValueError(f"Resume inherits task {key}={baseline_value}; conflicting override")
         values[key] = baseline_value if value is None else value
+    if values["enemy_count"] == 1:
+        # An explicitly allowed 2 -> 1 switch drops inherited second-target fields.
+        # Explicit second-target overrides still fail in the task validator.
+        for key in ("second_distance", "second_enemy_health_fraction"):
+            if requested.get(key) is None:
+                values[key] = None
     return training_task(**values)
 
 
@@ -274,7 +281,8 @@ class TraceCallback(BaseCallback):
 
 def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft II",
           map_name=None, max_game_seconds=None, scenario=None, distance=None, seed=None,
-          own_health_fraction=None, enemy_health_fraction=None, curriculum=None, allow_task_change=False,
+          own_health_fraction=None, enemy_health_fraction=None, enemy_count=None,
+          second_distance=None, second_enemy_health_fraction=None, curriculum=None, allow_task_change=False,
           total_timesteps=32, n_steps=None, batch_size=None, n_epochs=None,
           learning_rate=None, resume=None, init_bc=None, init_bc_dataset=None, environment=None):
     if resume is not None and init_bc is not None:
@@ -287,7 +295,9 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
     task, curriculum, task_change = resolve_task_set(
         parent[1] if parent else None, curriculum=curriculum, allow_task_change=allow_task_change,
         map_name=map_name, max_game_seconds=max_game_seconds, scenario=scenario, distance=distance,
-        own_health_fraction=own_health_fraction, enemy_health_fraction=enemy_health_fraction)
+        own_health_fraction=own_health_fraction, enemy_health_fraction=enemy_health_fraction,
+        enemy_count=enemy_count, second_distance=second_distance,
+        second_enemy_health_fraction=second_enemy_health_fraction)
     task_semantics = "compatibility_default; curriculum governs reset" if curriculum else "single fixed task"
     requested = dict(n_steps=n_steps, batch_size=batch_size, n_epochs=n_epochs,
                      learning_rate=learning_rate)
@@ -314,7 +324,9 @@ def train(output, *, worker_python, game_path=r"C:\Program Files (x86)\StarCraft
         worker_python=worker_python, game_path=game_path, map_name=task["map_name"],
         max_game_seconds=task["max_game_seconds"], scenario=task["scenario"],
         distance=task["distance"], own_health_fraction=task["health_fraction"],
-        enemy_health_fraction=task["enemy_health_fraction"], curriculum=curriculum,
+        enemy_health_fraction=task["enemy_health_fraction"], enemy_count=task["enemy_count"],
+        second_distance=task.get("second_distance"),
+        second_enemy_health_fraction=task.get("second_enemy_health_fraction"), curriculum=curriculum,
         output_root=output / "episodes")
     trace = TraceCallback(env, output / "training_transitions.jsonl")
     environment_closed = False
@@ -484,6 +496,9 @@ def main():
     parser.add_argument("--distance", type=float, help="New run default: 6; resume inherits task")
     parser.add_argument("--own-health-fraction", type=float)
     parser.add_argument("--enemy-health-fraction", type=float)
+    parser.add_argument("--enemy-count", type=int, choices=[1, 2], help="New run default: 1; resume inherits task")
+    parser.add_argument("--second-distance", type=float)
+    parser.add_argument("--second-enemy-health-fraction", type=float)
     parser.add_argument("--curriculum", type=Path, help="Frozen round-robin task JSON; resume inherits embedded curriculum")
     parser.add_argument("--allow-task-change", action="store_true", help="Explicitly authorize a recorded resume task-set change")
     initialization = parser.add_mutually_exclusive_group()
@@ -503,6 +518,8 @@ def main():
         map_name=args.map, max_game_seconds=args.max_game_seconds, seed=args.seed,
         scenario=args.scenario, distance=args.distance,
         own_health_fraction=args.own_health_fraction, enemy_health_fraction=args.enemy_health_fraction,
+        enemy_count=args.enemy_count, second_distance=args.second_distance,
+        second_enemy_health_fraction=args.second_enemy_health_fraction,
         curriculum=args.curriculum, allow_task_change=args.allow_task_change,
         total_timesteps=args.total_timesteps, n_steps=args.n_steps,
         batch_size=args.batch_size, n_epochs=args.n_epochs,

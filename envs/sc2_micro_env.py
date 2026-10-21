@@ -26,8 +26,14 @@ class MicroEnvCloseError(RuntimeError):
 
 def training_task(*, scenario="marine-vs-marine", distance=6.0,
                   max_game_seconds=8.0, map_name="Ancient Cistern LE",
-                  own_health_fraction=1.0, enemy_health_fraction=1.0):
+                  own_health_fraction=1.0, enemy_health_fraction=1.0,
+                  enemy_count=1, second_distance=None, second_enemy_health_fraction=None):
     """Serializable task contract; HP deltas use real unit HP, divided by 45."""
+    if isinstance(enemy_count, bool) or not isinstance(enemy_count, numbers.Integral) or enemy_count not in (1, 2):
+        raise ValueError("enemy_count must be an integer: 1 or 2")
+    enemy_count = int(enemy_count)
+    if enemy_count == 1 and (second_distance is not None or second_enemy_health_fraction is not None):
+        raise ValueError("Second enemy fields require enemy_count=2")
     distance, max_game_seconds = float(distance), float(max_game_seconds)
     own_health_fraction, enemy_health_fraction = float(own_health_fraction), float(enemy_health_fraction)
     if scenario not in SCENARIOS:
@@ -39,21 +45,38 @@ def training_task(*, scenario="marine-vs-marine", distance=6.0,
     if not (math.isfinite(own_health_fraction) and 0.2 < own_health_fraction <= 1
             and math.isfinite(enemy_health_fraction) and 0 < enemy_health_fraction <= 1):
         raise ValueError("Health fractions require own in (0.2,1], enemy in (0,1]")
-    return dict(scenario=scenario, scenario_version=scenario + "-v6", distance=distance,
+    task = dict(scenario=scenario, scenario_version=scenario + "-v6", distance=distance,
                 max_game_seconds=max_game_seconds, map_name=map_name,
-                friendly_count=1, enemy_count=1, health_fraction=own_health_fraction,
+                friendly_count=1, enemy_count=enemy_count, health_fraction=own_health_fraction,
                 enemy_health_fraction=enemy_health_fraction, enemy_hidden=False,
                 decision_game_loops=8, reward_scale=45.0,
                 reward_version="effective-hp-delta-45-terminal-1-v1")
+    if enemy_count == 2:
+        second_distance = 8.0 if second_distance is None else float(second_distance)
+        second_enemy_health_fraction = (0.5 if second_enemy_health_fraction is None
+                                        else float(second_enemy_health_fraction))
+        if not (math.isfinite(second_distance) and distance + 1 <= second_distance <= 10
+                and math.isfinite(second_enemy_health_fraction) and 0 < second_enemy_health_fraction <= 1):
+            raise ValueError("Second target distance must be near distance + 1 through 10; health in (0,1]")
+        task.update(scenario_version=scenario + "-1v2-v1", second_distance=second_distance,
+                    second_enemy_health_fraction=second_enemy_health_fraction)
+    return task
 
 
 def normalize_training_task(task):
     """Validate a full stored contract, including legacy full-health tasks."""
+    friendly_count = task.get("friendly_count")
+    if isinstance(friendly_count, bool) or not isinstance(friendly_count, numbers.Integral) or friendly_count != 1:
+        raise ValueError("friendly_count must be the integer 1")
     normalized = training_task(**{key: task[key] for key in
         ("scenario", "distance", "max_game_seconds", "map_name")},
         own_health_fraction=task.get("health_fraction", 1.0),
-        enemy_health_fraction=task.get("enemy_health_fraction", 1.0))
-    if task != normalized:
+        enemy_health_fraction=task.get("enemy_health_fraction", 1.0),
+        enemy_count=task.get("enemy_count", 1), second_distance=task.get("second_distance"),
+        second_enemy_health_fraction=task.get("second_enemy_health_fraction"))
+    stored = dict(task)
+    stored.setdefault("enemy_count", 1)
+    if stored != normalized:
         raise ValueError("Incompatible resume task metadata")
     return normalized
 
@@ -73,7 +96,8 @@ class SC2MicroEnv:
                  map_name="Ancient Cistern LE", max_game_seconds=20,
                  startup_timeout=90, step_timeout=30, output_root=None, worker_python=None,
                  scenario="marine-vs-marine", distance=6.0,
-                 own_health_fraction=1.0, enemy_health_fraction=1.0):
+                 own_health_fraction=1.0, enemy_health_fraction=1.0,
+                 enemy_count=1, second_distance=None, second_enemy_health_fraction=None):
         self.game_path = str(game_path)
         self.worker_python = str(worker_python or sys.executable)
         self.map_name = map_name
@@ -81,7 +105,9 @@ class SC2MicroEnv:
         self.task = training_task(scenario=scenario, distance=distance,
                                   max_game_seconds=max_game_seconds, map_name=map_name,
                                   own_health_fraction=own_health_fraction,
-                                  enemy_health_fraction=enemy_health_fraction)
+                                  enemy_health_fraction=enemy_health_fraction, enemy_count=enemy_count,
+                                  second_distance=second_distance,
+                                  second_enemy_health_fraction=second_enemy_health_fraction)
         self.startup_timeout = float(startup_timeout)
         self.step_timeout = float(step_timeout)
         if min(self.max_game_seconds, self.startup_timeout, self.step_timeout) <= 0:
@@ -115,6 +141,10 @@ class SC2MicroEnv:
                    "--scenario", self.task["scenario"], "--distance", str(self.task["distance"]),
                    "--health-fraction", str(self.task["health_fraction"]),
                    "--enemy-health-fraction", str(self.task["enemy_health_fraction"])]
+        command += ["--enemy-count", str(self.task["enemy_count"])]
+        if self.task["enemy_count"] == 2:
+            command += ["--second-distance", str(self.task["second_distance"]),
+                        "--second-enemy-health-fraction", str(self.task["second_enemy_health_fraction"])]
         self._log = (self.output_dir / "worker.log").open("w", encoding="utf-8")
         started = time.monotonic()
         try:

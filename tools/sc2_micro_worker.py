@@ -46,21 +46,27 @@ def main():
     parser.add_argument("--distance", type=float, default=6.0)
     parser.add_argument("--health-fraction", type=float, default=1.0)
     parser.add_argument("--enemy-health-fraction", type=float, default=1.0)
+    parser.add_argument("--enemy-count", type=int, choices=[1, 2], default=1)
+    parser.add_argument("--second-distance", type=float)
+    parser.add_argument("--second-enemy-health-fraction", type=float)
     args = parser.parse_args()
     if not 0 < args.max_game_seconds <= 120:
         parser.error("max-game-seconds must be in (0,120]")
     task = training_task(scenario=args.scenario, distance=args.distance,
                          max_game_seconds=args.max_game_seconds, map_name=args.map,
                          own_health_fraction=args.health_fraction,
-                         enemy_health_fraction=args.enemy_health_fraction)
+                         enemy_health_fraction=args.enemy_health_fraction, enemy_count=args.enemy_count,
+                         second_distance=args.second_distance,
+                         second_enemy_health_fraction=args.second_enemy_health_fraction)
     os.environ["SC2PATH"] = str(Path(args.game_path).resolve())
     os.chdir(ROOT)
     connection = Client((os.environ["SC2_MICRO_HOST"], int(os.environ["SC2_MICRO_PORT"])),
                         family="AF_INET", authkey=bytes.fromhex(os.environ["SC2_MICRO_AUTHKEY"]))
     # Parent owns the episode root and worker.log; Telemetry owns a new child.
     telemetry = WorkerTelemetry(Path(args.output_dir) / "game")
-    options = SimpleNamespace(**vars(args), training_task=task,
-                              enemy_count=1, second_distance=8.0, second_enemy_health_fraction=0.5,
+    scene_args = dict(vars(args), second_distance=task.get("second_distance", 8.0),
+                      second_enemy_health_fraction=task.get("second_enemy_health_fraction", 0.5))
+    options = SimpleNamespace(**scene_args, training_task=task,
                               enemy_hidden=False,
                               data_split=None, expert="kite", policy="external", mode="micro_env",
                               game_step=DECISION_LOOPS, micro_max_units=1, realtime=False)

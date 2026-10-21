@@ -1,0 +1,235 @@
+{
+  "format": "p5-two-enemy-task-mvp-evidence-v1",
+  "date": "2026-10-21",
+  "status": "passed_engineering_scope",
+  "artifact": "artifacts/p5_two_enemy_task_20261021",
+  "plan_sha256": "cff7379132250081a9b6e5a8257a28ba24e93afa0d961048490355260d10807d",
+  "hashes_sha256": "9262571760a118a9c75ebf2f8480bb700e8d6992cd9a1edf172d9f3fe749abb9",
+  "harness_exit_code": 0,
+  "episode_id": "512d36450c3d4d0c86872596328ec2c2",
+  "worker_pid": 71588,
+  "wall_seconds": 16.43700000003446,
+  "episodes": 1,
+  "retries": 0,
+  "training_performed": false,
+  "llm_requests": 0,
+  "task": {
+    "scenario": "marine-vs-zergling",
+    "scenario_version": "marine-vs-zergling-1v2-v1",
+    "distance": 6.0,
+    "max_game_seconds": 12.0,
+    "map_name": "Ancient Cistern LE",
+    "friendly_count": 1,
+    "enemy_count": 2,
+    "health_fraction": 1.0,
+    "enemy_health_fraction": 1.0,
+    "enemy_hidden": false,
+    "decision_game_loops": 8,
+    "reward_scale": 45.0,
+    "reward_version": "effective-hp-delta-45-terminal-1-v1",
+    "second_distance": 8.0,
+    "second_enemy_health_fraction": 0.5
+  },
+  "generator_scenario_version": "marine-vs-zergling-v6",
+  "ready_frame": 19,
+  "observation_dimensions": 16,
+  "action_mask_dimensions": 5,
+  "initial_scene": {
+    "game_loop": 19,
+    "initialization_confirmed": true,
+    "friendly_tag": 4356308993,
+    "friendly_position": [
+      82.28125,
+      80.0
+    ],
+    "health": 45.0,
+    "visible_enemy_count": 2,
+    "enemy_positions": [
+      [
+        86.7080078125,
+        80.0
+      ],
+      [
+        88.7080078125,
+        80.0
+      ]
+    ],
+    "enemies": [
+      {
+        "tag": 4356571137,
+        "role": 0,
+        "position": [
+          86.7080078125,
+          80.0
+        ],
+        "health": 35.0,
+        "health_max": 35.0,
+        "distance": 4.4267578125,
+        "in_range": true
+      },
+      {
+        "tag": 4356833281,
+        "role": 1,
+        "position": [
+          88.7080078125,
+          80.0
+        ],
+        "health": 17.6025390625,
+        "health_max": 35.0,
+        "distance": 6.4267578125,
+        "in_range": false
+      }
+    ],
+    "nearest_tag": 4356571137,
+    "weakest_tag": 4356833281,
+    "weapon_cooldown": 8.69580078125,
+    "obs": [
+      1.0,
+      0.0,
+      0.5797200520833333,
+      0.368896484375,
+      0.0,
+      0.368896484375,
+      1.0,
+      0.0,
+      0.0,
+      0.5355631510416666,
+      0.0,
+      0.5029296875,
+      0.0,
+      0.125,
+      0.08935546875,
+      0.0
+    ],
+    "mask": [
+      false,
+      false,
+      true,
+      true,
+      true
+    ],
+    "expert_action": 2
+  },
+  "ready_enemy_effective_hp": 52.6025390625,
+  "transition_checks": [
+    {
+      "frame": 27,
+      "action": 2,
+      "enemy_hp": 52.7392578125,
+      "second_hp": 17.7392578125,
+      "enemy_hp_loss": -0.13671875,
+      "own_hp_loss": 0.0,
+      "reward": -0.0030381944444444445,
+      "reward_recomputed": -0.0030381944444444445,
+      "command_result": "engine_confirmed"
+    },
+    {
+      "frame": 35,
+      "action": 2,
+      "enemy_hp": 52.8759765625,
+      "second_hp": 17.8759765625,
+      "enemy_hp_loss": -0.13671875,
+      "own_hp_loss": 0.0,
+      "reward": -0.0030381944444444445,
+      "reward_recomputed": -0.0030381944444444445,
+      "command_result": "engine_confirmed"
+    },
+    {
+      "frame": 43,
+      "action": 0,
+      "enemy_hp": 47.06396484375,
+      "second_hp": 18.0126953125,
+      "enemy_hp_loss": 5.81201171875,
+      "own_hp_loss": 0.0,
+      "reward": 0.12915581597222223,
+      "reward_recomputed": 0.12915581597222223,
+      "command_result": "engine_confirmed"
+    }
+  ],
+  "close_identity": {
+    "episode_id": "512d36450c3d4d0c86872596328ec2c2",
+    "decision_id": 3,
+    "frame": 43
+  },
+  "close_ack": [
+    {
+      "packet": {
+        "protocol": "sc2-micro-v1",
+        "type": "closed",
+        "episode_id": "512d36450c3d4d0c86872596328ec2c2",
+        "decision_id": 3,
+        "unit_slot": 0,
+        "frame": 43,
+        "info": {
+          "reason": "training_budget_close",
+          "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]"
+        }
+      },
+      "summary_exists": true
+    }
+  ],
+  "close_info": {
+    "reason": "training_budget_close",
+    "official_results": "[<Result.Defeat: 2>, <Result.Victory: 1>]",
+    "worker_exit_code": 0
+  },
+  "summary": {
+    "status": "interrupted",
+    "result": null,
+    "stop_reason": "training_budget_close",
+    "error": null,
+    "counters": {
+      "marines_created": 1,
+      "callbacks": 4,
+      "micro_action_retreat": 2,
+      "micro_action_nearest": 1
+    },
+    "game_span_seconds": 1.0714285714285714,
+    "wall_span_seconds": 0.0879300000378862,
+    "game_to_wall_ratio": 12.185017297474438,
+    "on_step_p50_seconds": 0.0006793999928049743,
+    "on_step_p95_seconds": 0.0009695999906398356,
+    "on_step_p99_seconds": 0.0009695999906398356,
+    "on_step_max_seconds": 0.0011294999858364463,
+    "peak_workers": 12,
+    "peak_marines": 1,
+    "peak_bases": 1
+  },
+  "scenario_result": {
+    "outcome": "training_budget_close",
+    "terminated": false,
+    "truncated": true,
+    "game_loop": 43,
+    "game_seconds": 1.9196428571428572
+  },
+  "processes_before": [],
+  "processes_after": [],
+  "frozen_file_count": 80,
+  "frozen_sha256_unchanged": true,
+  "learning_exclusion": {
+    "format": "learning-exclusion-v1",
+    "reason": "Engineering-only 1v2 reset/step/close acceptance; never train from these rows.",
+    "exclude_from_training": true,
+    "raw_files": [
+      {
+        "path": "artifacts/p5_two_enemy_task_20261021/episodes/512d36450c3d4d0c86872596328ec2c2/game/micro_transitions.jsonl",
+        "sha256": "1f6d66fca152247ea1dd3637794703fb145a6eaecf2bad37ab6c7a8fe5ca9b97"
+      },
+      {
+        "path": "artifacts/p5_two_enemy_task_20261021/episodes/512d36450c3d4d0c86872596328ec2c2/game/rl_rollout.jsonl",
+        "sha256": "0295be9b11e9fe2ab2b6329439f9aafa4f74d9d9b4b00e741080892957562760"
+      }
+    ]
+  },
+  "sc2_base_build": 98370,
+  "limitations": [
+    "No actual 1v2 training, learned ability, benefit or formal P5/P6 acceptance.",
+    "Only 3 real steps; both enemies alive at close. All-dead terminal semantics are not real-tested here.",
+    "SC2MicroEnv is real-tested; Gym curriculum and trainer propagation are static/mock coverage only.",
+    "Nominal spawn distances/HP fractions differ from ready values due to initialization movement and regeneration.",
+    "Raw scenario split=train is excluded permanently by raw SHA; micro reward=null is distinct from IPC/rl_rollout real reward.",
+    "Official Defeat/Victory is leave handshake only, not natural combat outcome.",
+    "scenario.json generator version v6 differs in meaning from training task 1v2-v1.",
+    "Latest-state snapshots were not read or hashed. No credentials, historical raw or model/default updates."
+  ]
+}
