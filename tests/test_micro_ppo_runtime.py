@@ -1,4 +1,4 @@
-"""Two focused checks for the Torch-free PPO deployment boundary."""
+"""Focused checks for the Torch-free PPO deployment boundary."""
 from collections import Counter
 import hashlib
 import json
@@ -13,11 +13,94 @@ import run_local  # Ares import paths
 from bot.micro import Action, Context
 from bot.micro_bc import SHAPES
 from bot.micro_bot import MicroRuleBot
-from bot.micro_ppo import NumpyPPOPolicy, POLICY_VERSION
+from bot.micro_ppo import NumpyPPOPolicy, POLICY_VERSION, enemy_domain, enemy_domain_reason
 from bot.rule_bot import RuleBot
 
 
 class MicroPPORuntimeTests(unittest.TestCase):
+    def test_optional_enemy_domain_guard_before_ownership(self):
+        def task(scenario="marine-vs-zergling", count=1):
+            return dict(scenario=scenario, enemy_count=count)
+
+        def metadata(tasks):
+            return dict(producer=dict(task=task(), curriculum=dict(
+                format="marine-micro-curriculum-v1", selection="round-robin", tasks=tasks)))
+
+        single = enemy_domain(metadata([task()]))  # current 256 declarations
+        double = enemy_domain(metadata([task(), task(count=2)]))  # 448 declarations
+        zergling = SimpleNamespace(type_id=SimpleNamespace(name="ZERGLING"))
+        marine = SimpleNamespace(type_id=SimpleNamespace(name="MARINE"))
+        ctx = Context(tuple([0] * 16), (True,) * 5,
+                      enemies=(zergling, zergling), supported=True)
+        self.assertEqual(enemy_domain_reason(single, ctx), "outside_domain")
+        self.assertEqual(enemy_domain_reason(double, ctx), "accepted")
+        mixed = Context(ctx.obs, ctx.mask, enemies=(zergling, marine), supported=True)
+        self.assertEqual(enemy_domain_reason(double, mixed), "mixed_enemies")
+        pairs = enemy_domain(metadata([task(), task("marine-vs-marine", 2)]))
+        self.assertEqual(enemy_domain_reason(pairs, ctx), "outside_domain")
+        self.assertEqual(enemy_domain(dict(producer=dict(task=task())))["status"], "known")
+        invalid = [
+            {}, dict(producer={}),
+            metadata([task(), {}]), metadata([task(), task(count=True)]),
+            metadata([task(), task(count=1.0)]), metadata([task(count=9)]),
+            metadata([task(count=3)]),
+            metadata([task("unknown")]), metadata([]),
+            dict(producer=dict(task=task(), curriculum=None)),
+            dict(producer=dict(task=task(), curriculum=dict(
+                format="marine-micro-curriculum-v1", tasks=[task()]))),
+            dict(producer=dict(task=task(), curriculum=dict(
+                format="marine-micro-curriculum-v1", selection="unknown", tasks=[task()]))),
+        ]
+        for value in invalid:
+            with self.subTest(metadata=value):
+                domain = enemy_domain(value)
+                self.assertEqual(domain["status"], "unknown")
+                self.assertEqual(domain["pairs"], [])
+                self.assertEqual(enemy_domain_reason(domain, ctx), "unknown_domain")
+        # Parent provenance and BC declarations never expand the current domain.
+        value = metadata([task()])
+        value["producer"]["task"] = task(count=2)
+        value["producer"]["parent_task"] = task(count=2)
+        self.assertEqual(enemy_domain(value), single)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            telemetry = SimpleNamespace(output=Path(tmp), counts=Counter(), event=Mock())
+            options = SimpleNamespace(seed=42, mode="llm_ppo", ppo_model="unused", micro_max_units=1)
+            policy = Mock(metadata=metadata([task()]))
+            policy.metadata["weights_sha256"] = "a" * 64
+            policy.action.return_value = int(Action.HOLD)
+
+            def base_init(bot, options, telemetry):
+                bot.options, bot.telemetry = options, telemetry
+                bot.arbiter, bot._last_order = Mock(), {}
+
+            with patch.object(RuleBot, "__init__", base_init), patch.object(NumpyPPOPolicy, "load", return_value=policy):
+                bot = MicroRuleBot(options, telemetry)
+            self.assertFalse(bot._ppo_enemy_domain_guard)  # missing option stays compatible
+            bot.issue_rule_order, bot._execute_micro = Mock(), Mock()
+            unit = SimpleNamespace(tag=1, health_percentage=1)
+            for domain, context_value, enabled, accepted in [
+                (single, ctx, True, False), (double, ctx, True, True),
+                (double, mixed, True, False), (enemy_domain({}), ctx, True, False),
+                (enemy_domain({}), ctx, False, True),
+            ]:
+                with self.subTest(domain=domain, enabled=enabled, accepted=accepted):
+                    bot._ppo_enemy_domain, bot._ppo_enemy_domain_guard = domain, enabled
+                    bot.controlled, bot._released_at = set(), {}
+                    policy.action.reset_mock()
+                    bot.issue_rule_order.reset_mock()
+                    with patch("bot.micro_bot.context", return_value=context_value):
+                        bot.issue_combat_orders([unit], "attack", None, 32)
+                    self.assertEqual(bot.controlled, {1} if accepted else set())
+                    self.assertEqual(policy.action.call_count, int(accepted))
+                    self.assertEqual(bot.issue_rule_order.call_count, int(not accepted))
+            self.assertEqual(telemetry.counts["micro_owned_decisions"], 2)
+            self.assertEqual(telemetry.counts["ppo_inference_decisions"], 2)
+            self.assertEqual(telemetry.counts["ppo_enemy_domain_outside_domain"], 1)
+            self.assertEqual(telemetry.counts["ppo_enemy_domain_unknown_domain"], 1)
+            self.assertEqual(telemetry.counts["ppo_rule_fallback_decisions"], 0)
+            bot.recorder.close(32, "test")
+
     def test_hash_provenance_and_masked_actor(self):
         with tempfile.TemporaryDirectory() as tmp:
             directory = Path(tmp)

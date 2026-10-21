@@ -1,0 +1,201 @@
+{
+  "date": "2026-10-21",
+  "status": "engineering_enemy_domain_guard_mvp_pass",
+  "source_head": "51322f8f21265c713e36926fe2af4ce392330b73",
+  "working_tree_source_frozen": true,
+  "plan": {
+    "path": "artifacts/p6_ppo_enemy_guard_20261021/plan.json",
+    "sha256": "65a9e78b1cd1087788757ce9755b81d9b2725f581caf97b0bbd7e8e39e14612f"
+  },
+  "execution": {
+    "plan_sha256": "65a9e78b1cd1087788757ce9755b81d9b2725f581caf97b0bbd7e8e39e14612f",
+    "pid": 65216,
+    "timeout_seconds": 90,
+    "timed_out": false,
+    "exit_code": 0,
+    "wall_seconds": 17.125,
+    "processes_after": {
+      "output": "",
+      "exit_code": 1
+    }
+  },
+  "integrity": {
+    "all_frozen_hashes_unchanged": true,
+    "frozen_file_count": 29
+  },
+  "guard_contract": {
+    "flag": "--ppo-enemy-domain-guard",
+    "default": false,
+    "source_priority": [
+      "current producer.curriculum.tasks",
+      "producer.task only if curriculum absent"
+    ],
+    "malformed_curriculum_fallback_to_task": false,
+    "strict_exact_count": true,
+    "whitelisted_scenarios": [
+      "marine-vs-zergling",
+      "marine-vs-marine"
+    ],
+    "guard_before_eligible": true,
+    "rejected_uses": "existing issue_rule_order; no actor inference and no PPO ownership",
+    "guard_disabled": "legacy behavior including unknown domain",
+    "limitations": [
+      "Enemy species/exact-count only",
+      "No friendly cooperation proof",
+      "No distance or HP generalization proof",
+      "No learning benefit or strength proof"
+    ]
+  },
+  "mock_validation": {
+    "source": "impl release and independent scope; evidence writer did not rerun tests",
+    "merged_check_runs": 2,
+    "passed": true,
+    "cases": [
+      "256 two-enemy reject",
+      "448 two-enemy accept",
+      "mixed species reject",
+      "legacy unknown guard on reject",
+      "legacy unknown guard off allow",
+      "partial malformed rejects entire domain",
+      "bool/float count reject",
+      "unsupported scenario reject",
+      "invalid curriculum does not fall back to task",
+      "pairs remain non-Cartesian"
+    ],
+    "accepted_inference_and_owned": 2,
+    "run_explanation": "Same merged check: initial pass, then necessary rerun after strict parsing tightening; both passed. Source: root final notification and impl."
+  },
+  "runtime": {
+    "run_directory": "artifacts/runs/p6_ppo_enemy_guard448_20261021",
+    "real_case_count": 1,
+    "retry_count": 0,
+    "guard_config": {
+      "event": "ppo_enemy_domain_config",
+      "wall_time": 1792574943.4182065,
+      "enabled": true,
+      "status": "known",
+      "source": "curriculum.tasks",
+      "reason": "declared",
+      "pairs": [
+        [
+          "ZERGLING",
+          1
+        ],
+        [
+          "ZERGLING",
+          2
+        ]
+      ]
+    },
+    "domain_checks": 12,
+    "domain_reason_counts": {
+      "accepted": 12
+    },
+    "enemy_count_checks": {
+      "2": 9,
+      "1": 3
+    },
+    "inference": 12,
+    "owned": 12,
+    "raw_transitions": 12,
+    "every_raw_matches_accepted_check": true,
+    "obs16_mask5": true,
+    "requested_and_executed_mask_legal": true,
+    "actual_8loops": true,
+    "policy_versions": [
+      "marine-ppo-numpy-v1"
+    ],
+    "command_results": {
+      "engine_confirmed": 4,
+      "hold": 7,
+      "order_preserved": 1
+    },
+    "requested_actions": {
+      "2": 2,
+      "1": 3,
+      "4": 7
+    },
+    "executed_actions": {
+      "2": 2,
+      "1": 2,
+      "4": 8
+    },
+    "split_test_no_labels": true,
+    "scenario_result": {
+      "outcome": "low_health_safety_exit",
+      "terminated": false,
+      "truncated": true,
+      "game_loop": 121,
+      "game_seconds": 5.401785714285714
+    },
+    "final_friendly_hp": 5.0,
+    "final_remaining_enemy_count": 1,
+    "final_remaining_enemy_hp": 23.2734375,
+    "error": null,
+    "command_conflicts": 0,
+    "fallback_events": [],
+    "domain_rejections": 0,
+    "unsupported_context": "Local low_health_safety_exit at frame121; guard checks only supported contexts, no reason-level unsupported counters or blanket all-context support claim.",
+    "initial_scene": {
+      "game_loop": 25,
+      "health": 45.0,
+      "visible_enemy_count": 2,
+      "weapon_cooldown": 0.261962890625,
+      "enemies": [
+        {
+          "role": 0,
+          "health": 35.0,
+          "distance": 3.134765625
+        },
+        {
+          "role": 1,
+          "health": 17.6025390625,
+          "distance": 5.134765625
+        }
+      ]
+    },
+    "outer_result": "Result.Defeat",
+    "outer_result_interpretation": "Active leave handshake, not local combat result; local truncated low-health safety exit is authoritative."
+  },
+  "learning_exclusion": {
+    "path": "artifacts/runs/p6_ppo_enemy_guard448_20261021/learning_exclusion.json",
+    "sha256": "ad95048c979fde4613cbfa31ac828343131e672a1b1b017b5374f77d89ca0be4",
+    "raw_sha256": "9d9a5484ce3950bc4860b5d35df8a77d738816800b2492b23c1012f63f86c798",
+    "permanent": true
+  },
+  "defaults": {
+    "actor": "artifacts/models/marine_ppo_curriculum256_20261019",
+    "guard_enabled_by_default": false,
+    "launcher_files_unchanged": true
+  },
+  "provenance_files": [
+    {
+      "path": "artifacts/p6_ppo_enemy_guard_20261021/plan.json",
+      "sha256": "65a9e78b1cd1087788757ce9755b81d9b2725f581caf97b0bbd7e8e39e14612f"
+    },
+    {
+      "path": "artifacts/p6_ppo_enemy_guard_20261021/integrity.json",
+      "sha256": "723bbe20c4bddacd74e654e02a5ef95eab6a11028fa5b53d5d5a6d347bbf92f1"
+    },
+    {
+      "path": "artifacts/runs/p6_ppo_enemy_guard448_20261021/manifest.json",
+      "sha256": "e134304b2595d169b0d5c940632f28b78cb9a65b3e967ac976bb230627630fe6"
+    },
+    {
+      "path": "artifacts/runs/p6_ppo_enemy_guard448_20261021/events.jsonl",
+      "sha256": "47c69ad97ec11250a769c467e90a8bc32a9ab060c000b5360dcdb601923decb4"
+    },
+    {
+      "path": "artifacts/runs/p6_ppo_enemy_guard448_20261021/micro_transitions.jsonl",
+      "sha256": "9d9a5484ce3950bc4860b5d35df8a77d738816800b2492b23c1012f63f86c798"
+    }
+  ],
+  "exclusions": [
+    "No training/model update/API/LLM/full Easy/installation/default change",
+    "No extra game or retry",
+    "No old suite rerun by evidence writer",
+    "No credentials or live latest_state read",
+    "Models and raw artifacts ignored by Git; migrate separately",
+    "Not full P5/P6 acceptance"
+  ]
+}

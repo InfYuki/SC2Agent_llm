@@ -52,6 +52,8 @@ def main():
     parser.add_argument("--micro-max-units", type=int, choices=range(1, 5), default=4)
     parser.add_argument("--bc-model", default=None, help="Prototype BC model directory; missing/invalid models use rule micro.")
     parser.add_argument("--ppo-model", default=None, help="Exported NumPy PPO actor directory; missing/invalid models use rule micro.")
+    parser.add_argument("--ppo-enemy-domain-guard", action="store_true",
+                        help="Require declared PPO enemy species/exact count before micro ownership; unknown/outside domains use rule combat. Does not certify friendly army, geometry, HP or terrain.")
     parser.add_argument("--llm-max-calls", type=int, default=60)
     parser.add_argument(
         "--game-path",

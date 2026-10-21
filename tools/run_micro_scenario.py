@@ -406,6 +406,8 @@ def main():
     parser.add_argument("--policy", choices=["rule", "bc", "ppo"], default="rule")
     parser.add_argument("--bc-model", default=None, help="Prototype model directory; invalid models fall back to kite rules.")
     parser.add_argument("--ppo-model", default=None, help="Exported NumPy PPO actor; invalid models fall back to kite rules.")
+    parser.add_argument("--ppo-enemy-domain-guard", action="store_true",
+                        help="Require declared PPO enemy species/exact count; unknown/outside domains use rule combat. Does not certify friendly army, geometry, HP or terrain.")
     parser.add_argument("--allow-low-health-eval", action="store_true",
                         help="Evaluation only: retain five-action policy below 20%% HP until death/kill/time; test split, no expert labels, PPO failures are errors.")
     parser.add_argument("--distance", type=scenario_distance, default=6.0)

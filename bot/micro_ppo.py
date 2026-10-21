@@ -7,6 +7,58 @@ from bot.micro_bc import NumpyBCPolicy
 
 POLICY_VERSION = "marine-ppo-numpy-v1"
 
+# Only scenarios with an explicit homogeneous enemy definition are understood.
+# This describes enemy species/count only, not friendly army, HP or geometry.
+ENEMY_SCENARIOS = {
+    "marine-vs-marine": "MARINE",
+    "marine-vs-zergling": "ZERGLING",
+}
+
+
+def enemy_domain(metadata):
+    """Read current producer declarations only; malformed sets fail as a whole."""
+    result = dict(status="unknown", source=None, reason="missing_task", pairs=[])
+    producer = metadata.get("producer") if isinstance(metadata, dict) else None
+    if not isinstance(producer, dict):
+        return dict(result, reason="invalid_producer")
+    if "curriculum" in producer:
+        curriculum = producer["curriculum"]
+        result["source"] = "curriculum.tasks"
+        if (not isinstance(curriculum, dict)
+                or curriculum.get("format") != "marine-micro-curriculum-v1"
+                or curriculum.get("selection") != "round-robin"
+                or not isinstance(curriculum.get("tasks"), list)
+                or not curriculum["tasks"]):
+            return dict(result, reason="invalid_curriculum")
+        tasks = curriculum["tasks"]
+    elif "task" in producer:
+        result["source"] = "task"
+        tasks = [producer["task"]]
+    else:
+        return result
+    pairs = set()
+    for task in tasks:
+        if not isinstance(task, dict):
+            return dict(result, reason="invalid_task")
+        scenario, count = task.get("scenario"), task.get("enemy_count")
+        if not isinstance(scenario, str) or scenario not in ENEMY_SCENARIOS:
+            return dict(result, reason="unsupported_scenario")
+        if type(count) is not int or count not in (1, 2):
+            return dict(result, reason="invalid_enemy_count")
+        pairs.add((ENEMY_SCENARIOS[scenario], count))
+    return dict(result, status="known", reason="declared", pairs=[list(p) for p in sorted(pairs)])
+
+
+def enemy_domain_reason(domain, ctx):
+    """Return a bounded audit reason for the same enemies used by context()."""
+    if domain["status"] != "known":
+        return "unknown_domain"
+    names = {enemy.type_id.name for enemy in ctx.enemies}
+    if len(names) != 1:
+        return "mixed_enemies" if names else "no_enemy"
+    pair = [next(iter(names)), len(ctx.enemies)]
+    return "accepted" if pair in domain["pairs"] else "outside_domain"
+
 
 class NumpyPPOPolicy(NumpyBCPolicy):
     policy_version = POLICY_VERSION

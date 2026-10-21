@@ -30,14 +30,17 @@ class MicroRuleBot(RuleBot):
             or getattr(options, "policy", "rule") == "ppo"
         )
         self._ppo_policy = None
+        self._ppo_enemy_domain_guard = bool(getattr(options, "ppo_enemy_domain_guard", False))
+        self._ppo_enemy_domain = dict(status="unknown", source=None, reason="model_unavailable", pairs=[])
         if self._ppo_requested:
-            from bot.micro_ppo import NumpyPPOPolicy, POLICY_VERSION
+            from bot.micro_ppo import NumpyPPOPolicy, POLICY_VERSION, enemy_domain
 
             # PPO and its rule fallback must never become expert/BC labels.
             self.recorder.policy_version = POLICY_VERSION
             self.recorder.bc_labels = False
             try:
                 self._ppo_policy = NumpyPPOPolicy.load(options.ppo_model)
+                self._ppo_enemy_domain = enemy_domain(self._ppo_policy.metadata)
                 self.telemetry.event(
                     "ppo_model_loaded", prototype=True,
                     weights_sha256=self._ppo_policy.metadata["weights_sha256"],
@@ -45,6 +48,10 @@ class MicroRuleBot(RuleBot):
                 )
             except Exception as exc:
                 self._ppo_fallback("load", exc)
+            self.telemetry.event(
+                "ppo_enemy_domain_config", enabled=self._ppo_enemy_domain_guard,
+                **self._ppo_enemy_domain,
+            )
         if self._bc_requested:
             from bot.micro_bc import NumpyBCPolicy, POLICY_VERSION
 
@@ -168,11 +175,30 @@ class MicroRuleBot(RuleBot):
                 contexts = {
                     unit.tag: context(self, unit, army, target) for unit in army
                 }
+            domain_allowed = set(contexts)
+            if self._ppo_requested and self._ppo_enemy_domain_guard:
+                from bot.micro_ppo import enemy_domain_reason
+
+                domain_allowed = set()
+                for tag, ctx in contexts.items():
+                    if not ctx.supported:
+                        continue
+                    reason = enemy_domain_reason(self._ppo_enemy_domain, ctx)
+                    self.telemetry.counts["ppo_enemy_domain_" + reason] += 1
+                    self.telemetry.event(
+                        "ppo_enemy_domain_check", unit_tag=tag, game_loop=frame,
+                        reason=reason, accepted=reason == "accepted",
+                        enemy_types=sorted({enemy.type_id.name for enemy in ctx.enemies}),
+                        enemy_count=len(ctx.enemies),
+                    )
+                    if reason == "accepted":
+                        domain_allowed.add(tag)
             eligible = {
                 unit.tag
                 for unit in army
                 if unit.tag in contexts
                 and contexts[unit.tag].supported
+                and unit.tag in domain_allowed
                 and (unit.health_percentage > 0.2 or self.terminal_evaluation())
                 and frame - self._released_at.get(unit.tag, -100) >= 16
                 and state in {"attack", "defend"}
