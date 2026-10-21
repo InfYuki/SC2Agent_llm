@@ -1,0 +1,371 @@
+{
+  "version": "p4-expert-subset-mvp-v1",
+  "date": "2026-10-21",
+  "source_head": "110dd79bfd5a02db1fde5425a871ffe568e31158",
+  "implementation": {
+    "default_cases": 12,
+    "default_experts": [
+      "amove",
+      "kite"
+    ],
+    "default_runs": 24,
+    "explicit_only_new_case": true,
+    "pending_only_resume": true,
+    "no_automatic_retry_or_overwrite": true,
+    "learning_exclusion_enforced": true
+  },
+  "budget": {
+    "real_cases": 1,
+    "retries": 0,
+    "seed": 101,
+    "game_seconds_limit": 12,
+    "wall_seconds_limit": 120,
+    "training_steps": 0,
+    "llm_calls": 0
+  },
+  "suite": {
+    "path": "artifacts\\micro_suites\\p4_expert_subset_20261021",
+    "status": "passed",
+    "scope": "subset",
+    "selected": {
+      "cases": [
+        "dual_zergling_train"
+      ],
+      "experts": [
+        "kite"
+      ],
+      "case_count": 1,
+      "run_count": 1
+    },
+    "plan_sha256": "e7a9581ce3441d28c56f5cc9048c2d3389158053c9b8eff78634299769ba1e62",
+    "summary_sha256": "593732cec73e295077c4901e9600652425fb02f0408ef9ea46505d4f38fc129c",
+    "case": {
+      "id": "dual_zergling_train",
+      "scenario": "marine-vs-zergling",
+      "distance": 6,
+      "health": 1,
+      "seed": 101,
+      "split": "train",
+      "limit": 12,
+      "enemy_count": 2,
+      "second_distance": 8,
+      "second_health": 0.5,
+      "observed_contract": "dual_zergling"
+    }
+  },
+  "provenance": {
+    "source_count": 25,
+    "source_hashes": {
+      "bot\\arbiter.py": "b79c01da825ffa3a65303e9560ddf3b7d6f4c0f0ce9a8ae6cc3352244211b30e",
+      "bot\\budget.py": "73cc2633ff2a750387492ce5b0c2e4a0859a4b65c21a2f03ef454a6478413f27",
+      "bot\\building_manager.py": "6386900953e2f0588f438d565c9206251adff7b720b3f3abc82ad59d01aa2e4d",
+      "bot\\compat.py": "f40b651e1e2b5532532b220e213ea27b9aea0da3085d472d4efb2605a70ef960",
+      "bot\\lifecycle.py": "5588be1cb1c11cb24b2db437367cd2b1dd3a1d2f144155c68b17235937cfba82",
+      "bot\\llm_bot.py": "e98503fb63c069c4070e1416b4d327da75bbc80f1c61bd656d9027129b4e0a3a",
+      "bot\\llm_client.py": "39d4f21f68b1962760e8b3f14eae8ab0d05498ae3db151a9db3d36e4a5df1e19",
+      "bot\\llm_ppo_bot.py": "049956798f12aae606cffd971860c253984a93112a212b233d81ee1ff52ce4af",
+      "bot\\main.py": "d3125d3094276c7c250479ff86426e48dde62946942f6b5dcbbdba39115f1894",
+      "bot\\micro.py": "e737087d30a98f0088df3fa0cdfa5fcdf784e6c877725dc1af5670c36476efb6",
+      "bot\\micro_bc.py": "a0d38f25e28a676b2b15a69f0697a9fb2cd35805226480519ab43bfb09fc369b",
+      "bot\\micro_bot.py": "4cb545bbfaf2e53cd19680d3bf1ff336771017de2a0ac643e5fe6c666f954a1e",
+      "bot\\micro_data.py": "e24bf52c9083aaa605f5815dbabb0f86b9a4fed63d8190d4245e583b19f2dde8",
+      "bot\\micro_env_bot.py": "70c09cfff203cbf2409bfc520696bfe538caa32eb8d38a5d97d5333676b74d63",
+      "bot\\micro_ppo.py": "84178864ae8af21405a03f98ca1fa96b53a668c78475adddef86d1f21631ad69",
+      "bot\\probe.py": "47bd3996380def5cc295fe9d5f9770135e99d516431471a80c682d42d24c7905",
+      "bot\\rule_bot.py": "38237d97aa0e91589680c2849092cd1c836f80a8d5c70ca08a82a6e9ae8b6238",
+      "bot\\strategy.py": "92153e739b586f8b9d2dba626a638b3e2b445ce405976a9e0d203644fd6a7f5d",
+      "bot\\telemetry.py": "d6d6d67cba9f18b82590a7eaf70d81efc73bae84f01eab1abfaa50b7b2d0363d",
+      "run_local.py": "b72faccb3a083f4aea71492f28a332b4fda2505336697fd299749bd1e6821175",
+      "tools\\run_micro_scenario.py": "6f19cb38513741fb7ca86dc06f702eb9d345c086786e70f7ecf4ddd7274c4e78",
+      "tools\\evaluate_micro.py": "316da2b8f0033cc956aee2658f7af323c4b22e006757e712134fe873ffa86d12",
+      "tools\\report_micro.py": "0bb2e71c47fe7b062e684210bec5dbf844bdb5e6021bbf16065f386115b3b3c5",
+      "tools\\export_micro_dataset.py": "f2c936c01c337ff9e04a05d33749971105f51c865881d6c852f0c9d82c5b8c1d",
+      "poetry.lock": "15d13dea8f4ee55b8fe9d50eaf28d3f71f2956971ffbc24781b1f92c5df7dc32"
+    },
+    "map_sha256": "13d075a466de88ba93aa3d9f3e9f3743606bffac1bf1b5e81f42b0c56d4a9c59",
+    "game_base_build": 98370,
+    "source_map_postcheck_unchanged": true
+  },
+  "raw": {
+    "run_id": "p4_expert_subset_20261021_dual_zergling_train_kite",
+    "files": {
+      "compatibility-report.json": {
+        "sha256": "b7be8c1a86e3f2d3e80ab965981f0924bce77f210dcc2d07efe4882e05090b23",
+        "mtime_ns": 1792579236272729300,
+        "size": 133
+      },
+      "events.jsonl": {
+        "sha256": "10c636acc5d0fe76bd263d8047097b1b18706b6ecb44e79a8fb4a1fe6b19bd62",
+        "mtime_ns": 1792579236794828300,
+        "size": 6915
+      },
+      "game.SC2Replay": {
+        "sha256": "341b72ae87a1d833417d99b455b7cf9f9155674d278e8300fad3d21607518b9e",
+        "mtime_ns": 1792579236829884700,
+        "size": 10001
+      },
+      "initial_scene_observation.json": {
+        "sha256": "ec2f6afc9c32f3f2d00495e023b759f701ba2df4c98e087145389b7a1fc9b7fd",
+        "mtime_ns": 1792579236467908800,
+        "size": 1336
+      },
+      "latest_state.json": {
+        "sha256": "e86f65bf843f4551f62046c84d9bf5668a13345f357aae0416ff58cb580c5bcb",
+        "mtime_ns": 1792579236793296600,
+        "size": 548
+      },
+      "manifest.json": {
+        "sha256": "59760ef197b93fef3e7579b97dfb774ab9d81a3e6739a0adbdb6c522b04ccd61",
+        "mtime_ns": 1792579219672324300,
+        "size": 3019
+      },
+      "micro_audit.json": {
+        "sha256": "8625f9cc3ba4033f42190ea8123812d47223b35599c72f4e84ab5f9724392ed3",
+        "mtime_ns": 1792579238796271500,
+        "size": 558
+      },
+      "micro_summary.json": {
+        "sha256": "335cee984b25f0ef3d736cb7178fd60e49cfefc6f74ab02d099331270466d280",
+        "mtime_ns": 1792579237650051300,
+        "size": 403
+      },
+      "micro_transitions.jsonl": {
+        "sha256": "6d178d167a695bcc7917637af7f96d9aa9436c779f5afd58244f797fc5213317",
+        "mtime_ns": 1792579236791780600,
+        "size": 15639
+      },
+      "runtime_abilities.json": {
+        "sha256": "44834a304ca6650651f43b032ecbb5f18ef2087a3ccbdc36691d4c186998fb72",
+        "mtime_ns": 1792579235827916000,
+        "size": 445163
+      },
+      "scenario.json": {
+        "sha256": "a2d59aa2ec0d6f179fbf4356b686f7ad06614e7931e2f5ed60ef46fc175fbc08",
+        "mtime_ns": 1792579236276300700,
+        "size": 725
+      },
+      "scenario_result.json": {
+        "sha256": "75d5509c4ae4d3d6ca3bba0f44e96468b7cd661d7281574da54fd04b70f7121c",
+        "mtime_ns": 1792579236793296600,
+        "size": 148
+      },
+      "summary.json": {
+        "sha256": "c051353634dc2ab6b520f15a7fe9e8ca2bd61db8090b2ac9e7c1376cc744f654",
+        "mtime_ns": 1792579237650569400,
+        "size": 766
+      }
+    },
+    "transitions": 12,
+    "eligible": 11,
+    "excluded": 1,
+    "command_results": {
+      "engine_confirmed": 4,
+      "hold": 8
+    },
+    "requested_actions": {
+      "2": 2,
+      "1": 2,
+      "4": 8
+    },
+    "executed_actions": {
+      "2": 2,
+      "1": 2,
+      "4": 8
+    },
+    "requested_executed_differences": 0,
+    "expert_versions": [
+      "marine-kite-v1"
+    ],
+    "reward": "null/not_implemented",
+    "learning_exclusion_sidecar": "absent; genuine expert train data remains eligible"
+  },
+  "observed": {
+    "initial": {
+      "game_loop": 25,
+      "initialization_confirmed": true,
+      "friendly_tag": 4356308993,
+      "friendly_type_id": 48,
+      "friendly_position": [
+        82.28125,
+        80.0
+      ],
+      "health": 45.0,
+      "visible_enemy_count": 2,
+      "enemy_positions": [
+        [
+          87.416015625,
+          80.0
+        ],
+        [
+          85.416015625,
+          80.0
+        ]
+      ],
+      "enemies": [
+        {
+          "tag": 4356833281,
+          "type_id": 105,
+          "role": 1,
+          "position": [
+            87.416015625,
+            80.0
+          ],
+          "health": 17.6025390625,
+          "health_max": 35.0,
+          "distance": 5.134765625,
+          "in_range": true
+        },
+        {
+          "tag": 4356571137,
+          "type_id": 105,
+          "role": 0,
+          "position": [
+            85.416015625,
+            80.0
+          ],
+          "health": 35.0,
+          "health_max": 35.0,
+          "distance": 3.134765625,
+          "in_range": true
+        }
+      ],
+      "nearest_tag": 4356571137,
+      "weakest_tag": 4356833281,
+      "weapon_cooldown": 0.190185546875,
+      "obs": [
+        1.0,
+        0.0,
+        0.012679036458333333,
+        0.26123046875,
+        0.0,
+        0.26123046875,
+        1.0,
+        0.0,
+        0.0,
+        0.4278971354166667,
+        0.0,
+        0.5029296875,
+        0.0,
+        0.125,
+        0.08935546875,
+        0.0
+      ],
+      "mask": [
+        false,
+        false,
+        true,
+        true,
+        true
+      ],
+      "expert_action": 2
+    },
+    "result": {
+      "outcome": "low_health_safety_exit",
+      "terminated": false,
+      "truncated": true,
+      "game_loop": 121,
+      "game_seconds": 5.401785714285714
+    },
+    "final_own_health": 5,
+    "final_visible_enemy_count": 1,
+    "final_enemy_health": 29.2392578125,
+    "engineering_pass_not_combat_win": true
+  },
+  "export": {
+    "path": "artifacts/micro_datasets/p4_expert_subset_20261021",
+    "exit": 0,
+    "samples": 11,
+    "eligible_command_results": {
+      "engine_confirmed": 4,
+      "hold": 7
+    },
+    "action_counts": {
+      "0": 0,
+      "1": 2,
+      "2": 2,
+      "3": 0,
+      "4": 7
+    },
+    "group_splits": {
+      "dual_zergling_train": "train"
+    },
+    "split_counts": {
+      "train": 11
+    },
+    "missing_actions": [
+      0,
+      3
+    ],
+    "npz_shapes": {
+      "obs": [
+        11,
+        16
+      ],
+      "mask": [
+        11,
+        5
+      ],
+      "action": [
+        11
+      ],
+      "game_loop": [
+        11
+      ],
+      "group": [
+        11
+      ],
+      "split": [
+        11
+      ]
+    },
+    "files": {
+      "demonstrations.npz": "f470c852696f6eb7a56f76cf0493544bd5d9a783ec3287ecd1dd0fe37b82b39a",
+      "metadata.json": "c08f8af71b8a36d4ed8f507545be96076db4e6981251426dbeec0403ec91af55"
+    },
+    "labels_match_raw_executed": true,
+    "masks_legal": true,
+    "obs_mask_rows_match_raw": true,
+    "training_readiness": "not_established",
+    "models_trained": false
+  },
+  "resume": {
+    "pending_before": 0,
+    "all_runs_terminal": true,
+    "exit": 0,
+    "wall_seconds": 0.2649999999557622,
+    "new_games": 0,
+    "raw_sha_and_mtime_unchanged": true,
+    "log": "artifacts/micro_suites/p4_expert_subset_20261021/terminal_resume.log"
+  },
+  "preservation": {
+    "old_82_dataset_files": {
+      "demonstrations.npz": {
+        "sha256": "6558232fea2386e1bef792b50e728b7f5e13ff6a47498837538dd4b0f91aee9e",
+        "mtime_ns": 1792296039841948200,
+        "size": 2803
+      },
+      "metadata.json": {
+        "sha256": "48df293d34accad041560193bf05c552b81c9c81a1515b7d975ce4c08a2611a5",
+        "mtime_ns": 1792296039852138600,
+        "size": 3785
+      }
+    },
+    "old_82_unchanged": true,
+    "old_82_merged": false,
+    "default_model": "curriculum256 unchanged",
+    "sc2_processes_after": 0
+  },
+  "evidence": {
+    "path": "artifacts/micro_suites/p4_expert_subset_20261021/freeze_evidence.json",
+    "sha256": "76fafe0d3126aac7407dc10fd484115b72a9525acead5b4e4154437d08e393a4"
+  },
+  "limits": [
+    "One train-only scenario group; no validation/test data or BC result",
+    "Missing actions 0 and 3; no coverage/completeness/readiness claim",
+    "Nominal spawn distance/HP differs from observed initialization; cooldown/hidden engine state not standardized",
+    "Existing kite rule expert, not PPO actor or a new algorithm; no training or old82 merge",
+    "Low-health safety truncation is not all-enemy kill or official combat defeat; outer leave result is not local outcome",
+    "No strength/win-rate/generalization/learning-benefit or full P4/P5/P6 acceptance claim",
+    "Artifacts are Git ignored and must be migrated separately"
+  ]
+}

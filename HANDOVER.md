@@ -397,3 +397,12 @@ plan SHA `65a9e78b1cd1087788757ce9755b81d9b2725f581caf97b0bbd7e8e39e14612f`；so
 唯一离线CLI exit0，当前448 checkpoint/actor严格SHA与16/5契约通过；五固定E3/E4真实raw 233+110+240+220+203=1006 source decision行，distinct obs877（obs+mask877），invalid/重复源0，不称1000独立状态。SB3未归一化logits最大误差3.814697265625e-6、同mask概率9.834766387939453e-7，动作1006/1006一致、near-tie(1e-6)0；默认min1000/tol1e-4达标。synthetic8另列通过，logits1.9073486328125e-6/prob2.444721758365631e-9/动作差0，不计真实数。
 
 首次E4 crashed110仅用于失败前合法推理audit，全部五raw SHA learning_exclusion永久排除训练；16冻结文件前后不变。完整逐行来源报告artifacts/p5_ppo_parity_20261021/parity.json SHA `a735b95b9508165a074438c12ca5ba0d094d393da0ed0772a0af420a4a66d19f`，工具最终SHA `12fa4613a84a18279e6536cb45b33bfa455465bac91f7acf6eaee64f899136d0`。见[一致性报告](docs/PHASE_05_PPO_PARITY_MVP_REPORT.md)及[精简JSON](docs/validation/p5_ppo_parity_mvp.json)。仅当前448导出一致性，不自动完成P4 BC千样本或P5/P6全面验收/强度收益；0游戏/训练/API/安装，默认仍256、guard不自动开，模型/raw迁移另带。未commit/push，待root保存。
+
+
+## 2026-10-21 P4 单规则专家 subset MVP最新接续
+
+evaluate_micro新增显式--case/--expert与pending-only --resume，默认旧12×2不变；仅显式dual_zergling_train（规则kite，非PPO/新算法）。唯一case seed101/名义距6+8/第二敌半血/12游戏秒/120墙秒，exit0、subset1run passed，无retry。实际initial frame25己45HP/CD.19018555，两type105敌距3.134765625/5.134765625、HP35/17.602539；初态运动/回血/cooldown未标准化。12raw均16obs/5mask/合法8loops，4confirmed+8hold，末frame121/5.4017857秒low_health_safety_exit truncated、己5HP/余1敌；未全杀，不把外层leave Defeat或stop_reason当局部结论。
+
+11eligible=4confirmed+7hold冻结独立新NPZ，末截断hold剔除；版本marine-kite-v1，label为eligible.executed_action，无expert_label伪字段。单group train11、动作[0,2,2,0,7]缺0/3、validation/test0；仅合法可供未来训练小样本，不能直接BC结论/训练readiness。export尊重rawSHA learning_exclusion（排除/无效即拒绝），本次专家raw无排除sidecar；旧82不改/不merge、不训练。新NPZ SHA f470c852696f6eb7a56f76cf0493544bd5d9a783ec3287ecd1dd0fe37b82b39a，raw SHA6d178d167a695bcc7917637af7f96d9aa9436c779f5afd58244f797fc5213317。
+
+plan SHA e7a9581ce3441d28c56f5cc9048c2d3389158053c9b8eff78634299769ba1e62，25源码/地图前后同；pending0全终态唯一resume exit0/.265秒/0新增游戏，raw所有hash+mtime与旧82两文件hash+mtime不变，无SC2残留。suite artifacts/micro_suites/p4_expert_subset_20261021、新dataset artifacts/micro_datasets/p4_expert_subset_20261021。详见[专家subset报告](docs/PHASE_04_EXPERT_SUBSET_MVP_REPORT.md)与[精简JSON](docs/validation/p4_expert_subset_mvp.json)。工件Git忽略迁移另带；不推强度/胜率/泛化/收益或P4P5P6全面验收。默认curriculum256不变；无训练/LLM/API/完整Easy/安装/额外测试游戏/凭据与live快照读取。本轮待root保存、未push。

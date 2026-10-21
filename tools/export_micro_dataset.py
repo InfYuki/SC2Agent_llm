@@ -9,9 +9,36 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 
 
+
+def check_learning_exclusion(directory, digest):
+    sidecar = directory / "learning_exclusion.json"
+    if not sidecar.exists():
+        return  # Legacy expert demonstrations predate exclusion sidecars.
+    try:
+        record = json.loads(sidecar.read_text(encoding="utf-8"))
+        hashes = record["raw_sha256"]
+        if (not isinstance(record["excluded_from_future_training"], bool)
+                or not isinstance(hashes, dict)
+                or hashes.get("micro_transitions.jsonl") != digest
+                or record.get("run_id", directory.name) != directory.name):
+            raise ValueError("Invalid learning exclusion sidecar")
+        for name, expected in hashes.items():
+            path = directory / name
+            if (not isinstance(name, str) or Path(name).name != name
+                    or not isinstance(expected, str) or not path.is_file()
+                    or hashlib.sha256(path.read_bytes()).hexdigest() != expected):
+                raise ValueError("Learning exclusion raw SHA mismatch")
+        if record["excluded_from_future_training"]:
+            raise ValueError("Run explicitly excluded from future training: " + directory.name)
+    except (KeyError, TypeError, json.JSONDecodeError) as error:
+        raise ValueError("Invalid learning exclusion sidecar") from error
+
 def export(summary_path, output):
     suite = json.loads(summary_path.read_text(encoding="utf-8"))
-    if suite["status"] != "passed":
+    if (suite["status"] != "passed"
+            or any(r.get("passed") is not True or r.get("status", "passed") != "passed"
+                   for r in suite["runs"])
+            or suite.get("selected", {}).get("run_count", len(suite["runs"])) != len(suite["runs"])):
         raise ValueError("Only a fully passed frozen suite can be exported")
     output.mkdir(parents=True, exist_ok=False)
     rows, inputs, group_splits = [], [], {}
@@ -29,6 +56,7 @@ def export(summary_path, output):
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         if digest != run["audit"]["source_sha256"]:
             raise ValueError("Audited input changed: " + run["run_id"])
+        check_learning_exclusion(path.parent, digest)
         inputs.append(dict(run_id=run["run_id"], sha256=digest))
         for line in path.read_text(encoding="utf-8").splitlines():
             row = json.loads(line)

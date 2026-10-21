@@ -341,6 +341,7 @@ class ScenarioBot(MicroRuleBot):
                 game_loop=int(self.state.game_loop),
                 initialization_confirmed=self._health_ready,
                 friendly_tag=unit.tag,
+                friendly_type_id=int(unit.type_id.value),
                 friendly_position=list(unit.position),
                 health=float(unit.health),
                 visible_enemy_count=len(enemies),
@@ -348,6 +349,7 @@ class ScenarioBot(MicroRuleBot):
                 enemies=[
                     dict(
                         tag=e.tag,
+                        type_id=int(e.type_id.value),
                         role=self._enemy_roles.get(e.tag),
                         position=list(e.position),
                         health=float(e.health),
