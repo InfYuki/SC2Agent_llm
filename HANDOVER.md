@@ -436,3 +436,11 @@ E3实际1306推理=owned=raw，mask合法/实际8loops，无模型fallback/confl
 140/324 source enemycount>2为448声明数量域外下界，其余缺type未知，guardfalse/0domainchecks不等于0OOD。324行expert null/bc_eligible false/reward null，rawSHA77137bf3de5b0f6d14715f7b83fb64f4d9a0c3cb3d68817d1bfc1836a734994d按sidecar永久排除未来训练；split=train非训练许可。低血安全/冷却中合理撤退仍保留，不把所有retreat等同错误；生产库存非全军损失，P5/P6全面验收尚未完成。
 
 冻结HEAD e3b28651c69ba5ee7dd3fd8a683328d24d3fc850加dirtydiff1a192d60b2fb8d978fc66f6ca3e827d6d862390dd8c7b683a6382f1b8efda721，map/448与历史同、manifest全源匹配且事后runtime/assets不变，base_build98370/隐藏初态未完整固定。报告[交战门禁](docs/PHASE_06_PPO_ENGAGEMENT_GATE_MVP_REPORT.md)及[精简JSON](docs/validation/p6_ppo_engagement_gate_mvp.json)；来源artifacts/p6_engagement_gate_20261022/freeze SHAde4eb03773452447769e146c1bb79ea7221b88342d4f94a37487915cdc2c2022、evidence SHA9c69951bb5191a9fd443fad1e05a702181f115caacbe1734a9a92688e0934c97。原始工件/模型Git忽略迁移另带；待root最终本地保存、未push，后续游戏/训练需新预算。
+
+## 2026-10-22 P4 多源冻结93条与单次BC候选
+
+旧82条加既有专家subset11条一次导出新93条（train43/validation24/test26），仅新增一个dual_zergling_train组，无新双敌heldout；旧82前缀、validation/test六数组和来源顺序逐值不变。真实场景版本为v6。多源导出保留原接口，逐来源排除/契约/分组泄漏及重复引用审计，2个passed suite共历史25 runs、13个所选kite raw来源，非本轮新增游戏。
+
+一次新BC沿用seed42/1000epochs/lr.003，validation选epoch1000后test一次：train/val100%，test仍23/26=88.46%、动作3召回仍.5；test loss由旧.4317181706升至.4963506460，未改善。旧val/test已历史使用，只作工程回归；不推双敌能力、泛化或收益，不promote。新模型NumpyBCPolicy加载、93条logits有限/动作合法且批量运行一致，最大logit差7.629e-6；23冻结文件hash未变，独立只读scope通过。同一合并fixture初版及补跨split raw覆盖后各1/1通过，未重跑全suite。
+
+新数据 `artifacts/micro_datasets/p4_merged93_20261022` SHA `5e926766664d796f74f42e460d86703023cc07769c249eec7670d225ac6fa515`，新候选 `artifacts/models/marine_bc_merged93_20261022_seed42` weights SHA `7f100e471aa4086ddaf5ca006ea1f6e9c29bea8812d3088e1e8b2b71a8b9e16a`。默认BC仍旧82条，PPO仍curriculum256；新候选仅显式 `--bc-model artifacts/models/marine_bc_merged93_20261022_seed42` 选择（运行会启动游戏，本轮未执行）。原始工件Git忽略需另带；0新游戏/LLM/API/PPO训练、无自动切换，P4全面验收与训练就绪未建立。见[多源BC报告](docs/PHASE_04_MERGED_BC_MVP_REPORT.md)及[共享JSON](docs/validation/p4_merged_bc_mvp.json)；本轮待root本地保存、未push。

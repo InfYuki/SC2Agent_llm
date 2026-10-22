@@ -1,0 +1,216 @@
+{
+  "date": "2026-10-22",
+  "scope": "P4 merged frozen93 single BC candidate engineering MVP",
+  "parent_revision": "5fe5c1beecff2b600de508ba6ec7625676e97fb2",
+  "source_patch": "tools/export_micro_dataset.py multi-summary export; tests/test_micro_dataset_merge.py",
+  "source_suites": [
+    {
+      "path": "artifacts/micro_suites/p3_v7_formal_20261018_115352/summary.json",
+      "sha256": "7359e6d41d50b83728e037b869198b09451d6184678f610adcaf70398245ffb0",
+      "status": "passed",
+      "run_count": 24,
+      "expert_run_count": 12
+    },
+    {
+      "path": "artifacts/micro_suites/p4_expert_subset_20261021/summary.json",
+      "sha256": "593732cec73e295077c4901e9600652425fb02f0408ef9ea46505d4f38fc129c",
+      "status": "passed",
+      "run_count": 1,
+      "expert_run_count": 1
+    }
+  ],
+  "selected_raw_source_count": 13,
+  "dataset_path": "artifacts/micro_datasets/p4_merged93_20261022",
+  "dataset_verification": {
+    "split_counts": {
+      "train": 43,
+      "validation": 24,
+      "test": 26
+    },
+    "action_counts": {
+      "2": 27,
+      "1": 19,
+      "4": 34,
+      "3": 9,
+      "0": 4
+    },
+    "source_count": 13,
+    "duplicate_references": 0,
+    "old82_prefix_unchanged": true,
+    "old_validation_test_arrays_unchanged": {
+      "validation": {
+        "obs": true,
+        "mask": true,
+        "action": true,
+        "game_loop": true,
+        "group": true,
+        "split": true
+      },
+      "test": {
+        "obs": true,
+        "mask": true,
+        "action": true,
+        "game_loop": true,
+        "group": true,
+        "split": true
+      }
+    },
+    "old_source_identity_order_unchanged": true,
+    "old_and_source_hashes_unchanged": true,
+    "dataset_sha256": "5e926766664d796f74f42e460d86703023cc07769c249eec7670d225ac6fa515"
+  },
+  "scenario_versions": [
+    "marine-vs-marine-v6",
+    "marine-vs-zergling-v6"
+  ],
+  "feature_version": "marine-16-v1",
+  "action_version": "marine-5-v1",
+  "decision_game_loops": 8,
+  "candidate_path": "artifacts/models/marine_bc_merged93_20261022_seed42",
+  "candidate_verification": {
+    "status": "passed",
+    "dataset": "artifacts\\micro_datasets\\p4_merged93_20261022",
+    "model": "artifacts\\models\\marine_bc_merged93_20261022_seed42",
+    "single_export": true,
+    "single_training": true,
+    "seed": 42,
+    "epochs": 1000,
+    "learning_rate": 0.003,
+    "selected_epoch": 1000,
+    "test_evaluation": "once_after_validation_selection_by_train_script; no_retraining",
+    "runtime_load": true,
+    "existing_dataset_rows_checked": 93,
+    "finite_logits": true,
+    "legal_actions": true,
+    "batch_runtime_action_parity": true,
+    "max_abs_batch_runtime_logit_delta": 7.62939453125E-06,
+    "dataset_source_hashes_match": true,
+    "dataset_metadata_sha256": "3ca1ebd25219496c2ca8b1207d1acb4ca3f1e3e5ea74002b718757bde86f0dd2",
+    "weights_sha256": "7f100e471aa4086ddaf5ca006ea1f6e9c29bea8812d3088e1e8b2b71a8b9e16a",
+    "model_metadata_sha256": "7eca6bcc834ad8d6da3e87a38892b4c4e5e33610e543d2e77a3c5502717a032f",
+    "training_report_sha256": "ff4dd13b1c095e7a86fa24678694d57c49e35878d51f63da5eb0be7caeba9aa5",
+    "all_preflight_old_and_source_hashes_unchanged": true,
+    "metrics": {
+      "train": {
+        "samples": 43,
+        "masked_loss": 0.00012987706577405334,
+        "masked_accuracy": 1.0,
+        "train_majority_with_hold_fallback_accuracy": 0.4883720930232558,
+        "action_recall": {
+          "0": 1.0,
+          "1": 1.0,
+          "2": 1.0,
+          "3": 1.0,
+          "4": 1.0
+        }
+      },
+      "validation": {
+        "samples": 24,
+        "masked_loss": 0.00019332014198880643,
+        "masked_accuracy": 1.0,
+        "train_majority_with_hold_fallback_accuracy": 0.4583333333333333,
+        "action_recall": {
+          "0": 1.0,
+          "1": 1.0,
+          "2": 1.0,
+          "3": 1.0,
+          "4": 1.0
+        }
+      },
+      "test": {
+        "samples": 26,
+        "masked_loss": 0.49635064601898193,
+        "masked_accuracy": 0.8846153846153846,
+        "train_majority_with_hold_fallback_accuracy": 0.07692307692307693,
+        "action_recall": {
+          "0": 1.0,
+          "1": 1.0,
+          "2": 1.0,
+          "3": 0.5,
+          "4": 1.0
+        }
+      }
+    },
+    "old82_metrics_from_existing_report": {
+      "train": {
+        "samples": 32,
+        "masked_loss": 0.00013840693281963468,
+        "masked_accuracy": 1.0,
+        "train_majority_with_hold_fallback_accuracy": 0.4375,
+        "action_recall": {
+          "0": 1.0,
+          "1": 1.0,
+          "2": 1.0,
+          "3": 1.0,
+          "4": 1.0
+        }
+      },
+      "validation": {
+        "samples": 24,
+        "masked_loss": 0.00036365733831189573,
+        "masked_accuracy": 1.0,
+        "train_majority_with_hold_fallback_accuracy": 0.4583333333333333,
+        "action_recall": {
+          "0": 1.0,
+          "1": 1.0,
+          "2": 1.0,
+          "3": 1.0,
+          "4": 1.0
+        }
+      },
+      "test": {
+        "samples": 26,
+        "masked_loss": 0.4317181706428528,
+        "masked_accuracy": 0.8846153846153846,
+        "train_majority_with_hold_fallback_accuracy": 0.07692307692307693,
+        "action_recall": {
+          "0": 1.0,
+          "1": 1.0,
+          "2": 1.0,
+          "3": 0.5,
+          "4": 1.0
+        }
+      }
+    },
+    "limitations": [
+      "New eleven samples only dual_zergling_train; no new dual-enemy validation or test",
+      "Old frozen validation/test are historically used, not new independent heldout",
+      "Offline label agreement only; no combat strength/generalization claim; default unchanged"
+    ],
+    "game_runs": 0,
+    "llm_calls": 0
+  },
+  "baseline": {
+    "dataset_sha256": "6558232fea2386e1bef792b50e728b7f5e13ff6a47498837538dd4b0f91aee9e",
+    "weights_sha256": "e36cba313c1d8e1731573595b1b975316e1522db3af8d1a4abf4f21e405c2dcf",
+    "weights_loaded_for_training": false
+  },
+  "comparison": {
+    "test_correct_old": 23,
+    "test_correct_new": 23,
+    "test_total": 26,
+    "test_loss_delta": 0.06463247537612915,
+    "test_loss_worse": true,
+    "action3_recall_old": 0.5,
+    "action3_recall_new": 0.5,
+    "quality_improvement_established": false
+  },
+  "minimal_fixture_check": "same one check passed initially 1/1 and again 1/1 after cross-split raw coverage; not full suite",
+  "independent_readonly_scope": "passed",
+  "preserved_preflight_file_count": 23,
+  "prototype": true,
+  "training_readiness": "not_established",
+  "new_dual_enemy_heldout": false,
+  "old_heldout_is_historically_used": true,
+  "default_model_changed": false,
+  "automatically_promoted": false,
+  "game_runs": 0,
+  "llm_calls": 0,
+  "ppo_training": 0,
+  "commit_push": "pending root local save; not pushed",
+  "evidence": [
+    "artifacts/bc93_preflight_20261022.json",
+    "artifacts/micro_datasets/p4_merged93_20261022/pretrain_verification.json",
+    "artifacts/models/marine_bc_merged93_20261022_seed42/artifact_verification.json"
+  ]
+}

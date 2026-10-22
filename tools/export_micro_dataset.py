@@ -33,17 +33,40 @@ def check_learning_exclusion(directory, digest):
     except (KeyError, TypeError, json.JSONDecodeError) as error:
         raise ValueError("Invalid learning exclusion sidecar") from error
 
-def export(summary_path, output):
-    suite = json.loads(summary_path.read_text(encoding="utf-8"))
-    if (suite["status"] != "passed"
-            or any(r.get("passed") is not True or r.get("status", "passed") != "passed"
-                   for r in suite["runs"])
-            or suite.get("selected", {}).get("run_count", len(suite["runs"])) != len(suite["runs"])):
-        raise ValueError("Only a fully passed frozen suite can be exported")
-    output.mkdir(parents=True, exist_ok=False)
+def export(summary_path, output, *, additional_summaries=()):
+    summary_paths = [Path(summary_path), *(Path(p) for p in additional_summaries)]
+    output = Path(output)
+    if output.exists():
+        raise FileExistsError("Use a new dataset output directory; never overwrite datasets")
+    suites, source_suites = [], []
+    for source_index, path in enumerate(summary_paths):
+        content = path.read_bytes()
+        suite = json.loads(content)
+        if (suite["status"] != "passed"
+                or any(r.get("passed") is not True or r.get("status", "passed") != "passed"
+                       for r in suite["runs"])
+                or suite.get("selected", {}).get("run_count", len(suite["runs"])) != len(suite["runs"])):
+            raise ValueError("Only a fully passed frozen suite can be exported")
+        suites.append(suite)
+        source_suites.append(dict(
+            source_index=source_index, path=str(path.resolve()),
+            sha256=hashlib.sha256(content).hexdigest(), status=suite["status"],
+            run_count=len(suite["runs"]),
+            expert_run_count=sum(r["expert"] == "kite" for r in suite["runs"]),
+            runs=[dict(run_index=i, run_id=r["run_id"], expert=r["expert"],
+                       case=r.get("case"), split=r.get("split"),
+                       audited_raw_sha256=r.get("audit", {}).get("source_sha256"),
+                       passed=r["passed"], status=r.get("status", "passed"))
+                  for i, r in enumerate(suite["runs"])],
+        ))
     rows, inputs, group_splits = [], [], {}
     expert_versions, scenario_versions = set(), set()
-    for run in suite["runs"]:
+    run_ids, raw_sources = {}, {}
+    duplicate_references = 0
+    references = ((source_index, run_index, run)
+                  for source_index, suite in enumerate(suites)
+                  for run_index, run in enumerate(suite["runs"]))
+    for source_index, run_index, run in references:
         if run["expert"] != "kite":
             continue
         group, split = run["case"], run["split"]
@@ -53,12 +76,18 @@ def export(summary_path, output):
             raise ValueError("Same scenario group leaked across splits")
         group_splits[group] = split
         path = ROOT / "artifacts/runs" / run["run_id"] / "micro_transitions.jsonl"
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        raw = path.read_bytes()
+        digest = hashlib.sha256(raw).hexdigest()
         if digest != run["audit"]["source_sha256"]:
             raise ValueError("Audited input changed: " + run["run_id"])
         check_learning_exclusion(path.parent, digest)
-        inputs.append(dict(run_id=run["run_id"], sha256=digest))
-        for line in path.read_text(encoding="utf-8").splitlines():
+        if run["run_id"] in run_ids and run_ids[run["run_id"]][0] != run:
+            raise ValueError("Conflicting run identity: " + run["run_id"])
+        if raw and digest in raw_sources and raw_sources[digest][0] != (group, split):
+            raise ValueError("Same raw content assigned to different case/split")
+        # Validate every reference before deduplication, including exclusions and rows.
+        run_rows = []
+        for line in raw.decode("utf-8").splitlines():
             row = json.loads(line)
             versions = row["versions"]
             if (
@@ -93,9 +122,25 @@ def export(summary_path, output):
                 or not row["mask"][row["executed_action"]]
             ):
                 raise ValueError("Illegal label or inconsistent split")
-            rows.append((row, group, split))
+            run_rows.append((row, group, split))
+        reference = dict(source_index=source_index, run_index=run_index,
+                         run_id=run["run_id"], sha256=digest)
+        previous = run_ids.get(run["run_id"])
+        canonical = previous[1] if previous else (raw_sources.get(digest, (None, None))[1] if raw else None)
+        if canonical is not None:
+            inputs[canonical]["source_references"].append(reference)
+            duplicate_references += 1
+        else:
+            canonical = len(inputs)
+            inputs.append(dict(run_id=run["run_id"], sha256=digest,
+                               case=group, split=split, source_references=[reference]))
+            rows.extend(run_rows)
+        run_ids[run["run_id"]] = (run, canonical)
+        if raw:
+            raw_sources[digest] = ((group, split), canonical)
     if not rows:
         raise ValueError("No eligible demonstrations")
+    output.mkdir(parents=True, exist_ok=False)
     dataset = output / "demonstrations.npz"
     np.savez_compressed(
         dataset,
@@ -129,7 +174,13 @@ def export(summary_path, output):
         action_counts=dict(counts),
         missing_actions=[i for i in range(5) if not counts[i]],
         dataset_sha256=hashlib.sha256(dataset.read_bytes()).hexdigest(),
-        suite_sha256=hashlib.sha256(summary_path.read_bytes()).hexdigest(),
+        suite_sha256=source_suites[0]["sha256"] if len(source_suites) == 1 else None,
+        source_suites=source_suites,
+        source_manifest_sha256=hashlib.sha256(
+            json.dumps(source_suites, sort_keys=True).encode("utf-8")
+        ).hexdigest(),
+        merge_order="summary_argument_order_then_suite_run_order_then_raw_row_order",
+        duplicate_references=duplicate_references,
         training_readiness="not_established",
         models_trained=False,
     )
@@ -143,8 +194,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("summary", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--additional-summary", type=Path, action="append", default=[])
     args = parser.parse_args()
-    print(json.dumps(export(args.summary, args.output), indent=2))
+    print(json.dumps(export(args.summary, args.output, additional_summaries=args.additional_summary), indent=2))
 
 
 if __name__ == "__main__":
