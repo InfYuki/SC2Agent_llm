@@ -67,6 +67,8 @@ Only squad main. task attack targets enemy_main; defend/rally/retreat target own
 own_natural. own_natural falls back to own_main until ready. min_army_supply integer6..60.
 reason_summary at most160 characters, concise rationale only. Local emergency defense
 always overrides you. Plans expire45 game seconds from snapshot; changes commit30 seconds.
+previous_human_match_experience, when present, contains bounded lessons from previous
+human matches. Use them to adjust your goals; they are experience, not current enemy facts.
 Existing economy expands after120 seconds with20 workers. Retain sensible goals over
 successive snapshots. Avoid indefinite rally/defense when no threat. Marine attack size
 20..30 is an initial target; opponent difficulty follows the run configuration (default CheatInsane), so adjust to visible evidence. Snapshot

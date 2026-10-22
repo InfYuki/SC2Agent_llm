@@ -79,6 +79,15 @@ class MicroRuleBot(RuleBot):
                 )
             except Exception as exc:
                 self._bc_fallback("load", exc)
+        if getattr(options, "human_training", False):
+            if self._ppo_policy is None:
+                raise ValueError("Human training requires a valid PPO model, without rule-only fallback")
+            from bot.human_training import HumanRecorder
+
+            self.recorder.close(0, "human_recorder_replaced")
+            # Replace the unused initial recorder file, never existing match data.
+            (telemetry.output / "micro_transitions.jsonl").unlink()
+            self.recorder = HumanRecorder(self, self._ppo_policy, options.human_checkpoint)
 
     def _bc_fallback(self, phase, exc):
         self._bc_policy = None
@@ -101,7 +110,8 @@ class MicroRuleBot(RuleBot):
     def choose_micro_action(self, unit, ctx):
         if self._ppo_policy is not None:
             try:
-                action = Action(self._ppo_policy.action(ctx.obs, ctx.mask))
+                action = Action(self.recorder.sample(unit.tag, ctx) if getattr(self.options, "human_training", False)
+                                else self._ppo_policy.action(ctx.obs, ctx.mask))
                 if not ctx.mask[action]:
                     raise ValueError("PPO selected masked action")
                 self.telemetry.counts["ppo_inference_decisions"] += 1
@@ -327,6 +337,8 @@ class MicroRuleBot(RuleBot):
     def _execute_micro(self, unit, ctx, requested, army, goal, frame):
         # Rebuild using the same observation/target/path rules at execution time.
         fresh = context(self, unit, army, goal)
+        if getattr(self.options, "human_training", False) and (not fresh.supported or not fresh.mask[requested]):
+            self.recorder.samples.pop(unit.tag, None)
         action = requested if fresh.mask[requested] and fresh.supported else Action.HOLD
         target = action_target(fresh, action)
         result = "hold" if action == Action.HOLD else "queued"

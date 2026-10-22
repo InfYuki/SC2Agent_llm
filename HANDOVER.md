@@ -1,5 +1,15 @@
 # SC2Agent_llm 工作交接与换机恢复
 
+## 2026-10-22 当前推进：真人 Terran 对练，LLM 与 PPO 同开
+
+用户新优先事项是人类作为 Terran 对手，赛后让 LLM 指挥经验与 PPO 微操一起迭代。新增 `run_human_training.cmd`，启动 HumanTerran（玩家操作）与 LLM_PPO_Training 两个实时客户端。默认 Ancient Cistern LE、LLM最多240请求、448 PPO+交战门禁、最多4Marine，无默认时间截断。普通官方Bot入口仍默认CheatInsane；真人对局无官方难度概念。
+
+赛后自动调用独立训练解释器 `tools/learn_human_match.py`：只接受自然完成且有真人采样来源的对局；LLM写入有界跨局提示经验（不做远端权重微调），PPO使用冻结行为checkpoint对应的随机masked采样、实际帧间隔奖励与按Marine ownership分段的GAE进行小规模真实梯度更新。更新actor/critic/optimizer checkpoint并导出NumPy actor，发布成对的最新指针，下次入口自动采用。行为概率与权重来源核对，不把旧argmax评估数据、replay或BC标签当成on-policy训练。
+
+每局 `artifacts/runs/human_<timestamp>/` 保存replay、事件、胜负、`human_training.json`、`human_ppo_rollout.jsonl`、`learning_report.json`及 `learning/` 模型；共享经验与 `ppo_latest.json` 位于 `artifacts/human_training/memory/`。LLM/PPO分别报告updated/skipped/failed；PPO不足8样本跳过、失败保留旧指针，成功消费的轨迹不重复训练。中断/错误/限时截断不训练。真人对局实时帧可能跳帧，记录实际间隔，不冒称固定8loops。
+
+SDK真人+Bot结果为列表，按Bot槽提取；本入口协调两个官方终局与host回放，局部清理每个自有客户端，避免SDK任一退出时全局kill另一客户端。现接口仍仅Marine局部微操，坦克/空军/静态防御等不支持时规则接管。入口预检、离线合成采样真实PPO更新与必要正确性检查通过；本轮未启动真人对局、未调用API，不声称真人实战已验证或训练带来强度提升。用户双击入口、正常结束后等待终端赛后处理即可开始。详见[真人训练入口报告](docs/HUMAN_TRAINING_ENTRY_REPORT.md)与README顶部。
+
 ## 2026-10-22 当前最高目标（优先于下方历史阶段记录）
 
 永久项目目标：战胜最高难度官方Bot，获胜优先；胜局越短越好、自然败局越久越好。完整局默认CheatInsane。用户要求围绕实战结果快速推进，不为每项改动反复卡严格提升证明；必要正确性验证及事实记录仍做。

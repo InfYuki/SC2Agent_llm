@@ -1,5 +1,25 @@
 # 本地 Ares + LLM + RL 项目
 
+## 真人 Terran 对练与赛后学习（2026-10-22）
+
+双击项目根目录 **`run_human_training.cmd`**。入口会启动两个星际客户端：你操作玩家名为 **HumanTerran** 的人族窗口，另一窗口为 **LLM_PPO_Training**。Agent 同时启用 DeepSeek LLM 战略、Ares 宏观与 PPO Marine 微操；这是实时真人对局，官方 Bot 难度不适用。默认地图 Ancient Cistern LE，无默认对局时长上限。
+
+```bat
+cd /d C:\code\SC2Agent_llm
+run_human_training.cmd
+run_human_training.cmd --show-config
+run_human_training.cmd --check-only
+run_human_training.cmd --human-fullscreen --map "Babylon LE"
+```
+
+正常结束或游戏内认输后，请等启动终端完成赛后处理再关终端。每局保存 replay、胜负、战略计划和微操训练轨迹；自动用独立训练环境进行一次小规模 PPO 更新，保存新的 checkpoint 与 actor，下一局自动使用最新成功模型。首次使用448模型；真人训练采用带合法动作掩码的随机采样，和普通评估入口的确定性决策不同。LLM 默认最多240次请求，读取原有私密配置；API失败仍有规则回退。
+
+LLM 的“学习”是把本局可见状态、计划和结果写成有界跨局经验，供下一局指挥参考，**不修改 DeepSeek 远端权重**。PPO 则实际更新本地策略、价值网络和优化器。两者结果分别写入 `artifacts/runs/<run_id>/learning_report.json`；有效微操样本不足8条时 PPO 明确跳过，LLM 经验仍可单独更新。中断、错误和限时截断不进入赛后学习；已经成功消费的 PPO 轨迹不重复更新。
+
+当前 PPO 仍最多接管4名 Marine，支持范围内的地面交战才产生训练片段。你可以自由使用 Terran；坦克、空军、静态防御等超出现有微操接口的情况由规则接管，可能没有 PPO 样本。首局用 Marine 接战比较容易积累可学习片段。其他 Marine 与运营继续由 Ares/规则执行。
+
+共享经验和最新模型指针位于 `artifacts/human_training/memory/`；本局更新模型位于 `artifacts/runs/<run_id>/learning/`，回放为该局 `game.SC2Replay`，最近启动日志为 `artifacts/last-human-run.log`。这些本地训练工件不随 Git 上传。`--check-only` 检查环境、模型配对和LLM配置，不启动游戏或请求API。训练解释器默认 `C:\code\sc2-ares-training\Scripts\python.exe`，可用 `--training-python` 或 `SC2_TRAINING_PYTHON` 覆盖；自选模型需同时给 `--checkpoint` 与 `--actor`。配置预检和离线更新验证已通过，首次真实人机对练需要你实际操作，尚未声称完成真人对局验证。详见[真人训练入口报告](docs/HUMAN_TRAINING_ENTRY_REPORT.md)。
+
 ## 2026-10-22 当前最高目标与推荐入口
 
 最高目标：战胜最高难度官方Bot，获胜优先；胜局越短越好，败局越久越好。后续完整局默认 **CheatInsane**。推荐双击 **`run_ppo.cmd`**：默认448 actor+交战门禁；需要LLM上层战略时用 `run_llm_ppo.cmd`。末尾参数可覆盖模型/难度，`--no-ppo-engagement-gate` 可关闭门禁。`run_rule.cmd` 保留纯规则模式，默认同样对最高档。模型文件Git忽略，换机需另带。

@@ -33,6 +33,16 @@ class StrategicBot(RuleBot):
         self._callbacks_at_request = 0
         self._candidate_id = None
         self._goal_progress = None
+        self._human_experience = None
+        memory_path = getattr(options, "strategy_memory", None)
+        if memory_path and Path(memory_path).is_file():
+            experience = json.loads(Path(memory_path).read_text(encoding="utf-8"))
+            if experience.get("format") != "human-strategy-memory-v1":
+                raise ValueError("Invalid human strategy memory format")
+            # Bound prompt growth independently of the persisted history.
+            self._human_experience = dict(format=experience["format"],
+                lessons=experience.get("lessons", [])[-8:],
+                recent_matches=experience.get("recent_matches", [])[-4:])
         telemetry.write_json(
             "llm_config.json",
             dict(
@@ -200,6 +210,8 @@ class StrategicBot(RuleBot):
             self._seq += 1
             self._last_snapshot = float(self.time)
             snapshot = self.snapshot()
+            if self._human_experience:
+                snapshot["previous_human_match_experience"] = self._human_experience
             self.telemetry.write_json("latest_strategy_snapshot.json", snapshot)
             if (
                 self.time - self._last_query_game >= 15

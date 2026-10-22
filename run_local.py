@@ -95,7 +95,13 @@ def main():
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--run-id", default=None)
     parser.add_argument("--show-config", action="store_true")
+    parser.add_argument("--human-training", action="store_true", help="Realtime Human Terran versus LLM+PPO; collect fresh stochastic PPO data.")
+    parser.add_argument("--human-checkpoint", default=None)
+    parser.add_argument("--strategy-memory", default=None)
+    parser.add_argument("--human-fullscreen", action="store_true")
     options = parser.parse_args()
+    if options.human_training and (options.mode != "llm_ppo" or not options.realtime or options.llm_max_calls < 1 or not options.human_checkpoint):
+        parser.error("human-training requires llm_ppo, realtime, positive llm-max-calls and human-checkpoint")
     if (
         options.game_step < 1
         or options.max_game_seconds < 0
@@ -103,6 +109,8 @@ def main():
     ):
         parser.error("game-step must be positive; max-game-seconds must be nonnegative")
     config = vars(options).copy()
+    if options.human_training:
+        config.update(opponent_kind="human", opponent="Terran", difficulty=None)
     print(json.dumps(config, ensure_ascii=True, indent=2), flush=True)
     if options.show_config:
         return 0
@@ -111,9 +119,9 @@ def main():
     from sc2 import maps
     from sc2.data import AIBuild, Difficulty, Race
     from sc2.main import run_game
-    from sc2.player import Bot, Computer
+    from sc2.player import Bot, Computer, Human
     from bot.telemetry import Telemetry
-    from bot.lifecycle import recover_completed_game
+    from bot.lifecycle import recover_completed_game, recover_human_game
 
     map_settings = maps.get(options.map)
     run_id = options.run_id or datetime.now(ZoneInfo("Asia/Shanghai")).strftime(
@@ -163,21 +171,26 @@ def main():
     print("Run output:", output, flush=True)
     started = time.perf_counter()
     try:
-        with recover_completed_game(telemetry):
+        players = [Bot(Race.Terran, ai, "LocalMarineRule"),
+                   Computer(Race[options.opponent], Difficulty[options.difficulty], AIBuild.Macro)]
+        if options.human_training:
+            players = [Human(Race.Terran, "HumanTerran", fullscreen=options.human_fullscreen),
+                       Bot(Race.Terran, ai, "LLM_PPO_Training")]
+        recovery = recover_human_game if options.human_training else recover_completed_game
+        with recovery(telemetry):
             result = run_game(
                 map_settings,
-                [
-                    Bot(Race.Terran, ai, "LocalMarineRule"),
-                    Computer(
-                        Race[options.opponent],
-                        Difficulty[options.difficulty],
-                        AIBuild.Macro,
-                    ),
-                ],
+                players,
                 realtime=options.realtime,
                 random_seed=options.seed,
                 save_replay_as=str(output / "game.SC2Replay"),
             )
+        if options.human_training:
+            if not isinstance(result, list) or len(result) != 2:
+                raise RuntimeError("Human match did not return both official player results")
+            telemetry.event("human_match_results", human_result=str(result[0]), bot_result=str(result[1]))
+            manifest["human_match_results"] = dict(human_result=str(result[0]), bot_result=str(result[1]))
+            result = result[1]
         telemetry.finish(result)
     except KeyboardInterrupt:
         telemetry.stop_reason = "user_interrupt"
