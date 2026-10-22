@@ -4,6 +4,7 @@ from dataclasses import asdict
 import json
 from pathlib import Path
 import time
+from sc2.ids.unit_typeid import UnitTypeId
 
 from bot.llm_client import Settings, Worker
 from bot.rule_bot import RuleBot
@@ -98,6 +99,8 @@ class StrategicBot(RuleBot):
             own_structures=dict(Counter(u.type_id.name for u in self.structures)),
             pending=dict(
                 marines=int(self.already_pending(self.marine_type)),
+                siege_tanks=int(self.already_pending(UnitTypeId.SIEGETANK)),
+                medivacs=int(self.already_pending(UnitTypeId.MEDIVAC)),
                 bases=int(self.already_pending(self.townhalls.first.type_id))
                 if self.townhalls
                 else 0,
@@ -108,6 +111,8 @@ class StrategicBot(RuleBot):
             active_plan=asdict(self.director.active) if self.director.active else None,
             available_targets=["own_main", "own_natural", "enemy_main"],
             ready_bases=len(self.ready_townhalls),
+            production_profile=self.production_profile(),
+            available_production_profiles=["marine_basic", "marine_tank_medivac"],
             base_under_attack=any(
                 u.can_attack_ground and u.distance_to(b) < 25
                 for u in visible
@@ -267,6 +272,9 @@ class StrategicBot(RuleBot):
             min(self._plan.worker_target, 22 * len(self.ready_townhalls)),
             self._plan.base_target,
         )
+
+    def production_profile(self):
+        return self._plan.production_profile if self._plan else super().production_profile()
 
     def strategic_order(self, army):
         goal = combat_goal(self._plan, False, float(self.supply_army))

@@ -4,10 +4,12 @@ from ares.behaviors.macro import (
     BuildStructure,
     BuildWorkers,
     ExpansionController,
+    GasBuildingController,
     MacroPlan,
     Mining,
     ProductionController,
     SpawnController,
+    TechUp,
 )
 from ares.consts import UnitRole
 from ares.managers.hub import Hub
@@ -18,6 +20,7 @@ from bot.arbiter import OrderArbiter
 from bot.budget import ExpansionBudget
 from bot.building_manager import BuildingManager
 from bot.probe import InstrumentedAresBot
+from bot.terran_support import FirstSupportReserve, SupportController, SUPPORT_TYPES, TANK_TYPES, composition
 
 
 class RuleBot(InstrumentedAresBot):
@@ -32,6 +35,7 @@ class RuleBot(InstrumentedAresBot):
         self._sweep_index = 0
         self.expansion_budget = ExpansionBudget()
         self._saving_expansion = False
+        self.support = SupportController()
 
     def register_managers(self):
         mediator = ManagerMediator()
@@ -48,6 +52,9 @@ class RuleBot(InstrumentedAresBot):
         if unit.type_id == UnitTypeId.MARINE:
             self.mediator.assign_role(tag=unit.tag, role=UnitRole.ATTACKING)
             self.telemetry.counts["marines_created"] += 1
+        elif unit.type_id in SUPPORT_TYPES:
+            self.mediator.assign_role(tag=unit.tag, role=UnitRole.ATTACKING)
+            self.telemetry.counts[unit.type_id.name.lower() + "_created"] += 1
 
     async def on_building_construction_complete(self, unit):
         await super().on_building_construction_complete(unit)
@@ -62,6 +69,12 @@ class RuleBot(InstrumentedAresBot):
         worker_target, base_target = self.economic_goals()
         plan.add(BuildWorkers(to_count=worker_target))
         plan.add(BuildStructure(self.start_location, UnitTypeId.BARRACKS, to_count=1))
+        profile = self.production_profile()
+        army_composition = composition(profile)
+        mixed = profile == "marine_tank_medivac"
+        if mixed and self.supply_workers >= 16:
+            # Mining's default three workers per gas remains the sole worker owner.
+            plan.add(GasBuildingController(to_count=min(4, 2 * max(1, len(self.ready_townhalls)))))
         needs_expansion = (
             self.time > 120
             and self.supply_workers >= 20
@@ -84,10 +97,16 @@ class RuleBot(InstrumentedAresBot):
                 )
             )
         if not saving:
-            plan.add(SpawnController(self.army_composition))
+            if mixed and self.time >= 100:
+                plan.add(FirstSupportReserve())
+                # Tech first, otherwise continuously spawning Marines can spend
+                # the minerals needed for the first Factory / Starport / addon.
+                plan.add(TechUp(UnitTypeId.SIEGETANK, self.start_location))
+                plan.add(TechUp(UnitTypeId.MEDIVAC, self.start_location))
+            plan.add(SpawnController(army_composition))
             plan.add(
                 ProductionController(
-                    self.army_composition,
+                    army_composition,
                     self.start_location,
                     add_production_at_bank=(300, 0),
                     max_production_structures=8,
@@ -100,13 +119,16 @@ class RuleBot(InstrumentedAresBot):
             self._combat(frame)
 
     def _combat(self, frame):
-        army = self.units(UnitTypeId.MARINE)
-        self.arbiter.begin_step({unit.tag: "rule_combat" for unit in army})
-        alive = {unit.tag for unit in army}
+        army = self.units.of_type({UnitTypeId.MARINE} | TANK_TYPES)
+        owners = {unit.tag: "rule_combat" for unit in army if unit.type_id == UnitTypeId.MARINE}
+        owners.update({unit.tag: "rule_support" for unit in self.units.of_type(SUPPORT_TYPES)})
+        self.arbiter.begin_step(owners)
+        alive = set(owners)
         self._last_order = {
             tag: value for tag, value in self._last_order.items() if tag in alive
         }
         if not army:
+            self.support.step(self, army, "rally", self.start_location, frame)
             return
         threats = self.enemy_units.filter(
             lambda enemy: enemy.is_visible
@@ -144,7 +166,9 @@ class RuleBot(InstrumentedAresBot):
                 marines=len(army),
             )
         self.strategy_state = state
-        self.issue_combat_orders(army, state, target, frame)
+        # Keep all Tank/Medivac objects outside the frozen Marine PPO interface.
+        self.issue_combat_orders(army.of_type({UnitTypeId.MARINE}), state, target, frame)
+        self.support.step(self, army, state, target, frame)
         self.telemetry.counts["command_conflicts"] = self.arbiter.conflicts
 
     def issue_combat_orders(self, army, state, target, frame):
@@ -166,6 +190,9 @@ class RuleBot(InstrumentedAresBot):
 
     def economic_goals(self):
         return min(48, 22 * len(self.ready_townhalls)), 2
+
+    def production_profile(self):
+        return "marine_tank_medivac"
 
     def strategic_order(self, army):
         return None

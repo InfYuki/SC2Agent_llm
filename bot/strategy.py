@@ -29,6 +29,7 @@ class Strategy:
     target_id: str
     min_army_supply: int
     reason_summary: str
+    production_profile: str = "marine_tank_medivac"
 
     @property
     def intent(self):
@@ -39,6 +40,7 @@ class Strategy:
             self.task,
             self.target_id,
             self.min_army_supply,
+            self.production_profile,
         )
 
 
@@ -70,7 +72,8 @@ def parse_plan(content, request_id, snapshot_seq):
     if value["stance"] not in ("develop", "defend_then_expand", "pressure"):
         raise PlanError("stance")
     if (
-        value["production_profile"] != "marine_basic"
+        type(value["production_profile"]) is not str
+        or value["production_profile"] not in {"marine_basic", "marine_tank_medivac"}
         or value["research_priority"] != []
     ):
         raise PlanError("unsupported_tech")
@@ -115,6 +118,7 @@ def parse_plan(content, request_id, snapshot_seq):
         task["target_id"],
         gate,
         reason,
+        value["production_profile"],
     )
 
 

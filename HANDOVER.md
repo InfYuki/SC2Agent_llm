@@ -1,5 +1,13 @@
 # SC2Agent_llm 工作交接与换机恢复
 
+## 2026-10-22 当前最高目标：战胜用户本人
+
+用户已完成首盘真人 Terran 对练，当前最终目标改为让 Agent 战胜用户本人；官方最高难度 Bot 仅作为练习基线，不能覆盖此目标。当前两项工作是基于真实回放观察用户运营并供 LLM 下一局战略参考，以及先补 Siege Tank / Medivac 的科技、生产与控制，再逐步增加其他单位。首盘自然 Defeat、536.651785714 游戏秒，LLM 跨局提示经验已更新；有效 PPO 样本0，已明确跳过，没有 PPO 参数更新。单局观察不能当成用户永久习惯，回放得到的历史全图事实也不能当成本局实时敌方视野。实现与分析见[真人对手与坦克医疗运输机报告](docs/HUMAN_OPPONENT_TANK_MEDIVAC_REPORT.md)。
+
+现规则默认及LLM支持 `marine_tank_medivac`（Marine80%/Tank12%/Medivac8%单位数目标），旧 `marine_basic` 仍合法；Mining + GasBuildingController补气，100游戏秒后科技与首批支援单位资源储备在Marine消费之前，Ares TechUp推进Factory/TechLab/Starport。Tank架起/收起、Medivac治疗/跟随/可见防空避让由独立规则控制，不进Marine PPO feature/action。原来MicroRuleBot重置arbiter后补回support所有权，保留Marine已发命令；无Marine也继续控制Tank/Medivac。无空投/升级/Stim，新混编尚未真实对局验证。
+
+首局replay实际解码并写 `replay_analysis/` 与共享 `strategy_memory.json`，真实LLM请求payload注入检查通过。build98370无精确schema，本轮显式批准98310兼容解码并校验玩家/胜负/时长；详细时间线、依赖与复现见[首盘复盘](docs/HUMAN_OPPONENT_FIRST_REPLAY_REPORT.md)。共享memory-dir的 `replay_protocol.json` 持久保存仅98370→98310配对，正常赛后先找精确schema，再按该显式配置自动复盘，不必每局手动输入；每局仍校验并标记兼容，其他build或未配置时明确skip，不静默猜协议。本局已不带CLIoverride重新解析，selection为persisted_explicit_compatibility_pair。10项生产/战略/LLM+PPO组合检查、1项经验注入检查及新增非法配对拒绝检查通过，无新SC2对局或API请求；不能宣称已战胜用户。
+
 ### 2026-10-22 真人入口启动修复：Git 元信息不再阻塞对局
 
 用户首个实际启动 `human_20261022_162220_645926` 在打开游戏前因 `subprocess(["git", ...])` 报 WinError 2；当时 PowerShell 能找到 `git.cmd`，但 Python 的 Windows CreateProcess 无法将裸 `git` 解析成该批处理入口。现直接定位原生 `git.exe`（含本机 `C:/Program Files/Git/mingw64/bin/git.exe`），统一采集版本信息；完全缺少 Git 时记录空 commit/diff、显式警告及范围有限的源码哈希，不阻塞游戏、不伪造版本。fallback 只读取 Python 源码与启动脚本，不递归读取私密配置或 artifacts。

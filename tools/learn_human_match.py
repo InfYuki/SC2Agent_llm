@@ -280,6 +280,30 @@ def learn(run_dir, checkpoint, output, memory_dir, *, epochs=2, min_samples=8):
                 report[key] = operation()
             except Exception as error:
                 report[key] = dict(status="failed", error=type(error).__name__, detail=str(error))
+        # Replay study is separate from on-policy PPO. Exact schemas only by
+        # default; only an explicit locally configured compatibility pair may
+        # override an unsupported build. Existing verified studies can reapply.
+        try:
+            from tools.analyze_human_replay import analyze, update_memory
+            study = run_dir / "replay_analysis" / "opponent_profile.json"
+            if study.is_file():
+                profile = read_json(study)
+                if (profile.get("source_run_id") != run_dir.name
+                        or profile.get("replay_sha256") != sha(run_dir / "game.SC2Replay")):
+                    raise ValueError("Stored replay study identity mismatch")
+                update_memory(memory_dir, profile)
+            else:
+                profile = analyze(run_dir, memory_dir=memory_dir)
+            report["replay_study"] = dict(status="updated", path=str(study),
+                mechanism="post-match full-information historical strategy memory, never PPO rollout",
+                actual_replay_build=profile["actual_replay_build"],
+                decoder_schema_build=profile["decoder_schema_build"],
+                compatibility_override=profile["compatibility_override"],
+                decoder_selection=profile.get("decoder_selection", "previous_verified_profile"))
+        except (ImportError, ValueError, FileNotFoundError) as error:
+            report["replay_study"] = dict(status="skipped", reason=str(error))
+        except Exception as error:
+            report["replay_study"] = dict(status="failed", error=type(error).__name__, detail=str(error))
     write_json(run_dir / "learning_report.json", report)
     return report
 

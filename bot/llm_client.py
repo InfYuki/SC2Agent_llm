@@ -52,16 +52,20 @@ EXAMPLE = {
     "snapshot_seq": 1,
     "stance": "defend_then_expand",
     "economy": {"worker_target": 44, "base_target": 2},
-    "production_profile": "marine_basic",
+    "production_profile": "marine_tank_medivac",
     "research_priority": [],
     "squad_tasks": [{"squad_id": "main", "task": "rally", "target_id": "own_natural"}],
     "attack_gate": {"min_army_supply": 20},
     "reason_summary": "Build a stable economy",
 }
-SYSTEM = """You are the strategic commander of a local StarCraft II Terran Marine bot.
+SYSTEM = """You are the strategic commander of a local StarCraft II Terran bot.
 Return only a JSON object matching the example exactly, copying request_id and snapshot_seq.
-You control goals; Ares handles execution. Only Marine production exists. No gas, tech,
-research, coordinates, raw actions or extra keys. Never assume hidden enemy units.
+You control goals; Ares handles execution. production_profile is marine_tank_medivac
+(Marine core, Siege Tanks and healing Medivacs; automatic Refineries, Factory TechLab
+and Starport) or marine_basic (Marine production only). Prefer mixed production against
+Terran ground armies. Tanks siege/unsiege and Medivacs heal/follow by local rules;
+there is no transport/drop control yet. No research, coordinates, raw actions or extra
+keys. Never assume hidden enemy units. A requested tech profile takes time and resources.
 stance: develop|defend_then_expand|pressure. worker_target integer16..48, base_target1..2.
 Only squad main. task attack targets enemy_main; defend/rally/retreat target own_main or
 own_natural. own_natural falls back to own_main until ready. min_army_supply integer6..60.
