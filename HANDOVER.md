@@ -1,5 +1,17 @@
 # SC2Agent_llm 工作交接与换机恢复
 
+## 2026-10-22 当前最高目标（优先于下方历史阶段记录）
+
+永久项目目标：战胜最高难度官方Bot，获胜优先；胜局越短越好、自然败局越久越好。完整局默认CheatInsane。用户要求围绕实战结果快速推进，不为每项改动反复卡严格提升证明；必要正确性验证及事实记录仍做。
+
+推荐 `run_ppo.cmd`，默认448 actor（`artifacts/models/marine_ppo_two_enemy448_20261021`）+交战门禁；`run_llm_ppo.cmd` 同配置、用于需要LLM时。末尾参数可覆盖，`--no-ppo-engagement-gate` 可关闭。通用规则入口仍为纯规则、对手最高档；新评估矩阵默认448+门禁只作用E3/E4，旧plan不改命令，P5脚本微操对手不变。
+
+本轮通过真实 `run_ppo.cmd` 省略difficulty/model/gate验证默认值：Zerg/Ancient Cistern LE/seed20261020/nonrealtime8loops/最多4Marine/LLM0，run `p6_highest_goal_20261022` 自然Victory，401.428571游戏秒（6分41.43秒）、completed/exit0/stop及error null。默认最高档+可用配置+本轮最高档虫族胜出目标已达成，建立401.43秒基线；不保证所有race/seed稳定赢。
+
+一次运行无重试，338合法8loop推理/owned/raw、266 confirmed/3 unconfirmed/8 preserved/61 hold，冲突/fallback0，回放存在/无残留。3项定向组合检查、核心scope及源/地图/actor冻结检查通过。原始评估永久禁训，模型和工件Git忽略换机另带。排序按可比配置自然胜局优先、胜局时间升/败局降；draw/cap/error/invalid不排名，不把错误或截断叫“活得久的败局”。
+
+来源HEAD `7f8824a8cafe618e5ea1c8cddd345b0395e4e309`+运行dirtydiff `114f38a540afec4d991d89963eb5986415044997f3ba570de0cb030311abd3b0`；evidence SHA `6c7e1c87f597139ee3808ae1ae9078a4b128871110774904d891b7edbc9f952f`。详见[最高目标报告](docs/PHASE_06_HIGHEST_BOT_GOAL_REPORT.md)、[精简JSON](docs/validation/p6_highest_bot_goal.json)及 `artifacts/p6_highest_goal_20261022`。后续继续最高档缩时、可扩其他种族/种子；职业回放可后续按需获取。本轮本地保存，未自动push。下方Medium、256和门禁off均为旧阶段记录，不覆盖本节。
+
 交接日期：2026-10-19。仓库：<https://github.com/InfYuki/SC2Agent_llm>。
 
 ## 先了解当前做到哪里

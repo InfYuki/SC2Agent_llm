@@ -1,0 +1,205 @@
+{
+  "schema": "p6-highest-bot-goal-v1",
+  "date": "2026-10-22",
+  "goal": {
+    "priority": [
+      "win_against_highest_official_bot",
+      "shorter_natural_wins",
+      "longer_natural_losses"
+    ],
+    "default_difficulty": "CheatInsane",
+    "status": "achieved_for_current_zerg_default_profile",
+    "baseline_game_seconds": 401.42857142857144,
+    "iteration_policy": "Results first; necessary correctness checks; no strict improvement proof required for every change",
+    "unranked": [
+      "draw",
+      "cap",
+      "truncated",
+      "error",
+      "invalid"
+    ]
+  },
+  "defaults": {
+    "recommended_entry": "run_ppo.cmd",
+    "optional_llm_entry": "run_llm_ppo.cmd",
+    "ppo_actor": "artifacts/models/marine_ppo_two_enemy448_20261021",
+    "engagement_gate": true,
+    "cli_general_gate_default": false,
+    "explicit_overrides": true,
+    "new_matrix_gate_modes": [
+      "E3",
+      "E4"
+    ],
+    "historical_plans_unchanged": true,
+    "p5_script_opponent_unchanged": true
+  },
+  "run_id": "p6_highest_goal_20261022",
+  "config": {
+    "mode": "rule_ppo",
+    "micro_max_units": 4,
+    "bc_model": null,
+    "ppo_model": "C:\\code\\SC2Agent_llm\\artifacts\\models\\marine_ppo_two_enemy448_20261021",
+    "ppo_enemy_domain_guard": false,
+    "ppo_engagement_gate": true,
+    "llm_max_calls": 0,
+    "game_path": "C:\\Program Files (x86)\\StarCraft II",
+    "map": "Ancient Cistern LE",
+    "opponent": "Zerg",
+    "difficulty": "CheatInsane",
+    "realtime": false,
+    "game_step": 8,
+    "max_game_seconds": 1200.0,
+    "seed": 20261020,
+    "run_id": "p6_highest_goal_20261022",
+    "show_config": false
+  },
+  "summary": {
+    "status": "completed",
+    "result": "Result.Victory",
+    "stop_reason": null,
+    "error": null,
+    "counters": {
+      "callbacks": 1125,
+      "completed_SUPPLYDEPOT": 14,
+      "completed_BARRACKS": 8,
+      "marines_created": 74,
+      "combat_commands": 5873,
+      "micro_decision_steps": 848,
+      "micro_owned_decisions": 338,
+      "command_conflicts": 0,
+      "completed_COMMANDCENTER": 1,
+      "retired_completed_expansion_jobs": 1,
+      "ppo_engagement_ready_outside_engagement": 315,
+      "ppo_engagement_cooldown_active": 712,
+      "ppo_engagement_own_attack_range": 221,
+      "ppo_inference_decisions": 338,
+      "micro_action_retreat": 256,
+      "micro_action_hold": 61,
+      "micro_action_weakest": 21
+    },
+    "game_span_seconds": 401.42857142857144,
+    "wall_span_seconds": 29.275576599990018,
+    "game_to_wall_ratio": 13.712063708036696,
+    "on_step_p50_seconds": 0.000978299998678267,
+    "on_step_p95_seconds": 0.007635799935087562,
+    "on_step_p99_seconds": 0.01125590002629906,
+    "on_step_max_seconds": 0.03221460001077503,
+    "peak_workers": 45,
+    "peak_marines": 65,
+    "peak_bases": 2
+  },
+  "launcher": {
+    "exit_code": 0,
+    "timed_out": false,
+    "wall_seconds": 42.03200000000652,
+    "attempts": 1,
+    "retries": 0,
+    "finished_utc": "2026-10-22T11:39:03.189734+08:00"
+  },
+  "ppo": {
+    "inference": 338,
+    "owned": 338,
+    "raw_rows": 338,
+    "requested_actions": {
+      "4": 61,
+      "2": 256,
+      "1": 21
+    },
+    "executed_actions": {
+      "4": 69,
+      "2": 254,
+      "1": 15
+    },
+    "command_results": {
+      "hold": 61,
+      "engine_confirmed": 266,
+      "engine_unconfirmed": 3,
+      "order_preserved": 8
+    },
+    "illegal_requested": 0,
+    "illegal_executed": 0,
+    "actual_game_loops": {
+      "8": 338
+    },
+    "metadata_game_loops": {
+      "8": 338
+    },
+    "fallback_events": [],
+    "max_simultaneous_owned": 4,
+    "all_expert_null": true,
+    "all_bc_ineligible": true,
+    "all_reward_null": true
+  },
+  "learning_exclusion": {
+    "schema": "evaluation-learning-exclusion-v1",
+    "permanent_exclusion": true,
+    "reason": "Evaluation-only production PPO decisions; never expert or training data; split=train is only a hash bucket.",
+    "files": [
+      {
+        "path": "micro_transitions.jsonl",
+        "sha256": "22f5ed765d96152a35c866c63e43684324aa3d102c8ff0eade7771d84a39cd5b",
+        "rows": 338
+      }
+    ]
+  },
+  "source": {
+    "head": "7f8824a8cafe618e5ea1c8cddd345b0395e4e309",
+    "dirty_diff_sha256": "114f38a540afec4d991d89963eb5986415044997f3ba570de0cb030311abd3b0",
+    "evidence": "artifacts/p6_highest_goal_20261022/evidence.json",
+    "evidence_sha256": "6c7e1c87f597139ee3808ae1ae9078a4b128871110774904d891b7edbc9f952f",
+    "report_sha256": "b8297f2cbe795a846fb67bf0a2791af4a785afacd658b9d66cc7e6850a999b60",
+    "key_hashes_sha256": "a6e5b515ad0c53ff3671bd9879c787328be5b6440a7fc33191637df135448cde",
+    "source_manifest_mismatches": 0,
+    "runtime_and_assets_unchanged": true
+  },
+  "checks": {
+    "targeted_combination_tests_passed": 3,
+    "core_scope": "passed",
+    "orphan_processes": 0,
+    "replay_exists": true,
+    "training_calls": 0,
+    "llm_calls": 0
+  },
+  "descriptive_goal_ranking": {
+    "attempts": 4,
+    "groups": [
+      {
+        "group": 1,
+        "ranked": [
+          {
+            "rank": 1,
+            "run_id": "p6_highest_goal_20261022",
+            "outcome": "win",
+            "game_seconds": 401.42857142857144
+          },
+          {
+            "rank": 2,
+            "run_id": "p6_engagement_gate_e3_20261022",
+            "outcome": "win",
+            "game_seconds": 406.42857142857144
+          },
+          {
+            "rank": 3,
+            "run_id": "p6_cheatinsane_e0_20261022",
+            "outcome": "win",
+            "game_seconds": 442.14285714285717
+          },
+          {
+            "rank": 4,
+            "run_id": "p6_cheatinsane_e3_20261022",
+            "outcome": "win",
+            "game_seconds": 541.7857142857143
+          }
+        ],
+        "unranked": []
+      }
+    ],
+    "formal_comparison_ready": false,
+    "meaning": "Four recorded highest-difficulty matches (three historical and this new default-entry game); shared configuration/source grouping retains explicit gate/mode/actor context. Descriptive only."
+  },
+  "limitations": [
+    "One current Zerg/Ancient Cistern LE/seed20261020 sample; no all-race or all-seed guarantee.",
+    "Descriptive ordering does not establish causal PPO improvement."
+  ],
+  "followup": "Continue winning at highest difficulty and shortening wins; other races/seeds or professional replays may follow as needed."
+}

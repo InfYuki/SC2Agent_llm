@@ -1,12 +1,26 @@
 # 本地 Ares + LLM + RL 项目
 
+## 2026-10-22 当前最高目标与推荐入口
+
+最高目标：战胜最高难度官方Bot，获胜优先；胜局越短越好，败局越久越好。后续完整局默认 **CheatInsane**。推荐双击 **`run_ppo.cmd`**：默认448 actor+交战门禁；需要LLM上层战略时用 `run_llm_ppo.cmd`。末尾参数可覆盖模型/难度，`--no-ppo-engagement-gate` 可关闭门禁。`run_rule.cmd` 保留纯规则模式，默认同样对最高档。模型文件Git忽略，换机需另带。
+
+默认PPO入口本轮已真实自然战胜最高档Zerg：**401.43游戏秒（6分41.43秒）**，Ancient Cistern LE/seed20261020，fixed8loops/最多4Marine/LLM0；一次运行无重试、无错误或截断。默认配置与这一最高档胜出目标已达成；不据此保证所有种族和种子均稳定获胜。新评估计划同样默认448+门禁（仅E3/E4），旧计划保持原命令。胜败按可比配置分组、自然胜局优先/胜局时间升序/败局降序；截断、错误和无效局不排名。
+
+```bat
+cd /d C:\code\SC2Agent_llm
+run_ppo.cmd
+run_ppo.cmd --show-config
+```
+
+详见[最高目标报告](docs/PHASE_06_HIGHEST_BOT_GOAL_REPORT.md)及[精简证据](docs/validation/p6_highest_bot_goal.json)。后续围绕实战胜出和缩时迭代，不为每项改动反复要求严格收益证明；保留必要正确性检查与事实边界。下文按阶段保留的Medium、PPO256和门禁off等表述是历史记录，以本节当前配置为准。
+
 从官方 Ares 模板建立的新工程，按“稳定规则 → LLM 战略 → RL 微操”的顺序实施。本地游戏、完整对局和研究实验是目标。
 
 P0/P1已通过：两地图×五种子10局完整固定步比赛全部正常获胜，另1局完整实时比赛获胜，实时比例约0.995。当前仅验证内置虫族Medium，未据此推断更强对手表现。本地规则基线：`baseline-rule-v1`；详细证据见 [阶段报告](docs/PHASE_01_REPORT.md)。
 
 ## 当前可用入口
 
-双击项目根目录的 `run_rule.cmd`，默认人族 Marine 规则版，对战内置虫族 Medium，Ancient Cistern LE，实时完整比赛，直到正常胜负或手动停止。
+双击项目根目录的 `run_rule.cmd`，默认人族 Marine 规则版，对战内置虫族 CheatInsane，Ancient Cistern LE，实时完整比赛，直到正常胜负或手动停止。当前推荐PPO入口见顶部。
 
 ```bat
 cd /d D:\CODE\sc2-ares-llm-rl

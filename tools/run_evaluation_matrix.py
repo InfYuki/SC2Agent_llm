@@ -28,7 +28,7 @@ import uuid
 ROOT = Path(__file__).resolve().parents[1]
 MODES = {"E0": "rule", "E1": "llm", "E2": "rule_bc",
          "E3": "rule_ppo", "E4": "llm_ppo"}
-COMMON = dict(map="Ancient Cistern LE", opponent="Zerg", difficulty="Easy",
+COMMON = dict(map="Ancient Cistern LE", opponent="Zerg", difficulty="CheatInsane",
               realtime=False, game_step=8, seed=20261020, max_game_seconds=1200,
               micro_max_units=4, wall_timeout=600)
 SOURCE_SUFFIXES = {".py", ".yml", ".yaml", ".toml", ".lock", ".SC2Map"}
@@ -115,6 +115,7 @@ def make_plan(root, args, batch_id):
     return dict(schema=1, batch_id=batch_id, scope="engineering only; no strength inference",
                 created_utc=datetime.now(timezone.utc).isoformat(), common=COMMON.copy(),
                 game_path=str(Path(args.game_path).resolve()), models=models,
+                ppo_engagement_gate=getattr(args, "ppo_engagement_gate", True),
                 installed_map=map_identity(args.game_path, COMMON["map"]),
                 llm_total_call_cap=args.llm_max_calls, max_games=len(attempts),
                 inputs=source_identity(root), attempts=attempts,
@@ -155,6 +156,8 @@ def command(root, plan, attempt):
         if kind in plan["models"] and ((kind == "bc" and attempt["experiment"] == "E2") or
                                         (kind == "ppo" and attempt["experiment"] in ("E3", "E4"))):
             result.extend([f"--{kind}-model", plan["models"][kind]["path"]])
+    if plan.get("ppo_engagement_gate", False) and attempt["experiment"] in ("E3", "E4"):
+        result.append("--ppo-engagement-gate")
     return result
 
 
@@ -254,7 +257,9 @@ def main(argv=None):
     parser.add_argument("--modes", choices=list(MODES), nargs="+", default=list(MODES))
     parser.add_argument("--llm-max-calls", type=int, default=0, help="TOTAL HTTP call reservation, split across E1/E4; 0..20")
     parser.add_argument("--bc-model", default=str(ROOT / "artifacts/models/marine_bc_mvp_20261018_seed42"))
-    parser.add_argument("--ppo-model", default=str(ROOT / "artifacts/models/marine_ppo_curriculum256_20261019"))
+    parser.add_argument("--ppo-model", default=str(ROOT / "artifacts/models/marine_ppo_two_enemy448_20261021"))
+    parser.add_argument("--ppo-engagement-gate", action=argparse.BooleanOptionalAction, default=True,
+                        help="Freeze PPO engagement gate in new plans; applies only to E3/E4")
     parser.add_argument("--game-path", default=os.getenv("SC2PATH", r"C:\Program Files (x86)\StarCraft II"))
     raw = list(sys.argv[1:] if argv is None else argv)
     args = parser.parse_args(raw)

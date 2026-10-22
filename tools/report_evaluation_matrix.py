@@ -86,6 +86,7 @@ def load_attempt(run):
         candidate("llm_configured_model", config.get("llm_model"), "manifest.json:config.llm_model")
         candidate("llm_configured_provider", config.get("llm_provider"), "manifest.json:config.llm_provider")
     identity = {"mode": mode, "llm_max_calls": config.get("llm_max_calls"),
+                "ppo_engagement_gate": config.get("ppo_engagement_gate", False),
                 "project_commit": manifest.get("project_commit"),
                 "dirty_diff_sha256": manifest.get("dirty_diff_sha256"),
                 "actor_weights_sha256": None, "llm_model": None,
@@ -201,6 +202,31 @@ def counts(rows):
                 end_to_end_completion_fraction=categories["completed"] / n if n else None)
 
 
+def goal_ranking(rows, group):
+    """Descriptive order within one shared configuration/source group only."""
+    ranked, unranked = [], []
+    for row in rows:
+        seconds = row["metrics"]["game_seconds"]
+        valid_seconds = type(seconds) in (int, float) and math.isfinite(seconds) and seconds >= 0
+        entry = dict(run_id=row["run_id"], experiment=row["experiment"],
+                     outcome=row["outcome"], category=row["category"], game_seconds=seconds,
+                     context=row["identity"])
+        if row["category"] == "completed" and row["outcome"] in ("win", "loss") and valid_seconds:
+            ranked.append(entry)
+        else:
+            entry["reason"] = ("invalid_game_seconds" if row["category"] == "completed" and
+                               row["outcome"] in ("win", "loss") else row["category"] + ":" + row["outcome"])
+            unranked.append(entry)
+    ranked.sort(key=lambda row: (0 if row["outcome"] == "win" else 1,
+                                row["game_seconds"] if row["outcome"] == "win" else -row["game_seconds"],
+                                row["run_id"]))
+    for index, row in enumerate(ranked, 1):
+        row["rank"] = index
+    return dict(group=group, shared_config=rows[0]["fair_config"],
+                shared_config_complete=not any(row["missing_comparison_fields"] for row in rows),
+                ranked=ranked, unranked=unranked)
+
+
 def build_report(paths):
     attempts, seen, duplicates = [], {}, []
     for path in paths:
@@ -224,8 +250,9 @@ def build_report(paths):
         if row["missing_comparison_fields"]:
             key += ":incomplete:" + row["run_id"]
         groups.setdefault(key, []).append(row)
-    comparisons = []
+    comparisons, rankings = [], []
     for index, rows in enumerate(groups.values(), 1):
+        rankings.append(goal_ranking(rows, index))
         missing = sorted({key for row in rows for key in row["missing_comparison_fields"]})
         # Rule arms have no actor/LLM identity; only match identities among arms
         # which actually share that intervention (E3/E4 both use PPO).
@@ -250,6 +277,8 @@ def build_report(paths):
                 totals=counts(attempts), matrix=matrix, attempts=attempts,
                 duplicate_inputs_ignored=duplicates,
                 comparison_groups=comparisons, differing_shared_fields=differences,
+                goal_ranking_policy="Within each shared configuration/source group: natural Victory first, shorter game seconds better; natural Defeat next, longer survival better. Draw/cap/error/unknown/invalid duration are unranked. Mode, actor, gate and mode-source contexts remain explicit; descriptive only, no cross-group or strength conclusion.",
+                goal_rankings=rankings,
                 formal_comparison_ready=False,
                 limitations=["No sampling frame/planned attempts inferred; caller must include every attempted run in the selected round.",
                              "Descriptive fractions/intervals cannot establish mode advantage; repeated repaired runs are not independent training seeds.",
@@ -267,6 +296,19 @@ def markdown(report):
     for row in report["attempts"]:
         m = row["metrics"]
         lines.append(f"| `{row['run_id']}` | {row['status']} | {row['outcome']} | {row['identity']['llm_max_calls']}/{m['llm_steps']} | {m['ppo_inference_decisions']}/{m['micro_owned_decisions']} | {m['local_micro_truncated']} |")
+    lines += ["", "## 用户目标排序", "", "每个公共配置/共享源码组内：自然胜局优先，胜局耗时越短越好；自然败局次之，败局存活秒越长越好。平局、时限截断、错误、未知结果与无效时长单列 unranked。不同组不合并排名；各模式/actor/gate及模式源码是显式上下文，仅描述记录，不构成强度结论。"]
+    for group in report["goal_rankings"]:
+        config = group["shared_config"]
+        lines += ["", f"### 配置组 {group['group']}", "",
+                  "公共配置：`" + json.dumps(config, ensure_ascii=False, sort_keys=True) + "`。完整：" + str(group["shared_config_complete"]) + "。",
+                  "", "| 排名 | run | 模式 / actor SHA / gate / 模式源码SHA | 结果 | 胜局耗时(秒) | 败局存活秒 | unranked原因 |",
+                  "|---:|---|---|---|---:|---:|---|"]
+        for entry in group["ranked"] + group["unranked"]:
+            context = entry["context"]
+            label = f"{context['mode']} / {context['actor_weights_sha256']} / {context['ppo_engagement_gate']} / {digest(context['mode_source_hashes'])[:12]}"
+            win_seconds = entry["game_seconds"] if entry.get("rank") and entry["outcome"] == "win" else "—"
+            loss_seconds = entry["game_seconds"] if entry.get("rank") and entry["outcome"] == "loss" else "—"
+            lines.append(f"| {entry.get('rank', 'unranked')} | `{entry['run_id']}` | {label} | {entry['outcome']} | {win_seconds} | {loss_seconds} | {entry.get('reason', '—')} |")
     lines += ["", "公平配置包含地图及SHA、对手、难度、实时/步进、seed、时限、控数、Ares/packages、共享执行器源码与game build。模式、模式适配源码、actor SHA、LLM模型/预算/请求日期单列；不会因为Rule/LLM或Rule/PPO的预期差异直接拒绝跨模式匹配，也不按模型路径斜杠判身份。缺失字段不会默认相等。", "",
               "当前各run缺失项："]
     for row in report["attempts"]:

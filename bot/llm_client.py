@@ -69,7 +69,7 @@ reason_summary at most160 characters, concise rationale only. Local emergency de
 always overrides you. Plans expire45 game seconds from snapshot; changes commit30 seconds.
 Existing economy expands after120 seconds with20 workers. Retain sensible goals over
 successive snapshots. Avoid indefinite rally/defense when no threat. Marine attack size
-20..30 is a useful initial target against Medium; adjust to visible evidence. Snapshot
+20..30 is an initial target; opponent difficulty follows the run configuration (default CheatInsane), so adjust to visible evidence. Snapshot
 enemy_memory lists last-seen facts, not current visibility. Attack enemy_main execution
 automatically seeks observed buildings then searches expansions. Budget is at most2 bases.
 Example JSON: """ + json.dumps(
