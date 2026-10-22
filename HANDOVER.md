@@ -444,3 +444,14 @@ E3实际1306推理=owned=raw，mask合法/实际8loops，无模型fallback/confl
 一次新BC沿用seed42/1000epochs/lr.003，validation选epoch1000后test一次：train/val100%，test仍23/26=88.46%、动作3召回仍.5；test loss由旧.4317181706升至.4963506460，未改善。旧val/test已历史使用，只作工程回归；不推双敌能力、泛化或收益，不promote。新模型NumpyBCPolicy加载、93条logits有限/动作合法且批量运行一致，最大logit差7.629e-6；23冻结文件hash未变，独立只读scope通过。同一合并fixture初版及补跨split raw覆盖后各1/1通过，未重跑全suite。
 
 新数据 `artifacts/micro_datasets/p4_merged93_20261022` SHA `5e926766664d796f74f42e460d86703023cc07769c249eec7670d225ac6fa515`，新候选 `artifacts/models/marine_bc_merged93_20261022_seed42` weights SHA `7f100e471aa4086ddaf5ca006ea1f6e9c29bea8812d3088e1e8b2b71a8b9e16a`。默认BC仍旧82条，PPO仍curriculum256；新候选仅显式 `--bc-model artifacts/models/marine_bc_merged93_20261022_seed42` 选择（运行会启动游戏，本轮未执行）。原始工件Git忽略需另带；0新游戏/LLM/API/PPO训练、无自动切换，P4全面验收与训练就绪未建立。见[多源BC报告](docs/PHASE_04_MERGED_BC_MVP_REPORT.md)及[共享JSON](docs/validation/p4_merged_bc_mvp.json)；本轮待root本地保存、未push。
+
+
+## 2026-10-22 P4 固定双BC新双敌heldout MVP
+
+采前冻两BC weights/meta/trainreport+93数据/meta共8文件，本轮0训练/优化/epoch选择、SHA全同。只显式新增dual_zergling_validation/test，不扩默认24；两kite短case各1局、两独立suite passed/exit0，18.031+16.719=34.750墙秒，无retry/补局。名义距6+10(seed111)/9+10(seed121)，敌HP1/.5；实际val frame26距3.134765625/7.134765625、CD1.008789、首RETREAT2，test frame17距9/10、CD0首APPROACH3。两局均low_health_safety_exit截断未全杀，外层leave Defeat不当自然战败。
+
+34raw→30eligible（val14→13/test20→17）；仅bothpass后四summary一次新导出123=93+13+17，split43/37/43，旧93六数组前缀及旧val24/test26原序不变。新val/test各对全部历史及彼此的float32 obs/obs+mask exact重复0（-0/+0同），资格true仅此无重叠门槛；历史自身crosssplit train–val/train–test/val–test仍4/1/1 matching pairs，两审计一致、保留。不同group不证明独立，两新case各1episode，不能把30行称30独立场景，旧val/test历史多用不重新称新heldout。
+
+两固定BC均val13/13、test17/17且模型动作30/30一致；标签[1,3,6,0,3]/[0,6,7,3,1]，缺类recall=null。原82→93BC loss val .00104189385→.00080204115/test .00556176808→.01483467408，test更差、不推训练收益；规则专家未全杀，标签一致≠战力/学会1v2/强泛化。新NPZ SHA `8f711539428a4b58bb03715060726e34a5f8b0f0d7f8340352cf21eb598525dd`；freeze SHA `db4d429c69b6574ddd0a2e902f3e20c827d97b826e0a5d86014edaa04a5e70c9`，frozen_evaluation SHA `e9c162562016c881e59919f8e9d4efb699c0335bc9cb33c829ec0dbfeaf32051`。独立核心scope通过，4summary/15raw来源SHA匹配、8冻结文件同、SC2残留0；定向fixture初版及缺失case处理后各通过，未跑历史全suite。
+
+见[固定双BC报告](docs/PHASE_04_DUAL_HELDOUT_MVP_REPORT.md)及[精简JSON](docs/validation/p4_dual_heldout_mvp.json)，原始证据 `artifacts/p4_dual_holdout_20261022`、新dataset同名；工件Git忽略迁移另带。默认BC82/PPO256及guard/交战门禁不改，动作奖励不改、不promote；无LLM/API/PPO训练/额外游戏/安装。P4千条、训练就绪及P4/P5/P6全面验收未建立；后续训练/游戏需新预算。本轮待root本地保存、未push。

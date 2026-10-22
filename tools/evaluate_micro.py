@@ -130,6 +130,11 @@ EXTRA_CASES = [dict(id="dual_zergling_train", scenario="marine-vs-zergling",
     distance=6, health=1, seed=101, split="train", limit=12,
     enemy_count=2, second_distance=8, second_health=0.5,
     observed_contract="dual_zergling")]
+EXTRA_CASES += [dict(id=f"dual_zergling_{split}", scenario="marine-vs-zergling",
+    distance=distance, health=1, seed=seed, split=split, limit=12,
+    enemy_count=2, second_distance=10, second_health=0.5,
+    observed_contract="dual_zergling")
+    for split, distance, seed in (("validation", 6, 111), ("test", 9, 121))]
 
 
 def select_cases(case_ids=None, experts=None):
@@ -201,7 +206,18 @@ def observed_case_check(directory, case, expert):
                        and r["bc_eligible"] and r["mask"][r["executed_action"]]
                        and r["command_result"] in {"engine_confirmed", "hold"} for r in rows)
         return dict(passed=geometry and (expert == "amove" or complete > 0),
-                    required=True, geometry_valid=geometry, complete_legal_samples=complete)
+                    required=True, geometry_valid=geometry, complete_legal_samples=complete,
+                    actual_observation=initial,
+                    coverage_diagnostics=dict(
+                        nearest_and_weakest_distinct=bool(near and weak and near["tag"] != weak["tag"]),
+                        nearest_in_range=bool(near and near["in_range"]),
+                        weakest_in_range=bool(weak and weak["in_range"]),
+                        nearest_shootable_weakest_not=bool(near and weak and near["in_range"] and not weak["in_range"]),
+                        both_out_of_range=bool(near and weak and not near["in_range"] and not weak["in_range"]),
+                        range_relations=[dict(tag=e["tag"], distance=e.get("distance"),
+                            effective_ground_range=(initial["friendly_ground_range"] + initial["friendly_radius"] + e["radius"])
+                                if all(k in initial for k in ("friendly_ground_range", "friendly_radius")) and "radius" in e else None,
+                            engine_in_range=e["in_range"]) for e in enemies.values()]))
     priority = case["expected_priority"]
     geometry = bool(
         initial["initialization_confirmed"]

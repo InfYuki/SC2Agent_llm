@@ -1,0 +1,404 @@
+{
+  "date": "2026-10-22",
+  "scope": "P4 frozen dual BC new dual-enemy heldout diagnostic MVP",
+  "parent_revision": "ce5f9e2c08fe0c97f26948ed6a45bb65d67cbcab",
+  "training_updates": 0,
+  "optimization_steps": 0,
+  "epoch_selection": false,
+  "promotion": false,
+  "default_model_changed": false,
+  "game_runs": 2,
+  "llm_api_calls": 0,
+  "retry": false,
+  "collection": {
+    "attempts": [
+      {
+        "command": [
+          "C:/Users/27932/anaconda3/envs/sc2-ares-runtime/python.exe",
+          "-s",
+          "tools/evaluate_micro.py",
+          "--suite-id",
+          "p4_dual_validation_20261022",
+          "--case",
+          "dual_zergling_validation",
+          "--expert",
+          "kite"
+        ],
+        "pid": 59624,
+        "exit_code": 0,
+        "wall_seconds": 18.031000000075437
+      },
+      {
+        "command": [
+          "C:/Users/27932/anaconda3/envs/sc2-ares-runtime/python.exe",
+          "-s",
+          "tools/evaluate_micro.py",
+          "--suite-id",
+          "p4_dual_test_20261022",
+          "--case",
+          "dual_zergling_test",
+          "--expert",
+          "kite"
+        ],
+        "pid": 66384,
+        "exit_code": 0,
+        "wall_seconds": 16.718999999924563
+      }
+    ],
+    "total_wall_seconds": 34.75,
+    "max_games": 2
+  },
+  "source_suites": [
+    {
+      "path": "C:\\code\\SC2Agent_llm\\artifacts\\micro_suites\\p3_v7_formal_20261018_115352\\summary.json",
+      "sha256": "7359e6d41d50b83728e037b869198b09451d6184678f610adcaf70398245ffb0",
+      "status": "passed",
+      "run_count": 24,
+      "expert_run_count": 12
+    },
+    {
+      "path": "C:\\code\\SC2Agent_llm\\artifacts\\micro_suites\\p4_expert_subset_20261021\\summary.json",
+      "sha256": "593732cec73e295077c4901e9600652425fb02f0408ef9ea46505d4f38fc129c",
+      "status": "passed",
+      "run_count": 1,
+      "expert_run_count": 1
+    },
+    {
+      "path": "C:\\code\\SC2Agent_llm\\artifacts\\micro_suites\\p4_dual_validation_20261022\\summary.json",
+      "sha256": "071dae8353028a5285cc34c3b9b8eb887b83b74a54469bfe74c1a7b42c503d1c",
+      "status": "passed",
+      "run_count": 1,
+      "expert_run_count": 1
+    },
+    {
+      "path": "C:\\code\\SC2Agent_llm\\artifacts\\micro_suites\\p4_dual_test_20261022\\summary.json",
+      "sha256": "457e83924da247400f0be3eeef150ca5128337dd7db92ff0c9336b76fe82db18",
+      "status": "passed",
+      "run_count": 1,
+      "expert_run_count": 1
+    }
+  ],
+  "selected_raw_source_count": 15,
+  "dataset_path": "artifacts/micro_datasets/p4_dual_holdout_20261022",
+  "dataset": {
+    "samples": 123,
+    "split_counts": {
+      "train": 43,
+      "validation": 37,
+      "test": 43
+    },
+    "sha256": "8f711539428a4b58bb03715060726e34a5f8b0f0d7f8340352cf21eb598525dd"
+  },
+  "duplicate_source_references": 0,
+  "preservation": {
+    "samples": 93,
+    "all_npz_arrays_prefix_preserved": true,
+    "old_validation_samples": 24,
+    "old_test_samples": 26,
+    "old_validation_test_order_and_content_preserved": true
+  },
+  "frozen_eight_files": {
+    "artifacts/models/marine_bc_mvp_20261018_seed42/weights.npz": {
+      "sha256": "e36cba313c1d8e1731573595b1b975316e1522db3af8d1a4abf4f21e405c2dcf",
+      "bytes": 21910
+    },
+    "artifacts/models/marine_bc_mvp_20261018_seed42/metadata.json": {
+      "sha256": "1223a8341b2f5e5b1b98cb54fd6062d5cdfa31d6907c9e9086479d97e0d253fc",
+      "bytes": 1122
+    },
+    "artifacts/models/marine_bc_mvp_20261018_seed42/training_report.json": {
+      "sha256": "63c4e99bac8193800e80606851870b913750acab7b6101524409d0986d145467",
+      "bytes": 7875
+    },
+    "artifacts/models/marine_bc_merged93_20261022_seed42/weights.npz": {
+      "sha256": "7f100e471aa4086ddaf5ca006ea1f6e9c29bea8812d3088e1e8b2b71a8b9e16a",
+      "bytes": 21934
+    },
+    "artifacts/models/marine_bc_merged93_20261022_seed42/metadata.json": {
+      "sha256": "7eca6bcc834ad8d6da3e87a38892b4c4e5e33610e543d2e77a3c5502717a032f",
+      "bytes": 1122
+    },
+    "artifacts/models/marine_bc_merged93_20261022_seed42/training_report.json": {
+      "sha256": "ff4dd13b1c095e7a86fa24678694d57c49e35878d51f63da5eb0be7caeba9aa5",
+      "bytes": 7927
+    },
+    "artifacts/micro_datasets/p4_merged93_20261022/demonstrations.npz": {
+      "sha256": "5e926766664d796f74f42e460d86703023cc07769c249eec7670d225ac6fa515",
+      "bytes": 3016
+    },
+    "artifacts/micro_datasets/p4_merged93_20261022/metadata.json": {
+      "sha256": "3ca1ebd25219496c2ca8b1207d1acb4ca3f1e3e5ea74002b718757bde86f0dd2",
+      "bytes": 18691
+    }
+  },
+  "frozen_eight_files_unchanged": {
+    "artifacts/models/marine_bc_mvp_20261018_seed42/weights.npz": true,
+    "artifacts/models/marine_bc_mvp_20261018_seed42/metadata.json": true,
+    "artifacts/models/marine_bc_mvp_20261018_seed42/training_report.json": true,
+    "artifacts/models/marine_bc_merged93_20261022_seed42/weights.npz": true,
+    "artifacts/models/marine_bc_merged93_20261022_seed42/metadata.json": true,
+    "artifacts/models/marine_bc_merged93_20261022_seed42/training_report.json": true,
+    "artifacts/micro_datasets/p4_merged93_20261022/demonstrations.npz": true,
+    "artifacts/micro_datasets/p4_merged93_20261022/metadata.json": true
+  },
+  "actual_export_sources_sha_match": true,
+  "collection_source_map_environment_unchanged": true,
+  "cases": {
+    "dual_zergling_validation": {
+      "split": "validation",
+      "samples": 13,
+      "status": "evaluated",
+      "label_counts": {
+        "0": 1,
+        "1": 3,
+        "2": 6,
+        "3": 0,
+        "4": 3
+      },
+      "models": {
+        "original82": {
+          "samples": 13,
+          "masked_loss": 0.0010418938472867012,
+          "masked_accuracy": 1.0,
+          "action_recall": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": null,
+            "4": 1.0
+          }
+        },
+        "augmented93": {
+          "samples": 13,
+          "masked_loss": 0.0008020411478355527,
+          "masked_accuracy": 1.0,
+          "action_recall": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": null,
+            "4": 1.0
+          }
+        }
+      },
+      "two_model_agreement": 1.0
+    },
+    "dual_zergling_test": {
+      "split": "test",
+      "samples": 17,
+      "status": "evaluated",
+      "label_counts": {
+        "0": 0,
+        "1": 6,
+        "2": 7,
+        "3": 3,
+        "4": 1
+      },
+      "models": {
+        "original82": {
+          "samples": 17,
+          "masked_loss": 0.0055617680773139,
+          "masked_accuracy": 1.0,
+          "action_recall": {
+            "0": null,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0
+          }
+        },
+        "augmented93": {
+          "samples": 17,
+          "masked_loss": 0.014834674075245857,
+          "masked_accuracy": 1.0,
+          "action_recall": {
+            "0": null,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0
+          }
+        }
+      },
+      "two_model_agreement": 1.0
+    }
+  },
+  "runs": [
+    {
+      "run_id": "p4_dual_validation_20261022_dual_zergling_validation_kite",
+      "suite_status": "passed",
+      "initial": {
+        "game_loop": 26,
+        "health": 45.0,
+        "weapon_cooldown": 1.0087890625,
+        "friendly_ground_range": 5.0,
+        "friendly_radius": 0.375,
+        "enemies": [
+          {
+            "type_id": 105,
+            "role": 1,
+            "health": 17.6025390625,
+            "distance": 7.134765625,
+            "radius": 0.375,
+            "in_range": false
+          },
+          {
+            "type_id": 105,
+            "role": 0,
+            "health": 35.0,
+            "distance": 3.134765625,
+            "radius": 0.375,
+            "in_range": true
+          }
+        ]
+      },
+      "result": {
+        "outcome": "low_health_safety_exit",
+        "terminated": false,
+        "truncated": true,
+        "game_loop": 138,
+        "game_seconds": 6.1607142857142865
+      },
+      "raw_rows": 14,
+      "eligible_rows": 13,
+      "commands": {
+        "engine_confirmed": 10,
+        "hold": 4
+      },
+      "raw_sha256": {
+        "micro_transitions.jsonl": "480fe01356b362e0f5bc17f73d79928f4809b6818986b479631e7bcc9112546a"
+      }
+    },
+    {
+      "run_id": "p4_dual_test_20261022_dual_zergling_test_kite",
+      "suite_status": "passed",
+      "initial": {
+        "game_loop": 17,
+        "health": 45.0,
+        "weapon_cooldown": 0.0,
+        "friendly_ground_range": 5.0,
+        "friendly_radius": 0.375,
+        "enemies": [
+          {
+            "type_id": 105,
+            "role": 0,
+            "health": 35.0,
+            "distance": 9.0,
+            "radius": 0.375,
+            "in_range": false
+          },
+          {
+            "type_id": 105,
+            "role": 1,
+            "health": 17.6025390625,
+            "distance": 10.0,
+            "radius": 0.375,
+            "in_range": false
+          }
+        ]
+      },
+      "result": {
+        "outcome": "low_health_safety_exit",
+        "terminated": false,
+        "truncated": true,
+        "game_loop": 177,
+        "game_seconds": 7.901785714285714
+      },
+      "raw_rows": 20,
+      "eligible_rows": 17,
+      "commands": {
+        "engine_confirmed": 16,
+        "engine_unconfirmed": 2,
+        "hold": 2
+      },
+      "raw_sha256": {
+        "micro_transitions.jsonl": "e3fda5484648e09487196292ba296385b24bee82ea35db389e60017e6fb228f7"
+      }
+    }
+  ],
+  "duplicate_audit": {
+    "obs": {
+      "historical_cross_split": {
+        "train_vs_validation": {
+          "left_samples": 43,
+          "right_samples": 24,
+          "matched_left_rows": 4,
+          "matching_pairs": 4
+        },
+        "train_vs_test": {
+          "left_samples": 43,
+          "right_samples": 26,
+          "matched_left_rows": 1,
+          "matching_pairs": 1
+        },
+        "validation_vs_test": {
+          "left_samples": 24,
+          "right_samples": 26,
+          "matched_left_rows": 1,
+          "matching_pairs": 1
+        }
+      },
+      "new_vs_history_and_each_other": {
+        "comparisons": 7,
+        "matched_left_rows": 0,
+        "matching_pairs": 0,
+        "scope": "each new case vs each historical split and new validation vs new test"
+      }
+    },
+    "obs_plus_mask": {
+      "historical_cross_split": {
+        "train_vs_validation": {
+          "left_samples": 43,
+          "right_samples": 24,
+          "matched_left_rows": 4,
+          "matching_pairs": 4
+        },
+        "train_vs_test": {
+          "left_samples": 43,
+          "right_samples": 26,
+          "matched_left_rows": 1,
+          "matching_pairs": 1
+        },
+        "validation_vs_test": {
+          "left_samples": 24,
+          "right_samples": 26,
+          "matched_left_rows": 1,
+          "matching_pairs": 1
+        }
+      },
+      "new_vs_history_and_each_other": {
+        "comparisons": 7,
+        "matched_left_rows": 0,
+        "matching_pairs": 0,
+        "scope": "each new case vs each historical split and new validation vs new test"
+      }
+    }
+  },
+  "duplicate_comparison": "exact source NPZ float32 obs; signed zero canonicalized; next_obs excluded",
+  "qualification": {
+    "independent_heldout": true,
+    "missing_eligible_cases": [],
+    "reason": "no_exact_observation_overlap",
+    "scope": "exact observation independence only; no training-readiness or combat-benefit claim"
+  },
+  "source_artifact_sha256": {
+    "artifacts\\p4_dual_holdout_20261022\\freeze.json": "db4d429c69b6574ddd0a2e902f3e20c827d97b826e0a5d86014edaa04a5e70c9",
+    "artifacts\\p4_dual_holdout_20261022\\collection_plan.json": "e7c66b0727c67a4ce62e795d38f6d6bea8c4cf76b14fd0d349484bf109e11958",
+    "artifacts\\p4_dual_holdout_20261022\\collection_execution.json": "bdef94e1011badeb265c4df9cc79194201cbb5d060df498f7d93b65dabeedd6f",
+    "artifacts\\p4_dual_holdout_20261022\\frozen_evaluation.json": "e9c162562016c881e59919f8e9d4efb699c0335bc9cb33c829ec0dbfeaf32051",
+    "artifacts\\micro_datasets\\p4_dual_holdout_20261022\\metadata.json": "b7d01b7d74b21126f7e537fd8e85f64fd5338b5782e749e6823ee5dda1927828"
+  },
+  "independent_readonly_scope": "passed core evidence audit; no new runs",
+  "minimal_fixture": "same targeted fixture passed initially and again after explicit missing/null empty-case handling; no historical full suite",
+  "sc2_processes_after": 0,
+  "training_readiness": "not_established",
+  "limitations": [
+    "New validation/test each one episode of correlated trajectory rows; exact observation non-overlap does not establish statistical independence or broad generalization",
+    "Historical validation/test repeatedly used and historical cross-split matching_pairs 4/1/1 retained",
+    "Rule expert did not kill all enemies; model label agreement is not combat strength",
+    "Both fixed BC agree 30/30; candidate test loss worse; no training or benefit established",
+    "Validation action3 and test action0 absent; recall null",
+    "P4 thousand-sample/full acceptance not established"
+  ],
+  "commit_push": "pending root local save; not pushed"
+}
