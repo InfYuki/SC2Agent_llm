@@ -16,7 +16,17 @@ sys.path[:0] = [str(ROOT / "ares-sc2" / "src"), str(ROOT / "ares-sc2")]
 
 
 def git(*args):
-    return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
+    """Compatibility for scenario/worker provenance; missing Git is unknown."""
+    from bot.provenance import find_git
+    executable = find_git()
+    if executable is None:
+        return None
+    try:
+        return subprocess.check_output(
+            [executable, *args], cwd=ROOT, text=True, stderr=subprocess.PIPE, timeout=15
+        ).strip()
+    except (OSError, subprocess.SubprocessError):
+        return None
 
 
 def create_bot(options, telemetry):
@@ -122,6 +132,7 @@ def main():
     from sc2.player import Bot, Computer, Human
     from bot.telemetry import Telemetry
     from bot.lifecycle import recover_completed_game, recover_human_game
+    from bot.provenance import source_provenance
 
     map_settings = maps.get(options.map)
     run_id = options.run_id or datetime.now(ZoneInfo("Asia/Shanghai")).strftime(
@@ -132,25 +143,15 @@ def main():
     if not output.is_relative_to(base.resolve()) or output == base.resolve():
         raise ValueError("run-id must name a directory inside artifacts/runs")
     telemetry = Telemetry(output)
-    names = git("ls-files", "--cached", "--others", "--exclude-standard", "-z").split(
-        "\0"
-    )
-    source_hashes = {
-        name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
-        for name in names
-        if name and (ROOT / name).is_file()
-    }
+    provenance = source_provenance(ROOT)
+    for warning in provenance["provenance_warnings"]:
+        print("Provenance warning:", warning, flush=True)
     manifest = dict(
         config=config,
         started_utc=datetime.now(ZoneInfo("UTC")).isoformat(),
         python=sys.executable,
         python_version=sys.version,
-        project_commit=git("rev-parse", "HEAD"),
-        ares_commit=git("-C", "ares-sc2", "rev-parse", "HEAD"),
-        dirty_diff_sha256=hashlib.sha256(
-            subprocess.check_output(["git", "diff", "HEAD"], cwd=ROOT)
-        ).hexdigest(),
-        source_hashes=source_hashes,
+        **provenance,
         map_sha256=hashlib.sha256(Path(map_settings.path).read_bytes()).hexdigest(),
         packages={
             name: importlib.metadata.version(name)

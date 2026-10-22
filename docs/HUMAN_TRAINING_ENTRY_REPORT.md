@@ -29,3 +29,16 @@ PPO：初始采用现有448 actor与配套checkpoint，训练局使用随机合�
 ## 本轮验证
 
 启动配置预检、依赖/私密配置安全预检与Python编译检查通过；4项运行接口定向检查覆盖真人采样实际帧间隔、缺失端点剔除、双客户端终局/回放及自有清理、学习身份覆盖拒绝与既有LLM+PPO组合兼容。独立训练环境1项检查用8条合成采样进行了真实参数更新、导出与成对最新指针验证，并检查重复消费拒绝、行为概率篡改拒绝和失败时旧指针保持。该离线检查不启动SC2、不调用API，合成数据不是用户真人训练资料。本轮没有实际真人参与对局，因此双窗口操作、真人终局与真实对局更新仍需首次使用确认，不声称已经实机验证完整真人训练链路。
+
+### 首次实际启动问题与修复
+
+用户运行 `human_20261022_162220_645926` 时，启动在源码版本记录阶段报 `FileNotFoundError: [WinError 2]`，未打开游戏。原因是 Windows 的 Python `subprocess(["git", ...])` 不能像 PowerShell 一样解析仅在 PATH 中的 `git.cmd`；启动脚本没有清空 PATH。修复改为定位原生 `git.exe`，兼容本机 `C:/Program Files/Git/mingw64/bin/git.exe` 等安装路径。无可用 Git 时，commit/diff 记录为 null 并警告，源码哈希明确标记为仅 Python 源码/启动脚本的受限范围；不读取 `.env.local` 或遍历 artifacts，不以元信息采集失败阻止开局。
+
+新增单项回归检查走真实 `run_local.main` 的 manifest、Human/Bot 结果及 summary 保存路径，覆盖空 PATH 下的原生 Git 与完全无 Git；SC2 执行替换为离线替身，不打开游戏或请求 API。尚不能据此声称真人整局已验证。PowerShell 重试命令：
+
+```powershell
+cd C:\code\SC2Agent_llm
+.\run_human_training.cmd --human-fullscreen
+```
+
+`--show-config` 与 `--check-only` 仅显示/预检，不打开游戏。

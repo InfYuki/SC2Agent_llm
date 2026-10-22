@@ -1,5 +1,11 @@
 # SC2Agent_llm 工作交接与换机恢复
 
+### 2026-10-22 真人入口启动修复：Git 元信息不再阻塞对局
+
+用户首个实际启动 `human_20261022_162220_645926` 在打开游戏前因 `subprocess(["git", ...])` 报 WinError 2；当时 PowerShell 能找到 `git.cmd`，但 Python 的 Windows CreateProcess 无法将裸 `git` 解析成该批处理入口。现直接定位原生 `git.exe`（含本机 `C:/Program Files/Git/mingw64/bin/git.exe`），统一采集版本信息；完全缺少 Git 时记录空 commit/diff、显式警告及范围有限的源码哈希，不阻塞游戏、不伪造版本。fallback 只读取 Python 源码与启动脚本，不递归读取私密配置或 artifacts。
+
+回归检查走真实 `run_local.main` 的 manifest/结果保存路径，仅替换 SC2 执行，分别验证 PATH 无 Git 但存在原生程序、以及完全无 Git 两种情况；不是再次只检查会提前返回的 `--show-config`。未启动游戏或调用 API，真人双窗口与完整学习仍待用户重试。PowerShell 实际开局用 `.\run_human_training.cmd --human-fullscreen`；`--show-config` / `--check-only` 不开游戏。
+
 ## 2026-10-22 当前推进：真人 Terran 对练，LLM 与 PPO 同开
 
 用户新优先事项是人类作为 Terran 对手，赛后让 LLM 指挥经验与 PPO 微操一起迭代。新增 `run_human_training.cmd`，启动 HumanTerran（玩家操作）与 LLM_PPO_Training 两个实时客户端。默认 Ancient Cistern LE、LLM最多240请求、448 PPO+交战门禁、最多4Marine，无默认时间截断。普通官方Bot入口仍默认CheatInsane；真人对局无官方难度概念。
