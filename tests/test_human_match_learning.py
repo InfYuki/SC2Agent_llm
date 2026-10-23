@@ -37,6 +37,8 @@ class HumanLearningSmoke(unittest.TestCase):
             actor_meta = export_actor(model, checkpoint, actor)
             run = root / "match"
             run.mkdir()
+            from tools.human_learning_approval import decide
+            decide(run, "yes")
             write_json(run / "summary.json", dict(status="completed", result="Result.Defeat",
                                                   stop_reason=None, error=None, game_span_seconds=120))
             write_json(run / "human_training.json", dict(

@@ -23,8 +23,11 @@ class HumanReplayStudyTest(unittest.TestCase):
             actual_replay_build=98370, decoder_schema_build=98310, compatibility_override=True,
             peak_workers=51, milestones=[dict(seconds=237.232, event="created", unit="SiegeTank", ordinal=1)],
             cumulative_units_created={"Marine": 44, "SiegeTank": 7, "Medivac": 6})
-        with tempfile.TemporaryDirectory() as temporary:
+        with tempfile.TemporaryDirectory() as temporary, patch("tools.analyze_human_replay.ROOT", Path(temporary)):
             memory = Path(temporary)
+            from tools.human_learning_approval import decide
+            run = memory / "artifacts" / "runs" / profile["source_run_id"]
+            decide(run, "yes")
             update_memory(memory, profile)
             update_memory(memory, profile)
             self.assertEqual(len(json.loads((memory / "strategy_memory.json").read_text())["recent_matches"]), 1)

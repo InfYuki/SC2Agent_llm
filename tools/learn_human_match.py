@@ -259,6 +259,11 @@ def train_ppo(run_dir, checkpoint, output, memory_dir, *, epochs=2, min_samples=
 def learn(run_dir, checkpoint, output, memory_dir, *, epochs=2, min_samples=8):
     run_dir, checkpoint = Path(run_dir).resolve(), Path(checkpoint).resolve()
     output, memory_dir = Path(output).resolve(), Path(memory_dir).resolve()
+    from tools.human_learning_approval import learning_block
+    blocked = learning_block(run_dir)
+    if blocked:
+        return dict(source_run_id=run_dir.name, llm=dict(status="skipped", reason=blocked),
+                    ppo=dict(status="skipped", reason=blocked), replay_study=dict(status="skipped", reason=blocked))
     summary = read_json(run_dir / "summary.json", {})
     report = dict(source_run_id=run_dir.name,
                   llm={"status": "skipped", "reason": "match_not_naturally_completed"},

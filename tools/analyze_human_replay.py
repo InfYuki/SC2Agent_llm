@@ -150,6 +150,16 @@ def analyze(run_dir, *, protocol_build=None, human_name="HumanTerran", memory_di
 
 
 def update_memory(memory_dir, profile):
+    # Offline inspection may remain available; publishing lessons requires consent.
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from tools.human_learning_approval import learning_block
+    run_id = profile.get("source_run_id", "")
+    if not run_id or Path(run_id).name != run_id or run_id in {".", ".."}:
+        raise ValueError("Invalid replay source run identity")
+    blocked = learning_block(ROOT / "artifacts" / "runs" / run_id)
+    if blocked:
+        raise ValueError("Replay memory update blocked: " + blocked)
     path = memory_dir / "strategy_memory.json"
     memory = read(path) if path.is_file() else dict(format="human-strategy-memory-v1", matches_seen=0, recent_matches=[], lessons=[])
     if memory.get("format") != "human-strategy-memory-v1":

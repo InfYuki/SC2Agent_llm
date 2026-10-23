@@ -19,6 +19,8 @@ def configuration(argv=None):
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--actor", type=Path)
     parser.add_argument("--run-id", default=None)
+    parser.add_argument("--learn", choices=("ask", "yes", "no"), default="ask", help="Post-match learning decision; default asks, only explicit yes learns.")
+    parser.add_argument("--learn-run", help="Decide learning for an existing run ID without starting SC2.")
     parser.add_argument("--show-config", action="store_true")
     parser.add_argument("--check-only", action="store_true", help="Validate local dependencies, policy identity and LLM settings without opening SC2 or calling the API.")
     args, game_args = parser.parse_known_args(argv)
@@ -29,6 +31,14 @@ def configuration(argv=None):
     if bool(args.checkpoint) != bool(args.actor):
         parser.error("--checkpoint and --actor must be supplied together")
     memory = args.memory_dir.resolve()
+    if args.learn_run:
+        existing = (ROOT / "artifacts" / "runs" / args.learn_run).resolve()
+        if existing.parent != (ROOT / "artifacts" / "runs").resolve():
+            parser.error("--learn-run must be a direct run ID")
+        metadata = json.loads((existing / "human_training.json").read_text(encoding="utf-8"))
+        checkpoint = Path(metadata["checkpoint"])
+        learn = [str(args.training_python.resolve()), "-s", "-u", str(ROOT / "tools" / "learn_human_match.py"), "--run-dir", str(existing), "--checkpoint", str(checkpoint), "--output", str(existing / "learning"), "--memory-dir", str(memory)]
+        return args, dict(run_id=args.learn_run, run_dir=str(existing), learning_command=learn, learning_mode=args.learn)
     latest = memory / "ppo_latest.json"
     if args.checkpoint:
         checkpoint, actor = args.checkpoint.resolve(), args.actor.resolve()
@@ -61,12 +71,26 @@ def configuration(argv=None):
     return args, dict(run_id=run_id, human="Terran", agent="Terran / LLM + stochastic PPO", realtime=True,
                       checkpoint=str(checkpoint), actor=str(actor), run_dir=str(run_dir),
                       strategy_memory=str(memory / "strategy_memory.json"), game_command=game,
-                      learning_command=learn)
+                      learning_command=learn, learning_mode=args.learn)
+
+
+def finish_learning(args, config):
+    from tools.human_learning_approval import decide
+    status = decide(Path(config["run_dir"]), args.learn)
+    print("Learning decision: " + status, flush=True)
+    if status != "approved":
+        print("Match/replay retained; LLM, PPO and replay memory unchanged. Resume with --learn-run " + config["run_id"] + " --learn yes", flush=True)
+        return 0
+    return subprocess.call(config["learning_command"], cwd=ROOT)
 
 
 def main(argv=None):
     args, config = configuration(argv)
     print(json.dumps(config, indent=2), flush=True)
+    if args.learn_run:
+        if args.show_config:
+            return 0
+        return finish_learning(args, config)
     if args.show_config:
         # Also exercise run_local's validation, without importing/starting SC2.
         return subprocess.call([*config["game_command"], "--show-config"], cwd=ROOT)
@@ -78,7 +102,7 @@ def main(argv=None):
     print("Preflight PASS: training dependencies, checkpoint/actor identity and local LLM settings. No API request made.", flush=True)
     if args.check_only:
         return subprocess.call([*config["game_command"], "--show-config"], cwd=ROOT)
-    print("Two SC2 windows will open. Play in HumanTerran as Terran; surrender/end normally to save and learn.", flush=True)
+    print("Two SC2 windows will open. Play in HumanTerran as Terran; surrender/end normally to save; you will decide whether to learn afterward.", flush=True)
     output = ROOT / "artifacts"
     output.mkdir(exist_ok=True)
     with (output / "last-human-run.log").open("w", encoding="utf-8") as log:
@@ -96,8 +120,8 @@ def main(argv=None):
     if code:
         print("Match did not finish cleanly; no PPO update. See artifacts/last-human-run.log.")
         return code
-    print("Match finished. Recording review and learning from this match...", flush=True)
-    return subprocess.call(config["learning_command"], cwd=ROOT)
+    print("Match saved. Awaiting your learning decision...", flush=True)
+    return finish_learning(args, config)
 
 
 if __name__ == "__main__":
