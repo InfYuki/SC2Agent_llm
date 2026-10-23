@@ -51,7 +51,7 @@ EXAMPLE = {
     "request_id": "COPY_FROM_SNAPSHOT",
     "snapshot_seq": 1,
     "stance": "defend_then_expand",
-    "economy": {"worker_target": 44, "base_target": 2},
+    "economy": {"worker_target": 72, "base_target": 4},
     "production_profile": "marine_tank_medivac",
     "research_priority": [],
     "squad_tasks": [{"squad_id": "main", "task": "rally", "target_id": "own_natural"}],
@@ -66,18 +66,23 @@ and Starport) or marine_basic (Marine production only). Prefer mixed production 
 Terran ground armies. Tanks siege/unsiege and Medivacs heal/follow by local rules;
 there is no transport/drop control yet. No research, coordinates, raw actions or extra
 keys. Never assume hidden enemy units. A requested tech profile takes time and resources.
-stance: develop|defend_then_expand|pressure. worker_target integer16..48, base_target1..2.
+stance: develop|defend_then_expand|pressure. worker_target integer16..80, base_target1..4.
 Only squad main. task attack targets enemy_main; defend/rally/retreat target own_main or
 own_natural. own_natural falls back to own_main until ready. min_army_supply integer6..60.
 reason_summary at most160 characters, concise rationale only. Local emergency defense
 always overrides you. Plans expire45 game seconds from snapshot; changes commit30 seconds.
 previous_human_match_experience, when present, contains bounded lessons from previous
 human matches. Use them to adjust your goals; they are experience, not current enemy facts.
-Existing economy expands after120 seconds with20 workers. Retain sensible goals over
+Local economy starts expanding after120 seconds with20 workers, unlocks third at360
+and fourth at540 seconds; visible threats and Ares location safety gate construction.
+economy_policy shows effective saturation goals and gas staffing. Local mineral depletion
+or saturation can raise your requested goals; do not treat two bases/44 workers as final.
+Prioritize replacement workers and mineral income; surplus gas reduces refinery staffing
+with hysteresis, restoring three when gas runs low. Retain sensible goals over
 successive snapshots. Avoid indefinite rally/defense when no threat. Marine attack size
 20..30 is an initial target; opponent difficulty follows the run configuration (default CheatInsane), so adjust to visible evidence. Snapshot
 enemy_memory lists last-seen facts, not current visibility. Attack enemy_main execution
-automatically seeks observed buildings then searches expansions. Budget is at most2 bases.
+automatically seeks observed buildings then searches expansions. Budget is at most4 bases and80 workers.
 Example JSON: """ + json.dumps(
     EXAMPLE, separators=(",", ":")
 )

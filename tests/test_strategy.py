@@ -19,14 +19,14 @@ def payload(**changes):
 
 class StrategyTests(unittest.TestCase):
     def test_strict_schema(self):
-        self.assertEqual(parse_plan(payload(), "r1", 1).base_target, 2)
+        self.assertEqual(parse_plan(payload(), "r1", 1).base_target, 4)
         cases = [
             dict(extra="code"),
             dict(snapshot_seq=True),
             dict(snapshot_seq=2),
             dict(request_id="other"),
             dict(economy={"worker_target": True, "base_target": 2}),
-            dict(economy={"worker_target": 48, "base_target": 3}),
+            dict(economy={"worker_target": 48, "base_target": 5}),
             dict(production_profile="battlecruiser"),
             dict(research_priority=["stim"]),
             dict(

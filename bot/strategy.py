@@ -79,8 +79,8 @@ def parse_plan(content, request_id, snapshot_seq):
         raise PlanError("unsupported_tech")
     economy = value["economy"]
     exact(economy, "worker_target base_target")
-    workers = integer(economy["worker_target"], 16, 48)
-    bases = integer(economy["base_target"], 1, 2)
+    workers = integer(economy["worker_target"], 16, 80)
+    bases = integer(economy["base_target"], 1, 4)
     tasks = value["squad_tasks"]
     if type(tasks) is not list or len(tasks) != 1:
         raise PlanError("squad_count")

@@ -90,7 +90,8 @@ class TerranSupportTest(unittest.TestCase):
         behaviors = []
         bot = SimpleNamespace(
             register_behavior=behaviors.append, start_location=Point2((0, 0)),
-            economic_goals=lambda: (22, 1), production_profile=lambda: "marine_tank_medivac",
+            economic_goals=lambda: (22, 1), economy_status={"workers_per_gas": 3},
+            economy_under_attack=lambda: False, production_profile=lambda: "marine_tank_medivac",
             supply_workers=20, ready_townhalls=[object()], townhalls=[object()], time=110,
             strategy_state="develop",
             expansion_budget=SimpleNamespace(reserve=lambda *a, **k: False),

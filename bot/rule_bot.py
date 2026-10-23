@@ -16,6 +16,7 @@ from ares.managers.hub import Hub
 from ares.managers.manager_mediator import ManagerMediator
 from sc2.ids.unit_typeid import UnitTypeId
 
+from bot.economy import EconomyPolicy
 from bot.arbiter import OrderArbiter
 from bot.budget import ExpansionBudget
 from bot.building_manager import BuildingManager
@@ -36,6 +37,9 @@ class RuleBot(InstrumentedAresBot):
         self.expansion_budget = ExpansionBudget()
         self._saving_expansion = False
         self.support = SupportController()
+        self.economy_policy = EconomyPolicy()
+        self.economy_status = {}
+        self._last_economy_event = -30.0
 
     def register_managers(self):
         mediator = ManagerMediator()
@@ -63,27 +67,27 @@ class RuleBot(InstrumentedAresBot):
     def play_step(self, iteration):
         # Ares Mining excludes builders via its mediator roles. No distribute_workers
         # or raw worker build commands are issued by this bot.
-        self.register_behavior(Mining())
+        worker_target, base_target = self.economic_goals()
+        self.register_behavior(Mining(workers_per_gas=self.economy_status["workers_per_gas"]))
         plan = MacroPlan()
         plan.add(AutoSupply(self.start_location))
-        worker_target, base_target = self.economic_goals()
         plan.add(BuildWorkers(to_count=worker_target))
-        plan.add(BuildStructure(self.start_location, UnitTypeId.BARRACKS, to_count=1))
         profile = self.production_profile()
         army_composition = composition(profile)
         mixed = profile == "marine_tank_medivac"
-        if mixed and self.supply_workers >= 16:
-            # Mining's default three workers per gas remains the sole worker owner.
-            plan.add(GasBuildingController(to_count=min(4, 2 * max(1, len(self.ready_townhalls)))))
         needs_expansion = (
             self.time > 120
-            and self.supply_workers >= 20
-            and self.townhalls.amount < base_target
+            and (self.supply_workers >= 20
+                 or (self.economy_status.get("reason") == "depleted"
+                     and self.supply_workers >= 1))
+            and len(self.ready_townhalls) + self.structure_pending(self.base_townhall_type) < base_target
+            and self.structure_pending(self.base_townhall_type) < 1
+            and not self.economy_under_attack()
         )
         saving = self.expansion_budget.reserve(
             float(self.time),
             needs_expansion,
-            under_attack=self.strategy_state == "defend",
+            under_attack=self.economy_under_attack(),
         )
         if saving != self._saving_expansion:
             self.telemetry.event(
@@ -93,9 +97,15 @@ class RuleBot(InstrumentedAresBot):
         if needs_expansion:
             plan.add(
                 ExpansionController(
-                    to_count=base_target, max_pending=1, prioritize=saving
+                    to_count=base_target, max_pending=1, prioritize=saving,
+                    check_location_is_safe=True
                 )
             )
+        # Supply and replacement workers precede saving; tech/production cannot
+        # consume expansion funds while the bounded reservation is active.
+        plan.add(BuildStructure(self.start_location, UnitTypeId.BARRACKS, to_count=1))
+        if mixed and self.supply_workers >= 16 and not saving:
+            plan.add(GasBuildingController(to_count=min(4, 2 * max(1, len(self.ready_townhalls)))))
         if not saving:
             if mixed and self.time >= 100:
                 plan.add(FirstSupportReserve())
@@ -188,8 +198,45 @@ class RuleBot(InstrumentedAresBot):
             if not command:
                 self.telemetry.counts["combat_command_rejected"] += 1
 
+    def requested_economic_goals(self):
+        return 72, 4
+
+    def economy_under_attack(self):
+        return any(enemy.is_visible and enemy.can_attack_ground
+                   and any(enemy.distance_to(base) < 25 for base in self.townhalls)
+                   for enemy in self.enemy_units)
+
     def economic_goals(self):
-        return min(48, 22 * len(self.ready_townhalls)), 2
+        requested_workers, requested_bases = self.requested_economic_goals()
+        bases = [base for base in self.ready_townhalls if not base.is_flying]
+        patches = sum(1 for patch in self.mineral_field
+                      if patch.mineral_contents > 0
+                      and any(patch.distance_to(base) < 10 for base in bases))
+        refineries = sum(1 for refinery in self.gas_buildings.ready
+                         if refinery.vespene_contents > 0
+                         and any(refinery.distance_to(base) < 12 for base in bases))
+        decision = self.economy_policy.decide(
+            seconds=float(self.time), workers=self.supply_workers,
+            ready_bases=len(bases), mineral_patches=patches, refineries=refineries,
+            minerals=self.minerals, gas=self.vespene,
+            mixed=self.production_profile() == "marine_tank_medivac",
+            requested_workers=requested_workers, requested_bases=requested_bases)
+        self.economy_status = dict(
+            requested_workers=requested_workers, requested_bases=requested_bases,
+            worker_target=decision.worker_target, base_target=decision.base_target,
+            workers_per_gas=decision.workers_per_gas,
+            mineral_capacity=decision.mineral_capacity, reason=decision.reason,
+            supply_workers=int(self.supply_workers), current_workers=len(self.workers),
+            ready_bases=len(bases), mineral_patches=patches,
+            pending_bases=int(self.structure_pending(self.base_townhall_type)),
+            actual_gas_workers=len(self.mediator.get_worker_to_vespene_dict),
+            minerals=int(self.minerals), vespene=int(self.vespene),
+            under_attack=self.economy_under_attack())
+        if self.time - self._last_economy_event >= 15:
+            self.telemetry.event("economy_policy", game_seconds=float(self.time),
+                                 **self.economy_status)
+            self._last_economy_event = float(self.time)
+        return decision.worker_target, decision.base_target
 
     def production_profile(self):
         return "marine_tank_medivac"

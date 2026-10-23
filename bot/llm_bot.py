@@ -111,6 +111,7 @@ class StrategicBot(RuleBot):
             active_plan=asdict(self.director.active) if self.director.active else None,
             available_targets=["own_main", "own_natural", "enemy_main"],
             ready_bases=len(self.ready_townhalls),
+            economy_policy=dict(self.economy_status),
             production_profile=self.production_profile(),
             available_production_profiles=["marine_basic", "marine_tank_medivac"],
             base_under_attack=any(
@@ -250,8 +251,8 @@ class StrategicBot(RuleBot):
                 and self.supply_army < self._plan.min_army_supply
                 else "active",
                 self.supply_workers
-                >= min(self._plan.worker_target, 22 * len(self.ready_townhalls)),
-                len(self.ready_townhalls) >= self._plan.base_target,
+                >= self.economy_status.get("worker_target", self._plan.worker_target),
+                len(self.ready_townhalls) >= self.economy_status.get("base_target", self._plan.base_target),
             )
             if progress != self._goal_progress:
                 self.telemetry.event(
@@ -264,12 +265,12 @@ class StrategicBot(RuleBot):
                 )
                 self._goal_progress = progress
 
-    def economic_goals(self):
+    def requested_economic_goals(self):
         if not self._plan:
-            return super().economic_goals()
+            return super().requested_economic_goals()
         self.stats["economy_goal_steps"] += 1
         return (
-            min(self._plan.worker_target, 22 * len(self.ready_townhalls)),
+            self._plan.worker_target,
             self._plan.base_target,
         )
 

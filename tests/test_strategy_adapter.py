@@ -32,6 +32,8 @@ class StrategyAdapterTests(unittest.TestCase):
         bot._failures = 0
         bot._inflight = None
         bot._deadline_reported = False
+        bot._human_experience = None
+        bot.economy_status = {}
         bot._plan = None
         bot._source = None
         bot._callbacks_at_request = 0
@@ -99,9 +101,14 @@ class StrategyAdapterTests(unittest.TestCase):
 
     def test_emergency_defense_precedes_llm_attack_in_real_executor(self):
         target = SimpleNamespace(x=10, y=20)
-        unit = SimpleNamespace(tag=42, is_idle=True, attack=Mock(return_value=True))
+        from sc2.ids.unit_typeid import UnitTypeId
+        class Army(list):
+            def of_type(self, kinds):
+                return self
+        unit = SimpleNamespace(tag=42, type_id=UnitTypeId.MARINE, is_idle=True, attack=Mock(return_value=True))
         bot = SimpleNamespace(
-            units=lambda _: [unit],
+            units=SimpleNamespace(of_type=lambda kinds: Army([unit]) if UnitTypeId.MARINE in kinds else Army()),
+            support=Mock(),
             arbiter=OrderArbiter(),
             _last_order={},
             enemy_units=SimpleNamespace(
@@ -127,5 +134,5 @@ class StrategyAdapterTests(unittest.TestCase):
 
     def test_rule_hooks_do_not_load_llm_or_require_credentials(self):
         bot = SimpleNamespace(ready_townhalls=[1, 2])
-        self.assertEqual(RuleBot.economic_goals(bot), (44, 2))
+        self.assertEqual(RuleBot.requested_economic_goals(bot), (72, 4))
         self.assertIsNone(RuleBot.strategic_order(bot, []))
