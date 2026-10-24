@@ -1,5 +1,14 @@
 # 本地 Ares + LLM + RL 项目
 
+## 2026-10-24 Factory 全兵种生产与基础控制
+
+Factory 路线现覆盖 Hellion、Hellbat、Widow Mine、Cyclone、Siege Tank、Thor。LLM 在旧编成外可选 `factory_hellion_cyclone`、`factory_mine_tank`、`factory_thor_hellbat`；气矿、Factory、附着 Tech Lab、Armory 与首批单位资源由统一生产计划衔接。Hellbat 可直接生产或由 Hellion 转换，Widow Mine 下埋后自动攻击并在转场时收起，Thor 保留两种武器模式的控制；Cyclone 本轮只实现基础武器作战，暂不含 Lock On 风筝。
+
+这些机械单位由规则控制，不进入 Marine PPO。扩张、补工人、矿气分配、Stim 研究和原有兵营编成保持兼容。仍用 `.\run_human_training.cmd --human-fullscreen` 开局，赛后仅显式 Y 才学习。本轮未新开实战或更新模型；新生产链尚待下一局验证，不能将定向检查当成实战收益。详见 [Factory 生产链报告](docs/FACTORY_UNIT_PRODUCTION_REPORT.md)。本轮最近两局复盘另见单独报告，未批准局不补学。
+
+
+最近两盘 `human_20261023_203244_532216` / `human_20261024_110526_233695` 均自然败局、约16分07／08秒，都是已批准学习的有效局；经济修复已达到4基地，后一局 Stim 已完成研究并出现施放记录。两局 PPO 均为0样本，未更新参数。对手回放累计生产17／11艘 Battlecruiser，现已修正压缩经验遗漏BC的问题，仅刷新已批准局的回放经验，原学习报告与PPO指针未改。优先改进为可见空军后的防空编成、早期pending扩张与补工人时序、微操支持域与拒绝原因，详见 [最近两局复盘](docs/LATEST_TWO_HUMAN_MATCH_REVIEW.md)。
+
 ## 2026-10-24 Stimpack 研究与战斗使用
 
 LLM 的 `research_priority` 现支持 `[]` 或 `["stimpack"]`，旧空列表策略保持合法。Ares 的 `UpgradeController` 负责建造所需兵营 Tech Lab、研究升级及 pending/complete 去重；LLM 快照包含可选科技和研究状态。这是科技选择和执行接口的第一项，尚不是自动学习所有科技树或远端模型微调。

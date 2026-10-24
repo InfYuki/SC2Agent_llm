@@ -5,7 +5,12 @@ PRODUCTION_PROFILES = {
     "marine_marauder_medivac": (("MARINE", .65, 2), ("MARAUDER", .25, 0), ("MEDIVAC", .10, 1)),
     "reaper_pressure": (("MARINE", .35, 1), ("REAPER", .65, 0)),
     "ghost_support": (("MARINE", .65, 3), ("MARAUDER", .15, 1), ("GHOST", .10, 0), ("MEDIVAC", .10, 2)),
+    "factory_hellion_cyclone": (("MARINE", .25, 2), ("HELLION", .35, 1), ("CYCLONE", .40, 0)),
+    "factory_mine_tank": (("MARINE", .40, 2), ("WIDOWMINE", .25, 1), ("SIEGETANK", .35, 0)),
+    "factory_thor_hellbat": (("MARINE", .20, 2), ("HELLIONTANK", .50, 1), ("THOR", .30, 0)),
 }
+
+FACTORY_PROFILES = frozenset(name for name in PRODUCTION_PROFILES if name.startswith("factory_"))
 
 
 def needs_gas(profile):

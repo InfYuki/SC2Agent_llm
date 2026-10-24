@@ -11,7 +11,7 @@ from sc2.position import Point2
 from ares.behaviors.macro import GasBuildingController, TechUp, SpawnController, MacroPlan
 from bot.arbiter import OrderArbiter
 from bot.llm_client import EXAMPLE, SYSTEM
-from bot.production import PRODUCTION_PROFILES, needs_gas
+from bot.production import FACTORY_PROFILES, PRODUCTION_PROFILES, needs_gas
 from bot.rule_bot import RuleBot
 from bot.strategy import parse_plan, PlanError
 from bot.terran_support import FirstInfantryReserve, FirstSupportReserve, SupportController, composition
@@ -48,7 +48,7 @@ class BarracksProductionTest(unittest.TestCase):
             self.assertEqual(any(isinstance(x, GasBuildingController) for x in macros), needs_gas(profile))
             tech = {x.desired_tech for x in macros if isinstance(x, TechUp)}
             self.assertEqual(tech, set(composition(profile)) - {U.MARINE})
-            if profile not in {'marine_basic', 'marine_tank_medivac'}:
+            if profile not in {'marine_basic', 'marine_tank_medivac'} | FACTORY_PROFILES:
                 self.assertTrue(any(isinstance(x, FirstInfantryReserve) for x in macros))
                 self.assertFalse(any(isinstance(x, FirstSupportReserve) for x in macros))
         self.assertTrue({U.MARINE, U.MARAUDER, U.REAPER, U.GHOST} <= all_kinds)

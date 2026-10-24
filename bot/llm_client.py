@@ -64,7 +64,16 @@ You control goals; Ares handles execution. Choose production_profile:
 marine_tank_medivac (Marine80%/Tank12%/Medivac8%),
 marine_basic (all Marines), marine_marauder_medivac (Marine65%/Marauder25%/Medivac10%),
 reaper_pressure (Marine35%/Reaper65%), or ghost_support
-(Marine65%/Marauder15%/Ghost10%/Medivac10%). Fractions are unit counts, not supply.
+(Marine65%/Marauder15%/Ghost10%/Medivac10%);
+factory_hellion_cyclone (Marine25%/Hellion35%/Cyclone40%),
+factory_mine_tank (Marine40%/WidowMine25%/Tank35%),
+factory_thor_hellbat (Marine20%/Hellbat50%/Thor30%). Fractions are unit counts, not supply.
+Factory profiles build their Factory, attached TechLab when needed, and Armory
+for Hellbats/Thors. Hellions counter light ground armies; Hellbats are short-range
+ground attackers; mines burrow and fire automatically, then unburrow to reposition.
+Cyclones use basic ground/air attacks (no Lock On controller). Thors provide ground
+and air attacks; use factory_thor_hellbat against observed heavy air such as Battlecruisers,
+but Hellbats cannot attack air. Factory skills are rules, not Marine PPO actions.
 Marauders require Barracks TechLab; Reapers need Barracks and gas; Ghosts need
 Barracks TechLab and Ghost Academy. Local Ares builds prerequisites/refineries.
 Use Marauders versus armored ground units; they cannot attack air. Reapers have

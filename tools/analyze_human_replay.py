@@ -15,6 +15,13 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 OPTIONAL = ROOT / ".local-setup" / "replay-analysis"
 
+# Bounded Terran army vocabulary, including the air threat from the recent games.
+# Tracker morph names are retained as evidence, not counted as extra births.
+ARMY_TYPES = {"Marine", "Marauder", "Reaper", "Ghost", "SiegeTank", "SiegeTankSieged",
+              "Hellion", "HellionTank", "WidowMine", "WidowMineBurrowed", "Cyclone",
+              "Thor", "ThorAP", "Medivac", "VikingFighter", "VikingAssault", "Banshee",
+              "Raven", "Liberator", "LiberatorAG", "Battlecruiser"}
+
 
 def read(path):
     return json.loads(Path(path).read_text(encoding="utf-8-sig"))
@@ -115,7 +122,7 @@ def analyze(run_dir, *, protocol_build=None, human_name="HumanTerran", memory_di
                               gas_rate=values["m_scoreValueVespeneCollectionRate"]))
     key_types = {"SupplyDepot", "Barracks", "Refinery", "CommandCenter", "OrbitalCommand",
                  "Factory", "FactoryTechLab", "Starport", "StarportReactor", "Bunker",
-                 "EngineeringBay", "Armory", "Reaper", "Marine", "SiegeTank", "Medivac", "Marauder", "VikingFighter"}
+                 "EngineeringBay", "Armory", "FusionCore"} | ARMY_TYPES
     milestones = []
     seen = Counter()
     for row in timeline:
@@ -167,10 +174,17 @@ def update_memory(memory_dir, profile):
     # This is a compact post-game study, explicitly not a live-state estimate.
     brief = {key: profile[key] for key in ("format", "source_run_id", "evidence_scope", "replay_sha256",
              "actual_replay_build", "decoder_schema_build", "compatibility_override", "peak_workers")}
-    brief["milestones"] = [{k: r[k] for k in ("seconds", "event", "unit", "ordinal")} for r in profile["milestones"]
-                           if r["unit"] in {"CommandCenter", "Factory", "Starport", "SiegeTank", "Medivac"}][:12]
+    selected = [r for r in profile["milestones"] if r["unit"] in
+                {"CommandCenter", "Factory", "Starport", "FusionCore", "Armory"} | ARMY_TYPES]
+    # Preserve first Battlecruiser/Factory unit timings before repeated macro events
+    # fill the prompt budget. Chronology remains explicit in each row's seconds.
+    first_army = [r for r in selected if r["unit"] in ARMY_TYPES and r["event"] == "created"
+                  and r.get("ordinal") == 1]
+    chosen = first_army + [r for r in selected if r not in first_army]
+    brief["milestones"] = sorted([{k: r[k] for k in ("seconds", "event", "unit", "ordinal")}
+                                  for r in chosen[:18]], key=lambda r: r["seconds"])
     brief["army_created"] = {k: v for k, v in profile["cumulative_units_created"].items()
-                             if k in {"Marine", "Marauder", "SiegeTank", "Medivac", "VikingFighter", "Reaper"}}
+                             if k in ARMY_TYPES}
     records = memory.setdefault("recent_matches", [])
     record = next((r for r in records if r.get("run_id") == profile["source_run_id"]), None)
     if record is None:
@@ -185,7 +199,20 @@ def update_memory(memory_dir, profile):
     ]
     if brief["army_created"].get("SiegeTank"):
         lessons.append("The studied human used Siege Tanks. Prepare supported combined arms and avoid blindly sending Marines into a currently observed siege line; this is a planning hypothesis, not proof of a fixed opponent build.")
-    memory["lessons"] = list(dict.fromkeys(lessons + memory.get("lessons", [])))[:8]
+    if brief["army_created"].get("Battlecruiser"):
+        lessons.append("The studied human produced Battlecruisers. Scout current air threats and choose supported anti-air production rather than relying on ground-only damage; past replay evidence does not prove the next build or any counter's effectiveness.")
+    # Shared old lessons had no per-line provenance. Rebuild from retained match
+    # evidence instead of keeping stale army summaries that omitted air units.
+    prior = []
+    for previous in reversed(records):
+        prior.extend(previous.get("notes", []))
+        evidence = previous.get("postmatch_replay_profile", {})
+        army = evidence.get("army_created", {})
+        if army and previous is not record:
+            prior.append("Historical replay " + str(previous.get("run_id")) +
+                         " cumulative army: " + ", ".join(f"{v} {k}" for k, v in army.items()) +
+                         ". Production totals, not current enemy vision.")
+    memory["lessons"] = list(dict.fromkeys(lessons + prior))[:8]
     memory["recent_matches"] = records[-8:]
     memory["updated_at_utc"] = datetime.now(timezone.utc).isoformat()
     write(path, memory)

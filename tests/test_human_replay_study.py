@@ -21,8 +21,11 @@ class HumanReplayStudyTest(unittest.TestCase):
         profile = dict(format="human-replay-profile-v1", source_run_id="studied-human-game",
             evidence_scope="post-match replay; not live vision", replay_sha256="a" * 64,
             actual_replay_build=98370, decoder_schema_build=98310, compatibility_override=True,
-            peak_workers=51, milestones=[dict(seconds=237.232, event="created", unit="SiegeTank", ordinal=1)],
-            cumulative_units_created={"Marine": 44, "SiegeTank": 7, "Medivac": 6})
+            peak_workers=51, milestones=[dict(seconds=237.232, event="created", unit="SiegeTank", ordinal=1),
+                dict(seconds=366.116, event="created", unit="Battlecruiser", ordinal=1)],
+            cumulative_units_created={"Marine": 44, "SiegeTank": 7, "Medivac": 6,
+                "Battlecruiser": 17, "Hellion": 18, "HellionTank": 4, "Cyclone": 1,
+                "WidowMine": 3, "Thor": 2, "Ghost": 2})
         with tempfile.TemporaryDirectory() as temporary, patch("tools.analyze_human_replay.ROOT", Path(temporary)):
             memory = Path(temporary)
             from tools.human_learning_approval import decide
@@ -48,7 +51,13 @@ class HumanReplayStudyTest(unittest.TestCase):
             payload = json.loads(bot.worker.submit.call_args.args[0])
             actual = payload["previous_human_match_experience"]["recent_matches"][-1]["postmatch_replay_profile"]
             self.assertEqual(actual["army_created"]["SiegeTank"], 7)
+            self.assertEqual(actual["army_created"]["Battlecruiser"], 17)
+            for name in ("Hellion", "HellionTank", "WidowMine", "Cyclone", "Thor", "Ghost"):
+                self.assertIn(name, actual["army_created"])
+            self.assertTrue(any("produced Battlecruisers" in lesson for lesson in
+                                payload["previous_human_match_experience"]["lessons"]))
             self.assertEqual(actual["milestones"][0]["seconds"], 237.232)
+            self.assertTrue(any(row["unit"] == "Battlecruiser" for row in actual["milestones"]))
             self.assertIn("not live vision", actual["evidence_scope"])
 
 

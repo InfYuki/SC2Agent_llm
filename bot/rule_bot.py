@@ -23,8 +23,8 @@ from bot.arbiter import OrderArbiter
 from bot.budget import ExpansionBudget
 from bot.building_manager import BuildingManager
 from bot.probe import InstrumentedAresBot
-from bot.production import needs_gas, tech_units
-from bot.terran_support import (FirstInfantryReserve, FirstSupportReserve, SupportController,
+from bot.production import FACTORY_PROFILES, needs_gas, tech_units
+from bot.terran_support import (FactoryMorphBudget, FirstFactoryReserve, FirstInfantryReserve, FirstSupportReserve, SupportController,
                                 SUPPORT_TYPES, GROUND_COMBAT_TYPES, composition)
 
 
@@ -121,11 +121,15 @@ class RuleBot(InstrumentedAresBot):
             desired_tech = tech_units(profile)
             if profile == "marine_tank_medivac" and self.time >= 100:
                 plan.add(FirstSupportReserve())
+            elif profile in FACTORY_PROFILES:
+                plan.add(FirstFactoryReserve(profile))
             elif mixed:
                 plan.add(FirstInfantryReserve(profile))
             if profile != "marine_tank_medivac" or self.time >= 100:
                 for unit_name in desired_tech:
                     plan.add(TechUp(getattr(UnitTypeId, unit_name), self.start_location))
+            if profile in FACTORY_PROFILES:
+                plan.add(FactoryMorphBudget(profile))
             plan.add(SpawnController(army_composition))
             plan.add(
                 ProductionController(
