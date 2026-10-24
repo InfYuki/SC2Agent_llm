@@ -10,6 +10,8 @@ if not exist "%ARES_ENV%\python.exe" (
 )
 set "PYTHONNOUSERSITE=1"
 set "PYTHONIOENCODING=utf-8"
+rem Independent chat switch: set SC2_CHAT_ENABLED=1, or pass --chat / --no-chat.
+if not defined SC2_CHAT_ENABLED set "SC2_CHAT_ENABLED=0"
 set "PATH=%ARES_ENV%;%ARES_ENV%\Scripts;%ARES_ENV%\Library\bin;%PATH%"
 "%ARES_ENV%\python.exe" -s -u tools\run_human_training.py %*
 set "HUMAN_TRAINING_CODE=%errorlevel%"

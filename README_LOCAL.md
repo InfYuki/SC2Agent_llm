@@ -1,5 +1,12 @@
 # 本地 Ares + LLM + RL 项目
 
+## 2026-10-24 独立游戏聊天（默认关闭）
+
+真人对局可用 `.\run_human_training.cmd --human-fullscreen --chat` 开启小鲸鱼人格聊天，`--no-chat` 关闭。开局固定问候，之后约60–120游戏秒进行短评，也可回应玩家游戏内聊天。聊天使用独立 `.env.chat.local`／`CHAT_DEEPSEEK_*`，不借用或覆盖决策密钥，独立后台请求、有限队列与超时；聊天失败不改战略计划、PPO与赛后审批。人格源文件位于 `personas/persona-588934424a/`，其中QQ工具指令不构成程序权限。
+
+默认入口仍为决策LLM＋PPO，聊天文字不输入战略或学习记忆；赛后仅显式Y才学习。本轮仅无游戏与mock检查，未调用API或训练模型，实际中文聊天显示待实战。详见[独立游戏聊天报告](docs/INDEPENDENT_MATCH_CHAT_REPORT.md)。任务收尾按AGENTS清理本轮缓存，保留模型、回放、学习记录与私密配置。
+
+
 ## 2026-10-24 基地防御与 Orbital Command
 
 新增 Missile Turret（含 Engineering Bay）、Bunker 和 Orbital Command 的建造／升级链。LLM 可选 `base_defense: none|standard|fortified` 与 `orbital_command: true|false`，旧策略缺字段默认 standard／true；原兵种路线、经济、Stim 与赛后人工学习开关保持兼容。Bunker 可装载附近 Marine 并在安静转场时卸载；Orbital 可召唤 MULE，并针对本局实际观察到的隐形／埋地威胁 Scan。防御不等于完整防空军队，也不把回放全图事实作为当前可见敌情。

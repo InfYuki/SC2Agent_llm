@@ -109,6 +109,9 @@ def main():
     parser.add_argument("--human-checkpoint", default=None)
     parser.add_argument("--strategy-memory", default=None)
     parser.add_argument("--human-fullscreen", action="store_true")
+    parser.add_argument("--chat", action=argparse.BooleanOptionalAction,
+                        default=os.getenv("SC2_CHAT_ENABLED", "0") == "1",
+                        help="Independent in-game chat (default off, or SC2_CHAT_ENABLED=1); separate private credentials.")
     options = parser.parse_args()
     if options.human_training and (options.mode != "llm_ppo" or not options.realtime or options.llm_max_calls < 1 or not options.human_checkpoint):
         parser.error("human-training requires llm_ppo, realtime, positive llm-max-calls and human-checkpoint")
@@ -203,6 +206,8 @@ def main():
         telemetry.finish()
         raise
     finally:
+        if hasattr(ai, "close_chat"):
+            ai.close_chat()
         if hasattr(ai, "close_micro"):
             ai.close_micro("system_failure" if telemetry.error else None)
         if hasattr(ai, "close_strategy"):

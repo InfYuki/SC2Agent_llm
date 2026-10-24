@@ -11,6 +11,7 @@ class InstrumentedAresBot(AresBot):
     def __init__(self, options, telemetry):
         self.options = options
         self.telemetry = telemetry
+        self._chat_runtime = None
         super().__init__(game_step_override=options.game_step)
 
     async def on_start(self):
@@ -47,6 +48,8 @@ class InstrumentedAresBot(AresBot):
                 realtime=self.realtime,
                 game_step=self.client.game_step,
             )
+            from bot.banter_runtime import start_banter
+            self._chat_runtime = start_banter(self)
         except Exception:
             self.telemetry.fail("on_start")
             raise
@@ -67,6 +70,14 @@ class InstrumentedAresBot(AresBot):
                 await self.client.leave()
                 return
             self.play_step(iteration)
+            chat = getattr(self, "_chat_runtime", None)
+            if chat is not None:
+                try:
+                    await chat.step()
+                except Exception:
+                    # Chat errors are deliberately outside gameplay telemetry.
+                    print("Game chat stopped; gameplay continues.", flush=True)
+                    self.close_chat()
             self.telemetry.observe(self, time.perf_counter() - start)
         except Exception:
             self.telemetry.fail("on_step")
@@ -86,4 +97,14 @@ class InstrumentedAresBot(AresBot):
             self.telemetry.fail("on_end")
             raise
         finally:
+            self.close_chat()
             self.telemetry.finish(result)
+
+    def close_chat(self):
+        chat = getattr(self, "_chat_runtime", None)
+        self._chat_runtime = None
+        if chat is not None:
+            try:
+                chat.close()
+            except Exception:
+                pass

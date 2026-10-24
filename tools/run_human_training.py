@@ -19,6 +19,9 @@ def configuration(argv=None):
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--actor", type=Path)
     parser.add_argument("--run-id", default=None)
+    parser.add_argument("--chat", action=argparse.BooleanOptionalAction,
+                        default=os.getenv("SC2_CHAT_ENABLED", "0") == "1",
+                        help="Independent game banter; --no-chat disables it. Default off unless SC2_CHAT_ENABLED=1.")
     parser.add_argument("--learn", choices=("ask", "yes", "no"), default="ask", help="Post-match learning decision; default asks, only explicit yes learns.")
     parser.add_argument("--learn-run", help="Decide learning for an existing run ID without starting SC2.")
     parser.add_argument("--show-config", action="store_true")
@@ -64,14 +67,15 @@ def configuration(argv=None):
             "--mode", "llm_ppo", "--human-training", "--realtime", "--opponent", "Terran",
             "--ppo-model", str(actor), "--human-checkpoint", str(checkpoint),
             "--strategy-memory", str(memory / "strategy_memory.json"),
-            "--ppo-engagement-gate", "--llm-max-calls", "240", "--run-id", run_id, *game_args]
+            "--ppo-engagement-gate", "--llm-max-calls", "240", "--run-id", run_id,
+            "--chat" if args.chat else "--no-chat", *game_args]
     learn = [str(args.training_python.resolve()), "-s", "-u", str(ROOT / "tools" / "learn_human_match.py"),
              "--run-dir", str(run_dir), "--checkpoint", str(checkpoint),
              "--output", str(run_dir / "learning"), "--memory-dir", str(memory)]
     return args, dict(run_id=run_id, human="Terran", agent="Terran / LLM + stochastic PPO", realtime=True,
                       checkpoint=str(checkpoint), actor=str(actor), run_dir=str(run_dir),
                       strategy_memory=str(memory / "strategy_memory.json"), game_command=game,
-                      learning_command=learn, learning_mode=args.learn)
+                      learning_command=learn, learning_mode=args.learn, chat_enabled=args.chat)
 
 
 def finish_learning(args, config):
@@ -100,6 +104,15 @@ def main(argv=None):
     from bot.llm_client import Settings
     Settings.load(ROOT / ".env.local")  # Validate in memory; never serialize credentials.
     print("Preflight PASS: training dependencies, checkpoint/actor identity and local LLM settings. No API request made.", flush=True)
+    if args.chat:
+        try:
+            from bot.banter_client import BanterSettings
+            BanterSettings.load(ROOT / ".env.chat.local")
+            print("Chat preflight PASS: separate local chat settings; no API request made.", flush=True)
+        except Exception:
+            # Optional chat must never block an otherwise valid match. Run_local
+            # independently validates it at startup and disables on failure.
+            print("Chat preflight unavailable: gameplay remains enabled; chat will stay off. No API request made.", flush=True)
     if args.check_only:
         return subprocess.call([*config["game_command"], "--show-config"], cwd=ROOT)
     print("Two SC2 windows will open. Play in HumanTerran as Terran; surrender/end normally to save; you will decide whether to learn afterward.", flush=True)
