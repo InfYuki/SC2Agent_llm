@@ -1,5 +1,11 @@
 # SC2Agent_llm 工作交接与换机恢复
 
+## 2026-10-24 基地防御与 Orbital Command
+
+新增 Missile Turret（含 Engineering Bay）、Bunker 和 Orbital Command 的建造／升级链。LLM 可选 `base_defense: none|standard|fortified` 与 `orbital_command: true|false`，旧策略缺字段默认 standard／true；原兵种路线、经济、Stim 与赛后人工学习开关保持兼容。Bunker 可装载附近 Marine 并在安静转场时卸载；Orbital 可召唤 MULE，并针对本局实际观察到的隐形／埋地威胁 Scan。防御不等于完整防空军队，也不把回放全图事实作为当前可见敌情。
+
+装载和建筑技能都由规则控制，Marine 的16维／5动作 PPO 不变；装载前退出旧控制轨迹。轨道升级使用有界储备，避免持续排 SCV 导致永远无空闲，也避免无限期停工。仍用 `.\run_human_training.cmd --human-fullscreen`，赛后仅显式 Y 才学习。本轮未新开实战或训练模型，详见 [基地防御与轨道报告](docs/TERRAN_DEFENSE_ORBITAL_REPORT.md)。任务结束清理本轮安全缓存，保留回放／模型／学习证据和依赖。
+
 ## 2026-10-24 Factory 全兵种生产与基础控制
 
 Factory 路线现覆盖 Hellion、Hellbat、Widow Mine、Cyclone、Siege Tank、Thor。LLM 在旧编成外可选 `factory_hellion_cyclone`、`factory_mine_tank`、`factory_thor_hellbat`；气矿、Factory、附着 Tech Lab、Armory 与首批单位资源由统一生产计划衔接。Hellbat 可直接生产或由 Hellion 转换，Widow Mine 下埋后自动攻击并在转场时收起，Thor 保留两种武器模式的控制；Cyclone 本轮只实现基础武器作战，暂不含 Lock On 风筝。

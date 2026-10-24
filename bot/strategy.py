@@ -32,6 +32,8 @@ class Strategy:
     reason_summary: str
     production_profile: str = "marine_tank_medivac"
     research_priority: tuple[str, ...] = ()
+    base_defense: str = 'standard'
+    orbital_command: bool = True
 
     @property
     def intent(self):
@@ -44,6 +46,8 @@ class Strategy:
             self.min_army_supply,
             self.production_profile,
             self.research_priority,
+            self.base_defense,
+            self.orbital_command,
         )
 
 
@@ -64,10 +68,16 @@ def parse_plan(content, request_id, snapshot_seq):
         )
     except (ValueError, TypeError, RecursionError):
         raise PlanError("json") from None
+    if type(value) is dict:
+        value.setdefault('base_defense', 'standard')
+        value.setdefault('orbital_command', True)
     exact(
         value,
-        "schema_version request_id snapshot_seq stance economy production_profile research_priority squad_tasks attack_gate reason_summary",
+        "schema_version request_id snapshot_seq stance economy production_profile research_priority squad_tasks attack_gate reason_summary base_defense orbital_command",
     )
+    if (type(value['base_defense']) is not str or value['base_defense'] not in ('none', 'standard', 'fortified')
+            or type(value['orbital_command']) is not bool):
+        raise PlanError('base_defense')
     if value["schema_version"] != "strategy-v1" or value["request_id"] != request_id:
         raise PlanError("identity")
     if integer(value["snapshot_seq"], 1, 10000000) != snapshot_seq:
@@ -124,6 +134,8 @@ def parse_plan(content, request_id, snapshot_seq):
         reason,
         value["production_profile"],
         tuple(value["research_priority"]),
+        value['base_defense'],
+        value['orbital_command'],
     )
 
 

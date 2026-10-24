@@ -105,9 +105,7 @@ class StrategicBot(RuleBot):
                 ghosts=int(self.already_pending(UnitTypeId.GHOST)),
                 siege_tanks=int(self.already_pending(UnitTypeId.SIEGETANK)),
                 medivacs=int(self.already_pending(UnitTypeId.MEDIVAC)),
-                bases=int(self.already_pending(self.townhalls.first.type_id))
-                if self.townhalls
-                else 0,
+                bases=int(self.structure_pending(self.base_townhall_type)),
             ),
             enemy_visible=dict(Counter(u.type_id.name for u in visible + structures)),
             enemy_memory=memory,
@@ -120,6 +118,7 @@ class StrategicBot(RuleBot):
             available_production_profiles=list(PRODUCTION_PROFILES),
             available_research=["stimpack"],
             research_status=self.upgrade_status(),
+            base_defense=self.base_defense_status(),
             production_compositions={name: {unit: fraction for unit, fraction, _ in spec}
                                      for name, spec in PRODUCTION_PROFILES.items()},
             base_under_attack=any(
@@ -287,6 +286,12 @@ class StrategicBot(RuleBot):
 
     def production_profile(self):
         return self._plan.production_profile if self._plan else super().production_profile()
+
+    def defense_policy(self):
+        return self._plan.base_defense if self._plan else super().defense_policy()
+
+    def orbital_enabled(self):
+        return self._plan.orbital_command if self._plan else super().orbital_enabled()
 
     def strategic_order(self, army):
         goal = combat_goal(self._plan, False, float(self.supply_army))

@@ -54,6 +54,8 @@ EXAMPLE = {
     "economy": {"worker_target": 72, "base_target": 4},
     "production_profile": "marine_tank_medivac",
     "research_priority": ["stimpack"],
+    "base_defense": "standard",
+    "orbital_command": True,
     "squad_tasks": [{"squad_id": "main", "task": "rally", "target_id": "own_natural"}],
     "attack_gate": {"min_army_supply": 20},
     "reason_summary": "Build a stable economy",
@@ -85,6 +87,15 @@ choosing advanced tech. research_priority is [] or ["stimpack"]. Stimpack requir
 Barracks TechLab and research resources; Ares builds prerequisites and reserves
 the research cost. It helps Marines/Marauders in sustained combat; use [] to defer
 research. Completed Stim is used by local safe combat rules, never a PPO action.
+base_defense is none|standard|fortified. Standard builds one frontline Bunker and
+one Missile Turret per ready mining base when mature or threatened; fortified
+allows two frontline Bunkers and two Turrets per base. Bunkers load nearby Marines
+under local defense and unload for a quiet advance/retreat. Turrets need Engineering Bay;
+they detect and attack air but cannot alone stop a Battlecruiser fleet.
+orbital_command is a boolean: upgrade ready idle Command Centers after Barracks,
+one at a time, with a bounded research budget before further SCVs. Orbital MULEs
+mine safe owned mineral patches and scans respond only to locally observed hidden
+threats, never hidden global replay information. These abilities are outside PPO.
 No other research, coordinates, raw actions or extra
 keys. Never assume hidden enemy units. A requested tech profile takes time and resources.
 stance: develop|defend_then_expand|pressure. worker_target integer16..80, base_target1..4.

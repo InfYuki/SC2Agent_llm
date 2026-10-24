@@ -194,6 +194,7 @@ class MicroRuleBot(RuleBot):
         contexts = {}
         engagement_rejected = set()
         stim_tags = set()
+        bunker_tags = set(getattr(getattr(self, 'base_controller', None), 'load_targets', {}))
         try:
             if not self._micro_disabled:
                 contexts = {
@@ -226,6 +227,7 @@ class MicroRuleBot(RuleBot):
                 unit.tag
                 for unit in army
                 if unit.tag not in stim_tags
+                and unit.tag not in bunker_tags
                 and unit.tag in contexts
                 and contexts[unit.tag].supported
                 and unit.tag in domain_allowed
@@ -275,6 +277,7 @@ class MicroRuleBot(RuleBot):
                 else "strategy_retreat"
                 if state in {"retreat", "rally"}
                 else "stim_rule_override" if tag in stim_tags
+                else "bunker_loading" if tag in bunker_tags
                 else "control_released"
             )
             self.recorder.finish(tag, frame, ctx, truncated=not remains, reason=reason)

@@ -17,6 +17,7 @@ from ares.managers.manager_mediator import ManagerMediator
 from sc2.ids.unit_typeid import UnitTypeId
 
 from bot.upgrades import StimController, StimResearch
+from bot.base_defense import BaseController, BaseDefenses, OrbitalResearch
 from sc2.ids.upgrade_id import UpgradeId
 from bot.economy import EconomyPolicy
 from bot.arbiter import OrderArbiter
@@ -42,6 +43,8 @@ class RuleBot(InstrumentedAresBot):
         self._saving_expansion = False
         self.support = SupportController()
         self.stim = StimController()
+        self.base_controller = BaseController()
+        self.orbital_research = OrbitalResearch()
         self._last_upgrade_status = None
         self.economy_policy = EconomyPolicy()
         self.economy_status = {}
@@ -79,6 +82,8 @@ class RuleBot(InstrumentedAresBot):
         self.register_behavior(Mining(workers_per_gas=self.economy_status["workers_per_gas"]))
         plan = MacroPlan()
         plan.add(AutoSupply(self.start_location))
+        if hasattr(self, 'orbital_research'):
+            plan.add(self.orbital_research)
         plan.add(BuildWorkers(to_count=worker_target))
         profile = self.production_profile()
         army_composition = composition(profile)
@@ -116,6 +121,8 @@ class RuleBot(InstrumentedAresBot):
         if mixed and self.supply_workers >= 16 and not saving:
             plan.add(GasBuildingController(to_count=min(4, 2 * max(1, len(self.ready_townhalls)))))
         if not saving:
+            if hasattr(self, 'base_controller'):
+                plan.add(BaseDefenses())
             if "stimpack" in research:
                 plan.add(StimResearch([UpgradeId.STIMPACK], self.start_location, prioritize=True))
             desired_tech = tech_units(profile)
@@ -143,18 +150,25 @@ class RuleBot(InstrumentedAresBot):
         frame = int(self.state.game_loop)
         if frame - self._last_combat_frame >= 8:
             self._last_combat_frame = frame
+            if hasattr(self, 'base_controller'):
+                self.base_controller.orbital_step(self, frame)
             self._combat(frame)
 
     def _combat(self, frame):
         army = self.units.of_type(GROUND_COMBAT_TYPES)
         owners = {unit.tag: "rule_combat" for unit in army if unit.type_id == UnitTypeId.MARINE}
         owners.update({unit.tag: "rule_support" for unit in self.units.of_type(SUPPORT_TYPES)})
+        controller = getattr(self, 'base_controller', None)
+        if controller:
+            owners.update({b.tag: 'rule_bunker' for b in self.structures(UnitTypeId.BUNKER).ready})
         self.arbiter.begin_step(owners)
         alive = set(owners)
         self._last_order = {
             tag: value for tag, value in self._last_order.items() if tag in alive
         }
         if not army:
+            if controller:
+                controller.prepare(self, army, 'attack', frame)
             self.support.step(self, army, "rally", self.start_location, frame)
             return
         threats = self.enemy_units.filter(
@@ -193,6 +207,8 @@ class RuleBot(InstrumentedAresBot):
                 marines=len(army),
             )
         self.strategy_state = state
+        if controller:
+            controller.prepare(self, army, state, frame)
         # Keep every non-Marine outside the frozen Marine PPO interface.
         self.issue_combat_orders(army.of_type({UnitTypeId.MARINE}), state, target, frame)
         self.support.step(self, army, state, target, frame)
@@ -203,6 +219,10 @@ class RuleBot(InstrumentedAresBot):
             self.issue_rule_order(unit, state, target, frame)
 
     def issue_rule_order(self, unit, state, target, frame):
+        base_controller = getattr(self, 'base_controller', None)
+        if base_controller and base_controller.issue_load(self, unit, frame):
+            self._last_order.pop(unit.tag, None)
+            return
         stim = getattr(self, "stim", None)
         if stim and stim.issue(self, unit, state, frame, "rule_combat"):
             self._last_order.pop(unit.tag, None)
@@ -261,6 +281,18 @@ class RuleBot(InstrumentedAresBot):
 
     def research_priorities(self):
         return ("stimpack",)
+
+    def defense_policy(self):
+        return 'standard'
+
+    def orbital_enabled(self):
+        return True
+
+    def base_defense_status(self):
+        types = (UnitTypeId.BUNKER, UnitTypeId.MISSILETURRET,
+                 UnitTypeId.ENGINEERINGBAY, UnitTypeId.ORBITALCOMMAND)
+        return dict(policy=self.defense_policy(), orbital_enabled=self.orbital_enabled(),
+                    structures={kind.name: len(self.structures(kind)) for kind in types})
 
     def upgrade_status(self):
         status = {"stimpack": "complete" if UpgradeId.STIMPACK in getattr(self.state, "upgrades", set())
