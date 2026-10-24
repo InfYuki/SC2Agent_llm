@@ -128,7 +128,11 @@ class SupportController:
         visible = [u for u in list(bot.enemy_units) + list(bot.enemy_structures)
                    if u.is_visible and not u.is_flying]
         for infantry in (u for u in support if u.type_id in BARRACKS_SUPPORT_TYPES):
-            # Basic combat only: no Stim, KD8, EMP, Snipe, cloak or nuclear orders.
+            stim = getattr(bot, "stim", None)
+            if stim and stim.issue(bot, infantry, state, frame, "rule_support"):
+                self.last_order.pop(infantry.tag, None)
+                continue
+            # Other abilities (KD8/EMP/Snipe/cloak/nuke) remain unimplemented.
             self.command(bot, infantry,
                          "move" if state in {"rally", "retreat"} else "attack", target, frame)
         for tank in (u for u in support if u.type_id in TANK_TYPES):

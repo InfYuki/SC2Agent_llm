@@ -1,5 +1,13 @@
 # 本地 Ares + LLM + RL 项目
 
+## 2026-10-24 Stimpack 研究与战斗使用
+
+LLM 的 `research_priority` 现支持 `[]` 或 `["stimpack"]`，旧空列表策略保持合法。Ares 的 `UpgradeController` 负责建造所需兵营 Tech Lab、研究升级及 pending/complete 去重；LLM 快照包含可选科技和研究状态。这是科技选择和执行接口的第一项，尚不是自动学习所有科技树或远端模型微调。
+
+Marine 和 Marauder 的 Stim 由规则按已完成升级、生命值、现有 Buff 与可见交战条件触发。Stim 是独立技能，不扩展 Marine PPO 的16维/5动作契约；施放决策前关闭旧微操轨迹，该决策不采样 PPO 动作，避免把技能当作伪训练动作。仍用 `.\run_human_training.cmd --human-fullscreen` 开局，赛后仅显式 Y 才学习。新研究/施放尚待实战验证，详见 [Stimpack 与临时文件清理报告](docs/STIMPACK_AND_CLEANUP_REPORT.md)。
+
+任务结束前清理本任务临时产物和安全缓存；保留模型、checkpoint、训练与学习记录、回放、证据报告、依赖和私密配置。此约定已写入根目录 [AGENTS.md](AGENTS.md)，下方旧“暂不研究/无 Stim”等说明为历史能力，不覆盖本节。
+
 ## 2026-10-24 兵营完整兵种生产链
 
 当前目标仍是战胜用户本人。本轮补齐标准对战兵营的 Marine、Marauder、Reaper、Ghost 生产入口及基本规则控制，LLM 可以选择对应兵种路线，科技与资源由 Ares 执行。Marauder 需要兵营 Tech Lab；Reaper 不需要 Tech Lab；Ghost 需要兵营 Tech Lab 和 Ghost Academy。Tank/Medivac 原有生产控制继续兼容。新增 `marine_marauder_medivac`、`reaper_pressure`、`ghost_support` 三种编成，原 `marine_basic` / `marine_tank_medivac` 保持合法且默认仍为后者。新步兵由规则执行攻击、集结与撤退，暂不含技能研发或 Ghost 主动施法。

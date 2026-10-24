@@ -193,6 +193,7 @@ class MicroRuleBot(RuleBot):
         started = time.perf_counter()
         contexts = {}
         engagement_rejected = set()
+        stim_tags = set()
         try:
             if not self._micro_disabled:
                 contexts = {
@@ -216,10 +217,16 @@ class MicroRuleBot(RuleBot):
                     )
                     if reason == "accepted":
                         domain_allowed.add(tag)
+            # Stim is a separate rule ability. Close the preceding ownership
+            # with its real next context before health is spent, then exclude
+            # this decision from PPO sampling (no new action/label).
+            stim = getattr(self, "stim", None)
+            stim_tags = {u.tag for u in army if stim and stim.ready(self, u, state, frame)}
             eligible = {
                 unit.tag
                 for unit in army
-                if unit.tag in contexts
+                if unit.tag not in stim_tags
+                and unit.tag in contexts
                 and contexts[unit.tag].supported
                 and unit.tag in domain_allowed
                 and (unit.health_percentage > 0.2 or self.terminal_evaluation())
@@ -267,6 +274,7 @@ class MicroRuleBot(RuleBot):
                 if remains
                 else "strategy_retreat"
                 if state in {"retreat", "rally"}
+                else "stim_rule_override" if tag in stim_tags
                 else "control_released"
             )
             self.recorder.finish(tag, frame, ctx, truncated=not remains, reason=reason)

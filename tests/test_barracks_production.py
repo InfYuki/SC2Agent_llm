@@ -37,7 +37,7 @@ class BarracksProductionTest(unittest.TestCase):
             behaviors = []
             fake = SimpleNamespace(
                 register_behavior=behaviors.append, start_location=Point2((0, 0)),
-                economic_goals=lambda: (24, 1), economy_status={'workers_per_gas': 3},
+                economic_goals=lambda: (24, 1), research_priorities=lambda: (), economy_status={'workers_per_gas': 3},
                 economy_under_attack=lambda: False, production_profile=lambda: profile,
                 supply_workers=24, ready_townhalls=[1], time=110,
                 expansion_budget=SimpleNamespace(reserve=lambda *a, **k: False),

@@ -31,6 +31,7 @@ class Strategy:
     min_army_supply: int
     reason_summary: str
     production_profile: str = "marine_tank_medivac"
+    research_priority: tuple[str, ...] = ()
 
     @property
     def intent(self):
@@ -42,6 +43,7 @@ class Strategy:
             self.target_id,
             self.min_army_supply,
             self.production_profile,
+            self.research_priority,
         )
 
 
@@ -75,7 +77,8 @@ def parse_plan(content, request_id, snapshot_seq):
     if (
         type(value["production_profile"]) is not str
         or value["production_profile"] not in PRODUCTION_PROFILES
-        or value["research_priority"] != []
+        or type(value["research_priority"]) is not list
+        or value["research_priority"] not in ([], ["stimpack"])
     ):
         raise PlanError("unsupported_tech")
     economy = value["economy"]
@@ -120,6 +123,7 @@ def parse_plan(content, request_id, snapshot_seq):
         gate,
         reason,
         value["production_profile"],
+        tuple(value["research_priority"]),
     )
 
 

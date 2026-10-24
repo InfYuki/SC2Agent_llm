@@ -16,6 +16,8 @@ from ares.managers.hub import Hub
 from ares.managers.manager_mediator import ManagerMediator
 from sc2.ids.unit_typeid import UnitTypeId
 
+from bot.upgrades import StimController, StimResearch
+from sc2.ids.upgrade_id import UpgradeId
 from bot.economy import EconomyPolicy
 from bot.arbiter import OrderArbiter
 from bot.budget import ExpansionBudget
@@ -39,6 +41,8 @@ class RuleBot(InstrumentedAresBot):
         self.expansion_budget = ExpansionBudget()
         self._saving_expansion = False
         self.support = SupportController()
+        self.stim = StimController()
+        self._last_upgrade_status = None
         self.economy_policy = EconomyPolicy()
         self.economy_status = {}
         self._last_economy_event = -30.0
@@ -69,6 +73,8 @@ class RuleBot(InstrumentedAresBot):
     def play_step(self, iteration):
         # Ares Mining excludes builders via its mediator roles. No distribute_workers
         # or raw worker build commands are issued by this bot.
+        if hasattr(self, "stim"):
+            self.upgrade_status()
         worker_target, base_target = self.economic_goals()
         self.register_behavior(Mining(workers_per_gas=self.economy_status["workers_per_gas"]))
         plan = MacroPlan()
@@ -76,7 +82,8 @@ class RuleBot(InstrumentedAresBot):
         plan.add(BuildWorkers(to_count=worker_target))
         profile = self.production_profile()
         army_composition = composition(profile)
-        mixed = needs_gas(profile)
+        research = RuleBot.research_priorities(self) if not hasattr(self, "research_priorities") else self.research_priorities()
+        mixed = needs_gas(profile) or bool(research)
         needs_expansion = (
             self.time > 120
             and (self.supply_workers >= 20
@@ -109,6 +116,8 @@ class RuleBot(InstrumentedAresBot):
         if mixed and self.supply_workers >= 16 and not saving:
             plan.add(GasBuildingController(to_count=min(4, 2 * max(1, len(self.ready_townhalls)))))
         if not saving:
+            if "stimpack" in research:
+                plan.add(StimResearch([UpgradeId.STIMPACK], self.start_location, prioritize=True))
             desired_tech = tech_units(profile)
             if profile == "marine_tank_medivac" and self.time >= 100:
                 plan.add(FirstSupportReserve())
@@ -190,6 +199,10 @@ class RuleBot(InstrumentedAresBot):
             self.issue_rule_order(unit, state, target, frame)
 
     def issue_rule_order(self, unit, state, target, frame):
+        stim = getattr(self, "stim", None)
+        if stim and stim.issue(self, unit, state, frame, "rule_combat"):
+            self._last_order.pop(unit.tag, None)
+            return
         action = "move" if state in {"retreat", "rally"} else "attack"
         signature = (action, round(target.x, 1), round(target.y, 1))
         old = self._last_order.get(unit.tag)
@@ -223,7 +236,7 @@ class RuleBot(InstrumentedAresBot):
             seconds=float(self.time), workers=self.supply_workers,
             ready_bases=len(bases), mineral_patches=patches, refineries=refineries,
             minerals=self.minerals, gas=self.vespene,
-            mixed=needs_gas(self.production_profile()),
+            mixed=needs_gas(self.production_profile()) or bool(self.research_priorities()),
             requested_workers=requested_workers, requested_bases=requested_bases)
         self.economy_status = dict(
             requested_workers=requested_workers, requested_bases=requested_bases,
@@ -241,6 +254,18 @@ class RuleBot(InstrumentedAresBot):
                                  **self.economy_status)
             self._last_economy_event = float(self.time)
         return decision.worker_target, decision.base_target
+
+    def research_priorities(self):
+        return ("stimpack",)
+
+    def upgrade_status(self):
+        status = {"stimpack": "complete" if UpgradeId.STIMPACK in getattr(self.state, "upgrades", set())
+                  else "pending" if getattr(self, "pending_or_complete_upgrade", lambda _: False)(UpgradeId.STIMPACK)
+                  else "not_started"}
+        if status != getattr(self, "_last_upgrade_status", None):
+            self.telemetry.event("research_status", game_seconds=float(self.time), **status)
+            self._last_upgrade_status = status
+        return status
 
     def production_profile(self):
         return "marine_tank_medivac"

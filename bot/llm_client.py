@@ -53,7 +53,7 @@ EXAMPLE = {
     "stance": "defend_then_expand",
     "economy": {"worker_target": 72, "base_target": 4},
     "production_profile": "marine_tank_medivac",
-    "research_priority": [],
+    "research_priority": ["stimpack"],
     "squad_tasks": [{"squad_id": "main", "task": "rally", "target_id": "own_natural"}],
     "attack_gate": {"min_army_supply": 20},
     "reason_summary": "Build a stable economy",
@@ -72,7 +72,11 @@ basic ground attack only, no harassment or grenade controller. Ghosts have basic
 attack only; no EMP, Snipe, cloak or nuke controller yet. These infantry use rules,
 only Marines use PPO. Medivacs heal/follow, no drops; Tanks siege/unsiege by rules.
 Prefer suitable mixed production against visible evidence rather than always
-choosing advanced tech. No research, coordinates, raw actions or extra
+choosing advanced tech. research_priority is [] or ["stimpack"]. Stimpack requires
+Barracks TechLab and research resources; Ares builds prerequisites and reserves
+the research cost. It helps Marines/Marauders in sustained combat; use [] to defer
+research. Completed Stim is used by local safe combat rules, never a PPO action.
+No other research, coordinates, raw actions or extra
 keys. Never assume hidden enemy units. A requested tech profile takes time and resources.
 stance: develop|defend_then_expand|pressure. worker_target integer16..80, base_target1..4.
 Only squad main. task attack targets enemy_main; defend/rally/retreat target own_main or

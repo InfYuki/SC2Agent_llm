@@ -118,6 +118,8 @@ class StrategicBot(RuleBot):
             economy_policy=dict(self.economy_status),
             production_profile=self.production_profile(),
             available_production_profiles=list(PRODUCTION_PROFILES),
+            available_research=["stimpack"],
+            research_status=self.upgrade_status(),
             production_compositions={name: {unit: fraction for unit, fraction, _ in spec}
                                      for name, spec in PRODUCTION_PROFILES.items()},
             base_under_attack=any(
@@ -279,6 +281,9 @@ class StrategicBot(RuleBot):
             self._plan.worker_target,
             self._plan.base_target,
         )
+
+    def research_priorities(self):
+        return self._plan.research_priority if self._plan else super().research_priorities()
 
     def production_profile(self):
         return self._plan.production_profile if self._plan else super().production_profile()
