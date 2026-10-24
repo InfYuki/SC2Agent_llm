@@ -36,6 +36,7 @@ class LLMPPORuntimeTest(unittest.TestCase):
                 bot.options, bot.telemetry = options, telemetry
                 bot.state = SimpleNamespace(game_loop=0, dead_units=set())
                 bot.strategy_state = "rally"
+                bot.economy_status = {}
                 bot.supply_army, bot.supply_workers = 10, 20
 
             with (
@@ -59,7 +60,9 @@ class LLMPPORuntimeTest(unittest.TestCase):
             calls = []
 
             def macro_and_combat(bot, iteration):
-                calls.append((bot.economic_goals(), bot.strategic_order(None)))
+                # Test strategic request routing, not the independent local
+                # saturation policy (covered in test_economy).
+                calls.append((bot.requested_economic_goals(), bot.strategic_order(None)))
                 self.assertEqual(bot.choose_micro_action(None, context), Action.HOLD)
 
             with (

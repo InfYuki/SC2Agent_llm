@@ -1,5 +1,11 @@
 # 本地 Ares + LLM + RL 项目
 
+## 2026-10-24 兵营完整兵种生产链
+
+当前目标仍是战胜用户本人。本轮补齐标准对战兵营的 Marine、Marauder、Reaper、Ghost 生产入口及基本规则控制，LLM 可以选择对应兵种路线，科技与资源由 Ares 执行。Marauder 需要兵营 Tech Lab；Reaper 不需要 Tech Lab；Ghost 需要兵营 Tech Lab 和 Ghost Academy。Tank/Medivac 原有生产控制继续兼容。新增 `marine_marauder_medivac`、`reaper_pressure`、`ghost_support` 三种编成，原 `marine_basic` / `marine_tank_medivac` 保持合法且默认仍为后者。新步兵由规则执行攻击、集结与撤退，暂不含技能研发或 Ghost 主动施法。
+
+Marine PPO 的16维观测与5动作接口保持不变，新增兵种由规则控制，不把它们混进旧 Marine 模型。仍用 `.\run_human_training.cmd --human-fullscreen` 开局，赛后仅显式 Y 才学习。新兵种生产与基本控制尚待下一场真人对练验证，不将离线检查当成实战胜利。具体可选配置及本轮验证见[兵营生产链报告](docs/BARRACKS_UNIT_PRODUCTION_REPORT.md)。
+
 ## 2026-10-23 真人赛后学习改为人工确认
 
 照常运行 `.\run_human_training.cmd --human-fullscreen`。对局结束后终端询问 `Learn from this match (LLM + PPO + replay)?`：输入 `y` 才更新 LLM 经验、PPO 和复盘经验；输入 `n` 跳过，直接回车或终端无交互则保留待定。原始记录均保留。可用 `--learn no` 预设本局不学，`--learn yes` 显式预先允许自动学习。暂时跳过后，可运行 `.\run_human_training.cmd --learn-run <run_id> --learn yes` 补学，不会打开游戏；成功消费的 PPO 不会重复训练。直接调用 learner 或复盘经验写入也检查批准和永久排除。

@@ -2,20 +2,61 @@
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.unit_typeid import UnitTypeId
 from ares.behaviors.macro import MacroBehavior
+from bot.production import PRODUCTION_PROFILES
 
 
 TANK_TYPES = {UnitTypeId.SIEGETANK, UnitTypeId.SIEGETANKSIEGED}
-SUPPORT_TYPES = TANK_TYPES | {UnitTypeId.MEDIVAC}
+BARRACKS_SUPPORT_TYPES = {UnitTypeId.MARAUDER, UnitTypeId.REAPER, UnitTypeId.GHOST}
+SUPPORT_TYPES = TANK_TYPES | {UnitTypeId.MEDIVAC} | BARRACKS_SUPPORT_TYPES
+GROUND_COMBAT_TYPES = TANK_TYPES | BARRACKS_SUPPORT_TYPES | {UnitTypeId.MARINE}
 
 
 def composition(profile):
-    if profile == "marine_basic":
-        return {UnitTypeId.MARINE: {"proportion": 1.0, "priority": 0}}
-    return {
-        UnitTypeId.MARINE: {"proportion": 0.80, "priority": 2},
-        UnitTypeId.SIEGETANK: {"proportion": 0.12, "priority": 0},
-        UnitTypeId.MEDIVAC: {"proportion": 0.08, "priority": 1},
-    }
+    return {getattr(UnitTypeId, name): {"proportion": proportion, "priority": priority}
+            for name, proportion, priority in PRODUCTION_PROFILES[profile]}
+
+
+class FirstInfantryReserve(MacroBehavior):
+    """Fund requested Barracks tech and first special infantry before Marines.
+
+    Factory/Starport are requested only by profiles also containing Medivacs.
+    Pending tech/units may complete while normal spending resumes; no repeated
+    unit reserve after the first one exists.
+    """
+    def __init__(self, profile):
+        self.profile = profile
+
+    def execute(self, ai, config, mediator):
+        selected = set(composition(self.profile))
+        wanted = selected & BARRACKS_SUPPORT_TYPES
+        if not wanted:
+            return False
+        cost = None
+        if wanted & {UnitTypeId.MARAUDER, UnitTypeId.GHOST} and not (
+            any(b.has_techlab for b in ai.structures(UnitTypeId.BARRACKS).ready)
+            or ai.structure_present_or_pending(UnitTypeId.BARRACKSTECHLAB)
+        ):
+            cost = (50, 25)
+        elif UnitTypeId.GHOST in wanted and not ai.structure_present_or_pending(UnitTypeId.GHOSTACADEMY):
+            cost = (150, 50)
+        elif UnitTypeId.MEDIVAC in selected and not ai.structure_present_or_pending(UnitTypeId.FACTORY):
+            cost = (150, 100)
+        elif (UnitTypeId.MEDIVAC in selected and ai.structures(UnitTypeId.FACTORY).ready
+              and not ai.structure_present_or_pending(UnitTypeId.STARPORT)):
+            cost = (150, 100)
+        else:
+            for kind, price in ((UnitTypeId.MARAUDER, (100, 25)),
+                                (UnitTypeId.REAPER, (50, 50)),
+                                (UnitTypeId.GHOST, (150, 125)),
+                                (UnitTypeId.MEDIVAC, (100, 100))):
+                if (kind in selected and ai.tech_ready_for_unit(kind)
+                    and not ai.units(kind) and not ai.already_pending(kind)):
+                    cost = price
+                    break
+        waiting = cost is not None and (ai.minerals < cost[0] or ai.vespene < cost[1])
+        if waiting:
+            ai.telemetry.counts["infantry_resource_reservation_steps"] += 1
+        return waiting
 
 
 class FirstSupportReserve(MacroBehavior):
@@ -86,6 +127,10 @@ class SupportController:
         self.last_order = {k: v for k, v in self.last_order.items() if k in alive}
         visible = [u for u in list(bot.enemy_units) + list(bot.enemy_structures)
                    if u.is_visible and not u.is_flying]
+        for infantry in (u for u in support if u.type_id in BARRACKS_SUPPORT_TYPES):
+            # Basic combat only: no Stim, KD8, EMP, Snipe, cloak or nuclear orders.
+            self.command(bot, infantry,
+                         "move" if state in {"rally", "retreat"} else "attack", target, frame)
         for tank in (u for u in support if u.type_id in TANK_TYPES):
             nearby = [e for e in visible if tank.distance_to(e) <= 14]
             firing = [e for e in nearby if 3 <= tank.distance_to(e) <= 12.5]

@@ -1,6 +1,7 @@
 """Pure strategic contract and lifecycle. No SC2 or networking dependencies."""
 from dataclasses import dataclass
 import json
+from bot.production import PRODUCTION_PROFILES
 
 
 class PlanError(ValueError):
@@ -73,7 +74,7 @@ def parse_plan(content, request_id, snapshot_seq):
         raise PlanError("stance")
     if (
         type(value["production_profile"]) is not str
-        or value["production_profile"] not in {"marine_basic", "marine_tank_medivac"}
+        or value["production_profile"] not in PRODUCTION_PROFILES
         or value["research_priority"] != []
     ):
         raise PlanError("unsupported_tech")

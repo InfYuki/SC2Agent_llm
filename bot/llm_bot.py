@@ -8,6 +8,7 @@ from sc2.ids.unit_typeid import UnitTypeId
 
 from bot.llm_client import Settings, Worker
 from bot.rule_bot import RuleBot
+from bot.production import PRODUCTION_PROFILES
 from bot.strategy import Director, PlanError, combat_goal, parse_plan
 
 
@@ -99,6 +100,9 @@ class StrategicBot(RuleBot):
             own_structures=dict(Counter(u.type_id.name for u in self.structures)),
             pending=dict(
                 marines=int(self.already_pending(self.marine_type)),
+                marauders=int(self.already_pending(UnitTypeId.MARAUDER)),
+                reapers=int(self.already_pending(UnitTypeId.REAPER)),
+                ghosts=int(self.already_pending(UnitTypeId.GHOST)),
                 siege_tanks=int(self.already_pending(UnitTypeId.SIEGETANK)),
                 medivacs=int(self.already_pending(UnitTypeId.MEDIVAC)),
                 bases=int(self.already_pending(self.townhalls.first.type_id))
@@ -113,7 +117,9 @@ class StrategicBot(RuleBot):
             ready_bases=len(self.ready_townhalls),
             economy_policy=dict(self.economy_status),
             production_profile=self.production_profile(),
-            available_production_profiles=["marine_basic", "marine_tank_medivac"],
+            available_production_profiles=list(PRODUCTION_PROFILES),
+            production_compositions={name: {unit: fraction for unit, fraction, _ in spec}
+                                     for name, spec in PRODUCTION_PROFILES.items()},
             base_under_attack=any(
                 u.can_attack_ground and u.distance_to(b) < 25
                 for u in visible
