@@ -93,7 +93,90 @@ class BanterRuntime:
             base_under_attack=any(
                 (u.can_attack_ground or u.can_attack_air) and u.distance_to(base) < 25
                 for u in visible for base in ai.townhalls),
+            chat_mood=self._chat_mood([u for u in ai.enemy_units if u.is_visible]),
         )
+
+    def _chat_mood(self, enemies):
+        """Conservative local tone cue, not a commander score or global win claim."""
+        ai = self.ai
+
+        def combat(unit):
+            return (not getattr(unit, "is_worker", False)
+                    and not getattr(unit, "is_structure", False)
+                    and (getattr(unit, "can_attack_ground", False)
+                         or getattr(unit, "can_attack_air", False)))
+
+        def close(unit, others, distance):
+            return any(unit.distance_to(other) <= distance for other in others)
+
+        def weighted_supply(units):
+            total = 0.0
+            for unit in units:
+                try:
+                    weight = float(ai.calculate_supply_cost(unit.type_id))
+                    maximum = float(unit.health_max + unit.shield_max)
+                    current = float(unit.health + unit.shield)
+                except (AttributeError, KeyError, TypeError, ValueError):
+                    return None  # Unknown unit data must not become free enemy strength.
+                if weight <= 0 or maximum <= 0:
+                    return None
+                total += weight * max(0.0, min(1.0, current / maximum))
+            return total
+
+        own = [u for u in ai.units if combat(u)]
+        enemies = [u for u in enemies if combat(u)]
+        local_enemies = [u for u in enemies
+                         if close(u, own, 18) or close(u, ai.townhalls, 25)]
+        local_own = [u for u in own if close(u, local_enemies, 18)]
+        local_defences = [u for u in getattr(ai, "structures", [])
+                          if getattr(u, "is_ready", True)
+                          and (getattr(u, "can_attack_ground", False)
+                              or getattr(u, "can_attack_air", False))
+                          and close(u, local_enemies, 18)]
+        cue = dict(stance="uncertain", emotion="谨慎、嘴硬、试探",
+                   scope="Visible local engagement only; hidden forces and global advantage unknown.",
+                   evidence=[])
+        if not local_enemies:
+            cue["evidence"].append("no_current_visible_local_engagement")
+            return cue
+        # Detect a concrete local mismatch before any supply estimate: many
+        # ground-only tanks cannot justify boasting at an airborne opponent.
+        air = any(getattr(u, "is_flying", False) for u in local_enemies)
+        ground = any(not getattr(u, "is_flying", False) for u in local_enemies)
+        defenders = local_own + local_defences
+        missing_air = air and not any(getattr(u, "can_attack_air", False) for u in defenders)
+        missing_ground = ground and not any(getattr(u, "can_attack_ground", False) for u in defenders)
+        damaged_base = any(
+            getattr(base, "health_percentage", 1.0) < 0.4
+            and close(base, local_enemies, 25) for base in ai.townhalls)
+        if missing_air or missing_ground or damaged_base:
+            cue.update(stance="disadvantage", emotion="慌张、紧张、强装镇定")
+            if missing_air:
+                cue["evidence"].append("visible_local_air_threat_without_nearby_anti_air")
+            if missing_ground:
+                cue["evidence"].append("visible_local_ground_threat_without_nearby_ground_defence")
+            if damaged_base:
+                cue["evidence"].append("own_low_health_base_under_visible_attack")
+            return cue
+        if local_defences:
+            # Building supply is zero and is not a fair army-strength proxy.
+            cue["evidence"].append("own_static_defences_present_strength_not_compared")
+            return cue
+        ours, theirs = weighted_supply(local_own), weighted_supply(local_enemies)
+        if ours is None or theirs is None:
+            cue["evidence"].append("unknown_local_unit_strength")
+            return cue
+        cue.update(own_local_health_weighted_supply=round(ours, 2),
+                   visible_enemy_local_health_weighted_supply=round(theirs, 2))
+        if theirs >= 1.8 * max(ours, 1.0):
+            cue.update(stance="disadvantage", emotion="慌张、紧张、强装镇定")
+            cue["evidence"].append("visible_local_combat_force_is_much_larger_than_mine")
+        elif ours >= 1.8 * max(theirs, 1.0):
+            cue.update(stance="advantage", emotion="得意、自信、轻度挑衅")
+            cue["evidence"].append("my_local_combat_force_is_much_larger_than_visible_opponent")
+        else:
+            cue["evidence"].append("visible_local_forces_not_clearly_one_sided")
+        return cue
 
     async def _send(self, text, kind):
         # Only the mandated greeting may span messages. Generated replies are
@@ -137,7 +220,10 @@ class BanterRuntime:
             return
         kind = "reply" if reply else "comment"
         messages = list(self._pending_human) if reply else []
-        payload = dict(kind=kind, game_seconds=round(now, 2), battlefield=self._snapshot(),
+        payload = dict(kind=kind, game_seconds=round(now, 2),
+                       speaker=dict(identity="小鲸鱼，当前Terran参赛Agent", perspective="first_person",
+                                    me="the agent's own army and bases", opponent="the human Terran player"),
+                       battlefield=self._snapshot(),
                        human_messages=messages, recent_bot_messages=list(self._history)[-6:])
         if self.worker.submit(payload):
             self._last_submit_wall = wall
